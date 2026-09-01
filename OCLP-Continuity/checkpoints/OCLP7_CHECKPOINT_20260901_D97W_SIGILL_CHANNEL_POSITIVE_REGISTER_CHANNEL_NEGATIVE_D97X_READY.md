@@ -38,9 +38,9 @@ Classification: `D97W_DIAGNOSTIC_REPORT_REGISTER_CHANNEL=NEGATIVE`. This is a ch
 
 Unified log channel:
 - launchd repeatedly spawned MTLCompilerService for WindowServer;
-- the displayed accelerated window contains 14 explicit `exited due to SIGILL | sent by exc handler` terminations across successive service PIDs;
+- the displayed accelerated window contains 15 explicit `exited due to SIGILL | sent by exc handler` terminations across successive service PIDs;
 - first five generated allowed corpses, then corpse production was throttled as `too many`;
-- this is a strong runtime corroboration that the D97V-instrumented service executed and hit a SIGILL path.
+- this is strong runtime corroboration that the D97V-instrumented service executed and hit a SIGILL path.
 
 Conservative classification:
 - `D97W_UNIFIED_LOG_SIGILL_TERMINATION_CHANNEL=POSITIVE_REPEATED`;
