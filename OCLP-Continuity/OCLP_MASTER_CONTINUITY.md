@@ -91,7 +91,7 @@ Classification: `D97W_DIAGNOSTIC_REPORT_REGISTER_CHANNEL=NEGATIVE`.
 
 Unified log:
 - repeated MTLCompilerService respawns for WindowServer;
-- 14 explicit launchd `exited due to SIGILL | sent by exc handler` terminations in the displayed accelerated window;
+- 15 explicit launchd `exited due to SIGILL | sent by exc handler` terminations in the displayed accelerated window;
 - corpse production allowed for first five then throttled.
 Classification: `D97W_UNIFIED_LOG_SIGILL_TERMINATION_CHANNEL=POSITIVE_REPEATED`.
 
