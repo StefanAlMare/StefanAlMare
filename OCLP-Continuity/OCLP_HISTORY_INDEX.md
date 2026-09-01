@@ -3,7 +3,7 @@
 Updated: 2026-09-01 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97AC_FINITE_OUTCOME_PARTITION_STATIC_PROVEN_D97AD_FINAL_IDENTITY_MAP_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97AD_FINAL_IDENTITY_PASS_D97AEA_FASTLANE_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 Repository recovery: `OCLP_REPOSITORY_RECOVERY_20260901.md`.
 
@@ -39,50 +39,50 @@ Twelve MTLCompilerService children produced twelve primary exit 124 results, zer
 Classification: `RUNTIME_LLVMVERSION_32023_PROVEN_ALL_12_OBSERVED_REQUESTS`.
 H4 (`runtime selects 3802`) rejected for the observed cohort. Unresolved interval returned to `validSimulatorMetadata` entry through REL+0x58B.
 
-## D97AB — CFG map and methodology false negative
-D97AB exact read-only map:
-- exact D97 -> P7 reconstruction;
-- validator 408 instructions / 81 blocks / 75 reachable;
-- indirect switch REL+0x279 resolved;
-- candidate, three known early errors and two residual finite outcomes mapped;
-- shared cave and all six patch windows SAFE.
+## D97AB / D97AC — whole-stage finite outcomes
+D97AB reconstructed exact P7 and mapped 408 instructions, 81 blocks, 75 reachable blocks and the REL+0x279 switch. It found candidate REL+0x58B, three known early errors, two residual finite outcomes, safe cave and six safe patch windows. Its zero-cycle exhaustiveness gate was a methodology false negative.
 
-It marked the partition incomplete only because cycles existed. That cycle-count gate was retired: cyclic SCCs with outgoing paths are not outcomes.
-
-## D97AC — finite-path outcome partition STATIC PROVEN
-Wrapper commit `6f7848011bca95aa9d1b6cfce7d25b256d860e06`, blob `8ddbf1f524c86b2932c2fbaee54f433f19d454d8`.
-
-Wrapper/core PASS, RC 0. Tarjan SCC and reverse reachability established:
+D97AC wrapper commit `6f7848011bca95aa9d1b6cfce7d25b256d860e06`, blob `8ddbf1f524c86b2932c2fbaee54f433f19d454d8`.
+Tarjan SCC and reverse reachability proved:
 - zero closed nonterminal SCCs;
 - zero reachable outside/unresolved edges;
-- zero reachable blocks without a path to a classified finite outcome;
-- all reachable blocks have a finite outcome path;
+- zero blocks without a classified finite-outcome path;
 - finite-path partition exhaustive STATIC PASS;
-- static global termination not claimed because cyclic SCCs exist;
-- classifier static ready YES.
+- static global termination not claimed;
+- all six windows and shared exit-stub cave safe.
 
-Mapped outcomes:
+Outcome codes:
 - 110 candidate REL+0x58B;
 - 111 buffer index REL+0x29A;
 - 112 sampler index REL+0x2D9;
 - 113 nested argument buffer REL+0x3E2;
 - 114 other early REL+0xB9 or REL+0x6CC.
+Mandatory runtime liveness gate: every spawned service PID must emit exactly one 110–114.
 
-Cave `0xF80..0xF90` and all six windows SAFE. Shared exit stub `b8010000020f050f0b`.
-Classification: whole-stage design STATIC PROVEN with mandatory runtime liveness gate: every spawned service PID must emit exactly one 110–114.
-
-## Required replacement architecture
-The classifier must not stack:
-- remove D97Z service helper/call and restore selector-only service;
-- replace D97 MTL helper/call with the pre-D97 whole-stage classifier;
-- retain selector/control/P6/P7.
-
-## D97AD — final identity/source transition mapper ready
+## D97AD — final identity/source transition FULL PASS
 Artifact commit `96d91d25f9959666c1ade1df10ff2c3c4dfe0cc8`, blob `536009a4d1ba9497f0a33fdb17f62dfa9a5089c4`.
 
-D97AD is read-only. It calculates the exact final MTL SHA from exact P7 plus six site postimages and the shared stub, verifies non-overlap/disassembly, reconstructs selector-only service, and proves the current D97Z+D97 source state can be transitioned to selector-only+D97AD by replacement rather than stacking.
+D97AD verified exact current D97Z app/service and D97 MTLCompiler identities, branch and HEAD. It proved:
+- D97Z service removal reconstructs selector-only SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- D97 removal reconstructs exact P7 SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`;
+- six site and shared-stub pre/postimages exact;
+- no overlap with D34/P6/P7 or internally;
+- synthetic disassembly PASS;
+- exact final MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`.
+
+Current source order `selector -> D97Z -> control -> P6 -> P7 -> D97`; planned order `selector -> control -> P6 -> P7 -> D97AD`. Replacement, not stacking, is static proven.
+
+## D97AE/D97AEA — FASTLANE ready
+Wrapper commit `5c2510b2e6c3ee613f44afecf96b1f57e1ff8515`, blob `35c8328caf111a5f57e4a5cc656ada1f38ce6f83`.
+Payload commit `473d4bab1571e2a8907d3ae500fb88e5fd9639c0`; core SHA256 `d8166ed5697cf281a60b19dba4c902470c4900de740006431d7cff5580fa5bb6`.
+
+The FASTLANE revalidates all identities, removes D97Z helper/call, replaces D97 with D97AD, retains selector/control/P6/P7, audits the exact two-file delta, builds and audits the packaged PyInstaller call graph, backs up/deploys the app and verifies fresh-process provenance. Root Patch and reboot remain automatic-NO.
 
 ## CURRENT ACTION
-Run D97AD only and return its complete report. Do not Root Patch or reboot. The next FASTLANE requires D97AD full audit.
+Run D97AEA only and return both complete reports:
+- `OCLP7_D97AEA_DIRECT_PINNED_PRE_D97_WHOLE_STAGE_EXIT_CLASSIFIER_FASTLANE_WRAPPER_REPORT.txt`;
+- `OCLP7_FASTLANE_D97AE_PRE_D97_WHOLE_STAGE_EXIT_CLASSIFIER_REPORT.txt`.
+
+Do not Root Patch or reboot even on PASS. Manual Root Patch requires a separate assistant audit.
 
 D82 remains reserve-only; Patch8 unauthorized.
