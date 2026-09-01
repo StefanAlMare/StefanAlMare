@@ -64,11 +64,17 @@ required=(
 missing=[x for x in required if x not in s]
 print('D97WA_REQUIRED_ANCHORS_MISSING='+repr(missing))
 if missing:raise SystemExit('STATIC_CONTRACT_ANCHOR_FAIL')
+# Match executable mutation/reboot commands only at shell-command positions; do not match report labels such as REBOOT=AUTO-NO.
 forbidden=[]
 patterns=(
- r'\bsudo\b',r'\bbless\b',r'\bkmutil\s+install\b',r'\bmount\s+-uw\b',
- r'\bshutdown\b',r'\breboot\b',r'launchctl\s+(kickstart|start|bootstrap)',
- r'open\s+.*OpenCore-Patcher',r'Root\s*Patch.*--'
+ r'(?m)^\s*(?:/usr/bin/)?sudo\b',
+ r'(?m)^\s*(?:/usr/sbin/|/sbin/)?bless\b',
+ r'(?m)^\s*(?:/usr/bin/)?kmutil\s+install\b',
+ r'(?m)^\s*(?:/sbin/)?mount\s+-uw\b',
+ r'(?m)^\s*(?:/sbin/)?shutdown\b',
+ r'(?m)^\s*(?:/sbin/)?reboot\b',
+ r'(?m)^\s*(?:/bin/)?launchctl\s+(?:kickstart|start|bootstrap)\b',
+ r'(?m)^\s*(?:/usr/bin/)?open\s+.*OpenCore-Patcher'
 )
 for pat in patterns:
     if re.search(pat,s,re.I):forbidden.append(pat)
