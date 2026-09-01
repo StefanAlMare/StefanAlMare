@@ -28,7 +28,7 @@ echo "ROOT_PATCH=AUTO-NO"
 echo "REBOOT=AUTO-NO"
 echo "REPORT=$REPORT"
 
-for t in git python3 tar gzip shasum split awk sed sort comm cp mkdir rm; do
+for t in git python3 tar gzip shasum split awk sed sort comm cmp cp mkdir rm find wc tr stat sw_vers; do
   P="$(command -v "$t" 2>/dev/null || true)"
   echo "TOOL_${t}=${P:-MISSING}"
   [[ -n "$P" ]] || fail "MISSING_TOOL:$t"
@@ -198,7 +198,7 @@ echo "SOURCE_ARCHIVE_SIZE=$ARCHIVE_SIZE"
 
 PARTS="$TMP/parts"
 /bin/mkdir -p "$PARTS"
-/usr/bin/split -b 70m -d -a 3 "$ARCHIVE" "$PARTS/source.tar.gz.part-"
+/usr/bin/split -b 70m -a 3 "$ARCHIVE" "$PARTS/source.tar.gz.part-"
 PART_COUNT="$(find "$PARTS" -type f -name 'source.tar.gz.part-*' | wc -l | tr -d ' ')"
 echo "SOURCE_ARCHIVE_PART_COUNT=$PART_COUNT"
 [[ "$PART_COUNT" -ge 1 ]] || fail "ARCHIVE_SPLIT_FAILED"
