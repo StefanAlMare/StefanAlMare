@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AEP_D97AD_APP_DEPLOYED_ROOTPATCH_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AD_ROOTPATCH_FULL_PASS_ACCELERATED_BOOT_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-01 EEST
@@ -113,14 +113,32 @@ Fresh process proven at the canonical application path.
 D97Z backup:
 `/Applications/OpenCore-Patcher.app.D97Z-before-D97AD-GitHub-20260901-232929`, executable SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`.
 
-No Root Patch or reboot occurred after D97AD application deployment. Therefore the currently root-patched system layer remains D97Z service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c` plus D97 MTL SHA `c46e864afa7c44f4e5aac36c8ac1976326ab363107513b96240c07649b20c118` until the next manual Root Patch.
+## D97AD manual Root Patch — FULL PASS
+The complete Root Patch transcript from the validated D97AD application passed audit.
 
-Expected post-Root-Patch identities:
-- selector-only MTLCompilerService SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`;
-- active order `selector -> control -> P6 -> P7 -> D97AD`.
+Exact retained chain observed:
+- MTLCompilerService selector `31001 -> 32023` verified;
+- P2b request layout verified;
+- P3 serialized-bitcode path verified;
+- AIR00 verified;
+- D34 verified;
+- true-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`;
+- P6 committed SHA `4b7660f6ddebd615cca4e67667f2e29a29366aa5b872866cfa79592d2cb6be76`;
+- P7 committed SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`.
 
-## CURRENT ACTION — MANUAL ROOT PATCH D97AD
-Manual Root Patch is authorized from the currently deployed D97AD application only. Do not reboot when patching completes. Return the complete Root Patch transcript for assistant audit. Only after exact service/MTL identities and the full patch chain are audited may an accelerated boot be authorized.
+D97Z service terminal classifier is absent from the transcript; only the retained selector patch is applied to MTLCompilerService. D97 downstream six-counter diagnostic is absent.
+
+D97AD committed exact MTLCompiler SHA:
+`524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`.
+`D97AD_PRE_D97_VALIDATOR_WHOLE_STAGE_EXIT_CLASSIFIER=PASS`.
+
+Outcome contract and mandatory runtime liveness gate are printed exactly. Patch process completed through Auxiliary Kernel Collection build, APFS snapshot creation, unmount and `Patching complete`, with no Root Patch error.
+
+## CURRENT ACTION — ACCELERATED D97AD BOOT
+Accelerated boot is authorized.
+1. Reboot into the newly root-patched accelerated configuration.
+2. If no usable image appears, hard-restart/power-cycle and boot VESA recovery according to the permanent VESA rule.
+3. After returning in VESA, run `last reboot | head -n 5` and return it before any runtime-log audit.
+4. Runtime analysis must scope only the immediately preceding accelerated diagnostic boot and enforce the liveness gate: every spawned MTLCompilerService PID must emit exactly one exit 110–114. Missing classifier exit, signal termination or other exit code invalidates the run.
 
 D82 remains reserve-only. Patch8 remains unauthorized.
