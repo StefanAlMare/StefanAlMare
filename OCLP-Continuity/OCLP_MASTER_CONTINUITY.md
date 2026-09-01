@@ -1,9 +1,9 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AD_ROOTPATCH_FULL_PASS_ACCELERATED_BOOT_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AD_ACCELERATED_0010_VESA_0012_D97AEQ_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
-Updated: 2026-09-01 EEST
+Updated: 2026-09-02 EEST
 
 ## Mandatory startup
 Before any technical change read in full:
@@ -15,7 +15,7 @@ Before any technical change read in full:
 6. `OCLP_HISTORY_INDEX.md`.
 
 ## Permanent contract
-Target Tahoe `26.6.2 / 25G82`, Intel Haswell HD4600 `8086:0412`, SMBIOS `MacBookAir6,2`.
+Target Tahoe `26.6.2 / 25G82`, Intel Haswell HD4600/4400 family `8086:0412`, SMBIOS `MacBookAir6,2`.
 Local OCLP branch `alex-tahoe-25G82-custom`, expected HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06`.
 Golden root-patched MTLCompiler SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`, immutable/read-only.
 True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`.
@@ -35,13 +35,13 @@ P7 retained MTL SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc27
 Retained source-helper segment SHAs:
 - selector `adb3981f5ac58820d4715436f56936ce2cae1bcf7c162107d215ff6150ee61a4`;
 - true-five control `254104fa863b6d0b8e9c27a6db907b423c3153958d3e51fc4cbd912c7ebe6ac9`;
-- P6 `ed38a8a0efad5b105f04d0ab76a4342d6fe682a33a0bf341f0da06c13a`;
+- P6 `ed38a8a0efad5b105f04d0ab76a4342d6fe682a33a0bf341f0b545f0da06c13a`;
 - P7 `a8fdac12d07a152e4a9ba5fc79558e0c594634f7762f6fd373421176e1a5b66b`.
 
 ## Durable semantic/runtime facts
 - D22: AIR2.6/Metal3.1 SEMANTIC PROVEN.
 - D69/D70: WindowServer/SkyLight is downstream of compiler XPC failure.
-- D71R: compiler-service lifecycle and deterministic termination are observable through launchd.
+- D71R: compiler-service lifecycle and deterministic termination observable through launchd.
 - D83: validator receives upstream `llvm::Module*` and derives metadata/resource counters internally.
 - D93: RMP `+0` bitcodeType, `+0x08` primary length, `+0x10` primary pointer, `+0x18/+0x20` plugin-data family.
 - D95D: wrapped LLVM bitcode STRUCTURAL-SEMANTIC PROVEN; exact Golden runtime semantics UNKNOWN.
@@ -49,23 +49,12 @@ Retained source-helper segment SHAs:
 - D97JB: full CFG 81 blocks; REL+`0x58B` dominates all six late predicates and is their earliest post-final-write common dominator.
 
 ## D97 compiler-generation provenance
-D97K-T proved MTLCompilerService selector semantics and provenance:
-- 3802 loads MTLCompiler 3802;
-- 32023 loads MTLCompiler 32023;
-- another value selects no valid compiler path;
-- selector is low32 of request key `llvmVersion`;
-- cached Metal.framework writes `llvmVersion` through exact `_xpc_dictionary_set_uint64`.
+D97K-T proved MTLCompilerService selector semantics and provenance: 3802 loads MTLCompiler 3802; 32023 loads MTLCompiler 32023; other value selects no valid compiler path; selector is low32 of request key `llvmVersion`; cached Metal.framework writes that key through exact `_xpc_dictionary_set_uint64`.
 
-D97Z installed launchd-visible exits 123/124/125. D97AA observed 12 unique MTLCompilerService children in the accelerated cohort, all with primary exit 124, zero 123, zero 125, zero signals and zero missing exits. Therefore `RUNTIME_LLVMVERSION_32023_PROVEN_ALL_12_OBSERVED_REQUESTS`; the 3802-selection hypothesis is rejected for that cohort.
+D97Z installed launchd-visible exits 123/124/125. D97AA observed 12 unique MTLCompilerService children in the accelerated cohort, all primary exit 124, zero 123/125/signals/missing. Classification: `RUNTIME_LLVMVERSION_32023_PROVEN_ALL_12_OBSERVED_REQUESTS`; H4 rejected for that cohort.
 
 ## D97AC — finite-path partition STATIC PROVEN
-D97AC established:
-- zero closed nonterminal SCCs;
-- zero reachable outside/unresolved edges;
-- zero reachable blocks without a path to a classified finite outcome;
-- every reachable block has a path to a classified finite outcome;
-- finite-path partition exhaustive STATIC PASS;
-- global termination not claimed because cyclic SCCs exist.
+D97AC established zero closed nonterminal SCCs, zero reachable outside/unresolved edges, zero reachable blocks without a classified finite-outcome path, and finite-path partition exhaustive STATIC PASS; global termination not claimed because cyclic SCCs exist.
 
 Mapped outcomes:
 - 110 reaches REL+`0x58B`;
@@ -77,68 +66,47 @@ Mapped outcomes:
 Shared cave and all six complete-instruction windows are SAFE. Mandatory runtime gate: every spawned MTLCompilerService PID must emit exactly one exit 110–114; missing, signal or other exit invalidates the run.
 
 ## D97AD — exact final transition FULL PASS
-D97AD proved:
-- removing D97Z reconstructs selector-only service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- removing D97 reconstructs exact P7 SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`;
-- all six outcome pre/postimages and the shared stub are exact and non-overlapping with D34/P6/P7;
-- synthetic disassembly PASS;
-- exact final D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`;
-- planned active order `selector -> control -> P6 -> P7 -> D97AD` is statically proven.
+D97AD proved selector-only service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, exact P7 reconstruction, six exact non-overlapping postimages, synthetic disassembly PASS and exact final D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Active order `selector -> control -> P6 -> P7 -> D97AD` is by replacement, not stacking.
 
-## D97AD source snapshot and private GitHub build
-The exact local post-transition source state was verified with three authorized tracked changes: `metal_3802.py`, `sys_patch.py`, and `sys_patch_helpers.py`. `metal_3802.py` is the required historical Tahoe compiler substrate, not an accidental dirty file.
+## D97AD source snapshot / private build / deployment
+Exact post-transition source state used three authorized tracked files: `metal_3802.py`, `sys_patch.py`, `sys_patch_helpers.py`; `metal_3802.py` is required historical Tahoe compiler substrate.
 
-Private snapshot/build lineage:
-- private repo `StefanAlMare/Private-Work`;
-- branch `oclp7-d97ad-github-build`;
+Private lane:
+- repo `StefanAlMare/Private-Work`, branch `oclp7-d97ad-github-build`;
 - snapshot commit `1faab13865eb945198f3551688f11f1ba645e29a`;
-- workflow `.github/workflows/oclp7-d97ad-build-v2.yml`;
-- run `33553271179`, job `100007798331`, Intel runner, conclusion success;
-- artifact `9818489515`, `OCLP7-D97AD-OpenCore-Patcher-v2`;
-- artifact digest `sha256:d570342beed9ceac1f37df24d7c4fa1ba0ad106114139f2e555ccba3f64ccc63`;
-- inner app zip SHA `c7951479492acbb2ce352d0958a2be84219db4b10484a0ce8cbb9238d0ef778c`;
-- packaged D97AD executable SHA `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`.
+- workflow run `33553271179`, job `100007798331`, Intel runner success;
+- artifact `9818489515`, digest `sha256:d570342beed9ceac1f37df24d7c4fa1ba0ad106114139f2e555ccba3f64ccc63`;
+- inner ZIP SHA `c7951479492acbb2ce352d0958a2be84219db4b10484a0ce8cbb9238d0ef778c`;
+- packaged/live D97AD executable SHA `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`.
 
-Packaged audit proved D97Z absent, D97 absent, D97AD exactly once, exact D97AD runtime contract, and Tahoe Metal 3802 compiler substrate.
-
-## D97AEO / D97AEP — D97AD app deployment FULL PASS
-D97AEP corrected only a zsh special-parameter collision (`path` rebinding `PATH`) in D97AEO by renaming three tool-loop references to `tool_path`; all artifact/deploy identities and rollback logic remained unchanged.
-
-D97AEO then passed exact workflow/artifact metadata, downloaded artifact, inner ZIP/manifest/build-audit validation, x86_64 staged app identity, D97Z live preimage identity, backup, deployment SHA equality, and fresh-process provenance.
-
-Current live application:
-`/Applications/OpenCore-Patcher.app` executable SHA `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`.
-Fresh process proven at the canonical application path.
-
-D97Z backup:
-`/Applications/OpenCore-Patcher.app.D97Z-before-D97AD-GitHub-20260901-232929`, executable SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`.
+D97AEO/D97AEP deployment FULL PASS. D97Z backup remains `/Applications/OpenCore-Patcher.app.D97Z-before-D97AD-GitHub-20260901-232929`, SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`.
 
 ## D97AD manual Root Patch — FULL PASS
-The complete Root Patch transcript from the validated D97AD application passed audit.
+Root Patch transcript proved selector `31001 -> 32023`, P2b, P3, AIR00, D34, true-five, P6 SHA `4b7660...`, P7 SHA `6e0e312...`, D97Z absent, D97 absent, and exact D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Patch completed through AKC, APFS snapshot and unmount without error.
 
-Exact retained chain observed:
-- MTLCompilerService selector `31001 -> 32023` verified;
-- P2b request layout verified;
-- P3 serialized-bitcode path verified;
-- AIR00 verified;
-- D34 verified;
-- true-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`;
-- P6 committed SHA `4b7660f6ddebd615cca4e67667f2e29a29366aa5b872866cfa79592d2cb6be76`;
-- P7 committed SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`.
+## D97AD accelerated boot chronology — pinned
+User returned through VESA and supplied:
+- `2026-09-02 00:10` = selected accelerated D97AD boot;
+- `2026-09-02 00:12` = VESA recovery boot, excluded;
+- `2026-09-02 00:09` = shutdown before diagnostic boot;
+- older `2026-09-01 23:37` entries excluded.
 
-D97Z service terminal classifier is absent from the transcript; only the retained selector patch is applied to MTLCompilerService. D97 downstream six-counter diagnostic is absent.
+WindowServer crash report in the selected accelerated boot:
+- PID 394; launch `00:11:32.9517`; crash `00:11:47.9888`;
+- boot UUID `B6B4D4C3-D751-4FB0-AE64-2AF8AA1B9CC0`;
+- COREANIMATION code 4, `XPC_ERROR_CONNECTION_INTERRUPTED` after multiple retries;
+- GPUCompiler 32023 libraries visible in WindowServer.
 
-D97AD committed exact MTLCompiler SHA:
-`524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`.
-`D97AD_PRE_D97_VALIDATOR_WHOLE_STAGE_EXIT_CLASSIFIER=PASS`.
+This retains the known downstream causal chain and does not determine the D97AD outcome code by itself.
 
-Outcome contract and mandatory runtime liveness gate are printed exactly. Patch process completed through Auxiliary Kernel Collection build, APFS snapshot creation, unmount and `Patching complete`, with no Root Patch error.
+## D97AEQ — read-only runtime outcome audit ready
+Artifact `OCLP7_D97AEQ_READONLY_D97AD_ACCELERATED_WHOLE_STAGE_EXIT_AUDIT.command`:
+- commit `c3da3efe2e53c2e74703df7d0385415df0b4eeb4`;
+- blob `463d30a4e3b640994e68bebebc91a01e14fd2be9`.
 
-## CURRENT ACTION — ACCELERATED D97AD BOOT
-Accelerated boot is authorized.
-1. Reboot into the newly root-patched accelerated configuration.
-2. If no usable image appears, hard-restart/power-cycle and boot VESA recovery according to the permanent VESA rule.
-3. After returning in VESA, run `last reboot | head -n 5` and return it before any runtime-log audit.
-4. Runtime analysis must scope only the immediately preceding accelerated diagnostic boot and enforce the liveness gate: every spawned MTLCompilerService PID must emit exactly one exit 110–114. Missing classifier exit, signal termination or other exit code invalidates the run.
+D97AEQ verifies selector-only service SHA, D97AD MTL SHA and all six postimages/shared stub, then audits unified logs only from `2026-09-02 00:10:00` through but not including `00:12:00`. It enumerates every service spawn and exact `exited due to` record, applies the mandatory per-PID liveness gate, prints exit histogram/sequence 110–114, and correlates fatal WindowServer PID 394. It is entirely read-only.
+
+## CURRENT ACTION — D97AEQ
+Run D97AEQ only and return the complete report. Do not Root Patch or reboot. Runtime interpretation is valid only if every spawned MTLCompilerService PID has exactly one classifier exit 110–114 and no signal/other/missing exit.
 
 D82 remains reserve-only. Patch8 remains unauthorized.
