@@ -75,12 +75,15 @@ echo "D97AEL_FIXED_WRAPPER_ZSH_PARSE=PASS"
 from pathlib import Path
 import sys
 s = Path(sys.argv[1]).read_text()
-old = 'git -C "$ORCH" add oclp7-d97ad/snapshot'
-new = 'git -C "$ORCH" add oclp7-d97ad/snapshot-v2'
-print(f"D97AEL_OLD_GIT_ADD_LITERAL_COUNT={s.count(old)}")
-print(f"D97AEL_NEW_GIT_ADD_LITERAL_COUNT={s.count(new)}")
-if s.count(old) != 1 or s.count(new) != 1:
-    raise SystemExit("D97AEL_GIT_ADD_TRANSFORM_LITERAL_CARDINALITY_FAIL")
+lines = s.splitlines()
+old_line = "        'git -C \"$ORCH\" add oclp7-d97ad/snapshot',"
+new_line = "        'git -C \"$ORCH\" add oclp7-d97ad/snapshot-v2',"
+old_count = sum(line == old_line for line in lines)
+new_count = sum(line == new_line for line in lines)
+print(f"D97AEL_OLD_GIT_ADD_EXACT_LINE_COUNT={old_count}")
+print(f"D97AEL_NEW_GIT_ADD_EXACT_LINE_COUNT={new_count}")
+if old_count != 1 or new_count != 1:
+    raise SystemExit("D97AEL_GIT_ADD_TRANSFORM_EXACT_LINE_CARDINALITY_FAIL")
 required = [
     'SNAP="$ORCH/oclp7-d97ad/snapshot-v2"',
     '[oclp7-snapshot-v2]',
