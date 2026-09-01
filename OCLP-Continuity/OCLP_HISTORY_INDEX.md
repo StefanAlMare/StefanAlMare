@@ -3,7 +3,7 @@
 Updated: 2026-09-01 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97ZA_FASTLANE_FULL_PASS_ROOTPATCH_AUTHORIZED.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97Z_ROOTPATCH_FULL_PASS_ACCELERATED_EXIT_CLASSIFIER_BOOT_AUTHORIZED.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 Repository recovery: `OCLP_REPOSITORY_RECOVERY_20260901.md`.
 
@@ -71,9 +71,29 @@ D97Z core:
 - deploy SHA match, fresh process PID 1380 and open OCLP PASS;
 - core RC 0, wrapper PASS, Root Patch AUTO-NO, reboot AUTO-NO.
 
-Classification: **D97ZA/D97Z FASTLANE FULL PASS**. Runtime untested.
+Classification: **D97ZA/D97Z FASTLANE FULL PASS**.
+
+## D97Z manual Root Patch — FULL PASS
+The complete Root Patch output established:
+- selector bridge `31001 -> 32023` verified;
+- exact D97Z service preimage SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- exact generated and committed D97Z service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`;
+- classifier PASS at `0x25C3..0x25EB` with exits 123/124/125, universal/no-PID and terminal/no-pass-through;
+- request-layout, serialized-bitcode, AIR00, D34 and true-five retained;
+- all P6 and P7 ports retained with exact committed SHA values;
+- downstream D97 retained with exact committed SHA `c46e864afa7c44f4e5aac36c8ac1976326ab363107513b96240c07649b20c118`;
+- Auxiliary Kernel Collection built and forced;
+- APFS snapshot created;
+- root volume unmounted and patching completed cleanly.
+
+Classification: **D97Z MANUAL ROOT PATCH FULL PASS**. Runtime untested.
 
 ## CURRENT ACTION
-Manual Root Patch is AUTHORIZED in the freshly deployed/opened OCLP app. Return complete Root Patch output for audit. Do not reboot until explicit authorization after that audit.
+Accelerated D97Z classifier boot is AUTHORIZED.
 
-Expected evidence: selector PASS; D97Z preimage `a8716ffd...`; D97Z final/committed SHA `2ce8d92c...`; classifier block/exits PASS; retained true-five/P6/P7/D97; AuxKC and APFS snapshot completion. D82 remains reserve-only; Patch8 unauthorized.
+After the accelerated attempt and VESA recovery, run:
+`last reboot | head -n 5 | tee ~/Desktop/OCLP7_D97Z_LAST_5_BOOTS.txt`
+
+Return the complete output. Do not Root Patch, modify OCLP or reboot again after VESA recovery. The next audit will analyze launchd exit codes only for the immediately preceding accelerated boot and classify 123/3802, 124/32023, 125/other or a request-varying mixture.
+
+D82 remains reserve-only; Patch8 unauthorized.
