@@ -51,7 +51,7 @@ D97W/D97WA artifacts:
 
 Accelerated boot 14:00; VESA 14:03 excluded.
 17 MTLCompilerService reports parsed, zero in content window, zero exact terminal/RAX captures. Register-report channel NEGATIVE.
-Unified log shows repeated service respawn and 14 explicit launchd SIGILL terminations in the displayed window. SIGILL channel POSITIVE_REPEATED. D97V terminal control-flow strongly corroborated but exact RIP/RAX not proven. Runtime `llvmVersion` remains UNKNOWN.
+Unified log shows repeated service respawn and 15 explicit launchd SIGILL terminations in the displayed window. SIGILL channel POSITIVE_REPEATED. D97V terminal control-flow strongly corroborated but exact RIP/RAX not proven. Runtime `llvmVersion` remains UNKNOWN.
 
 ## D97X — deterministic launchd exit classifier mapper ready
 Artifact commit `09d9a64bbf8789a3227693adec37c3d06551ee53`, blob `71bd9caedd19b71d16637d9bdbd5263930824192`.
