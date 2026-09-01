@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97X_NO_SAFE_ZERO_CAVE_D97Y_INPLACE_BLOCK_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97Y_INPLACE_CLASSIFIER_STATIC_PROVEN_D97ZA_FASTLANE_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-01 EEST
@@ -97,43 +97,86 @@ Classification: `D97W_UNIFIED_LOG_SIGILL_TERMINATION_CHANNEL=POSITIVE_REPEATED`.
 
 Conservative conclusion: D97V terminal execution is strongly corroborated, but exact RIP and RAX are not proven because no crash report exists. Runtime `llvmVersion` remains UNKNOWN.
 
-## Methodology decision after D97W
+## Deterministic exit-classifier methodology
 Do not repeat a register-dependent SIGILL capture. Use deterministic launchd-visible normal exit accounting.
-Exact classifier semantics:
+Exact universal terminal classifier semantics:
 - exit 123 = EAX exactly 3802;
 - exit 124 = EAX exactly 32023;
 - exit 125 = any other value.
-Universal/no-PID, terminal, no crash-report dependency.
+No PID filter and no crash-report dependency.
 
-## D97X observed STATIC NEGATIVE
-Artifact `OCLP7_D97X_READONLY_EXIT_CODE_CLASSIFIER_CAVE_SAFETY_AND_DESIGN_MAP.command`:
-- commit `09d9a64bbf8789a3227693adec37c3d06551ee53`;
-- blob `71bd9caedd19b71d16637d9bdbd5263930824192`.
-
-D97X identity and selector-only reconstruction PASS. Exact code map:
-- `__TEXT,__text` file `0x23C0..0x360A`, VM `0x1000023C0..0x10000360A`;
-- capture/classifier site VM `0x1000025C3`.
-
-Static inventory: 1329 instructions, 225 direct branch/call targets, 59 RIP-relative targets and 68 symbol addresses.
-Executable zero-runs >=48 bytes: `0`; safe cave candidates: `0`.
-
+## D97X retained STATIC NEGATIVE
+D97X identity and selector-only reconstruction PASS. Executable zero-runs >=48 bytes: `0`; safe cave candidates: `0`.
 Classifications:
 - `D97X_RESULT=NO_STATICALLY_SAFE_EXECUTABLE_ZERO_CAVE_FOUND`;
-- `D97X_EXIT_CLASSIFIER_AUTHORIZED=NO` for cave placement;
-- this is a valid STATIC NEGATIVE, not a tooling failure.
-
+- cave placement unauthorized;
+- valid STATIC NEGATIVE, not tooling failure.
 Do not weaken cave criteria or use unproved non-code bytes.
 
-## D97Y in-place complete-block mapper ready
+## D97Y in-place complete-block proof
 Artifact `OCLP7_D97Y_READONLY_INPLACE_TERMINAL_CLASSIFIER_BLOCK_SAFETY_MAP.command`:
 - commit `4e3d2333d1d28350295ce2710e82431edba1ed3f`;
 - blob `549c894920b9fb1d688272f6b50034b3763bcf55`.
 
-D97Y tests a different, rule-compliant architecture: replace a contiguous sequence of complete straight-line instructions beginning at the already-proven first instruction after the getter. Because the diagnostic is terminal, it makes no pass-through claim and does not require a cave.
+D97Y FULL PASS, strict read-only.
+Identity:
+- current D97V service SHA `bdb861da010542200a1fc480e796ba6d3405c842344612d162019c17d2b1fb19`;
+- selector-only reconstruction SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`.
 
-It requires exact selector-only reconstruction; finds the minimum complete-instruction interval holding the 36-byte classifier; requires the expected instruction identities and exact end boundary; audits direct targets, RIP-relative targets, symbols and containing-symbol boundaries; verifies classifier branch bytes/semantics/syscall; retains both selector paths and the first untouched instruction; derives deterministic final SHA and disassembles the synthetic postimage. It performs no integration or mutation.
+Minimum complete-instruction interval:
+- file `0x25C3..0x25EB`;
+- VM `0x1000025C3..0x1000025EB`;
+- length 40 bytes;
+- six complete straight-line instructions;
+- first untouched instruction at `0x25EB`.
 
-## CURRENT ACTION — D97Y
-Run D97Y only and return the complete report. Do not Root Patch or reboot.
+Exact preimage:
+`4c89b558ffffffb9000000c048898d60ffffff488d0df10d000048898d68ffffff488d0d951b0000`
 
-Only if every complete-block, inbound-reference, classifier and synthetic-disassembly gate passes may one identity-pinned FASTLANE replacing D97V with the in-place deterministic exit classifier be designed.
+Preimage SHA256:
+`0808135bb09b797b61ab8da494604db69a4e25a635ccd779025c7483a97af93f`
+
+Inbound safety:
+- no direct target at block start or interior;
+- no RIP-relative target into block;
+- no symbol inside block;
+- no function/symbol boundary crossed;
+- original block contains no control transfer.
+
+Exact classifier code, 36 bytes:
+`3dda0e0000740c3d177d0000740a6a7d5feb086a7b5feb036a7c5fb8010000020f050f0b`
+
+Exact 40-byte postimage, four NOP padding:
+`3dda0e0000740c3d177d0000740a6a7d5feb086a7b5feb036a7c5fb8010000020f050f0b90909090`
+
+All rel8 destinations, semantic tests, exit syscall encoding, selector retention, next-instruction retention and synthetic disassembly PASS.
+Synthetic final service SHA:
+`2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`.
+
+Classifications:
+- `D97Y_INPLACE_COMPLETE_INSTRUCTION_BLOCK=STATIC_PROVEN`;
+- `D97Y_INBOUND_REFERENCE_SAFETY=STATIC_PROVEN`;
+- `D97Y_THREE_WAY_EXIT_CLASSIFIER=STATIC_PROVEN`.
+
+## D97Z core / D97ZA wrapper ready
+Compressed identity-pinned D97Z core payload commit: `09543f3f5e7ad816d15650580ed17165eb698b0f`.
+Payload blobs:
+- part1 `ad2bac11c3875ae725855031cae5c00de443935d`;
+- part2 `02325e749088750bef7ce02cfb9cfa09f8d32f29`;
+- part3 `74517f92d02917fd839f3034f73e51875377ac67`;
+- part4 `4177b268cad02d4c740fe8b1ac53c08e451ad9a6`.
+Decompressed core SHA256: `419516697a9d69b888ec8fb03c10d6892c809c2e1a7653f190739f87350c3716`.
+
+Wrapper `OCLP7_D97ZA_DIRECT_PINNED_INPLACE_EXIT_CLASSIFIER_FASTLANE_WRAPPER.command`:
+- commit `32ebc5a679b92f4ea6a9dc7a234e6281d7f61177`;
+- blob `c0816d84048364eb793dcab0f55c3a4e8bcc1a70`.
+
+D97ZA verifies all payload identities, reconstructs the exact core, parses zsh, compiles six embedded Python blocks, audits required contracts and then runs the full D97Z FASTLANE.
+D97Z replaces D97V helper/call in place — not stacked — then performs exact prechecks, offline proof, source backup/integration, compile/delta/unrelated-file audit, build, packaged audit, SHA backup/deploy, fresh-process provenance, opens OCLP and STOPS. Downstream D97 remains retained. No automatic Root Patch or reboot.
+
+## CURRENT ACTION — D97ZA
+Run D97ZA only and return both complete reports:
+- `OCLP7_D97ZA_DIRECT_PINNED_INPLACE_EXIT_CLASSIFIER_FASTLANE_WRAPPER_REPORT.txt`;
+- `OCLP7_FASTLANE_D97Z_MTLCOMPILERSERVICE_LLVMVERSION_EXIT_CLASSIFIER_REPORT.txt`.
+
+A printed PASS is insufficient until assistant audit. Do not Root Patch or reboot. D82 remains reserve-only. Patch8 remains unauthorized.
