@@ -1,9 +1,9 @@
 # OCLP PROJECT HISTORY INDEX — ASUS2 / OCLP1 → future phases
 
-Updated: 2026-09-01 EEST
+Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97AD_ROOTPATCH_FULL_PASS_ACCELERATED_BOOT_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AD_ACCELERATED_0010_VESA_0012_D97AEQ_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 Repository recovery: `OCLP_REPOSITORY_RECOVERY_20260901.md`.
 
@@ -27,95 +27,50 @@ D34 cave protected. P6/P7 retained, sufficiency NEGATIVE. D50/D68/D82 reserve-on
 - D97JB: REL+0x58B universal for all six late predicates and earliest post-final-write common dominator.
 
 ## D97 compiler generation provenance
-D97K-T traced MTLCompilerService selection to XPC key `llvmVersion` and proved cached Metal.framework writes it through exact `_xpc_dictionary_set_uint64`.
-Selector semantics STATIC PROVEN: 3802 loads MTLCompiler 3802; 32023 loads 32023; other values select no valid path.
+D97K-T traced MTLCompilerService selection to XPC key `llvmVersion` and proved cached Metal.framework writes it through exact `_xpc_dictionary_set_uint64`. Selector semantics STATIC PROVEN: 3802 loads MTLCompiler 3802; 32023 loads 32023; other values select no valid path.
 
 ## D97U through D97Z
 D97U mapped the receiver post-getter boundary with RAX/EAX live. D97V register capture produced repeated SIGILL but no register report. D97Z replaced it with launchd exits 123/124/125. D97X found no safe zero cave; D97Y proved the service in-place block. D97ZA/D97Z FASTLANE and Root Patch FULL PASS.
 
 ## D97AA — runtime llvmVersion 32023 PROVEN
-Accelerated boot `17:12`; VESA `17:14` excluded.
-Twelve MTLCompilerService children produced twelve primary exit 124 results, zero 123, zero 125, zero signals and zero missing exits.
-Classification: `RUNTIME_LLVMVERSION_32023_PROVEN_ALL_12_OBSERVED_REQUESTS`.
-H4 (`runtime selects 3802`) rejected for the observed cohort. Unresolved interval returned to `validSimulatorMetadata` entry through REL+0x58B.
+Accelerated boot `17:12`; VESA `17:14` excluded. Twelve service children produced twelve primary exit 124 results, zero 123, zero 125, zero signals and zero missing exits. Classification: `RUNTIME_LLVMVERSION_32023_PROVEN_ALL_12_OBSERVED_REQUESTS`; H4 rejected for that cohort.
 
 ## D97AB / D97AC — whole-stage finite outcomes
-D97AB reconstructed exact P7 and mapped 408 instructions, 81 blocks, 75 reachable blocks and the REL+0x279 switch. It found candidate REL+0x58B, three known early errors, two residual finite outcomes, safe cave and six safe patch windows. Its zero-cycle exhaustiveness gate was a methodology false negative.
+D97AB reconstructed exact P7 and mapped 408 instructions, 81 blocks, 75 reachable blocks and the REL+0x279 switch. D97AC Tarjan SCC/reverse reachability proved zero closed nonterminal SCCs, zero reachable unresolved edges, zero blocks without a classified finite-outcome path, finite-path partition exhaustive STATIC PASS, and all six windows/shared cave safe. Global termination not claimed.
 
-D97AC Tarjan SCC and reverse reachability proved:
-- zero closed nonterminal SCCs;
-- zero reachable outside/unresolved edges;
-- zero blocks without a classified finite-outcome path;
-- finite-path partition exhaustive STATIC PASS;
-- static global termination not claimed;
-- all six windows and shared exit-stub cave safe.
+Outcome codes: 110 candidate REL+0x58B; 111 buffer index REL+0x29A; 112 sampler index REL+0x2D9; 113 nested arg buffer REL+0x3E2; 114 other early REL+0xB9 or REL+0x6CC. Mandatory runtime gate: every spawned service PID exactly one exit 110–114.
 
-Outcome codes:
-- 110 candidate REL+0x58B;
-- 111 buffer index REL+0x29A;
-- 112 sampler index REL+0x2D9;
-- 113 nested argument buffer REL+0x3E2;
-- 114 other early REL+0xB9 or REL+0x6CC.
-Mandatory runtime liveness gate: every spawned service PID must emit exactly one 110–114.
+## D97AD — final transition FULL PASS
+D97AD proved selector-only service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, exact P7 reconstruction, six exact non-overlapping postimages, synthetic disassembly PASS and final D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Active order `selector -> control -> P6 -> P7 -> D97AD` by replacement.
 
-## D97AD — final identity/source transition FULL PASS
-D97AD proved selector-only service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, exact P7 reconstruction, six exact non-overlapping postimages, synthetic disassembly PASS and final D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Planned active order is `selector -> control -> P6 -> P7 -> D97AD`, by replacement rather than stacking.
+## D97AEA through D97AEJ — tooling cleanup and Tahoe substrate
+Tooling failures were separated from Haswell evidence. D97AEI reproduced historical retained-helper source hashes with `ast.get_source_segment`. D97AEJ classified dirty `metal_3802.py` as required historical Tahoe compiler substrate (blob `2ea2a73c...`, SHA256 `fe751967...`), authorizing three tracked source files.
 
-## D97AEA through D97AEI — tooling failures and source-state recovery
-Several wrapper/audit failures were classified as tooling rather than Haswell evidence: a truncated P6 expected SHA literal, narrow regex/AST binding assumptions, stale pre-transition source expectations, and source-range/code-object identity methods that did not reproduce the historical measurement contract.
+## Private D97AD snapshot/build/deploy — FULL PASS
+Exact snapshot pushed to private `StefanAlMare/Private-Work`, branch `oclp7-d97ad-github-build`, commit `1faab13865eb945198f3551688f11f1ba645e29a`. GitHub Actions run `33553271179`, Intel runner, succeeded. Artifact `9818489515`; inner zip SHA `c795147...`; packaged executable SHA `5a214ab...`. Packaged audit proved D97Z/D97 absent, D97AD exactly once and Tahoe substrate PASS.
 
-D97AEI finally reproduced the exact historical retained-helper segment SHAs through `ast.get_source_segment` for selector, control, P6 and P7 and proved exact post-transition call order/receiver. It also exposed a third tracked dirty file, `metal_3802.py`.
-
-## D97AEJ — Tahoe Metal 3802 substrate classified required
-`metal_3802.py` working copy blob `2ea2a73c1642892d14168168b7961b3385cece81`, SHA256 `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`, was proven semantic and historical, not accidental. It supplies the Tahoe compiler substrate including `MTLCompilerService.xpc`, MTLCompiler/GPUCompiler framework handling and retained QuartzCore metallib behavior. It is therefore an authorized third tracked file for the exact D97AD snapshot.
-
-## D97AEK/L/M — exact private three-file snapshot push FULL PASS
-Authorized tracked files:
-- `opencore_legacy_patcher/sys_patch/patchsets/shared_patches/metal_3802.py`;
-- `opencore_legacy_patcher/sys_patch/sys_patch.py`;
-- `opencore_legacy_patcher/sys_patch/sys_patch_helpers.py`.
-
-After correcting only push-lane tooling issues (`snapshot-v2` stale `git add` path and a self-referential forbidden-operation scanner), the exact source snapshot was pushed to private repo `StefanAlMare/Private-Work`, branch `oclp7-d97ad-github-build`, commit `1faab13865eb945198f3551688f11f1ba645e29a`.
-
-## Private GitHub Actions D97AD build FULL PASS
-Workflow `.github/workflows/oclp7-d97ad-build-v2.yml`, run `33553271179`, job `100007798331`, Intel runner `macos-15-intel`, completed successfully.
-
-Artifact:
-- ID `9818489515`;
-- name `OCLP7-D97AD-OpenCore-Patcher-v2`;
-- size `751552700`;
-- digest `sha256:d570342beed9ceac1f37df24d7c4fa1ba0ad106114139f2e555ccba3f64ccc63`;
-- inner app zip SHA `c7951479492acbb2ce352d0958a2be84219db4b10484a0ce8cbb9238d0ef778c`;
-- packaged app executable SHA `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`.
-
-Packaged audit proved D97Z and D97 absent, D97AD exactly once, runtime contract PASS, Tahoe compiler substrate PASS.
-
-## D97AEO / D97AEP — exact artifact download/audit/deploy FULL PASS
-D97AEP corrected only the zsh special `path` parameter collision in D97AEO. The corrected deployment pipeline verified GitHub run/artifact metadata, downloaded and verified the exact artifact, validated the inner ZIP, manifest and build audit, verified staged x86_64 app SHA, backed up the exact D97Z app, deployed the exact D97AD app, and proved a fresh process at the canonical `/Applications/OpenCore-Patcher.app` path.
-
-Current D97AD live app executable SHA:
-`5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`.
-
-D97Z backup:
-`/Applications/OpenCore-Patcher.app.D97Z-before-D97AD-GitHub-20260901-232929`, executable SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`.
+D97AEO/D97AEP downloaded, audited and deployed the exact app. Live `/Applications/OpenCore-Patcher.app` executable SHA `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`; D97Z backup retained.
 
 ## D97AD manual Root Patch — FULL PASS
-The validated D97AD application completed the manual Root Patch successfully.
+Transcript proved selector, P2b, P3, AIR00, D34, true-five, P6, P7, D97AD exact final MTL SHA `524a16...`; D97Z and D97 absent. Patch completed through AKC/APFS snapshot/unmount without error.
 
-The transcript proved the retained chain and exact identities:
-- selector `31001 -> 32023` verified;
-- P2b request-layout bridge verified;
-- P3 serialized-bitcode path verified;
-- AIR00 and D34 verified;
-- true-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`;
-- P6 committed SHA `4b7660f6ddebd615cca4e67667f2e29a29366aa5b872866cfa79592d2cb6be76`;
-- P7 committed SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`;
-- D97AD committed MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`;
-- D97AD classifier PASS and outcome/liveness contract printed exactly.
+## D97AD accelerated boot — 2026-09-02 00:10 selected
+User returned through VESA and supplied chronology:
+- `00:10` accelerated D97AD boot SELECTED;
+- `00:12` VESA recovery EXCLUDED;
+- `00:09` shutdown transition;
+- older 23:37 entries excluded.
 
-D97Z service terminal classifier and downstream D97 six-counter diagnostic are absent from the Root Patch transcript, matching the packaged/source transition. Patch process completed through AKC build, APFS snapshot creation and unmount without error.
+Accelerated WindowServer crash anchor: PID 394, launched 00:11:32.9517, crashed 00:11:47.9888, boot UUID `B6B4D4C3-D751-4FB0-AE64-2AF8AA1B9CC0`, COREANIMATION code 4 with `XPC_ERROR_CONNECTION_INTERRUPTED` after multiple retries. GPUCompiler 32023 libraries were loaded. This retains the established downstream causal chain and does not determine the classifier outcome.
+
+## D97AEQ — read-only D97AD outcome audit ready
+Artifact `OCLP7_D97AEQ_READONLY_D97AD_ACCELERATED_WHOLE_STAGE_EXIT_AUDIT.command`:
+- commit `c3da3efe2e53c2e74703df7d0385415df0b4eeb4`;
+- blob `463d30a4e3b640994e68bebebc91a01e14fd2be9`.
+
+It verifies visible selector-only service SHA and D97AD MTL SHA/postimages, then audits only `00:10:00..00:12:00`, enumerates every service spawn/exit, enforces the liveness gate, prints code histogram/sequence 110–114 and correlates WindowServer PID 394. Entirely read-only.
 
 ## CURRENT ACTION
-Accelerated D97AD boot is authorized. If no usable image appears, recover through the permanent VESA procedure. After returning in VESA, first provide `last reboot | head -n 5` so the accelerated and recovery sessions can be pinned before any unified-log audit. Runtime result is valid only if every spawned MTLCompilerService PID in the accelerated cohort produces exactly one classifier exit 110–114; signal/other/missing exit invalidates the cohort.
+Run D97AEQ only and return the complete report. Do not Root Patch or reboot. Runtime result is valid only if every spawned MTLCompilerService PID has exactly one classifier exit 110–114 and no signal/other/missing exit.
 
 D82 remains reserve-only; Patch8 unauthorized.
