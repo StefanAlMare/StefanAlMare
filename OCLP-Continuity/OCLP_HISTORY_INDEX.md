@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEQ_28_OF_28_EXIT1_CLASSIFIER_ZERO_RUNTIME_INVALID.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AER_STATIC_LATE_MESSAGES_CONTRADICT_VISIBLE_D97AD_RUNTIME_PROVENANCE_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 Repository recovery: `OCLP_REPOSITORY_RECOVERY_20260901.md`.
 
@@ -53,23 +53,22 @@ Transcript proved selector, P2b, P3, AIR00, D34, P6, P7 and exact D97AD final MT
 ## D97AEQ — decisive runtime coverage failure
 D97AEQ verified visible selector-only service SHA, exact D97AD MTL SHA, six site postimages and shared stub. The selected accelerated window contained 28 unique MTLCompilerService spawns and 28 exact launchd exit records.
 
-Runtime result:
-- 110=0;
-- 111=0;
-- 112=0;
-- 113=0;
-- 114=0;
-- signals=0;
-- missing exits=0;
-- natural exit(1)=28/28.
+Runtime result: 110=0, 111=0, 112=0, 113=0, 114=0, signals=0, missing exits=0, natural exit(1)=28/28.
 
 Classification: D97AEQ audit PASS; visible D97AD identity PASS; classifier execution NEGATIVE for observed cohort; liveness gate FAIL; whole-stage outcome classification INVALID; natural service exit(1) RUNTIME PROVEN 28/28.
 
 Fatal WindowServer PID 394 hosted 12 compiler-service children, all exit(1). Final child PID 441 exited `00:11:47.968`, ~20.8 ms before WindowServer crash `00:11:47.9888`.
 
-Every observed service emitted an MTLCompiler diagnostic before exit(1) containing `...supported in the simulator but ... were used`; a common `STRING sz:9` decode mismatch appears for all PIDs, with extra size-24 variants on PIDs 347/380/433.
+## D97AER — static late-message contradiction / provenance unresolved
+D97AER reverified exact visible D97AD 32023 and selector-only service identities. Visible 3802 SHA is `85d4c285915c4d2094f3624d80fd2d0c4dd30994fc5150c22d1e6d2b58d67f40`.
 
-D97AC remains a STATIC CFG proof only; D97AEQ disproves the runtime coverage assumption for the observed execution. Executed-code provenance versus visible patched-file identity is unresolved.
+In visible 32023, five resolved simulator-limit diagnostic xrefs are all inside `MTLSimCompiler::validSimulatorMetadata` and strictly after candidate REL+0x58B: buffers 0x596, samplers 0x5BC, textures 0x5E0, const buffers 0x608, interpolated inputs 0x62B. The exact D97AD exit110 terminal is visibly immediately before this late family. Runtime nevertheless emitted the diagnostic for all 28 PIDs and produced zero exit110, proving a contradiction between visible patched bytes and observed runtime message if one assumes exact visible 32023 execution.
+
+Visible 3802 contains the same diagnostic family, so message text alone cannot discriminate generation. Compact historical logs contained no explicit 32023/3802 image path. Executed-image provenance remains UNKNOWN.
+
+D97AER's local `RUNTIME_EXIT1_PID_COUNT=0` / correlation incomplete is a tooling regex false negative; D97AEQ remains authoritative for 28/28 exit(1).
+
+Authoritative classification: static 32023 late-message xrefs STATIC PROVEN after REL+0x58B; simulator diagnostic REACHED for all 28 observed PIDs; compact-log generation provenance UNKNOWN; exact visible D97AD execution provenance unresolved.
 
 ## CURRENT ACTION
-Run a read-only D97AER provenance mapper: map the pre-exit diagnostic strings/xrefs in visible 32023, compare 3802, and search the selected historical unified-log window for explicit compiler load/path provenance. No Root Patch/reboot. D82 reserve-only; Patch8 unauthorized.
+Run D97AES, a read-only historical unified-log JSON sender-image mapper. Extract raw simulator-diagnostic records and all available sender/process image path/UUID metadata, compare against visible 32023 and 3802 Mach-O UUIDs, and use repaired launchd exit parsing only as corroboration. No Root Patch/reboot. D82 reserve-only; Patch8 unauthorized.
