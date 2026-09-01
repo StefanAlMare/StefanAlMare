@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AEA_FALSE_SHA_MAP_FAIL_D97AEB_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AEB_MATCHER_FALSE_NEGATIVE_D97AEC_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-01 EEST
@@ -96,18 +96,24 @@ D97AEA passed payload/core identity, zsh/Python compilation, precheck, exact ser
 Classification: `D97AEA_SOURCE_PREIMAGE_AUDIT=FALSE_FAIL_P6_P7_EXPECTED_SHA_MAP`.
 No functional design, runtime patch bytes, source transition, live application, Root Patch or boot state changed. Failure rollback was invoked.
 
-## D97AEB correction ready
-Artifact `OCLP7_D97AEB_P6_P7_SHA_MAP_FIX_WRAPPER.command`:
-- commit `d95e9451cfe0f4b3aa447150d1e481d9ab635a83`;
-- blob `d9f3bed3882e268c22ec3b37cc285c4a7228dd37`.
+## D97AEB matcher false negative
+D97AEB verified all four payload blobs, the original core SHA and the unique owner `PYINTEGRATE` block. It then returned `D97AEB_P6_SHA_MAP_HIT_COUNT=0` because its regex recognized only narrow dict/tuple textual layouts, while the core uses a different binding shape. It stopped before modifying or executing the core. No source integration, build, deploy, Root Patch or reboot occurred.
 
-D97AEB reconstructs and pins the original D97AE core, modifies only the two P6/P7 expected-helper SHA literals inside the unique failing embedded Python audit block, proves neutralized textual identity for all remaining logic, recompiles every Python block, parses zsh, retains all functional/runtime anchors and executes the complete D97AE FASTLANE. It does not auto Root Patch or reboot.
+Classification: `D97AEB_MATCHER_FALSE_NEGATIVE_REAL_PYINTEGRATE_BINDING_SHAPE_NOT_REGEX_MAP_SHAPE`.
 
-## CURRENT ACTION — D97AEB
-Run D97AEB only and return:
-- `OCLP7_D97AEB_P6_P7_SHA_MAP_FIX_WRAPPER_REPORT.txt`;
+## D97AEC ready
+Artifact `OCLP7_D97AEC_AST_SEMANTIC_P6_P7_SHA_BINDING_FIX_WRAPPER.command`:
+- commit `d6b90d246ce10481295e225d4fee99d588ddbe1c`;
+- blob `e638b2eab6f590fb20e80524de8fab28e974ece9`;
+- reachable branch `d97aec-ready`.
+
+D97AEC reconstructs and pins the original D97AE core, parses the unique failing owner block with Python AST, semantically binds P6/P7 helper identities to their expected SHA literals across assignment/dict/tuple/list/call forms, refuses ambiguity, modifies only the bound SHA literals, proves neutralized textual identity for all remaining logic, recompiles every embedded Python block, parses zsh, retains all functional/runtime anchors and executes the complete D97AE FASTLANE. Runtime patch bytes and source transition are unchanged. It does not auto Root Patch or reboot.
+
+## CURRENT ACTION — D97AEC
+Run D97AEC only and return:
+- `OCLP7_D97AEC_AST_SEMANTIC_P6_P7_SHA_BINDING_FIX_WRAPPER_REPORT.txt`;
 - `OCLP7_FASTLANE_D97AE_PRE_D97_WHOLE_STAGE_EXIT_CLASSIFIER_REPORT.txt`.
 
-Do not Root Patch or reboot even if D97AEB/D97AE return PASS. Manual Root Patch requires a separate full assistant audit.
+Do not Root Patch or reboot even if D97AEC/D97AE return PASS. Manual Root Patch requires a separate full assistant audit.
 
 D82 remains reserve-only. Patch8 remains unauthorized.
