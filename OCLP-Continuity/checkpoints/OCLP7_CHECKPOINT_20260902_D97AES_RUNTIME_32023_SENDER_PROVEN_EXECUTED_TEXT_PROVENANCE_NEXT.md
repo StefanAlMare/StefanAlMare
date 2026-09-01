@@ -36,7 +36,14 @@ D97AES local JSON exit parser again failed to collect launchd exit(1) records. D
 ## Remaining contradiction
 Runtime now directly proves that the late simulator diagnostic sender is MTLCompiler generation/path/UUID 32023. However the exact visible filesystem 32023 contains D97AD exit110 before all five late diagnostic xrefs. Sender path and LC_UUID do not by themselves prove that runtime executed the current root-patched text bytes; a dyld/shared-cache or stale mapped 32023 image remains a hypothesis, not yet fact.
 
+## D97AET artifact — ready
+`OCLP7_D97AET_READONLY_EXECUTED_TEXT_PC_BACKTRACE_AND_SHARED_CACHE_PROVENANCE.command`
+- commit `acc9692e93881605f872b7bd4ccbe9c60abba7c3`;
+- blob `b69adfa632512406579c354176afd073ca3e45d4`.
+
+D97AET is read-only. It revalidates the visible service/32023 identities and exact D97AD exit110 site; regenerates the same historical `00:10..00:12` unified-log window with JSON backtraces; extracts `senderProgramCounter` and every 32023 `backtrace.frames[].imageOffset`; maps offsets to the visible 32023 `validSimulatorMetadata` range and D97AD candidate/late callsites; and enumerates standard Cryptex/System dyld shared-cache files, searching them read-only for the 32023/3802 image paths. If `dyld_shared_cache_util` is locally available, it uses `-list` only.
+
 ## CURRENT SINGLE NEXT ACTION
-Run a read-only D97AET executed-text provenance mapper on the same historical JSON window. It must extract `senderProgramCounter` and all `backtrace.frames` metadata for every simulator diagnostic; normalize image offsets against the 32023 sender image; map each record to the visible 32023 late xref/callsite family; and inspect local dyld/shared-cache availability/provenance sufficiently to discriminate filesystem-patched 32023 text from a cached/stale 32023 mapping when the available metadata permits it.
+Run D97AET only and return the complete report. We are looking for direct historical 32023 image offsets beyond the visible D97AD exit110 site and for local shared-cache containment evidence. Do not infer cache execution merely from cache presence; that requires assistant audit.
 
 No source/system/Golden mutation, service launch, runtime instrumentation, Root Patch or reboot. D82 remains reserve-only. Patch8 remains unauthorized.
