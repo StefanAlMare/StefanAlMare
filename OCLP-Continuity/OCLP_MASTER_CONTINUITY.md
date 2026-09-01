@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AD_ACCELERATED_0010_VESA_0012_D97AEQ_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEQ_28_OF_28_EXIT1_CLASSIFIER_ZERO_RUNTIME_INVALID.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -84,29 +84,41 @@ D97AEO/D97AEP deployment FULL PASS. D97Z backup remains `/Applications/OpenCore-
 ## D97AD manual Root Patch — FULL PASS
 Root Patch transcript proved selector `31001 -> 32023`, P2b, P3, AIR00, D34, true-five, P6 SHA `4b7660...`, P7 SHA `6e0e312...`, D97Z absent, D97 absent, and exact D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Patch completed through AKC, APFS snapshot and unmount without error.
 
-## D97AD accelerated boot chronology — pinned
-User returned through VESA and supplied:
-- `2026-09-02 00:10` = selected accelerated D97AD boot;
-- `2026-09-02 00:12` = VESA recovery boot, excluded;
-- `2026-09-02 00:09` = shutdown before diagnostic boot;
-- older `2026-09-01 23:37` entries excluded.
+## D97AD accelerated boot chronology
+Selected accelerated boot `2026-09-02 00:10`; VESA recovery `00:12` excluded. Fatal WindowServer PID 394 launched `00:11:32.9517`, crashed `00:11:47.9888`, boot UUID `B6B4D4C3-D751-4FB0-AE64-2AF8AA1B9CC0`, COREANIMATION code 4 with `XPC_ERROR_CONNECTION_INTERRUPTED` after multiple retries. GPUCompiler 32023 libraries were visible in the crash report.
 
-WindowServer crash report in the selected accelerated boot:
-- PID 394; launch `00:11:32.9517`; crash `00:11:47.9888`;
-- boot UUID `B6B4D4C3-D751-4FB0-AE64-2AF8AA1B9CC0`;
-- COREANIMATION code 4, `XPC_ERROR_CONNECTION_INTERRUPTED` after multiple retries;
-- GPUCompiler 32023 libraries visible in WindowServer.
+## D97AEQ — runtime result: classifier coverage failed, 28/28 natural exit(1)
+D97AEQ read-only audit verified visible selector-only service SHA `a8716ffd...`, visible exact D97AD MTL SHA `524a16a...`, all six terminal postimages and shared exit stub.
 
-This retains the known downstream causal chain and does not determine the D97AD outcome code by itself.
+Selected accelerated window produced:
+- 28 service spawns / 28 unique PIDs;
+- 28 exact `exited due to` records;
+- zero missing exits, zero signals;
+- zero exits 110/111/112/113/114;
+- all 28 PIDs normal `exit(1)`.
 
-## D97AEQ — read-only runtime outcome audit ready
-Artifact `OCLP7_D97AEQ_READONLY_D97AD_ACCELERATED_WHOLE_STAGE_EXIT_AUDIT.command`:
-- commit `c3da3efe2e53c2e74703df7d0385415df0b4eeb4`;
-- blob `463d30a4e3b640994e68bebebc91a01e14fd2be9`.
+Authoritative classification:
+- `D97AEQ_AUDIT_TOOL_EXECUTION=PASS`;
+- `D97AD_VISIBLE_DISK_IDENTITY=PASS`;
+- `D97AD_CLASSIFIER_EXIT_EXECUTION_FOR_OBSERVED_COHORT=NEGATIVE`;
+- `D97AD_RUNTIME_LIVENESS_GATE=FAIL`;
+- `D97AD_WHOLE_STAGE_OUTCOME_CLASSIFICATION=INVALID`;
+- `NATURAL_MTLCOMPILERSERVICE_EXIT1=RUNTIME_PROVEN_28_OF_28`.
 
-D97AEQ verifies selector-only service SHA, D97AD MTL SHA and all six postimages/shared stub, then audits unified logs only from `2026-09-02 00:10:00` through but not including `00:12:00`. It enumerates every service spawn and exact `exited due to` record, applies the mandatory per-PID liveness gate, prints exit histogram/sequence 110–114, and correlates fatal WindowServer PID 394. It is entirely read-only.
+Do not infer any of the 110–114 outcomes from this run.
 
-## CURRENT ACTION — D97AEQ
-Run D97AEQ only and return the complete report. Do not Root Patch or reboot. Runtime interpretation is valid only if every spawned MTLCompilerService PID has exactly one classifier exit 110–114 and no signal/other/missing exit.
+Fatal WindowServer PID 394 hosted 12 observed service children, all exit(1). Final child PID 441 exited at `00:11:47.968`, approximately 20.8 ms before WindowServer crash at `00:11:47.9888`, strongly corroborating the exact fatal-lane order `compiler service failure -> XPC interruption -> WindowServer abort`.
 
-D82 remains reserve-only. Patch8 remains unauthorized.
+Every observed service emitted an MTLCompiler diagnostic immediately before exit(1) containing `...supported in the simulator but ... were used`; all show a repeated `STRING sz:9` decode mismatch, and PIDs 347/380/433 additionally show two `STRING sz:24` variants.
+
+D97AC remains a STATIC proof about the mapped validator CFG, but D97AEQ proves that the intended six-site runtime coverage assumption does not hold for the observed execution. Runtime executed-code provenance versus visible patched-file identity is now unresolved.
+
+## CURRENT ACTION — D97AER READ-ONLY PROVENANCE MAPPER
+Map the universal pre-exit compiler diagnostic and executed-generation provenance before spending another reboot. D97AER must:
+- retain current D97AD visible identities;
+- locate all `supported in the simulator` / `were used` static strings and xrefs in visible MTLCompiler 32023, map xrefs to symbols/functions and validator-relative offsets where applicable;
+- compare against visible MTLCompiler 3802 when available;
+- search the selected accelerated unified-log window for explicit 32023/3802 MTLCompiler path/load provenance;
+- correlate the universal diagnostic with the static function map.
+
+Read-only only. No Root Patch or reboot. D82 remains reserve-only. Patch8 remains unauthorized.
