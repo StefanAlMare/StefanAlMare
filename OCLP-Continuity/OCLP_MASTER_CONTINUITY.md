@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AEB_MATCHER_FALSE_NEGATIVE_D97AEC_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AEP_D97AD_APP_DEPLOYED_ROOTPATCH_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-01 EEST
@@ -34,11 +34,9 @@ P7 retained MTL SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc27
 
 Retained source-helper segment SHAs:
 - selector `adb3981f5ac58820d4715436f56936ce2cae1bcf7c162107d215ff6150ee61a4`;
-- D97Z service `3238bd5efd9161fbe53a58601a01667b37c96ff03c3126adace6cc701aa3bcbf`;
 - true-five control `254104fa863b6d0b8e9c27a6db907b423c3153958d3e51fc4cbd912c7ebe6ac9`;
-- P6 `ed38a8a0efad5b105f04d0ab76a4342d6fe682a33a0bf341f0b545f0da06c13a`;
-- P7 `a8fdac12d07a152e4a9ba5fc79558e0c594634f7762f6fd373421176e1a5b66b`;
-- D97 `7147d3be9c63968859fd89958aa74a15db6adad866c5f95059f6a61b39b6ae9c`.
+- P6 `ed38a8a0efad5b105f04d0ab76a4342d6fe682a33a0bf341f0da06c13a`;
+- P7 `a8fdac12d07a152e4a9ba5fc79558e0c594634f7762f6fd373421176e1a5b66b`.
 
 ## Durable semantic/runtime facts
 - D22: AIR2.6/Metal3.1 SEMANTIC PROVEN.
@@ -87,33 +85,42 @@ D97AD proved:
 - exact final D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`;
 - planned active order `selector -> control -> P6 -> P7 -> D97AD` is statically proven.
 
-## D97AEA observed false tooling failure
-Original wrapper commit `5c2510b2e6c3ee613f44afecf96b1f57e1ff8515`, blob `35c8328caf111a5f57e4a5cc656ada1f38ce6f83`.
-Original core payload commit `473d4bab1571e2a8907d3ae500fb88e5fd9639c0`, decompressed SHA256 `d8166ed5697cf281a60b19dba4c902470c4900de740006431d7cff5580fa5bb6`.
+## D97AD source snapshot and private GitHub build
+The exact local post-transition source state was verified with three authorized tracked changes: `metal_3802.py`, `sys_patch.py`, and `sys_patch_helpers.py`. `metal_3802.py` is the required historical Tahoe compiler substrate, not an accidental dirty file.
 
-D97AEA passed payload/core identity, zsh/Python compilation, precheck, exact service and MTL transitions, all six synthetic outcome postimages, collision audit and synthetic disassembly. It stopped in `SOURCE PREIMAGE AUDIT` before integration/build/deploy after printing actual P6 helper segment SHA `ed38a8a0efad5b105f04d0ab76a4342d6fe682a33a0bf341f0b545f0da06c13a` and raising a mismatch. The actual SHA is authoritative; the core's expected P6/P7 entries were reversed.
+Private snapshot/build lineage:
+- private repo `StefanAlMare/Private-Work`;
+- branch `oclp7-d97ad-github-build`;
+- snapshot commit `1faab13865eb945198f3551688f11f1ba645e29a`;
+- workflow `.github/workflows/oclp7-d97ad-build-v2.yml`;
+- run `33553271179`, job `100007798331`, Intel runner, conclusion success;
+- artifact `9818489515`, `OCLP7-D97AD-OpenCore-Patcher-v2`;
+- artifact digest `sha256:d570342beed9ceac1f37df24d7c4fa1ba0ad106114139f2e555ccba3f64ccc63`;
+- inner app zip SHA `c7951479492acbb2ce352d0958a2be84219db4b10484a0ce8cbb9238d0ef778c`;
+- packaged D97AD executable SHA `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`.
 
-Classification: `D97AEA_SOURCE_PREIMAGE_AUDIT=FALSE_FAIL_P6_P7_EXPECTED_SHA_MAP`.
-No functional design, runtime patch bytes, source transition, live application, Root Patch or boot state changed. Failure rollback was invoked.
+Packaged audit proved D97Z absent, D97 absent, D97AD exactly once, exact D97AD runtime contract, and Tahoe Metal 3802 compiler substrate.
 
-## D97AEB matcher false negative
-D97AEB verified all four payload blobs, the original core SHA and the unique owner `PYINTEGRATE` block. It then returned `D97AEB_P6_SHA_MAP_HIT_COUNT=0` because its regex recognized only narrow dict/tuple textual layouts, while the core uses a different binding shape. It stopped before modifying or executing the core. No source integration, build, deploy, Root Patch or reboot occurred.
+## D97AEO / D97AEP — D97AD app deployment FULL PASS
+D97AEP corrected only a zsh special-parameter collision (`path` rebinding `PATH`) in D97AEO by renaming three tool-loop references to `tool_path`; all artifact/deploy identities and rollback logic remained unchanged.
 
-Classification: `D97AEB_MATCHER_FALSE_NEGATIVE_REAL_PYINTEGRATE_BINDING_SHAPE_NOT_REGEX_MAP_SHAPE`.
+D97AEO then passed exact workflow/artifact metadata, downloaded artifact, inner ZIP/manifest/build-audit validation, x86_64 staged app identity, D97Z live preimage identity, backup, deployment SHA equality, and fresh-process provenance.
 
-## D97AEC ready
-Artifact `OCLP7_D97AEC_AST_SEMANTIC_P6_P7_SHA_BINDING_FIX_WRAPPER.command`:
-- commit `d6b90d246ce10481295e225d4fee99d588ddbe1c`;
-- blob `e638b2eab6f590fb20e80524de8fab28e974ece9`;
-- reachable branch `d97aec-ready`.
+Current live application:
+`/Applications/OpenCore-Patcher.app` executable SHA `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0`.
+Fresh process proven at the canonical application path.
 
-D97AEC reconstructs and pins the original D97AE core, parses the unique failing owner block with Python AST, semantically binds P6/P7 helper identities to their expected SHA literals across assignment/dict/tuple/list/call forms, refuses ambiguity, modifies only the bound SHA literals, proves neutralized textual identity for all remaining logic, recompiles every embedded Python block, parses zsh, retains all functional/runtime anchors and executes the complete D97AE FASTLANE. Runtime patch bytes and source transition are unchanged. It does not auto Root Patch or reboot.
+D97Z backup:
+`/Applications/OpenCore-Patcher.app.D97Z-before-D97AD-GitHub-20260901-232929`, executable SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`.
 
-## CURRENT ACTION — D97AEC
-Run D97AEC only and return:
-- `OCLP7_D97AEC_AST_SEMANTIC_P6_P7_SHA_BINDING_FIX_WRAPPER_REPORT.txt`;
-- `OCLP7_FASTLANE_D97AE_PRE_D97_WHOLE_STAGE_EXIT_CLASSIFIER_REPORT.txt`.
+No Root Patch or reboot occurred after D97AD application deployment. Therefore the currently root-patched system layer remains D97Z service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c` plus D97 MTL SHA `c46e864afa7c44f4e5aac36c8ac1976326ab363107513b96240c07649b20c118` until the next manual Root Patch.
 
-Do not Root Patch or reboot even if D97AEC/D97AE return PASS. Manual Root Patch requires a separate full assistant audit.
+Expected post-Root-Patch identities:
+- selector-only MTLCompilerService SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- D97AD MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`;
+- active order `selector -> control -> P6 -> P7 -> D97AD`.
+
+## CURRENT ACTION — MANUAL ROOT PATCH D97AD
+Manual Root Patch is authorized from the currently deployed D97AD application only. Do not reboot when patching completes. Return the complete Root Patch transcript for assistant audit. Only after exact service/MTL identities and the full patch chain are audited may an accelerated boot be authorized.
 
 D82 remains reserve-only. Patch8 remains unauthorized.
