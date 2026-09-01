@@ -3,12 +3,12 @@
 Updated: 2026-09-01 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97Z_ROOTPATCH_FULL_PASS_ACCELERATED_EXIT_CLASSIFIER_BOOT_AUTHORIZED.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97AA_RUNTIME_LLVMVERSION_32023_PROVEN_D97AB_WHOLE_STAGE_MAP_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 Repository recovery: `OCLP_REPOSITORY_RECOVERY_20260901.md`.
 
 ## Permanent protocol
-Identity-pinned FASTLANE -> complete audit -> manual Root Patch -> complete audit -> accelerated boot -> VESA recovery -> analyze only accelerated boot -> persist. Golden immutable/read-only. No automatic Root Patch/reboot. Missing `.ips` alone never hard negative. Control-flow != semantic proof.
+Identity-pinned FASTLANE -> complete audit -> manual Root Patch -> complete audit -> accelerated boot -> VESA recovery -> analyze only immediately preceding accelerated boot -> persist. Golden immutable/read-only. No automatic Root Patch/reboot. Missing `.ips` alone never hard negative. Control-flow is not semantic proof.
 
 ## Functional baseline
 P1 -> P2b -> P3 -> AIR00 -> D34.
@@ -19,81 +19,65 @@ D34 cave protected. P6/P7 retained, sufficiency NEGATIVE. D50/D68/D82 reserve-on
 ## Major durable milestones
 - D22: AIR2.6/Metal3.1 SEMANTIC PROVEN.
 - D69/D70: WindowServer downstream of compiler XPC failure.
-- D71R: service lifecycle observable through launchd.
+- D71R: service lifecycle/termination observable through launchd.
 - D83: upstream `llvm::Module*`; resource counters derived internally.
 - D93: primary RMP contract.
 - D95D: 14/14 deliberate SIGILL; wrapped LLVM bitcode STRUCTURAL-SEMANTIC PROVEN.
-- D96C: six-counter state stable at +0x58B.
-- D97H: 64/64 simulator-family/exit1 and zero downstream D97 SIGILL.
-- D97JB: +0x58B universal for all six late predicates and earliest post-final-write common dominator.
+- D96C: six-counter state stable at validator REL+0x58B.
+- D97JB: REL+0x58B universal for all six late predicates and earliest post-final-write common dominator.
 
 ## D97 compiler-version provenance
-D97K-T traced the runtime compiler selector from MTLCompilerService to XPC key `llvmVersion` and proved cached Metal.framework writes that key through exact `_xpc_dictionary_set_uint64`. Selector semantics are STATIC PROVEN: 3802 loads MTLCompiler 3802, 32023 loads 32023, other values select no valid path.
+D97K-T traced the receiver selector to XPC key `llvmVersion` and proved cached Metal.framework writes the key through exact `_xpc_dictionary_set_uint64`.
+Selector semantics STATIC PROVEN:
+- 3802 loads MTLCompiler 3802;
+- 32023 loads MTLCompiler 32023;
+- other values select no valid path.
 
-## D97U/V and D97W
-D97U mapped the exact post-getter boundary at fileoff `0x25C3`; RAX/EAX live and no selector overlap.
-D97V/VA FASTLANE and manual Root Patch FULL PASS. Installed terminal service SHA `bdb861da010542200a1fc480e796ba6d3405c842344612d162019c17d2b1fb19`.
-D97W found no in-window register report but 15 explicit launchd SIGILL terminations. Register channel NEGATIVE; SIGILL channel POSITIVE_REPEATED; runtime `llvmVersion` remained UNKNOWN.
+## D97U/V/W register capture
+D97U mapped exact post-getter boundary at service fileoff `0x25C3` with RAX/EAX live.
+D97V/VA FASTLANE and manual Root Patch FULL PASS; installed service SHA `bdb861da010542200a1fc480e796ba6d3405c842344612d162019c17d2b1fb19`.
+D97W found no in-window crash-register report, but repeated launchd SIGILL terminations. Register channel NEGATIVE; SIGILL channel POSITIVE_REPEATED.
 
-## Deterministic exit-code methodology
-Universal terminal classifier:
-- exit 123 for EAX 3802;
-- exit 124 for EAX 32023;
-- exit 125 for other.
-Uses Darwin x86_64 exit syscall and launchd accounting; no PID filter and no `.ips` dependency.
+## D97X/Y/Z deterministic exit methodology
+Universal launchd-visible classifier:
+- exit 123 = 3802;
+- exit 124 = 32023;
+- exit 125 = other.
 
-## D97X / D97Y
-D97X returned a valid STATIC NEGATIVE: no statically safe executable zero cave.
-D97Y then proved a safe complete-instruction in-place block:
-- file `0x25C3..0x25EB`, length 40, six straight-line instructions;
-- no direct target, RIP xref, symbol or function boundary inside;
-- exact 36-byte classifier plus four NOPs;
-- selector paths and next instruction retained;
-- synthetic final service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`;
-- synthetic disassembly PASS.
+D97X: no safe executable zero cave, valid STATIC NEGATIVE.
+D97Y: safe in-place block `0x25C3..0x25EB`, exact classifier plus four NOPs, no inbound target/xref/symbol, final service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`.
+D97ZA/D97Z FASTLANE FULL PASS; D97V replaced, not stacked; downstream D97 retained; app SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`.
+D97Z manual Root Patch FULL PASS; selector/true-five/P6/P7/D97/AuxKC/APFS snapshot all retained and verified.
 
-## D97ZA/D97Z — FASTLANE FULL PASS
-D97ZA wrapper commit `32ebc5a679b92f4ea6a9dc7a234e6281d7f61177`, blob `c0816d84048364eb793dcab0f55c3a4e8bcc1a70`.
-Payload commit `09543f3f5e7ad816d15650580ed17165eb698b0f`; all four payload identities and exact decompressed core SHA256 `419516697a9d69b888ec8fb03c10d6892c809c2e1a7653f190739f87350c3716` PASS. Zsh parse, six Python-block compile, anchors and forbidden-automation audit PASS.
+## D97AA — runtime llvmVersion 32023 PROVEN
+Artifact `OCLP7_D97AA_READONLY_ACCELERATED_EXIT_CLASSIFIER_LAUNCHD_AUDIT.command`:
+- commit `dec4a51d8b62e3e4d243b3763a7c56c0975ca60e`;
+- blob `1af7ea1b5438a3e447e7df821b4eb94228402206`.
 
-D97Z core:
-- exact live D97V app and service identities PASS;
-- D97V -> selector-only -> D97Z offline proof PASS;
-- exact final service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`;
-- D97V helper/call replaced by D97Z in place, not stacked;
-- selector/control/P6/P7/D97 helper identities retained;
-- active call order selector -> D97Z -> control -> P6 -> P7 -> D97;
-- exactly two allowed tracked files changed; exact deltas and whitespace gates PASS;
-- build PASS in 78.81 seconds;
-- packaged D97V absent, D97Z present once, order exact, privileged write count 3, downstream D97 retained;
-- dist/live app SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`;
-- backup exact prior D97V SHA;
-- deploy SHA match, fresh process PID 1380 and open OCLP PASS;
-- core RC 0, wrapper PASS, Root Patch AUTO-NO, reboot AUTO-NO.
+Accelerated boot `17:12`; VESA `17:14` excluded.
+D97AA verified exact D97Z service/block and classified 12 unique MTLCompilerService children for WindowServer PID 177.
 
-Classification: **D97ZA/D97Z FASTLANE FULL PASS**.
+Explicit primary launchd outcomes:
+- exit 123: 0;
+- exit 124: 12;
+- exit 125: 0;
+- signal: 0;
+- spawn without explicit exit: 0.
 
-## D97Z manual Root Patch — FULL PASS
-The complete Root Patch output established:
-- selector bridge `31001 -> 32023` verified;
-- exact D97Z service preimage SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- exact generated and committed D97Z service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`;
-- classifier PASS at `0x25C3..0x25EB` with exits 123/124/125, universal/no-PID and terminal/no-pass-through;
-- request-layout, serialized-bitcode, AIR00, D34 and true-five retained;
-- all P6 and P7 ports retained with exact committed SHA values;
-- downstream D97 retained with exact committed SHA `c46e864afa7c44f4e5aac36c8ac1976326ab363107513b96240c07649b20c118`;
-- Auxiliary Kernel Collection built and forced;
-- APFS snapshot created;
-- root volume unmounted and patching completed cleanly.
+Service PIDs: `323,326,328,331,334,337,340,343,351,353,357,361`.
+The 33 additional parser `unknown` entries are duplicate ancillary lifecycle lines, not independent process outcomes.
 
-Classification: **D97Z MANUAL ROOT PATCH FULL PASS**. Runtime untested.
+Classification: `RUNTIME_LLVMVERSION_32023_PROVEN_ALL_12_OBSERVED_REQUESTS`. No request variation.
+H4 (`runtime selects 3802`) is rejected for the observed accelerated cohort. D97H zero downstream marker is therefore not explained by compiler generation selection.
+
+## D97AB — pre-D97 validator whole-stage mapper ready
+Artifact `OCLP7_D97AB_READONLY_PRE_D97_VALIDATOR_WHOLE_STAGE_OUTCOME_MAP.command`:
+- commit `e0519e5b38c029e5bfd6ba141c422b43ca64246e`;
+- blob `366fb2a45895723d103b7edb31679a4cd5dd9a16`.
+
+D97AB is read-only. It reconstructs exact P7 from current D97 in a temporary copy, rebuilds the full `validSimulatorMetadata` CFG including the REL+0x279 indirect switch, and attempts an exhaustive partition before REL+0x58B into candidate reached, three known early metadata errors, and any other early terminal outcomes. It also audits the reusable D97 cave and complete-instruction terminal windows for a possible universal whole-stage launchd classifier.
 
 ## CURRENT ACTION
-Accelerated D97Z classifier boot is AUTHORIZED.
-
-After the accelerated attempt and VESA recovery, run:
-`last reboot | head -n 5 | tee ~/Desktop/OCLP7_D97Z_LAST_5_BOOTS.txt`
-
-Return the complete output. Do not Root Patch, modify OCLP or reboot again after VESA recovery. The next audit will analyze launchd exit codes only for the immediately preceding accelerated boot and classify 123/3802, 124/32023, 125/other or a request-varying mixture.
+Run D97AB only and return its complete report. Do not Root Patch or reboot. Any FASTLANE requires subsequent full assistant audit and explicit authorization.
 
 D82 remains reserve-only; Patch8 unauthorized.
