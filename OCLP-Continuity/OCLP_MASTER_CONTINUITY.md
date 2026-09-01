@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AB_CYCLE_CRITERION_FALSE_NEGATIVE_D97AC_SCC_AUDIT_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97AC_FINITE_OUTCOME_PARTITION_STATIC_PROVEN_D97AD_FINAL_IDENTITY_MAP_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-01 EEST
@@ -36,18 +36,18 @@ P7 retained SHA `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bd
 - D22: AIR2.6/Metal3.1 SEMANTIC PROVEN.
 - D36-D44 invalidated by D34 cave collision.
 - D69/D70: WindowServer/SkyLight is downstream of compiler XPC failure.
-- D71R: compiler-service lifecycle and deterministic termination are observable through launchd.
+- D71R: compiler-service lifecycle and deterministic termination observable through launchd.
 - D80 perturbative crash retired by D81 clean control.
 - D83: validator receives upstream `llvm::Module*` and derives resource metadata/counters internally.
 - D93: RMP `+0` bitcodeType, `+0x08` primary length, `+0x10` primary pointer, `+0x18/+0x20` plugin-data family.
-- D95/D95D: 14/14 deliberate SIGILL captures; wrapped LLVM bitcode STRUCTURAL-SEMANTIC PROVEN; exact Golden runtime semantics UNKNOWN.
+- D95/D95D: wrapped LLVM bitcode STRUCTURAL-SEMANTIC PROVEN; exact Golden runtime semantics UNKNOWN.
 - D96C: six counter values stable at `validSimulatorMetadata` REL+`0x58B`.
 - D97JB: full CFG 81 blocks; REL+`0x58B` dominates all six late predicates and is their earliest post-final-write common dominator.
 
 ## D97 compiler and selector provenance
-D97 downstream MTLCompiler snapshot:
+D97 downstream snapshot:
 - site fileoff `0x9D6BD`, cave `0xF80`, UD2 `0xF9F`, R11 magic `0x2152544E43373944`;
-- installed 32023 SHA `c46e864afa7c44f4e5aac36c8ac1976326ab363107513b96240c07649b20c118`.
+- installed MTLCompiler 32023 SHA `c46e864afa7c44f4e5aac36c8ac1976326ab363107513b96240c07649b20c118`.
 D97H observed repeated simulator-family service cycles but zero downstream D97 SIGILL.
 
 D97K-T proved:
@@ -56,66 +56,79 @@ D97K-T proved:
 - selector is low32 of XPC key `llvmVersion`;
 - cached Metal.framework writes `llvmVersion` through exact `_xpc_dictionary_set_uint64`.
 
-## D97U/V/W and D97X/Y/Z
-D97U proved the first instruction after the receiver getter at fileoff `0x25C3` preserves full RAX and low32 EAX.
-D97V installed a terminal UD2 capture. D97V/VA FASTLANE and manual Root Patch FULL PASS, but D97W produced repeated launchd SIGILL without an accessible register report.
+## D97U through D97Z
+D97U proved full RAX/low32 EAX live immediately after the receiver getter at fileoff `0x25C3`.
+D97V installed a terminal UD2 capture; repeated SIGILL was visible but no accessible register report was generated.
 
-A universal launchd-visible classifier replaced the failed register channel:
-- exit 123 = `llvmVersion=3802`;
-- exit 124 = `llvmVersion=32023`;
-- exit 125 = other.
+D97Z replaced the failed register channel with universal launchd-visible exits:
+- 123 = `llvmVersion=3802`;
+- 124 = `llvmVersion=32023`;
+- 125 = other.
 
-D97X found no safe executable zero cave, a valid STATIC NEGATIVE.
-D97Y proved a safe complete-instruction in-place block `0x25C3..0x25EB`, length 40. D97ZA/D97Z FASTLANE and manual Root Patch FULL PASS. D97Z committed service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`.
+D97X found no safe zero cave. D97Y proved a safe in-place service block `0x25C3..0x25EB`. D97ZA/D97Z FASTLANE and manual Root Patch FULL PASS. D97Z service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`; live app SHA `0a572f116293b3010276a035780e2ad5cd2414c29ff927461ed59f614d986e1f`.
 
 ## D97AA decisive runtime result
 Accelerated boot `17:12`; VESA `17:14` excluded.
-D97AA verified exact D97Z identity and classified 12 unique MTLCompilerService children for WindowServer PID 177:
+Twelve unique MTLCompilerService children for WindowServer PID 177 yielded:
 - exit 123: `0`;
 - exit 124: `12`;
 - exit 125: `0`;
 - signal exits: `0`;
-- spawn without explicit exit: `0`.
+- spawned PID without explicit exit: `0`.
 
 Classification: `RUNTIME_LLVMVERSION_32023_PROVEN_ALL_12_OBSERVED_REQUESTS`.
-H4 (`runtime selects 3802`) is rejected for the observed cohort. D97H zero downstream marker is not explained by compiler-generation selection. The unresolved causal interval is `MTLSimCompiler::validSimulatorMetadata` entry through, but not including, REL+`0x58B`.
+H4 (`runtime selects 3802`) is rejected for the observed cohort. The unresolved causal interval is inside `MTLSimCompiler::validSimulatorMetadata`, from entry through but not including REL+`0x58B`.
 
-## D97AB observed static mapper result
-Artifact:
-- commit `e0519e5b38c029e5bfd6ba141c422b43ca64246e`;
-- blob `366fb2a45895723d103b7edb31679a4cd5dd9a16`.
+## D97AB methodology correction
+D97AB reconstructed exact P7 and mapped the exact validator CFG: 408 instructions, 81 blocks, 75 reachable, indirect switch REL+`0x279` resolved. Candidate REL+`0x58B`, three known early errors and two residual finite outcomes were mapped. Shared cave and all six patch windows were SAFE.
 
-D97AB read-only mapper PASS:
-- exact D97 -> P7 reconstruction;
-- validator range exact `0x7FFB162C7132..0x7FFB162C7830`;
-- 408 instructions, full 81-block CFG, 75 reachable;
-- REL+`0x279` indirect switch resolved;
-- candidate REL+`0x58B` and three early error xrefs all reachable;
-- residual finite terminals B10 (`0xB9..0xCE`) and B80 (`0x6CC..0x6FE`);
-- shared cave `0xF80..0xF90` and all six terminal patch windows individually SAFE.
+D97AB marked the partition incomplete solely because cyclic regions existed. That criterion was retired: a cycle is not an outcome when it has outgoing paths to classified finite outcomes.
 
-D97AB reported two residual cycles and marked the entire partition incomplete because its criterion was `cycle count == 0`. That is a mapper-methodology false negative: a cyclic CFG component is not an outcome if it has outgoing edges to classified outcomes. D97AB did not perform SCC condensation, closed-SCC detection, reverse outcome reachability or a reachable unresolved-edge gate. No FASTLANE is authorized from D97AB alone.
-
-## D97AC SCC-hardened mapper ready
-Wrapper `OCLP7_D97AC_SCC_SINK_AND_RESIDUAL_TERMINAL_HARDENED_WRAPPER.command`:
+## D97AC — finite-path outcome partition STATIC PROVEN
+Wrapper:
 - commit `6f7848011bca95aa9d1b6cfce7d25b256d860e06`;
 - blob `8ddbf1f524c86b2932c2fbaee54f433f19d454d8`.
 
-D97AC is identity-pinned to the exact D97AB blob and changes only static analysis methodology:
-- Tarjan SCC condensation;
-- closed nonterminal SCC detection;
-- reverse reachability from all known and residual finite outcomes;
-- reachable outside/unresolved edge gate;
-- residual terminal inbound/raw-byte provenance;
-- separation of finite-path exhaustiveness from any global loop-termination claim.
+D97AC wrapper/core PASS and RC 0. Exact D97 -> P7 reconstruction and validator identity retained.
 
-A future runtime classifier, if statically authorized, must retain the liveness gate: every spawned MTLCompilerService PID must emit exactly one classifier exit; any spawned PID without one invalidates runtime classification.
+SCC-hardened decisive gates:
+- `CLOSED_NONTERMINAL_SCC_COUNT=0`;
+- `REACHABLE_OUTSIDE_OR_UNRESOLVED_EDGE_COUNT=0`;
+- `BLOCKS_WITHOUT_PATH_TO_CLASSIFIED_FINITE_OUTCOME_COUNT=0`;
+- `ALL_REACHABLE_BLOCKS_HAVE_CLASSIFIED_FINITE_OUTCOME_PATH=PASS`;
+- `FINITE_PATH_OUTCOME_PARTITION_EXHAUSTIVE_STATIC=PASS`;
+- global termination explicitly not claimed because cyclic SCCs exist;
+- `SCC_HARDENED_CLASSIFIER_STATIC_READY=YES`.
 
-## CURRENT ACTION — D97AC
-Run D97AC only and return both complete reports:
-- `OCLP7_D97AC_SCC_SINK_AND_RESIDUAL_TERMINAL_HARDENED_WRAPPER_REPORT.txt`;
-- `OCLP7_D97AC_READONLY_PRE_D97_VALIDATOR_SCC_FINITE_OUTCOME_AUDIT_REPORT.txt`.
+Finite outcomes and codes:
+- 110 candidate/D97 boundary REL+`0x58B`;
+- 111 buffer-index error REL+`0x29A`;
+- 112 sampler-index error REL+`0x2D9`;
+- 113 nested argument-buffer error REL+`0x3E2`;
+- 114 normal early return REL+`0xB9` or unwind/cleanup REL+`0x6CC`.
 
-Do not Root Patch or reboot. A FASTLANE may be designed only after D97AC proves zero closed nonterminal SCCs, zero reachable outside/unresolved edges, finite-outcome reachability for every reachable block, retained safe windows/cave, and the runtime liveness gate.
+Shared cave `0xF80..0xF90` remains zero and without target/xref/symbol. Stub `b8010000020f050f0b`. All six complete-instruction windows are SAFE.
+
+Classification: `STATIC_PROVEN_FOR_FASTLANE_DESIGN_ONLY_WITH_RUNTIME_LIVENESS_GATE`.
+Mandatory runtime gate: every spawned MTLCompilerService PID must emit exactly one exit 110–114; a missing, signal or other exit invalidates the runtime run.
+
+## Required next integration architecture
+The next diagnostic must replace, not stack:
+1. remove D97Z service helper/call so Root Patch leaves selector-only MTLCompilerService SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+2. replace D97 MTLCompiler helper/call with the whole-stage classifier because it reuses D97's site/cave;
+3. retain selector, true-five control, P6 and P7 unchanged.
+
+## D97AD exact final-image/source-transition mapper ready
+Artifact:
+- commit `96d91d25f9959666c1ade1df10ff2c3c4dfe0cc8`;
+- blob `536009a4d1ba9497f0a33fdb17f62dfa9a5089c4`.
+
+D97AD is strictly read-only. It verifies exact live D97Z service/app and D97 MTLCompiler, reconstructs selector-only service and P7, verifies all six pre/postimages and non-overlap with D34/P6/P7, calculates the exact synthetic final MTL SHA, disassembles all six site heads, and proves the current-to-planned source transition: remove D97Z and replace D97 with D97AD, not stacked.
+
+## CURRENT ACTION — D97AD
+Run D97AD only and return:
+`OCLP7_D97AD_READONLY_PRE_D97_WHOLE_STAGE_FINAL_IMAGE_AND_SOURCE_TRANSITION_MAP_REPORT.txt`.
+
+Do not Root Patch or reboot. Build the FASTLANE only after the exact final SHA and source-transition map pass assistant audit.
 
 D82 remains reserve-only. Patch8 remains unauthorized.
