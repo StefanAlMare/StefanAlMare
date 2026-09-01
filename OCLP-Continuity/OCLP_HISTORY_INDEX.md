@@ -3,7 +3,7 @@
 Updated: 2026-09-01 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97W_SIGILL_CHANNEL_POSITIVE_REGISTER_CHANNEL_NEGATIVE_D97X_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260901_D97X_NO_SAFE_ZERO_CAVE_D97Y_INPLACE_BLOCK_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 Repository recovery: `OCLP_REPOSITORY_RECOVERY_20260901.md`.
 
@@ -53,13 +53,24 @@ Accelerated boot 14:00; VESA 14:03 excluded.
 17 MTLCompilerService reports parsed, zero in content window, zero exact terminal/RAX captures. Register-report channel NEGATIVE.
 Unified log shows repeated service respawn and 15 explicit launchd SIGILL terminations in the displayed window. SIGILL channel POSITIVE_REPEATED. D97V terminal control-flow strongly corroborated but exact RIP/RAX not proven. Runtime `llvmVersion` remains UNKNOWN.
 
-## D97X — deterministic launchd exit classifier mapper ready
+## D97X — cave-placement STATIC NEGATIVE
 Artifact commit `09d9a64bbf8789a3227693adec37c3d06551ee53`, blob `71bd9caedd19b71d16637d9bdbd5263930824192`.
-Read-only mapper verifies current D97V, reconstructs selector-only preimage, maps executable zero caves and rejects xref/target/symbol/overlap hazards. It designs a three-way exact EAX classifier:
-- exit 123 for 3802;
-- exit 124 for 32023;
+
+Exact D97V identity and selector-only reconstruction PASS. Executable `__TEXT,__text` is file `0x23C0..0x360A`; static inventory contains 1329 instructions, 225 direct branch/call targets, 59 RIP-relative targets and 68 symbols.
+
+Zero-runs of at least 48 bytes inside executable text: `0`. Safe cave candidates: `0`.
+
+Classification: `NO_STATICALLY_SAFE_EXECUTABLE_ZERO_CAVE_FOUND`; cave-based classifier NOT AUTHORIZED. This is a valid STATIC NEGATIVE. Cave criteria remain unchanged.
+
+## D97Y — in-place terminal complete-block mapper ready
+Artifact commit `4e3d2333d1d28350295ce2710e82431edba1ed3f`, blob `549c894920b9fb1d688272f6b50034b3763bcf55`.
+
+D97Y evaluates a distinct safe placement architecture permitted for explicitly terminal diagnostics: overwrite only a contiguous interval of complete straight-line instructions beginning immediately after the `llvmVersion` getter. It must prove the minimum interval large enough for the 36-byte three-way classifier, exact instruction identities/end boundary, no interior branch target/RIP xref/symbol/function-boundary hazard, retained selector paths and next instruction, deterministic final SHA and valid synthetic disassembly. No integration or Root Patch.
+
+Classifier semantics remain:
+- exit 123 for EAX 3802;
+- exit 124 for EAX 32023;
 - exit 125 for other.
-Uses Darwin x86_64 exit syscall and launchd accounting; no `.ips` dependency. No integration or Root Patch.
 
 ## CURRENT ACTION
-Run D97X only and return its complete report. Do not Root Patch or reboot. If every static gate passes, build one corrected FASTLANE replacing D97V, then follow the permanent audit protocol.
+Run D97Y only and return its complete report. Do not Root Patch or reboot. If and only if every static gate passes, design one identity-pinned FASTLANE replacing D97V with the in-place deterministic exit classifier.
