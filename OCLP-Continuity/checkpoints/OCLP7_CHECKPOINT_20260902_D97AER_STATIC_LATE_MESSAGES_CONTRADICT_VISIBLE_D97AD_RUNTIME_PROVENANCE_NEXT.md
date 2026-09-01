@@ -46,7 +46,12 @@ D97AER printed `RUNTIME_EXIT1_PID_COUNT=0` and `UNIVERSAL_PRE_EXIT_DIAGNOSTIC_CO
 
 Do not infer 3802 or stale/shared-cache execution yet. Those remain hypotheses until direct provenance evidence.
 
-## CURRENT SINGLE NEXT ACTION
-Run a new read-only JSON unified-log provenance mapper on the same historical accelerated window. It must inspect raw JSON records for the simulator diagnostic and extract every available `senderImagePath`, `senderImageUUID`, `processImagePath`, `processImageUUID`, source/format metadata and PID. Compare sender UUID/path against the visible 32023 and 3802 Mach-O UUIDs. Also repair the launchd exit(1) parser only as corroboration; D97AEQ remains authoritative for exit counts.
+## D97AES artifact — ready
+`OCLP7_D97AES_READONLY_JSON_SENDER_IMAGE_AND_FORMAT_PROVENANCE.command`
+- commit `d2b0ed71ac900dc5257a273150b9cee57d981707`;
+- blob `1d4ba5ebffde598910db7b08237b30f6c9a9568e`.
 
-No source/system/Golden mutation, service launch, Root Patch or reboot. D82 remains reserve-only. Patch8 remains unauthorized.
+D97AES is read-only and uses the exact historical `00:10:00 <= t < 00:12:00` window with `log show --style json`. It records visible 32023/3802/service Mach-O UUIDs, extracts raw simulator-diagnostic JSON records, enumerates sender/process image paths and UUIDs, inspects `formatString` metadata for branch-family recovery, and compares sender UUID/path against visible 32023 and 3802. A repaired exit(1) parser is corroborative only; D97AEQ remains authoritative for 28/28 exit(1).
+
+## CURRENT SINGLE NEXT ACTION
+Run D97AES only and return the complete report. No source/system/Golden mutation, service launch, runtime instrumentation, Root Patch or reboot. D82 remains reserve-only. Patch8 remains unauthorized.
