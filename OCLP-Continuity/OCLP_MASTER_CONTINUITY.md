@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97ZA_FASTLANE_FULL_PASS_ROOTPATCH_AUTHORIZED.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97Z_ROOTPATCH_FULL_PASS_ACCELERATED_EXIT_CLASSIFIER_BOOT_AUTHORIZED.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-01 EEST
@@ -17,7 +17,7 @@ Before any technical change read in full:
 ## Permanent contract
 Target Tahoe 26.6.2 / 25G82, Haswell 8086:0412, SMBIOS MacBookAir6,2.
 Local OCLP branch `alex-tahoe-25G82-custom`, expected HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06`.
-Golden root-patched MTLCompiler SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`, immutable/read-only.
+Golden root-patched MTLCompiler SHA `ddabe975cd2ff3e885eccd50259639182b29ee269`, immutable/read-only.
 True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`.
 
 One action at a time. Identity-pinned FASTLANE -> full audit -> manual Root Patch -> full audit -> accelerated boot -> VESA recovery -> analyze only accelerated boot -> persist.
@@ -124,18 +124,35 @@ Build/package/deploy:
 - core RC 0 and wrapper PASS;
 - Root Patch AUTO-NO and reboot AUTO-NO.
 
-Classification: **D97ZA/D97Z FASTLANE FULL PASS**. Runtime remains UNTESTED.
+Classification: **D97ZA/D97Z FASTLANE FULL PASS**.
 
-## CURRENT ACTION — manual Root Patch
-Manual Root Patch in the freshly deployed/opened OCLP application is AUTHORIZED.
-Return the complete Root Patch output for assistant audit. Do not reboot until explicit post-Root-Patch authorization.
+## D97Z manual Root Patch — FULL PASS
+Complete Root Patch output audited:
+- selector `31001 -> 32023` applied and verified;
+- D97Z exact preimage SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- D97Z generated and committed service SHA exact `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`;
+- classifier PASS, block `0x25C3..0x25EB`, exits `123/124/125`, universal/no-PID, terminal/no-pass-through;
+- request-layout, serialized-bitcode, AIR00 and D34 verified;
+- true-five SHA exact;
+- P6 all 12 ports and committed SHA exact, PASS;
+- P7 both ports and committed SHA exact, PASS;
+- downstream D97 committed SHA exact and PASS;
+- Auxiliary Kernel Collection built/forced;
+- APFS snapshot created;
+- root volume unmounted and `Patching complete` reached;
+- no traceback, rollback or failed stage.
 
-Expected key evidence:
-- selector 31001 -> 32023 PASS;
-- D97Z preimage SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- D97Z committed/final service SHA `2ce8d92c23060a3f5b9b883bd465e6e46b26013d801b6887cdedc43386f9b37c`;
-- D97Z classifier PASS with block `0x25C3..0x25EB` and exits `123/124/125`;
-- retained true-five/P6/P7/D97 lineage;
-- AuxKC and APFS snapshot completion.
+Classification: **D97Z MANUAL ROOT PATCH FULL PASS**. Runtime remains UNTESTED.
+
+## CURRENT ACTION — accelerated D97Z classifier boot
+Accelerated boot is AUTHORIZED.
+
+User procedure:
+1. reboot normally into the root-patched accelerated configuration;
+2. if no usable image appears, hard restart/power-cycle and boot the known VESA configuration;
+3. once back in VESA, do not Root Patch, alter OCLP or reboot again;
+4. run `last reboot | head -n 5 | tee ~/Desktop/OCLP7_D97Z_LAST_5_BOOTS.txt` and return the complete output.
+
+The next analysis will scope launchd exit accounting only to that accelerated boot and classify observed requests as 123/3802, 124/32023, 125/other, or a request-varying mixture.
 
 D82 remains reserve-only. Patch8 remains unauthorized.
