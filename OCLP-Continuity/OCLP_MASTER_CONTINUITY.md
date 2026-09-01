@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97W_SIGILL_CHANNEL_POSITIVE_REGISTER_CHANNEL_NEGATIVE_D97X_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260901_D97X_NO_SAFE_ZERO_CAVE_D97Y_INPLACE_BLOCK_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-01 EEST
@@ -99,18 +99,41 @@ Conservative conclusion: D97V terminal execution is strongly corroborated, but e
 
 ## Methodology decision after D97W
 Do not repeat a register-dependent SIGILL capture. Use deterministic launchd-visible normal exit accounting.
-Planned exact classifier:
+Exact classifier semantics:
 - exit 123 = EAX exactly 3802;
 - exit 124 = EAX exactly 32023;
 - exit 125 = any other value.
 Universal/no-PID, terminal, no crash-report dependency.
 
-## D97X artifact ready
-`OCLP7_D97X_READONLY_EXIT_CODE_CLASSIFIER_CAVE_SAFETY_AND_DESIGN_MAP.command`
+## D97X observed STATIC NEGATIVE
+Artifact `OCLP7_D97X_READONLY_EXIT_CODE_CLASSIFIER_CAVE_SAFETY_AND_DESIGN_MAP.command`:
 - commit `09d9a64bbf8789a3227693adec37c3d06551ee53`;
 - blob `71bd9caedd19b71d16637d9bdbd5263930824192`.
 
-D97X verifies current D97V identity, reconstructs selector-only preimage, maps Mach-O sections/xrefs/symbols, selects only a statically safe executable zero cave, constructs an exact 36-byte three-way classifier using Darwin x86_64 exit syscall `0x2000001`, derives deterministic site/cave bytes and final SHA, and disassembles a synthetic patched copy. It performs no integration or mutation.
+D97X identity and selector-only reconstruction PASS. Exact code map:
+- `__TEXT,__text` file `0x23C0..0x360A`, VM `0x1000023C0..0x10000360A`;
+- capture/classifier site VM `0x1000025C3`.
 
-## CURRENT ACTION — D97X
-Run D97X only and return the complete report. Do not Root Patch or reboot. After assistant audit, design a single identity-pinned FASTLANE replacing D97V with the deterministic exit-code classifier only if every cave and classifier gate passes.
+Static inventory: 1329 instructions, 225 direct branch/call targets, 59 RIP-relative targets and 68 symbol addresses.
+Executable zero-runs >=48 bytes: `0`; safe cave candidates: `0`.
+
+Classifications:
+- `D97X_RESULT=NO_STATICALLY_SAFE_EXECUTABLE_ZERO_CAVE_FOUND`;
+- `D97X_EXIT_CLASSIFIER_AUTHORIZED=NO` for cave placement;
+- this is a valid STATIC NEGATIVE, not a tooling failure.
+
+Do not weaken cave criteria or use unproved non-code bytes.
+
+## D97Y in-place complete-block mapper ready
+Artifact `OCLP7_D97Y_READONLY_INPLACE_TERMINAL_CLASSIFIER_BLOCK_SAFETY_MAP.command`:
+- commit `4e3d2333d1d28350295ce2710e82431edba1ed3f`;
+- blob `549c894920b9fb1d688272f6b50034b3763bcf55`.
+
+D97Y tests a different, rule-compliant architecture: replace a contiguous sequence of complete straight-line instructions beginning at the already-proven first instruction after the getter. Because the diagnostic is terminal, it makes no pass-through claim and does not require a cave.
+
+It requires exact selector-only reconstruction; finds the minimum complete-instruction interval holding the 36-byte classifier; requires the expected instruction identities and exact end boundary; audits direct targets, RIP-relative targets, symbols and containing-symbol boundaries; verifies classifier branch bytes/semantics/syscall; retains both selector paths and the first untouched instruction; derives deterministic final SHA and disassembles the synthetic postimage. It performs no integration or mutation.
+
+## CURRENT ACTION — D97Y
+Run D97Y only and return the complete report. Do not Root Patch or reboot.
+
+Only if every complete-block, inbound-reference, classifier and synthetic-disassembly gate passes may one identity-pinned FASTLANE replacing D97V with the in-place deterministic exit classifier be designed.
