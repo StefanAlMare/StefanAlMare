@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEQ_28_OF_28_EXIT1_CLASSIFIER_ZERO_RUNTIME_INVALID.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AER_STATIC_LATE_MESSAGES_CONTRADICT_VISIBLE_D97AD_RUNTIME_PROVENANCE_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -90,12 +90,7 @@ Selected accelerated boot `2026-09-02 00:10`; VESA recovery `00:12` excluded. Fa
 ## D97AEQ — runtime result: classifier coverage failed, 28/28 natural exit(1)
 D97AEQ read-only audit verified visible selector-only service SHA `a8716ffd...`, visible exact D97AD MTL SHA `524a16a...`, all six terminal postimages and shared exit stub.
 
-Selected accelerated window produced:
-- 28 service spawns / 28 unique PIDs;
-- 28 exact `exited due to` records;
-- zero missing exits, zero signals;
-- zero exits 110/111/112/113/114;
-- all 28 PIDs normal `exit(1)`.
+Selected accelerated window produced 28 unique service PIDs, 28 exact launchd exit records, zero missing exits, zero signals, zero exits 110–114, and all 28 normal `exit(1)`.
 
 Authoritative classification:
 - `D97AEQ_AUDIT_TOOL_EXECUTION=PASS`;
@@ -105,20 +100,35 @@ Authoritative classification:
 - `D97AD_WHOLE_STAGE_OUTCOME_CLASSIFICATION=INVALID`;
 - `NATURAL_MTLCOMPILERSERVICE_EXIT1=RUNTIME_PROVEN_28_OF_28`.
 
-Do not infer any of the 110–114 outcomes from this run.
+Fatal WindowServer PID 394 hosted 12 observed service children, all exit(1). Final child PID 441 exited at `00:11:47.968`, ~20.8 ms before WindowServer crash, strongly corroborating `compiler service failure -> XPC interruption -> WindowServer abort`.
 
-Fatal WindowServer PID 394 hosted 12 observed service children, all exit(1). Final child PID 441 exited at `00:11:47.968`, approximately 20.8 ms before WindowServer crash at `00:11:47.9888`, strongly corroborating the exact fatal-lane order `compiler service failure -> XPC interruption -> WindowServer abort`.
+## D97AER — static late-message map exposes executed-image contradiction
+D97AER reverified selector-only service SHA and exact visible D97AD 32023 SHA. Visible 3802 SHA is `85d4c285915c4d2094f3624d80fd2d0c4dd30994fc5150c22d1e6d2b58d67f40`.
 
-Every observed service emitted an MTLCompiler diagnostic immediately before exit(1) containing `...supported in the simulator but ... were used`; all show a repeated `STRING sz:9` decode mismatch, and PIDs 347/380/433 additionally show two `STRING sz:24` variants.
+Visible 32023 contains the simulator-limit diagnostic family. Five resolved late message xrefs are all inside `MTLSimCompiler::validSimulatorMetadata` and all strictly after the D97AD candidate terminal REL `0x58B`:
+- buffers REL `0x596`;
+- samplers REL `0x5BC`;
+- textures REL `0x5E0`;
+- constant buffers REL `0x608`;
+- interpolated inputs REL `0x62B`.
 
-D97AC remains a STATIC proof about the mapped validator CFG, but D97AEQ proves that the intended six-site runtime coverage assumption does not hold for the observed execution. Runtime executed-code provenance versus visible patched-file identity is now unresolved.
+Disassembly immediately before the first late message visibly contains the exact D97AD terminal at REL `0x58B` (exit110 + unconditional jump to shared exit stub). Therefore those late messages cannot be emitted by normal fallthrough through the exact patched 32023 D97AD path without first taking exit110. D97AEQ observed zero exit110 and 28/28 exit(1).
 
-## CURRENT ACTION — D97AER READ-ONLY PROVENANCE MAPPER
-Map the universal pre-exit compiler diagnostic and executed-generation provenance before spending another reboot. D97AER must:
-- retain current D97AD visible identities;
-- locate all `supported in the simulator` / `were used` static strings and xrefs in visible MTLCompiler 32023, map xrefs to symbols/functions and validator-relative offsets where applicable;
-- compare against visible MTLCompiler 3802 when available;
-- search the selected accelerated unified-log window for explicit 32023/3802 MTLCompiler path/load provenance;
-- correlate the universal diagnostic with the static function map.
+Visible 3802 contains the same six messages; its validator owns all six xrefs, including nested argument buffer REL `0x4CB` and late resource-limit family REL `0x619..0x6C3`. Therefore compact message text alone does not distinguish 32023 from 3802.
 
-Read-only only. No Root Patch or reboot. D82 remains reserve-only. Patch8 remains unauthorized.
+D97AER compact historical log search found no explicit 32023/3802 image path, so executed generation/path remains UNKNOWN. D97AER proved the simulator diagnostic appears for all 28 spawned PIDs. Its local `RUNTIME_EXIT1_PID_COUNT=0` is a tooling false negative caused by regex shape; D97AEQ remains authoritative for 28/28 exit(1).
+
+Authoritative classifications:
+- `D97AER_STATIC_32023_LATE_DIAGNOSTIC_XREFS=STATIC_PROVEN_AFTER_REL_0x58B`;
+- `D97AER_RUNTIME_SIMULATOR_DIAGNOSTIC=REACHED_FOR_ALL_28_OBSERVED_PIDS`;
+- `D97AER_COMPACT_LOG_GENERATION_PROVENANCE=UNKNOWN`;
+- `D97AER_EXIT1_LOCAL_CORRELATOR=TOOLING_FALSE_NEGATIVE`;
+- `EXACT_VISIBLE_D97AD_32023_EXECUTION_PROVENANCE=UNRESOLVED`;
+- `VISIBLE_D97AD_BYTES_VS_RUNTIME_LATE_MESSAGE=CONTRADICTION_REQUIRING_EXECUTED_IMAGE_PROVENANCE`.
+
+Do not promote 3802, stale mapping, shared-cache execution, or static-CFG failure to fact without direct evidence.
+
+## CURRENT ACTION — D97AES JSON SENDER-IMAGE PROVENANCE
+Run a read-only historical unified-log JSON mapper on the exact `00:10..00:12` accelerated window. Extract raw simulator-diagnostic records and every available `senderImagePath`, `senderImageUUID`, `processImagePath`, `processImageUUID`, source/format metadata and PID. Compare sender path/UUID against visible MTLCompiler 32023 and 3802 Mach-O UUIDs. Repair launchd exit(1) parsing only as corroboration; D97AEQ remains authoritative for exit counts.
+
+No source/system/Golden mutation, service launch, Root Patch or reboot. D82 remains reserve-only. Patch8 remains unauthorized.
