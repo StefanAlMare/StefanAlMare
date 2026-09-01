@@ -3,37 +3,39 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AES_RUNTIME_32023_SENDER_PROVEN_EXECUTED_TEXT_PROVENANCE_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AET_CACHE_CONTAINS_32023_BYTE_COMPARE_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
-Repository recovery: `OCLP_REPOSITORY_RECOVERY_20260901.md`.
 
 ## Permanent protocol
-Identity-pinned FASTLANE -> complete audit -> manual Root Patch -> complete audit -> accelerated boot -> VESA recovery -> analyze only immediately preceding accelerated boot -> persist. Golden immutable/read-only. No automatic Root Patch/reboot. Missing `.ips` alone never hard negative. Control-flow is not semantic proof.
+Identity-pinned FASTLANE -> complete audit -> manual Root Patch -> complete audit -> accelerated boot -> VESA recovery -> selected accelerated-boot analysis -> persist. Golden immutable/read-only. No automatic Root Patch/reboot. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
 
 ## Functional baseline
-P1 -> P2b -> P3 -> AIR00 -> D34. True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. Golden SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`. D34 cave protected. P6/P7 retained, sufficiency NEGATIVE. D50/D68/D82 reserve-only. D84 retired. Patch8 unauthorized.
+P1 -> P2b -> P3 -> AIR00 -> D34. True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. P6/P7 retained, runtime sufficiency NEGATIVE.
 
 ## Durable milestones
-D22 AIR2.6/Metal3.1 SEMANTIC PROVEN. D69/D70 WindowServer downstream. D71R compiler lifecycle observable. D83 upstream llvm::Module*. D93 RMP contract. D95D wrapped LLVM bitcode STRUCTURAL-SEMANTIC PROVEN. D96C six-counter state. D97JB REL+0x58B common dominator.
+D22 AIR semantics PROVEN. D69/D70 WindowServer downstream. D71R compiler lifecycle observable. D83 upstream llvm::Module*. D93 RMP contract. D95D wrapped LLVM bitcode structural-semantic proof. D96C/D97JB late validator frontier/static CFG.
 
-## D97 provenance and classifier line
-D97K-T mapped compiler generation selection. D97AA proved runtime llvmVersion 32023 for an earlier cohort. D97AC statically mapped finite outcomes in `validSimulatorMetadata`. D97AD exact transition produced selector-only service SHA `a8716ffd...` and final MTL SHA `524a16a...`, with six exact terminal postimages/shared stub.
+## D97 provenance and exact transition
+D97AA proved runtime 32023 selection in an earlier cohort. D97AC statically mapped the validator finite outcomes. D97AD exact transition produced selector-only service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43` and final MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755` with six exact terminal postimages/shared stub. Private build/deploy and manual Root Patch passed exactly.
 
-Private snapshot/build/deploy and manual Root Patch all passed exactly; live D97AD app executable SHA `5a214ab2...`.
+## Accelerated D97AD boot
+Selected boot `2026-09-02 00:10`; VESA `00:12` excluded. Fatal WindowServer PID394 followed the compiler-service failure lane.
 
-## Selected accelerated D97AD boot
-Accelerated boot `2026-09-02 00:10`; VESA recovery `00:12` excluded. WindowServer PID394 crashed `00:11:47.9888` after compiler XPC interruption; final child PID441 exited ~20.8 ms earlier.
+## D97AEQ
+Visible D97AD identity PASS. 28 service PIDs / 28 exact launchd exits; zero signals/missing; zero exits110-114; all 28 normal exit(1). Classifier runtime coverage NEGATIVE and whole-stage outcome INVALID.
 
-## D97AEQ — runtime coverage failure
-Exact visible D97AD identities/postimages PASS. 28 unique service PIDs, 28 exact launchd exits, zero signals/missing, zero exits110–114, natural exit(1)=28/28. Classifier execution NEGATIVE; liveness gate FAIL; whole-stage outcome INVALID.
+## D97AER
+Visible 32023 late simulator-limit diagnostics map after the visible D97AD candidate terminal REL+0x58B, yet runtime emitted those diagnostics for all 28 PIDs. Exact executed-text provenance became the key unresolved issue.
 
-## D97AER — late diagnostic contradiction
-Visible 32023 simulator-limit xrefs resolve inside `validSimulatorMetadata` at REL `0x596`, `0x5BC`, `0x5E0`, `0x608`, `0x62B`, all after exact D97AD exit110 REL `0x58B`. Runtime nevertheless emitted simulator diagnostics for all 28 PIDs with zero exit110. Compact generation provenance UNKNOWN.
+## D97AES
+Historical JSON proved every simulator diagnostic sender is MTLCompiler 32023 path/UUID, all 28 PIDs; 3802 is NEGATIVE.
 
-## D97AES — runtime sender 32023 PROVEN
-Historical unified-log JSON contained 33 simulator-diagnostic records across all 28 service PIDs. Every record reports sender path `/System/Library/PrivateFrameworks/MTLCompiler.framework/Versions/32023/MTLCompiler` and sender UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`, exactly the visible 32023 LC_UUID. Sender path/UUID histograms: 32023=33, 3802=0, unknown=0. Thus runtime diagnostic sender generation/path/UUID 32023 is PROVEN for all observed PIDs; 3802 explanation is NEGATIVE.
+## D97AET
+Visible D97AD candidate bytes remained exact. Historical sender/backtrace offsets were only `0x9FFEE` and `0xA5F81`, outside the validator; no archived frame directly proves traversal beyond the terminal.
 
-Archived `formatString` is truncated and cannot identify the exact late branch. Sender path/UUID still does not prove exact current text bytes; filesystem-patched vs cached/stale 32023 execution remains unresolved.
+D97AET also proved the Cryptex x86_64h dyld shared cache contains the 32023 MTLCompiler path and not the 3802 path. This is cache containment only, not runtime-cache execution proof.
+
+Exact candidate discriminator at image offset `0x9D6BD`: P7/pre-D97AD `8b8d10feffff83f941`; D97AD `6a6e5fe9bb38f6ff90`.
 
 ## CURRENT ACTION
-D97AET read-only executed-text provenance mapper: extract `senderProgramCounter`/`backtrace.frames`, map exact runtime image offsets to visible 32023 callsites, and inspect dyld/shared-cache provenance. No Root Patch/reboot. D82 reserve-only; Patch8 unauthorized.
+D97AEU read-only dyld shared-cache byte mapper: identify cached 32023 image by path/UUID and compare cache bytes against all six D97AD pre/postimages plus selected retained-patch sites. No Root Patch/reboot.
