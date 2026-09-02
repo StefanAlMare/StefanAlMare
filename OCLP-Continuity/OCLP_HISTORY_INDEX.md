@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEW_PHYSICAL_READ_VALID_D5CE_RUNTIME_TEXT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEX_GITHUB_BUILD_ARTIFACT_AUDIT_PASS_WRAPPER_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -50,5 +50,13 @@ The exact official release lineage is OCLP 1.3.0 -> PatcherSupportPkg 1.4.6 -> 1
 
 D97AES is reclassified as direct runtime provenance: 33/33 simulator diagnostics across 28/28 PIDs came from immediate sender DSO 32023/D5CE; current cache D226 is NEGATIVE as the immediate sender of those records. This does not exclude D226 elsewhere and does not prove exact D97AD postimage bytes because the known P7-to-D97AD transform lineage preserves D5CE. Exact runtime D97AD text remains UNKNOWN. The earlier semantic-D226 next action is superseded and becomes reserve-only static cross-build research.
 
-## CURRENT ACTION — assistant GitHub runtime D5CE text proof
-Assistant designs and audits a passive non-stopping universal/no-PID mapper for a new naturally occurring service cohort: per PID loaded D5CE header/path/base/backing plus direct read-only classification of the six D97AD sites, stub and required retained/late/far-frontier anchors. No service launch. STOP on unsafe/denied task access; no LLDB attach, Root Patch or reboot. No ASUS2 command before GitHub audit.
+## D97AEX GitHub helper build and artifact audit
+Frozen source commit `5272206915adb71a1b08d5fe131da40a799b3943`, blob `edcb086b00dd760ba67a9a4f7ccaaea1b5baae41`, SHA256 `04bbf5b0a6e4ba18928d45ca1e9588ddda95055d048c98550528659f7e300658` implements a finite poll-sampled universal/no-PID read-only watcher over exactly 31 windows / 330 bytes per pass. Three independent source audits passed.
+
+Private run `33612947825`, job `100192139189`, head `222fc2c79de2dab46101aaa47591d613dcd96896` succeeded on `macos-15-intel`: compile/link, x86_64 Mach-O, exact source/site/public provenance, imports, ad-hoc no-entitlement signing, six-marker self-test and packaging passed; production scan was not run. Artifact `9839742433` ZIP SHA256 `e4604aeba99e1860cb36f76aabf1a37b6472aabf1c27057ea905937c0b42f322`, inner tar SHA256 `47de50185a65b11a4a54982f84ba8124abd1a352dce1f62c46980d13c51a6a1e`, and every inner payload checksum passed three independent post-download audits.
+
+The exact signed helper is 94928 bytes / mode 0755 / blob `528fd75bea3c9ed262daebf55142902a3795fcb8` / SHA256 `bb0ed72910d7ef379276303463af9676b1a712e2f1f755e126234cada43eee1f`, published without production execution at public commit `18880de15acde73ca366c8c0e6e8e6aa4ea3a9f0`. GitHub build/artifact/public-binary gates are PASS. Live Tahoe authorization for the private read-only task port and runtime text result remain UNKNOWN/NOT RUN.
+
+## CURRENT ACTION — assistant GitHub D97AEX wrapper audit
+Assistant designs and fully audits the identity-pinned wrapper in GitHub: exact helper identity, service/target SHA pre/post, helper self-test, default natural no-PID watch, exact RC 0/2/3/4 preservation and retrospective Unified Log census scoped only to `LOG_VISIBLE` with global spawn coverage UNKNOWN. No service launch, debugger fallback, source/system/Golden mutation, Root Patch or reboot. No ASUS2 command before wrapper CI and downloaded-artifact audit pass. Task-read denial causes STOP.
+
