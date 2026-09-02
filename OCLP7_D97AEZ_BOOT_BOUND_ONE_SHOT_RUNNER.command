@@ -234,7 +234,7 @@ claimed_stop() {
   emit "CLAIMED_BOOT_UUID=$CURRENT_BOOT_UUID"
   emit "BOOT_LANE_INTRINSIC_PROOF=NOT_AVAILABLE"
   emit "D97AEZ_RERUN_ALLOWED=NO"
-  exec 3>&- 2>/dev/null || true
+  exec 3>&- || true
   /bin/sync 2>/dev/null || true
   /bin/chmod 0400 "$REPORT" 2>/dev/null || true
   /usr/bin/chflags uchg "$REPORT" 2>/dev/null || true
@@ -363,7 +363,7 @@ seal_done() {
   emit "D97AEZ_RUNNER_REASON=$runner_reason"
   emit "D97AEZ_RERUN_ALLOWED=NO"
   emit "REPORT_DURABILITY_SYNC=SYSTEM_WIDE_SYNC_REQUIRED"
-  exec 3>&- 2>/dev/null || true
+  exec 3>&- || true
   REPORT_OPEN=0
   /bin/sync || exit 2
 
@@ -399,7 +399,7 @@ seal_done() {
   print -r -- "RUNNER_REASON=$runner_reason" >&4
   print -r -- "RUNNER_RC=$final_rc" >&4
   print -r -- "D97AEZ_DONE_END=END" >&4
-  exec 4>&- 2>/dev/null || true
+  exec 4>&- || true
   /bin/sync || exit 2
   done_lines="$(/usr/bin/wc -l < "$done_tmp")" || exit 2
   (( done_lines == 14 )) || exit 2
