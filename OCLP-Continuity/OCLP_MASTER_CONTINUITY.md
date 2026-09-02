@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEX_GITHUB_BUILD_ARTIFACT_AUDIT_PASS_WRAPPER_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEX_WRAPPER_GITHUB_ARTIFACT_AUDIT_PASS_ASUS2_RUNTIME_PROOF_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -68,10 +68,19 @@ Downloaded artifact `9839742433` is exact: ZIP 94141 bytes / SHA256 `e4604aeba99
 
 `D97AEX_GITHUB_SOURCE_STATIC_AUDIT=PASS`, `D97AEX_GITHUB_COMPILE_LINK_MACHO_CODESIGN_SELFTEST=PASS`, `D97AEX_DOWNLOADED_ARTIFACT_IDENTITY_AUDIT=PASS`, `D97AEX_PUBLIC_BINARY_IDENTITY=PASS`. Live production execution remains `NOT_RUN`; Tahoe authorization of the private read-only task port remains `UNKNOWN`.
 
-## CURRENT ACTION — assistant GitHub D97AEX pinned-wrapper audit
-The assistant must design and fully audit in GitHub the exact pinned wrapper for helper commit `18880de15acde73ca366c8c0e6e8e6aa4ea3a9f0`. It must verify helper blob/SHA/bytes/mode; service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43` and visible target SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755` before and after; run only self-test plus the default natural-instance watcher; preserve helper RC 0/2/3/4; and add a retrospective read-only Unified Log census explicitly scoped to `LOG_VISIBLE` while retaining `GLOBAL_SPAWN_COHORT_COVERAGE=UNKNOWN`.
+## D97AEX pinned-wrapper GitHub audit and public identity
+The frozen wrapper is 886 lines / 40522 bytes, blob `5e0cbe4e0041537666d1655fba32161d756e4df7`, SHA256 `98361e388c40556565b00c11283ed3600386acc996b8e1a7e06ae8169075fd37`. Exact `zsh -f -n`, static/RC/threat/census audits and all positive/adversarial fixtures passed with zero blockers.
 
-The wrapper must not launch or stop MTLCompilerService and must contain no source/system/Golden mutation, debugger/control-port fallback, Root Patch or reboot. GitHub CI plus downloaded-artifact audit must pass before publication and before a minimal identity-pinned ASUS2 command. A denied task-read port is a decisive STOP blocker, not authority for a more invasive fallback.
+Private final audit commit `c912f21980a2aa5bc9b14f7d634fc7e07a063c90`, tree `b9f3fdf1bff541ee52c4aced05e55599c8584b81`, produced successful run `33620774640`, job `100217036670`. The two earlier fail-closed iterations only corrected an unproven Unified Log trailer assumption: run `33620220763` rejected it, and diagnostic run `33620376174` proved the actual macOS trailer `{"count":0,"finished":1}`. No production watcher ran in any CI iteration.
 
-No user action, Root Patch or reboot is currently authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+Downloaded artifact `9842808563` is exact: ZIP 64888 bytes / SHA256 `08b91fc6528696e90aad51f7b3cc76e4a8a659dc826e20bf78b03c9c8908c32a`; 20 safe unique entries, CRC PASS, 18/18 payload SHA256 and 18/18 Git blobs PASS. The wrapper, identity manifest, auditor and workflow are byte-identical to the frozen inputs. All consolidated/static/syntax/helper/log/fixture reports pass. Helper execution was self-test only; wrapper execution, production watch, sudo and service launch were not run.
+
+The exact wrapper is public at immutable merge commit `da979b5938a8a52bba4e976b5606ccf5c1d951aa`, publication tree `84af62761a14a171253262f6538f7ede31d4cb0a`, path `OCLP7_D97AEX_PINNED_WRAPPER.command`, mode `100755`, blob `5e0cbe4e0041537666d1655fba32161d756e4df7`. Public content identity matches the frozen SHA256/bytes. `D97AEX_PINNED_WRAPPER_GITHUB_AUDIT=PASS`, `D97AEX_PINNED_WRAPPER_DOWNLOADED_ARTIFACT_AUDIT=PASS`, `D97AEX_PINNED_WRAPPER_PUBLIC_IDENTITY=PASS`, `D97AEX_PRODUCTION_EXECUTION=NOT_RUN`.
+
+## CURRENT ACTION — ASUS2-only D97AEX runtime-text proof
+The GitHub-capable lane is complete. The only authorized next action is one identity-pinned execution of the exact public wrapper on ASUS2. It downloads and verifies the already-published helper, runs the exact self-test, validates Tahoe `26.6.2 / 25G82`, service and target identities before and after, requests only the private read-only task port through the exact helper, watches naturally occurring universal/no-PID instances for 120 seconds, and performs a retrospective read-only `LOG_VISIBLE` census. It never launches or stops MTLCompilerService.
+
+Return the complete terminal transcript and the exact Desktop report named by `REPORT=`. RC `0` means bounded observed-cohort match; RC `4` bounded observed-cohort mismatch; RC `3` incomplete coverage STOP; RC `2` fail-closed blocker STOP. Any result is evidence only and must be audited and persisted before another action.
+
+Only this read-only ASUS2 proof is authorized. No Root Patch or reboot is authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
 

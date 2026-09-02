@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEX_GITHUB_BUILD_ARTIFACT_AUDIT_PASS_WRAPPER_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEX_WRAPPER_GITHUB_ARTIFACT_AUDIT_PASS_ASUS2_RUNTIME_PROOF_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -57,6 +57,15 @@ Private run `33612947825`, job `100192139189`, head `222fc2c79de2dab46101aaa4759
 
 The exact signed helper is 94928 bytes / mode 0755 / blob `528fd75bea3c9ed262daebf55142902a3795fcb8` / SHA256 `bb0ed72910d7ef379276303463af9676b1a712e2f1f755e126234cada43eee1f`, published without production execution at public commit `18880de15acde73ca366c8c0e6e8e6aa4ea3a9f0`. GitHub build/artifact/public-binary gates are PASS. Live Tahoe authorization for the private read-only task port and runtime text result remain UNKNOWN/NOT RUN.
 
-## CURRENT ACTION — assistant GitHub D97AEX wrapper audit
-Assistant designs and fully audits the identity-pinned wrapper in GitHub: exact helper identity, service/target SHA pre/post, helper self-test, default natural no-PID watch, exact RC 0/2/3/4 preservation and retrospective Unified Log census scoped only to `LOG_VISIBLE` with global spawn coverage UNKNOWN. No service launch, debugger fallback, source/system/Golden mutation, Root Patch or reboot. No ASUS2 command before wrapper CI and downloaded-artifact audit pass. Task-read denial causes STOP.
+## D97AEX wrapper GitHub audit and public anchor
+Frozen wrapper identity: 886 lines / 40522 bytes, blob `5e0cbe4e0041537666d1655fba32161d756e4df7`, SHA256 `98361e388c40556565b00c11283ed3600386acc996b8e1a7e06ae8169075fd37`; exact zsh/static/RC/threat/census audits PASS with zero blockers.
+
+Private final commit/tree `c912f21980a2aa5bc9b14f7d634fc7e07a063c90` / `b9f3fdf1bff541ee52c4aced05e55599c8584b81`; final run `33620774640`, job `100217036670`, SUCCESS. Earlier runs `33620220763` and `33620376174` were fail-closed/diagnostic iterations that established the actual macOS trailer `{"count":0,"finished":1}`; no production watcher ran.
+
+Downloaded artifact `9842808563`: 64888-byte ZIP, SHA256 `08b91fc6528696e90aad51f7b3cc76e4a8a659dc826e20bf78b03c9c8908c32a`; 20 safe entries, CRC PASS, 18/18 SHA256 and 18/18 Git blobs PASS, all reports PASS. Helper execution was self-test only; wrapper/production/sudo/service launch NOT RUN.
+
+Public immutable wrapper anchor: merge commit `da979b5938a8a52bba4e976b5606ccf5c1d951aa`, publication tree `84af62761a14a171253262f6538f7ede31d4cb0a`, path `OCLP7_D97AEX_PINNED_WRAPPER.command`, mode `100755`, exact blob/SHA/bytes above.
+
+## CURRENT ACTION — ASUS2-only D97AEX runtime-text proof
+GitHub lane is complete. User runs only the exact identity-pinned public wrapper on ASUS2 and returns the complete terminal transcript plus exact Desktop report. RC0=bounded match; RC4=bounded mismatch; RC3=incomplete STOP; RC2=fail-closed blocker STOP. The wrapper is universal/no-PID, never launches/stops the service, and keeps global spawn coverage UNKNOWN. No Root Patch or reboot is authorized.
 
