@@ -62,7 +62,7 @@ constexpr char kExpectedServiceSha256[] =
     "a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43";
 constexpr char kExpectedVisibleTargetSha256[] =
     "524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755";
-constexpr int64_t kExpectedTargetFileSize = 1636864;
+constexpr int64_t kExpectedTargetFileSize = 1636896;
 
 constexpr uint32_t kExpectedCpuType = 0x01000007U;
 constexpr uint32_t kExpectedCpuSubtype = 3U;
