@@ -165,6 +165,26 @@ Read-only/static mappers run in GitHub whenever all required inputs are availabl
 
 Rhythm: `assistant GitHub validate/integrate/compile/build/audit/publish -> assistant reports and persists -> user runs only target-local proof/deploy if required -> assistant audits -> user manually Root Patches if authorized -> assistant audits -> user boots/VESA-recovers -> assistant analyzes and persists -> next single action`.
 
+### 12B. Permanent accelerated-diagnostic FASTLANE feedback loop
+This subsection is authoritative for every diagnostic that must be exercised during a no-image accelerated boot.
+
+1. Before implementation, state the single causal question, the exact outcomes that would change the repair hypothesis, and why the proposed accelerated boot can discriminate them. A command that cannot naturally reach the relevant cohort or cannot distinguish the outcomes is not handed to the user.
+2. The assistant exhausts in GitHub every test of the FASTLANE/diagnostic implementation that does not inherently require ASUS2. This includes syntax, source integration, compile/link when applicable, package construction, static safety, identity/provenance, state-machine fixtures, positive and adversarial RC cases, interrupted/incomplete cases, report parsing/sealing, one-shot behavior, artifact download/re-extraction and complete log/artifact audit.
+3. The user never assembles fragments, combines partial commands, compiles locally, repairs a GitHub failure locally, or performs exploratory repetitions that GitHub can simulate. Each ASUS2 gate is delivered as one complete identity-pinned audited wrapper or one explicit manual action.
+4. A GitHub PASS proves only implementation/tool properties. It never substitutes for live Haswell/Tahoe execution and never proves accelerated runtime behavior.
+5. The normal hardware feedback cycle is:
+   - assistant completes and audits the GitHub FASTLANE;
+   - user runs the single authorized pinned ASUS2 deploy/arm action;
+   - assistant audits that complete report and STOPs if any gate is not exact;
+   - user manually Root Patches only when a new OCLP build actually requires it, then returns the complete transcript;
+   - assistant audits Root Patch before authorizing accelerated boot;
+   - user boots the authorized accelerated configuration; when no image is available, waits the explicitly stated bounded collection interval, hard-restarts/power-cycles manually, and boots VESA recovery;
+   - user runs only the pinned retrieval/audit action required by the real hardware result;
+   - assistant analyzes only the selected accelerated boot, persists the result, and defines the next single discriminating action.
+6. When the already-installed root-patched diagnostic identity is exact and the next question needs only observation, do not manufacture a new OCLP patch or Root Patch. GitHub instead validates the smallest passive boot-time observer; ASUS2 only arms it, performs the real accelerated boot/recovery, and returns its report.
+7. A foreground command run after returning to VESA cannot substitute for an observer that had to overlap the earlier accelerated cohort. Passive observers never create `MTLCompilerService`; they must be active before the natural accelerated workload.
+8. Work proceeds through visible gates. Before crossing from GitHub implementation to any ASUS2 mutation/boot, the assistant reports the exact completed evidence, remaining hardware-only unknown, expected user action and STOP boundary. Do not expand an unreviewed design for hours or hand the user a hardware test before its GitHub-testable implementation paths have been exercised.
+
 ## 13. Runtime evidence discipline
 Analyze only the immediately preceding accelerated diagnostic boot, excluding the later VESA recovery boot.
 
