@@ -5,7 +5,7 @@ Date: 2026-09-02 EEST
 ## Authoritative verdict
 D97AEZ is the smallest passive boot-bound observation transport for the already-installed exact D97AD diagnostic. Its complete GitHub-capable implementation lane is closed `PASS`. GitHub proved the implementation, identities, state machine, failure behavior and release package; it did not and cannot prove the live accelerated runtime result.
 
-ASUS2 is Intel Haswell `x86_64`, not ARM. In this project `activation`/`activate`/`deploy` means enabling the passive observer. The sole literal `arm64` occurrence belongs to a negative non-x86_64 CI fixture.
+ASUS2 is Intel Haswell `x86_64`, not ARM. In this project `activation`/`activate`/`deploy` means enabling the passive observer. Every literal `arm64` occurrence belongs solely to a negative non-x86_64 CI fixture.
 
 No new functional OCLP patch and no new Root Patch are presently justified. D97AD remains installed with exact selector-only service SHA256 `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43` and exact final MTLCompiler SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`, 1636896 bytes.
 
@@ -19,6 +19,8 @@ During a new failed accelerated boot, do naturally spawned exact-path `MTLCompil
 ## Frozen public release identities
 The wrapper release content is immutable at public commit `eba63b606f4a48f747b1605e682d4ac2a624bb40`, tree `3622a4bf5ab0c34e444634b40ccf0f0fe18fa71d`. Both wrappers pin the earlier immutable payload commit/tree `b30a02fed23cdd75de880c90947f5c985571b53a` / `51b4df3c6935dbf818b5269c99a7752d71da2eba`, avoiding self-reference.
 
+Public PR `StefanAlMare/StefanAlMare#15` was integrated at merge commit `97efe39c2ce870e28636c65c16c8a9e518aa4a7b`. Private exhaustive-audit PR `StefanAlMare/Private-Work#7` was integrated at merge commit `7804216be8d72f4105c9a4798ced71070d7706c2`.
+
 - runner `OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command`: mode `100755`, blob `74ab4b67f2d2bfe2e7635b1d4025e488d59c2ad2`, SHA256 `9c2dc2060ea557dfea9ca1901b055f1242ba4e34f5ec29297e6b847997a320a4`, 36701 bytes / 794 lines;
 - plist `OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist`: mode `100644`, blob `8ef97872d0a29c28a91c9d1818bf0c5c7492c080`, SHA256 `90c0801805319126520cc946d9f2bb4a69e95fd7a0be4a85914a1c3305ec03c5`, 1027 bytes;
 - unchanged corrected D97AEX helper: mode `100755`, blob `9f22460e8c1e51a2ae091eb7377e958f6a148e35`, SHA256 `f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9`, 94928 bytes;
@@ -27,7 +29,7 @@ The wrapper release content is immutable at public commit `eba63b606f4a48f747b16
 - audit workflow: mode `100644`, blob `ba9e7ec4a605b87166947ed9d4b97882e5f77ad8`, SHA256 `8a37bd2e7e6b303d61ee36a9881128cd2f18b535e3adb783fe7a31d4dd33077e`, 67937 bytes / 1289 lines.
 
 ## GitHub exhaustive PASS
-Private branch head/tree `09c937d32a13fd03242b0f6b9fdc7b5c8c6c3a66` / `cac21270170b010f8265b77aa39fd9c2658a4d2d`; pull-request merge-test SHA `2f577b1e5ea344d9dfec47c18723fd1e7700ef50`. Workflow ID `348570767`, run `33655550721`, job `100333075176`, runner `macos-15-intel`, conclusion `success`; all 11 functional steps passed.
+Private branch head/tree `09c937d32a13fd03242b0f6b9fdc7b5c8c6c3a66` / `cac21270170b010f8265b77aa39fd9c2658a4d2d`; pull-request merge-test SHA `2f577b1e5ea344d9dfec47c18723fd1e7700ef50`. Workflow ID `348570767`, run `33655550721`, job `100333075176`, runner `macos-15-intel`, conclusion `success`; all 10 declared workflow steps passed, and all 11 numbered steps through artifact upload, including automatic setup, succeeded.
 
 The GitHub lane passed exact checkout/static identities, runner/plist syntax and safety, unchanged-helper provenance and six-marker self-test, fresh x86_64 helper compile/link/self-test, public payload pins, wrapper parsing/supply chain, and the complete isolated state matrix:
 
