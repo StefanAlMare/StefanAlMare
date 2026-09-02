@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEX_WRAPPER_GITHUB_ARTIFACT_AUDIT_PASS_ASUS2_RUNTIME_PROOF_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEX_PREWATCH_MIXED_SIZE_PROVENANCE_FALSE_NEGATIVE_D97AEY_GITHUB_REPAIR_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -66,6 +66,12 @@ Downloaded artifact `9842808563`: 64888-byte ZIP, SHA256 `08b91fc6528696e90aad51
 
 Public immutable wrapper anchor: merge commit `da979b5938a8a52bba4e976b5606ccf5c1d951aa`, publication tree `84af62761a14a171253262f6538f7ede31d4cb0a`, path `OCLP7_D97AEX_PINNED_WRAPPER.command`, mode `100755`, exact blob/SHA/bytes above.
 
-## CURRENT ACTION — ASUS2-only D97AEX runtime-text proof
-GitHub lane is complete. User runs only the exact identity-pinned public wrapper on ASUS2 and returns the complete terminal transcript plus exact Desktop report. RC0=bounded match; RC4=bounded mismatch; RC3=incomplete STOP; RC2=fail-closed blocker STOP. The wrapper is universal/no-PID, never launches/stops the service, and keeps global spawn coverage UNKNOWN. No Root Patch or reboot is authorized.
+## D97AEX first live attempt — pre-watch tooling false negative
+Exact public wrapper `da979b5938a8a52bba4e976b5606ccf5c1d951aa` / blob `5e0cbe4e0041537666d1655fba32161d756e4df7` / SHA256 `98361e388c40556565b00c11283ed3600386acc996b8e1a7e06ae8169075fd37` passed outer identity and ran once on ASUS2.
 
+OS/build/arch, helper/codesign/self-test/sudo, helper pre-watch and service pre-watch identities passed. Stable target stat/hash/stat reported exact D97AD SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755` and size `1636896`; wrapper expected `1636864`, therefore RC2 `PREWATCH_FAIL_CLOSED_STOP`. The smaller size belongs to the unmodified donor SHA `4f65fb...5641`; helper source carries the same mixed-provenance size constant. Runtime watcher and log census were NOT RUN.
+
+Report: 96 lines / 5389 bytes / blob `dab425a8e09b88308e90f88e3d124a4cd31ef112` / SHA256 `39a4febf181d35437016a69ee7c4fc50a1ae339dd29670aebf3d35dc78d3510b`. No service launch/stop, system/Golden/target mutation, Root Patch or reboot. Classification: tooling false negative, no target-drift or runtime-text conclusion.
+
+## CURRENT ACTION — assistant GitHub D97AEY size-provenance repair
+User STOP. Correct the exact final-target size to `1636896` throughout helper source/manifest/build provenance and wrapper/identity/auditor/workflow, retaining SHA and all fail-closed gates. Rebuild and audit helper in GitHub, audit downloaded artifact, publish immutable helper, repin/re-audit wrapper in GitHub, audit downloaded wrapper artifact, publish immutable wrapper, and persist before any ASUS2 rerun. No local user compile, OCLP, Root Patch or reboot.
