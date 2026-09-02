@@ -1,0 +1,63 @@
+diff --git a/opencore_legacy_patcher/sys_patch/sys_patch_helpers.py b/opencore_legacy_patcher/sys_patch/sys_patch_helpers.py
+--- a/opencore_legacy_patcher/sys_patch/sys_patch_helpers.py
++++ b/opencore_legacy_patcher/sys_patch/sys_patch_helpers.py
+@@ -10263,9 +10263,46 @@ class SysPatchHelpers:
+             return _hashlib.sha256(bytes(blob)).hexdigest()
+ 
+         def _xattrs(path):
++            listed = _subprocess.run(
++                ['/usr/bin/xattr', '-s', '--', str(path)],
++                stdout=_subprocess.PIPE,
++                stderr=_subprocess.PIPE,
++            )
++            if listed.returncode != 0:
++                raise RuntimeError(
++                    'D97AF xattr name enumeration failed with exit '
++                    + str(listed.returncode)
++                )
++            if listed.stderr:
++                raise RuntimeError('D97AF xattr name enumeration produced stderr')
++            raw_names = listed.stdout
++            if raw_names and not raw_names.endswith(b'\n'):
++                raise RuntimeError('D97AF xattr name enumeration framing invalid')
++            names = [] if not raw_names else raw_names[:-1].split(b'\n')
++            if any(not name or b'\x00' in name for name in names):
++                raise RuntimeError('D97AF xattr name framing invalid')
++            if len(set(names)) != len(names):
++                raise RuntimeError('D97AF xattr name cardinality invalid')
++
+             result = {}
+-            for name in sorted(_os.listxattr(path, follow_symlinks=False)):
+-                result[name] = _os.getxattr(path, name, follow_symlinks=False)
++            for name_bytes in sorted(names):
++                name = _os.fsdecode(name_bytes)
++                read = _subprocess.run(
++                    ['/usr/bin/xattr', '-s', '-p', '-x', '--', name, str(path)],
++                    stdout=_subprocess.PIPE,
++                    stderr=_subprocess.PIPE,
++                )
++                if read.returncode != 0:
++                    raise RuntimeError(
++                        'D97AF xattr value read failed with exit '
++                        + str(read.returncode)
++                    )
++                if read.stderr:
++                    raise RuntimeError('D97AF xattr value read produced stderr')
++                try:
++                    result[name] = bytes.fromhex(read.stdout.decode('ascii'))
++                except (UnicodeDecodeError, ValueError) as error:
++                    raise RuntimeError('D97AF xattr hex output invalid') from error
+             return result
+ 
+         def _acl_entries(path):
+diff --git a/opencore_legacy_patcher/sys_patch/sys_patch.py b/opencore_legacy_patcher/sys_patch/sys_patch.py
+--- a/opencore_legacy_patcher/sys_patch/sys_patch.py
++++ b/opencore_legacy_patcher/sys_patch/sys_patch.py
+@@ -724,5 +724,7 @@ class PatchSysVolume:
+             except Exception as e:
+                 logging.error(f"- Failed to patch GPU compiler libraries: {e}")
+                 logging.exception("Stack Trace:")
++                self._unmount_root_vol()
++                raise
+ 
+         self._write_patchset(required_patches)
