@@ -20,6 +20,19 @@ jobs:
       - name: Checkout exact head
         uses: actions/checkout@v4
 
+      - name: Record GitHub provenance
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          echo "D97AEW_CI_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "D97AEW_CI_WORKFLOW=$GITHUB_WORKFLOW"
+          echo "D97AEW_CI_RUN_ID=$GITHUB_RUN_ID"
+          echo "D97AEW_CI_RUN_NUMBER=$GITHUB_RUN_NUMBER"
+          echo "D97AEW_CI_JOB=$GITHUB_JOB"
+          echo "D97AEW_CI_RUNNER_OS=$RUNNER_OS"
+          echo "D97AEW_CI_RUNNER_ARCH=$RUNNER_ARCH"
+          echo "D97AEW_CI_HEAD_SHA=$GITHUB_SHA"
+
       - name: Run validation-only wrapper
         shell: zsh {0}
         run: |
