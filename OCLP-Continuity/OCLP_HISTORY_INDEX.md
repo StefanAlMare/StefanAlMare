@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AF_OLD_ROOT_PATCH_UNPATCH_PASS_VESA_REBOOT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AF_ROOT_PATCH_INVALID_PACKAGED_OS_LISTXATTR_FIX_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -98,5 +98,12 @@ The next manual OCLP operation entered `Starting Unpatch Process`. It found exac
 
 Classification: `LEGACY_ROOT_PATCH_UNPATCH=OCLP_REPORTED_PASS_PENDING_REBOOT`, `SYSTEM_SNAPSHOT_MUTATION=YES_BY_MANUAL_UNPATCH`, `UNPATCH_ACTIVATION_REBOOT=NOT_YET_RUN`, `D97AF_ROOT_PATCH=NOT_STARTED`. The clean post-reboot state is not yet independently proven. This output is not a D97AF Root Patch result. Exact D97AF remains the last proven live application and exact D97AD remains in its timestamped backup.
 
-## CURRENT ACTION — manual unpatch-activation reboot into VESA, then STOP
-The OCLP-reported complete unpatch requires one manual reboot with the correct ASUS2 OpenCore/EFI. After unpatched Tahoe/VESA loads, STOP and report the return. The clean state and exact D97AF app identity will be checked before patching. Do not apply D97AF Root Patch in that same unobserved step; it will be the next separately authorized action. This reboot is preparatory and is not the later accelerated D97AF test boot.
+## D97AF Root Patch invalid — packaged `os.listxattr` unavailable
+After returning in VESA, the user manually ran Root Patch from the exact deployed D97AF app. The returned complete log is SHA256 `b1a263a7bddadbbf46ad8c10abcbfb82043edb17a5c15a21637de6ecae0a24a1`, git blob `b22c777844a2253a8e7fafab851acd86149b9067`, `26879` bytes and `731` logical lines.
+
+P1, P2b, P3, AIR00, D34, P6, P7 and D97AD all reported PASS, with D97AD committed SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. The D97AF method then raised `AttributeError: module 'os' has no attribute 'listxattr'` at `_xattrs` through `_target_metadata`. Exact source ordering proves the failure preceded every D97AF target byte read or write, temporary file, sibling reservation and rename; `D97AF_METHOD_TARGET_MUTATION=NOT_REACHED`.
+
+OCLP caught the error, continued through patchset information, Auxiliary Kernel Collection handling and APFS snapshot creation, and printed generic `Patching complete`. This generic terminal message does not override the explicit custom-step exception. Classification: `D97AF_ROOT_PATCH=INVALID_PARTIAL`, `D97AF_LC_UUID_BUILD_STAMP=FAILED_NOT_APPLIED`, `POST_SNAPSHOT_MTL_IDENTITY=NOT_YET_READ`, `REBOOT=NOT_AUTHORIZED`.
+
+## CURRENT ACTION — correct D97AF packaged-runtime metadata path; no reboot
+Remain in VESA and do not reboot or rerun Root Patch from the current D97AF app. Replace the unavailable packaged-Python xattr dependency with an exact macOS-compatible mechanism, validate source and packaged runtime, run the substantial Intel build and full FASTLANE artifact/app audit, then deploy/open/STOP. A separately authorized recovery/unpatch action will follow only after the corrected app is proven.
