@@ -49,12 +49,14 @@ The source sequence is decisive: D97AF first calls `_target_metadata(target)`; t
 
 ```text
 D97AF_PACKAGED_RUNTIME_OS_LISTXATTR=ABSENT
-D97AF_METHOD_TARGET_READ=NOT_REACHED
+D97AF_TARGET_DATA_FORK_READ=NOT_REACHED
 D97AF_METHOD_TARGET_MUTATION=NOT_REACHED
 D97AF_LC_UUID_BUILD_STAMP=FAILED_NOT_APPLIED
 ```
 
 This exposes a validation gap: source Python and static packaged-source audits passed, but the exact PyInstaller runtime API surface used by the D97AF method was not executed before deployment.
+
+No separate reboot/VESA return or application-identity audit was returned between the earlier unpatch output and this Root Patch log. The last proven live D97AF app remains SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`; the exact application identity at this Root Patch invocation is `NOT_SEPARATELY_RECHECKED`.
 
 ## Partial snapshot state
 OCLP caught the custom-step exception and continued with patchset information, launchd records, Auxiliary Kernel Collection handling, APFS snapshot creation and root-volume unmount. It then printed generic `Patching complete` and requested reboot.
@@ -65,11 +67,11 @@ That generic terminal line is not a D97AF PASS. The log proves snapshot creation
 D97AF_ROOT_PATCH=INVALID_PARTIAL
 APFS_SNAPSHOT_AFTER_PARTIAL_PATCH=OCLP_REPORTED_CREATED
 POST_SNAPSHOT_MTL_IDENTITY=NOT_YET_READ
-CURRENT_D97AF_APP_ROOT_PATCH_COMPATIBILITY=NEGATIVE
+CURRENT_D97AF_APP_D97AF_METHOD_RUNTIME_COMPATIBILITY=NEGATIVE
 REBOOT_AFTER_PARTIAL_PATCH=NOT_AUTHORIZED
 ```
 
-## CURRENT SINGLE NEXT ACTION — correct packaged-runtime xattr path; remain in VESA
+## CURRENT SINGLE NEXT ACTION — correct packaged-runtime xattr path; no reboot
 Do not reboot and do not rerun Root Patch from the current D97AF application.
 
 Implement the smallest exact correction that retains the `MODE_OWNER_FLAGS_XATTRS_PRESERVE_EXACT|ACL_NONE_REQUIRED` policy without relying on unavailable `os.listxattr`/`os.getxattr` in the packaged runtime. Then follow FASTLANE exactly: source validation and transactional tests -> integration -> compile/diff -> substantial Intel build -> executable packaged-runtime test -> artifact and packaged-app audit -> exact SHA/identity -> recoverable backup/deploy -> open OCLP -> STOP.
