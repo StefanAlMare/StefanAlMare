@@ -601,7 +601,9 @@ safe_grep_count() {
 }
 
 summary_field() {
-  local summary="$1" key="$2" remainder="${summary#*${key}=}"
+  local summary="$1"
+  local key="$2"
+  local remainder="${summary#*${key}=}"
   [[ "$remainder" != "$summary" ]] || return 1
   print -r -- "${remainder%%|*}"
 }
