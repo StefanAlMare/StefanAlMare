@@ -55,17 +55,25 @@ D97AEW performs exactly one reversible old-scanner-to-new-scanner block replacem
 The D97AEV three transforms themselves, all six D97AD pre/post byte sites, shared stub, D34/AIR00/P6/P7 retained windows and D97AEU UUID/cache logic are unchanged.
 
 ## GitHub-first static audit provenance
-- repository: `StefanAlMare/StefanAlMare`;
-- workflow: `.github/workflows/oclp7-d97aew-static-audit.yml` (`OCLP7 D97AEW static audit`);
-- workflow ID: `348159929`;
-- event: `pull_request`;
-- run ID: `PENDING_PR_AUDIT`;
-- job/runner/head SHA/conclusion: `PENDING_PR_AUDIT`;
-- uploaded static report artifact: `PENDING_PR_AUDIT`.
+- public artifact repository: `StefanAlMare/StefanAlMare`;
+- public artifact commit/blob/SHA256: `2d14c7831d4adc9578daf5b80b55b72f663d836a` / `45876fa66e9018053882be7b01eeccabcfe8046b` / `cdd976be2ee2981aec2d35055e96fc0559f2f3277a9e38d62f2476817ef74394`;
+- public workflow registered at `.github/workflows/oclp7-d97aew-static-audit.yml`, but the public repository produced no Actions run through the available push/PR/dispatch paths; this did not transfer work to the user;
+- proven GitHub build lane repository: `StefanAlMare/Private-Work`;
+- isolated audit branch/head SHA: `oclp7-d97aew-github-audit` / `3a152504867fa743750f5307749c9d152bf9164e`;
+- workflow: `.github/workflows/oclp7-d97aew-private-static-audit.yml` (`OCLP7 D97AEW private static audit`), workflow ID `348172340`;
+- event/run/run number: `push` / `33600569828` / `2`;
+- job: `static-audit`, job ID `100153125476`;
+- runner: GitHub-hosted `macos-15`, macOS `15.7.9` (`24G830`), X64, runner version `2.337.0`;
+- job conclusion: `success`; every recorded setup, checkout, provenance, identity, validation-only, complete-report audit, artifact-upload and cleanup step concluded `success`;
+- exact-public-identity gate: private audit copy Git blob `45876fa66e9018053882be7b01eeccabcfe8046b` and SHA256 `cdd976be2ee2981aec2d35055e96fc0559f2f3277a9e38d62f2476817ef74394`, `PASS`;
+- validation-only report gates: base identity, one scanner transform, post-transform old/new counts `0/1`, reversible scanner-only delta, safe/dangerous corpus, retained anchors, zsh parse, embedded-Python compile and final static audit all `PASS`;
+- live mapper marker: `D97AEW_ASUS2_MAPPER_EXECUTION=NOT_RUN_IN_GITHUB`, as required because the real Cryptex shared cache is machine-local;
+- artifact: `OCLP7-D97AEW-private-static-audit-report`, artifact ID `9835010017`, ZIP size `1073` bytes, GitHub digest `sha256:4f02b891ee4004806117e473ffc67f29fdf28ec65a7061e1e5b7b7e0c0fb339a`;
+- downloaded artifact re-audit: one report file, `2109` bytes, report SHA256 `9854d73200b08f0c9608a992343bfc78ea0e6e7246ad7eb25b2174361120e535`; downloaded ZIP digest exactly matched the GitHub-published digest.
 
-The checkpoint must not be merged as READY until the PR workflow run is fully audited and these pending fields are replaced with exact GitHub provenance.
+GitHub static validation is therefore fully audited `PASS`. This proves wrapper identity, transformation containment, syntax/embedded-code validity and safety gates; it does not claim execution against ASUS2's live cache.
 
 ## CURRENT SINGLE NEXT ACTION — D97AEW
-After the recorded GitHub PR static audit passes, run only the pinned D97AEW wrapper on ASUS2 and return the complete report. D97AEW must continue through the fixed D97AEV wrapper into the unchanged read-only D97AEU cache mapper.
+Run only the GitHub-audited, identity-pinned D97AEW wrapper on ASUS2 and return the complete report. D97AEW must continue through the fixed D97AEV wrapper into the unchanged read-only D97AEU cache mapper.
 
 No Root Patch or reboot. Cache containment/byte identity must not be promoted to runtime-cache execution proof. Golden remains immutable/read-only. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
