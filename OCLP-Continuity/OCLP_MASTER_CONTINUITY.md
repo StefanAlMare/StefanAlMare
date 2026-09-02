@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEW_PHYSICAL_READ_VALID_D5CE_RUNTIME_TEXT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEX_GITHUB_BUILD_ARTIFACT_AUDIT_PASS_WRAPPER_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -59,7 +59,19 @@ D97AES runtime evidence is now classified precisely: all 33 simulator diagnostic
 
 No source/system/Golden/service/Root Patch/reboot mutation occurred. The previous semantic-D226 mapper frontier is superseded and moved to reserve-only static cross-build research.
 
-## CURRENT ACTION — assistant GitHub runtime D5CE text-provenance audit
-The assistant must first design and fully audit in GitHub an identity-pinned, passive, non-stopping, universal/no-PID method for a new naturally occurring MTLCompilerService cohort. Per captured PID it must prove loaded 32023 header/path/UUID/base/backing and, only through safe read-only memory access, classify the six D97AD sites, shared stub and required retained/late/far-frontier anchors as PRE/POST/OTHER with explicit coverage. It must not launch the service. If task-port or exact memory reading is unsafe, perturbative or denied, STOP with a recorded blocker; do not use LLDB attach and do not substitute a semantic remap of D226. Only after complete GitHub audit may the user receive a minimal ASUS2-only command.
+## D97AEX GitHub helper build and artifact audit
+The frozen universal/no-PID read-only watcher source is public commit `5272206915adb71a1b08d5fe131da40a799b3943`, blob `edcb086b00dd760ba67a9a4f7ccaaea1b5baae41`, SHA256 `04bbf5b0a6e4ba18928d45ca1e9588ddda95055d048c98550528659f7e300658`. Its exact manifest has 31 non-overlapping windows / 330 bytes per pass: 23 patch windows / 202 bytes and 8 late/far invariants / 128 bytes. Three independent source audits passed with zero blockers.
+
+Private GitHub run `33612947825`, job `100192139189`, exact head `222fc2c79de2dab46101aaa47591d613dcd96896` completed `success` on `macos-15-intel`. Compile/link, exact source/manifest/public-anchor identity, x86_64 Mach-O, imports, minimum macOS 15.0 / SDK 15.5, ad-hoc no-entitlement signature, exact six-marker self-test and package audit all passed. Production scan was not run.
+
+Downloaded artifact `9839742433` is exact: ZIP 94141 bytes / SHA256 `e4604aeba99e1860cb36f76aabf1a37b6472aabf1c27057ea905937c0b42f322`; inner tar SHA256 `47de50185a65b11a4a54982f84ba8124abd1a352dce1f62c46980d13c51a6a1e`; all 22 inner payload checksums pass. Three independent post-download audits found zero blockers. The exact signed helper is 94928 bytes, mode 0755, blob `528fd75bea3c9ed262daebf55142902a3795fcb8`, SHA256 `bb0ed72910d7ef379276303463af9676b1a712e2f1f755e126234cada43eee1f`, published without execution at commit `18880de15acde73ca366c8c0e6e8e6aa4ea3a9f0`.
+
+`D97AEX_GITHUB_SOURCE_STATIC_AUDIT=PASS`, `D97AEX_GITHUB_COMPILE_LINK_MACHO_CODESIGN_SELFTEST=PASS`, `D97AEX_DOWNLOADED_ARTIFACT_IDENTITY_AUDIT=PASS`, `D97AEX_PUBLIC_BINARY_IDENTITY=PASS`. Live production execution remains `NOT_RUN`; Tahoe authorization of the private read-only task port remains `UNKNOWN`.
+
+## CURRENT ACTION — assistant GitHub D97AEX pinned-wrapper audit
+The assistant must design and fully audit in GitHub the exact pinned wrapper for helper commit `18880de15acde73ca366c8c0e6e8e6aa4ea3a9f0`. It must verify helper blob/SHA/bytes/mode; service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43` and visible target SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755` before and after; run only self-test plus the default natural-instance watcher; preserve helper RC 0/2/3/4; and add a retrospective read-only Unified Log census explicitly scoped to `LOG_VISIBLE` while retaining `GLOBAL_SPAWN_COHORT_COVERAGE=UNKNOWN`.
+
+The wrapper must not launch or stop MTLCompilerService and must contain no source/system/Golden mutation, debugger/control-port fallback, Root Patch or reboot. GitHub CI plus downloaded-artifact audit must pass before publication and before a minimal identity-pinned ASUS2 command. A denied task-read port is a decisive STOP blocker, not authority for a more invasive fallback.
 
 No user action, Root Patch or reboot is currently authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+
