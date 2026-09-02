@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_GITHUB_FIRST_EXECUTION_CONTRACT_D97AEV_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEV_PREBOOT_SUBSTRING_FALSE_POSITIVE_D97AEW_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -31,5 +31,12 @@ D97AEU discovered main x86_64h cache and `.01`–`.06` subcaches. The target MTL
 
 The mapper stopped at `CACHED_IMAGE_HIT_CARDINALITY_FAIL:7` before byte comparison. Classification: TOOLING FALSE FAILURE caused by counting replicated tables as distinct images. No cache byte result was produced.
 
-## CURRENT ACTION — D97AEV
-Run pinned wrapper `OCLP7_D97AEV_LOGICAL_CACHE_IMAGE_DEDUP_UUID_SAFE_WRAPPER.command`, commit `b8350946e307ec2df253ffb795b31c2104034372`, blob `1060f611b3fec7fc66f80d7674d2fb06a2cdfe6d`. It deduplicates logical cache image identity, separates cache UUID from filesystem UUID, and leaves all D97AD byte discriminators unchanged. No Root Patch/reboot.
+## D97AEV / D97AEW
+D97AEV passed pinned wrapper/base identities, all three transform cardinalities and all required anchors, but its raw `reboot` substring check falsely matched the legitimate `/System/Volumes/Preboot/...` cache path. It stopped before fixed-wrapper write/parse/core execution. Classification: TOOLING FALSE FAILURE; all cache-byte comparisons NOT REACHED; no mutation/Root Patch/reboot.
+
+D97AEW pins D97AEV commit `b8350946e307ec2df253ffb795b31c2104034372` / blob `1060f611b3fec7fc66f80d7674d2fb06a2cdfe6d` and replaces only the scanner block with a reversible command-boundary correction plus safe/dangerous regression corpus. The GitHub-audited D97AEW wrapper is commit `2d14c7831d4adc9578daf5b80b55b72f663d836a`, blob `45876fa66e9018053882be7b01eeccabcfe8046b`, SHA256 `cdd976be2ee2981aec2d35055e96fc0559f2f3277a9e38d62f2476817ef74394`.
+
+GitHub-first validation completed `success` in private workflow ID `348172340`, run `33600569828`, job `100153125476`, exact audit head `3a152504867fa743750f5307749c9d152bf9164e`; every job step passed. Artifact `9835010017` ZIP digest `4f02b891ee4004806117e473ffc67f29fdf28ec65a7061e1e5b7b7e0c0fb339a` matched after download; its single complete report also passed content audit. Live ASUS2 mapper execution remains the only required local step.
+
+## CURRENT ACTION — D97AEW
+Run only `OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command` on ASUS2 and return its complete report. No Root Patch/reboot.
