@@ -19,12 +19,12 @@ fi
 
 readonly WRAPPER_NAME="OCLP7_D97AEX_PINNED_WRAPPER"
 readonly REPOSITORY="StefanAlMare/StefanAlMare"
-readonly HELPER_COMMIT="18880de15acde73ca366c8c0e6e8e6aa4ea3a9f0"
-readonly HELPER_TREE="f6806366a19f3f9da034611d04e39e4bb00e7486"
+readonly HELPER_COMMIT="4f46e3c97d5cbd89cf77efd5a6a0044aefab52a7"
+readonly HELPER_TREE="0e3a97a5abe4a81eb32848274f06190ad77418f8"
 readonly HELPER_PATH="OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER"
 readonly HELPER_URL="https://raw.githubusercontent.com/StefanAlMare/StefanAlMare/${HELPER_COMMIT}/${HELPER_PATH}"
-readonly HELPER_BLOB_EXPECTED="528fd75bea3c9ed262daebf55142902a3795fcb8"
-readonly HELPER_SHA256_EXPECTED="bb0ed72910d7ef379276303463af9676b1a712e2f1f755e126234cada43eee1f"
+readonly HELPER_BLOB_EXPECTED="9f22460e8c1e51a2ae091eb7377e958f6a148e35"
+readonly HELPER_SHA256_EXPECTED="f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9"
 readonly HELPER_BYTES_EXPECTED="94928"
 readonly HELPER_PUBLIC_MODE_EXPECTED="100755"
 readonly HELPER_RUNTIME_MODE_EXPECTED="500"
@@ -38,7 +38,7 @@ readonly SERVICE="/System/Library/Frameworks/Metal.framework/Versions/A/XPCServi
 readonly TARGET="/System/Library/PrivateFrameworks/MTLCompiler.framework/Versions/32023/MTLCompiler"
 readonly SERVICE_SHA256_EXPECTED="a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43"
 readonly TARGET_SHA256_EXPECTED="524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755"
-readonly TARGET_BYTES_EXPECTED="1636864"
+readonly TARGET_BYTES_EXPECTED="1636896"
 readonly LOG_PREDICATE='process == "MTLCompilerService" OR (process == "launchd" AND eventMessage CONTAINS[c] "MTLCompilerService")'
 
 for tool in \
