@@ -470,7 +470,6 @@ jobs:
               for old in sorted(mapping, key=lambda key: len(mapping[key]), reverse=True):
                   reverse = reverse.replace(mapping[old], old)
               assert reverse == source, "test runner differs beyond literal replacements"
-
               runner_copy = install / production_runner.name
               runner_copy.write_text(transformed, encoding="utf-8")
               runner_copy.chmod(0o500)
@@ -564,6 +563,21 @@ jobs:
                   print(f"===== BEGIN D97AEZ SIM {name} OUTPUT =====")
                   print(result.stdout, end="" if result.stdout.endswith("\n") else "\n")
                   print(f"===== END D97AEZ SIM {name} OUTPUT =====")
+                  state_dir = Path(env["D97AEZ_TEST_ROOT"]) / "state"
+                  print(f"===== BEGIN D97AEZ SIM {name} STATE =====")
+                  for artifact in sorted(state_dir.rglob("*")):
+                      relative = artifact.relative_to(state_dir)
+                      if artifact.is_dir():
+                          print(f"DIRECTORY={relative}|MODE={file_mode(artifact):04o}")
+                      elif artifact.is_file():
+                          data = artifact.read_bytes()
+                          print(
+                              f"FILE={relative}|MODE={file_mode(artifact):04o}|"
+                              f"BYTES={len(data)}|SHA256={hashlib.sha256(data).hexdigest()}"
+                          )
+                          if len(data) <= 65536:
+                              print(data.decode("utf-8", errors="backslashreplace"), end="")
+                  print(f"===== END D97AEZ SIM {name} STATE =====")
               return result.returncode
 
           def assert_no_claim(root):
@@ -761,7 +775,7 @@ jobs:
             /usr/bin/git --git-dir="$payload_git" fetch \
               --no-tags --depth=1 \
               https://github.com/StefanAlMare/StefanAlMare.git \
-              b5f99c883ff7006f8c5800464c8e032631d5e8d2
+              b30a02fed23cdd75de880c90947f5c985571b53a
           export D97AEZ_PUBLIC_PAYLOAD_GIT_DIR="$payload_git"
           python3 - <<'PY'
           from pathlib import Path
@@ -772,12 +786,12 @@ jobs:
           import stat
           import subprocess
 
-          payload_commit = "b5f99c883ff7006f8c5800464c8e032631d5e8d2"
-          payload_tree = "585b9113d5ffdb509b41bda1a80bbc12cb13917e"
+          payload_commit = "b30a02fed23cdd75de880c90947f5c985571b53a"
+          payload_tree = "51b4df3c6935dbf818b5269c99a7752d71da2eba"
           payload_entries = {
               "OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command": (
-                  "100755", "1e962579811d897ec82546e1ecbd0f6b03354aac",
-                  "0dbc8e0c3e2880d105a4c139e0c278616ff339e06a40bd0f9a46827963feedf4", 36677,
+                  "100755", "74ab4b67f2d2bfe2e7635b1d4025e488d59c2ad2",
+                  "9c2dc2060ea557dfea9ca1901b055f1242ba4e34f5ec29297e6b847997a320a4", 36701,
               ),
               "OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist": (
                   "100644", "8ef97872d0a29c28a91c9d1818bf0c5c7492c080",
@@ -791,14 +805,14 @@ jobs:
           wrappers = {
               "ACTIVATION": (
                   Path(os.environ["D97AEZ_ACTIVATION_WRAPPER"]),
-                  "bea0032dc39d07e5718be3d9c27bbfa0e3c010c8",
-                  "d180fa939e0bff4047ade5b9914d04d407b0971f6def86f7869d44858c3d067b",
+                  "484182b44283c338213faeae46b9c8b2592df744",
+                  "1fe59799df1e46822dca2ffb4a0d203bd8f06cc41923fa7cfc78c29acd81c115",
                   39883,
               ),
               "RETRIEVAL": (
                   Path(os.environ["D97AEZ_RETRIEVAL_WRAPPER"]),
-                  "2a32158a8ea21b6852f33143d4b176cb350ba55f",
-                  "94fc454f564414b38c78c66ae213409d043e3011a08aae4b1054950cd1f5b5c2",
+                  "4492668f573c4ed6f4b9a3256bf9e449f273c983",
+                  "4e738b39fbd6dbaee95107f5caa65cbe78da8f6343698b55f20be36d963f1948",
                   50220,
               ),
           }
@@ -857,7 +871,7 @@ jobs:
               "RUNNER_PUBLIC_MODE_EXPECTED": "100755",
               "RUNNER_BLOB_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command"][1],
               "RUNNER_SHA256_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command"][2],
-              "RUNNER_BYTES_EXPECTED": "36677",
+              "RUNNER_BYTES_EXPECTED": "36701",
               "PLIST_PUBLIC_MODE_EXPECTED": "100644",
               "PLIST_BLOB_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist"][1],
               "PLIST_SHA256_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist"][2],
@@ -872,7 +886,7 @@ jobs:
               "PAYLOAD_TREE_EXPECTED": payload_tree,
               "RUNNER_BLOB_EXPECTED": exact_activation["RUNNER_BLOB_EXPECTED"],
               "RUNNER_SHA256_EXPECTED": exact_activation["RUNNER_SHA256_EXPECTED"],
-              "RUNNER_BYTES_EXPECTED": "36677",
+              "RUNNER_BYTES_EXPECTED": "36701",
               "PLIST_BLOB_EXPECTED": exact_activation["PLIST_BLOB_EXPECTED"],
               "PLIST_SHA256_EXPECTED": exact_activation["PLIST_SHA256_EXPECTED"],
               "PLIST_BYTES_EXPECTED": "1027",
@@ -1054,10 +1068,10 @@ jobs:
           /usr/bin/cmp "$audit_root/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt" "$extracted/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt"
           [[ "$(/usr/bin/stat -f '%Lp' "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == 755 ]]
           [[ "$(/usr/bin/stat -f '%Lp' "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 755 ]]
-          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == bea0032dc39d07e5718be3d9c27bbfa0e3c010c8 ]]
-          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 2a32158a8ea21b6852f33143d4b176cb350ba55f ]]
-          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_ACTIVATION_WRAPPER" | /usr/bin/awk '{print $1}')" == d180fa939e0bff4047ade5b9914d04d407b0971f6def86f7869d44858c3d067b ]]
-          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_RETRIEVAL_WRAPPER" | /usr/bin/awk '{print $1}')" == 94fc454f564414b38c78c66ae213409d043e3011a08aae4b1054950cd1f5b5c2 ]]
+          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == 484182b44283c338213faeae46b9c8b2592df744 ]]
+          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 4492668f573c4ed6f4b9a3256bf9e449f273c983 ]]
+          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_ACTIVATION_WRAPPER" | /usr/bin/awk '{print $1}')" == 1fe59799df1e46822dca2ffb4a0d203bd8f06cc41923fa7cfc78c29acd81c115 ]]
+          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_RETRIEVAL_WRAPPER" | /usr/bin/awk '{print $1}')" == 4e738b39fbd6dbaee95107f5caa65cbe78da8f6343698b55f20be36d963f1948 ]]
           python3 - <<'PY'
           from pathlib import Path, PurePosixPath
           import os
