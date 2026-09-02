@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEW_CACHE_POSITIONAL_IDENTITY_NEGATIVE_SEMANTIC_REMAP_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEW_PHYSICAL_READ_VALID_D5CE_RUNTIME_TEXT_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -46,16 +46,20 @@ D97AEU discovered main x86_64h cache plus `.01`–`.06` subcaches. Each parseabl
 
 D97AEU stopped at raw-hit cardinality `7` before reading any discriminator bytes. This is TOOLING FALSE FAILURE; no byte conclusion is permitted from that run.
 
-## D97AEW cache positional identity result
+## D97AEW corrected cache interpretation
 D97AEW, D97AEV and the corrected D97AEU core completed with internal RC `0`. Wrapper/blob/SHA, scanner-only correction, all three D97AEV transforms, retained anchors, zsh parsing and embedded Python compilation passed exactly.
 
-The seven replicated `imagesText` records deduplicate to one cached 32023 image: UUID `D2265480-60EB-3526-BAF7-2D6596149186`, load `0x7FFD03141000`, text size `0xCE239`, executable bytes in subcache `.05`. Cached table UUID equals cached Mach-O LC_UUID, but differs from visible filesystem UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`.
+The seven replicated `imagesText` records deduplicate to one cached 32023 image: UUID `D2265480-60EB-3526-BAF7-2D6596149186`, load `0x7FFD03141000`, text size `0xCE239`, executable bytes in subcache `.05`. The physical `.05` address-to-file translation and byte reads are valid.
 
-At the six visible D97AD image offsets the cache result is `PRE=0|POST=0|OTHER=6`, while the visible filesystem file is D97AD POST at all six. The shared stub is OTHER in cache. All 16 retained functional windows are exact postimages in the visible file and `0/16` at the same cache offsets. Both historical sender-PC windows also differ. Classification: cache-versus-visible-filesystem positional byte identity NEGATIVE; semantic location/equivalence in the separately identified cached image UNKNOWN.
+Apple dyld copies `imagesText.uuid` from the selected input Mach-O slice and preserves that slice's `LC_UUID`; D226 is therefore `CACHE_INPUT_SLICE_UUID`, not a cache-optimization UUID derived from D5CE. Direct transplantation of D5CE filesystem offsets into D226 is cross-lineage and unsupported. Consequently the observed `PRE=0|POST=0|OTHER=6`, OTHER stub, retained `0/16` and differing sender windows are valid physical reads at those numerical D226 offsets, but are not semantic classifications of the corresponding D226 functions. Authoritative status: `CACHE_PHYSICAL_BYTE_READ=VALID`, `CROSS_IMAGE_SITE_CORRELATION=NOT_ESTABLISHED`, `D97AD_CACHE_PATCH_DISCRIMINATOR=INCONCLUSIVE`.
 
-This does not prove runtime cache execution and does not prove that the semantics are absent elsewhere in the optimized cached image. Runtime text backing remains UNKNOWN. No source/system/Golden/service/Root Patch/reboot mutation occurred.
+The official OCLP 1.3.0 -> PatcherSupportPkg 1.4.6 donor is 14.2 Beta 1 MTLCompiler 32023 with exact UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`. The public dsce implementations bracketing internal version 8 mark only the first four UUID bytes as `D5 CE 00 <version>` and preserve the final twelve; the exact internal v8 source is not public. Exact 2023 release provenance independently establishes that this donor is not the current Tahoe D226 input, while the different retained UUID tails corroborate the separate lineage under the documented algorithm.
 
-## CURRENT ACTION — assistant GitHub semantic remap
-The assistant must build and fully audit an identity-pinned read-only semantic cache mapper. It must compare Mach-O section topology and locate module/classifier boundaries through unique/semantic anchors instead of reusing visible-filesystem fixed offsets. Only after GitHub audit may the user receive a minimal ASUS2-only mapper command.
+D97AES runtime evidence is now classified precisely: all 33 simulator diagnostics across 28/28 PIDs identify the immediate sender DSO as 32023/D5CE. Apple logging obtains the sender UUID from the loaded sender Mach-O header, and dsce created D5CE specifically for log visibility. Therefore `RUNTIME_DIAGNOSTIC_SENDER_D5CE_DSCE_32023=PROVEN` and `RUNTIME_DIAGNOSTIC_SENDER_CURRENT_D226_CACHE=NEGATIVE` for that diagnostic cohort. This does not exclude D226 elsewhere in those processes and does not prove the exact current D97AD SHA/postimage bytes in memory, because the known P7-to-D97AD transform lineage preserves the same D5CE LC_UUID. `RUNTIME_EXACT_CURRENT_D97AD_TEXT_BYTES=UNKNOWN`.
+
+No source/system/Golden/service/Root Patch/reboot mutation occurred. The previous semantic-D226 mapper frontier is superseded and moved to reserve-only static cross-build research.
+
+## CURRENT ACTION — assistant GitHub runtime D5CE text-provenance audit
+The assistant must first design and fully audit in GitHub an identity-pinned, passive, non-stopping, universal/no-PID method for a new naturally occurring MTLCompilerService cohort. Per captured PID it must prove loaded 32023 header/path/UUID/base/backing and, only through safe read-only memory access, classify the six D97AD sites, shared stub and required retained/late/far-frontier anchors as PRE/POST/OTHER with explicit coverage. It must not launch the service. If task-port or exact memory reading is unsafe, perturbative or denied, STOP with a recorded blocker; do not use LLDB attach and do not substitute a semantic remap of D226. Only after complete GitHub audit may the user receive a minimal ASUS2-only command.
 
 No user action, Root Patch or reboot is currently authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
