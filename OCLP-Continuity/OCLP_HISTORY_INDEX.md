@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AF_DEPLOY_FASTLANE_AUDITED_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AF_APP_DEPLOY_PASS_MANUAL_ROOT_PATCH_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -84,7 +84,14 @@ Original artifact `9868515225` is `751567689` bytes with GitHub digest `70a123bf
 ## D97AF deploy FASTLANE audited / ready
 Exact wrapper `OCLP7_D97AF_EXACT_GITHUB_ARTIFACT_AUDIT_DEPLOY.command`, SHA256 `e82a5748abd09684a88932380d98d4ae8d83e0bfea94c462866080cfe7b535b4`, git blob `02b4a322eaabb1eff0c3a14089a9ce6508882bc6`, `26914` bytes, passed zsh parse, all three embedded Python compiles, independent pinning/archive/path audits and ordinary error/signal fault matrices.
 
-Before `/Applications` mutation it re-verifies the exact private run/job/artifact, outer and inner ZIPs, full SHA records, unique x86_64 packaged executable and exact installed D97AD preimage. It prepares and re-verifies D97AF beside live, drains the exact old OCLP path, moves D97AD to a re-verified timestamped backup, performs a second gap census, installs/re-verifies exact D97AF, opens it and stops. EXIT/HUP/INT/TERM recovery removes owned staging or restores exact D97AD during ordinary failures. The two-rename interval is not represented as crash-atomic against SIGKILL/kernel crash/power loss. Deployment remains `NOT_STARTED`; Root Patch/reboot remain unauthorized.
+Before `/Applications` mutation it re-verifies the exact private run/job/artifact, outer and inner ZIPs, full SHA records, unique x86_64 packaged executable and exact installed D97AD preimage. It prepares and re-verifies D97AF beside live, drains the exact old OCLP path, moves D97AD to a re-verified timestamped backup, performs a second gap census, installs/re-verifies exact D97AF, opens it and stops. EXIT/HUP/INT/TERM recovery removes owned staging or restores exact D97AD during ordinary failures. The two-rename interval is not represented as crash-atomic against SIGKILL/kernel crash/power loss. At that audited-ready checkpoint deployment was `NOT_STARTED`; the live result below supersedes that execution state.
 
-## CURRENT ACTION — run exact D97AF ASUS2 app backup/deploy/open/STOP wrapper
-Deliver the single public-commit-pinned wrapper command. After exact D97AF OCLP opens, STOP and return the complete terminal output. Do not click Root Patch. Root Patch and reboot remain unauthorized until the returned deployment result is audited.
+## D97AF live app deployment PASS
+The exact public delivery from commit `15c1a141cb362a03c1e63d8bfbb8dac72b693d0e` ran on ASUS2 with wrapper blob `02b4a322eaabb1eff0c3a14089a9ce6508882bc6`, SHA256 `e82a5748abd09684a88932380d98d4ae8d83e0bfea94c462866080cfe7b535b4`, `26914` bytes and outer RC `0`.
+
+All 16 build job steps, exact `751567689`-byte artifact SHA256 `70a123bfad81e00072ed2691fc769fa81c25f07c48a2ddb39a092d06d1947d9b`, eight-member outer archive, complete SHA records, inner app ZIP SHA256 `728dd30d7a4483bc7318300f3911e8aae8590f0d9ff59afbcf7db66651d8e907`, reports and staged executable passed again on ASUS2. Exact live D97AD preimage SHA256 `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0` passed and is preserved at `/Applications/OpenCore-Patcher.app.D97AD-before-D97AF-20260903-013623`.
+
+Both old-process censuses were empty. Live `/Applications/OpenCore-Patcher.app` is now exact D97AF x86_64, `6595600` bytes, SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`; fresh exact-path PID `3678` passed. `D97AF_EXACT_GITHUB_ARTIFACT_AUDIT_DEPLOY=PASS` and `INSTALLED_APP_MUTATION_STATE=D97AF_DEPLOYED_EXACT`. No source/system target/Golden/Root Patch/reboot mutation occurred.
+
+## CURRENT ACTION — manual D97AF Root Patch, then STOP before reboot
+Deployment is audited PASS. In the exact D97AF OCLP application already open, the user may manually run `Post-Install Root Patch` / `Start Root Patching` once. When it finishes and offers/recommends reboot, STOP and return the complete Root Patch output. Do not reboot until that result is audited and a later checkpoint explicitly authorizes accelerated boot.
