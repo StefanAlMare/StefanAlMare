@@ -18,7 +18,7 @@
       "text_vmsize": "0xC9000",
       "text_fileoff": "0x0",
       "text_filesize": "0xC9000",
-      "file_size": 1636864
+      "file_size": 1636896
     }
   },
   "contract": {
