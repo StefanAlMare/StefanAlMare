@@ -1,0 +1,62 @@
+name: OCLP7 D97AEW static audit
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command
+      - .github/workflows/oclp7-d97aew-static-audit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-audit:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v4
+
+      - name: Run validation-only wrapper
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/Desktop"
+          export D97AEW_VALIDATE_ONLY=1
+          /bin/zsh ./OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command
+
+      - name: Audit complete static report
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          report="$HOME/Desktop/OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER_REPORT.txt"
+          test -f "$report"
+          grep -F 'D97AEW_BASE_IDENTITY=PASS' "$report"
+          grep -F 'D97AEW_SCANNER_TRANSFORM_MATCH_COUNT=1' "$report"
+          grep -F 'D97AEW_OLD_SCANNER_AFTER_COUNT=0' "$report"
+          grep -F 'D97AEW_NEW_SCANNER_AFTER_COUNT=1' "$report"
+          grep -F 'D97AEW_ONLY_FORBIDDEN_SCANNER_CHANGED=PASS' "$report"
+          grep -F 'D97AEW_PREBOOT_SAFE_REAL_REBOOT_FORBIDDEN_SYNTHETIC=PASS' "$report"
+          grep -F 'D97AEW_RETAINED_D97AEV_IDENTITY_SAFETY_ANCHORS_MISSING=[]' "$report"
+          grep -F 'D97AEW_FIXED_D97AEV_ZSH_PARSE=PASS' "$report"
+          grep -F 'D97AEW_EMBEDDED_PYTHON_BLOCK_COUNT=1' "$report"
+          grep -F 'D97AEW_STATIC_WRAPPER_AUDIT=PASS' "$report"
+          grep -F 'D97AEW_GITHUB_STATIC_AUDIT=PASS' "$report"
+          grep -F 'D97AEW_ASUS2_MAPPER_EXECUTION=NOT_RUN_IN_GITHUB' "$report"
+          grep -F 'SOURCE_MUTATION=NO' "$report"
+          grep -F 'SYSTEM_MUTATION=NO' "$report"
+          grep -F 'ROOT_PATCH=AUTO-NO' "$report"
+          grep -F 'REBOOT=AUTO-NO' "$report"
+          printf 'D97AEW_WRAPPER_GIT_BLOB=%s\n' "$(git hash-object OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command)"
+          shasum -a 256 OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command
+
+      - name: Upload static audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: OCLP7-D97AEW-static-audit-report
+          path: ~/Desktop/OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER_REPORT.txt
+          if-no-files-found: error
+          retention-days: 30
