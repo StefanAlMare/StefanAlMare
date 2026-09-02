@@ -43,7 +43,7 @@ After that design gate, GitHub may author, compile/build, package and fully audi
 
 The decisive sequence, only after a future audited authorization, is:
 
-1. ASUS2 VESA installs/arms one exact identity-pinned observer;
+1. ASUS2 VESA installs/activates one exact identity-pinned observer;
 2. user manually enters the accelerated configuration;
 3. the observer watches the natural boot cohort without launching/stopping MTLCompilerService;
 4. user waits for bounded completion, manually hard-restarts and enters VESA;

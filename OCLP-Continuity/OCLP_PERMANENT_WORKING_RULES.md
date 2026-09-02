@@ -174,16 +174,17 @@ This subsection is authoritative for every diagnostic that must be exercised dur
 4. A GitHub PASS proves only implementation/tool properties. It never substitutes for live Haswell/Tahoe execution and never proves accelerated runtime behavior.
 5. The normal hardware feedback cycle is:
    - assistant completes and audits the GitHub FASTLANE;
-   - user runs the single authorized pinned ASUS2 deploy/arm action;
+   - user runs the single authorized pinned ASUS2 activation/deploy action;
    - assistant audits that complete report and STOPs if any gate is not exact;
    - user manually Root Patches only when a new OCLP build actually requires it, then returns the complete transcript;
    - assistant audits Root Patch before authorizing accelerated boot;
    - user boots the authorized accelerated configuration; when no image is available, waits the explicitly stated bounded collection interval, hard-restarts/power-cycles manually, and boots VESA recovery;
    - user runs only the pinned retrieval/audit action required by the real hardware result;
    - assistant analyzes only the selected accelerated boot, persists the result, and defines the next single discriminating action.
-6. When the already-installed root-patched diagnostic identity is exact and the next question needs only observation, do not manufacture a new OCLP patch or Root Patch. GitHub instead validates the smallest passive boot-time observer; ASUS2 only arms it, performs the real accelerated boot/recovery, and returns its report.
+6. When the already-installed root-patched diagnostic identity is exact and the next question needs only observation, do not manufacture a new OCLP patch or Root Patch. GitHub instead validates the smallest passive boot-time observer; ASUS2 only activates it, performs the real accelerated boot/recovery, and returns its report.
 7. A foreground command run after returning to VESA cannot substitute for an observer that had to overlap the earlier accelerated cohort. Passive observers never create `MTLCompilerService`; they must be active before the natural accelerated workload.
 8. Work proceeds through visible gates. Before crossing from GitHub implementation to any ASUS2 mutation/boot, the assistant reports the exact completed evidence, remaining hardware-only unknown, expected user action and STOP boundary. Do not expand an unreviewed design for hours or hand the user a hardware test before its GitHub-testable implementation paths have been exercised.
+9. Architecture terminology is unambiguous: ASUS2 is Intel Haswell `x86_64`, never ARM. Use `activation`/`activate`/`deploy` for enabling an observer. A literal `arm64` label is permitted only for a negative non-x86_64 CI fixture and never describes the target or an implementation plan.
 
 ## 13. Runtime evidence discipline
 Analyze only the immediately preceding accelerated diagnostic boot, excluding the later VESA recovery boot.

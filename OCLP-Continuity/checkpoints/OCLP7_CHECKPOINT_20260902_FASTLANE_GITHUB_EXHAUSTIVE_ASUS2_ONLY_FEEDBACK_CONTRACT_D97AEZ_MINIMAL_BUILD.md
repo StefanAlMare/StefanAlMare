@@ -43,8 +43,8 @@ D97AD is already installed with exact stable visible service/target identities. 
 The smallest acceptable D97AEZ FASTLANE is:
 
 1. GitHub builds/tests/packages/audits a passive one-shot boot observer around the unchanged corrected D97AEX universal/no-PID helper;
-2. only after complete PASS, the user runs one pinned arm/deploy wrapper in VESA;
-3. assistant audits that complete arm report;
+2. only after complete PASS, the user runs one pinned activation/deployment wrapper in VESA;
+3. assistant audits that complete activation report;
 4. user manually enters the already-root-patched accelerated configuration;
 5. observer overlaps the naturally spawned cohort without launching or stopping MTLCompilerService;
 6. user waits the stated bounded interval, manually hard-restarts/power-cycles, and enters VESA;

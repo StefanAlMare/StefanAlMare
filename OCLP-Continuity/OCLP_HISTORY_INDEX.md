@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_FASTLANE_GITHUB_EXHAUSTIVE_ASUS2_ONLY_FEEDBACK_CONTRACT_D97AEZ_MINIMAL_BUILD.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEZ_GITHUB_FULL_PASS_ACTIVATION_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -97,7 +97,20 @@ Opening Terminal and starting D97AEX cannot create MTLCompilerService: the helpe
 ## Permanent FASTLANE hardware-feedback correction
 The user reaffirmed the historical accelerated-test cycle and made its division explicit. The assistant must test in GitHub every property of the FASTLANE/diagnostic implementation that GitHub can exercise, including build/package when applicable, state/RC/adversarial/interruption fixtures, identities and artifact/report audit. The user is never asked to combine fragments, compile locally or repair GitHub work. The user performs only the single pinned step that inherently requires ASUS2, followed—after assistant audit—by any actually required manual Root Patch, the real no-image accelerated boot, bounded wait, manual hard reset/VESA recovery and pinned evidence retrieval. GitHub evidence is tool evidence only and never replaces hardware runtime evidence.
 
-For D97AEZ, D97AD is already installed and exact, so no new functional OCLP patch or Root Patch is justified. The correct transport is the smallest passive one-shot observer validated in GitHub, armed before boot, and retrieved after VESA. A foreground VESA command cannot substitute for that boot overlap.
+For D97AEZ, D97AD is already installed and exact, so no new functional OCLP patch or Root Patch is justified. The correct transport is the smallest passive one-shot observer validated in GitHub, activated before boot, and retrieved after VESA. A foreground VESA command cannot substitute for that boot overlap. ASUS2 is Intel Haswell `x86_64`, not ARM; `arm64` appears only as a negative non-x86_64 CI fixture.
 
-## CURRENT ACTION — D97AEZ minimal GitHub FASTLANE; user STOP
-Do not repeat the VESA foreground watch and do not substitute an induced VESA workload. The accepted causal question remains whether naturally spawned exact-path MTLCompilerService processes in a new accelerated boot map the current D97AD 31-window postimage or different runtime text. MATCH can negate only the known P7-vs-D97AD bounded-provenance mismatch hypothesis within those tested windows of a completely captured observed cohort; it cannot establish whole-image or runtime-semantic identity. Assistant now builds, tests, packages and audits the minimal one-shot orchestration entirely in GitHub. No ASUS2 command, Root Patch or reboot is authorized until that lane and artifact audit are complete.
+## D97AEZ GitHub implementation and exhaustive audit — PASS
+The passive boot-bound observer release is frozen at public content commit/tree `eba63b606f4a48f747b1605e682d4ac2a624bb40` / `3622a4bf5ab0c34e444634b40ccf0f0fe18fa71d`; both release wrappers pin payload commit/tree `b30a02fed23cdd75de880c90947f5c985571b53a` / `51b4df3c6935dbf818b5269c99a7752d71da2eba`.
+
+Final runner blob/SHA256/bytes `74ab4b67f2d2bfe2e7635b1d4025e488d59c2ad2` / `9c2dc2060ea557dfea9ca1901b055f1242ba4e34f5ec29297e6b847997a320a4` / `36701`; plist `8ef97872d0a29c28a91c9d1818bf0c5c7492c080` / `90c0801805319126520cc946d9f2bb4a69e95fd7a0be4a85914a1c3305ec03c5` / `1027`; activation wrapper `484182b44283c338213faeae46b9c8b2592df744` / `1fe59799df1e46822dca2ffb4a0d203bd8f06cc41923fa7cfc78c29acd81c115` / `39883`; retrieval wrapper `4492668f573c4ed6f4b9a3256bf9e449f273c983` / `4e738b39fbd6dbaee95107f5caa65cbe78da8f6343698b55f20be36d963f1948` / `50220`.
+
+Private audit branch head/tree `09c937d32a13fd03242b0f6b9fdc7b5c8c6c3a66` / `cac21270170b010f8265b77aa39fd9c2658a4d2d`; PR merge-test SHA `2f577b1e5ea344d9dfec47c18723fd1e7700ef50`. Workflow ID `348570767`, run/job `33655550721` / `100333075176`, `macos-15-intel`, `success`; all 11 functional steps passed. The matrix covered exact identities, helper self-test/rebuild, same-boot skip, first-next-boot atomic claim, duplicate/no-rerun, RC0/2/3/4, non-x86_64, pre/post drift, contradictory/truncated, grep error, watchdog/secondary/signal overlap, truncated deploy and interruption.
+
+GitHub found and repaired two real zsh bugs before final PASS: compound-local expansion under `set -u`, and sticky grep RC2 causing `set -e` to exit during descriptor close before report sealing. The final runner's three `exec [34]>&- || true` changes were independently audited and frozen.
+
+Downloaded artifact ID `9856618441`: ZIP SHA256 `f7d377c7080eb709781d3e41b40803193be02fd74e02517e6d387b595d43f5e2`; inner tar SHA256 `d0ffcaf3164524013fbb6b6321288efddc83e53d9c2dc8650d34fc43faaa1969`; nested release tar SHA256 `dd05a77a309b6093c7045f259f6b9293ee7d3b27f3b8bacfddfcb480fcca2c11`. Outer CRC/path/type/hash, all reports, source identities and nested wrapper/manifest byte comparisons passed. Production runner/launchd and ASUS2 accelerated runtime were explicitly not run in GitHub.
+
+## CURRENT ACTION — one activation wrapper, then STOP
+Do not repeat the VESA foreground watch or induce a VESA workload. The causal question remains whether naturally spawned exact-path MTLCompilerService processes in a new accelerated boot map the current D97AD 31-window postimage or different runtime text.
+
+The GitHub lane is complete. The only authorized ASUS2 action now is one outer identity-pinned download/verification/execution of the activation wrapper from public release commit `eba63b606f4a48f747b1605e682d4ac2a624bb40`, followed by return of the complete Terminal transcript and Desktop activation report. Then STOP. Do not open OCLP, Root Patch or reboot until the assistant audits that report. No new Root Patch is presently expected because D97AD is already exact.
