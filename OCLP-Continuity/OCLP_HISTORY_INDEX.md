@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEX_PREWATCH_MIXED_SIZE_PROVENANCE_FALSE_NEGATIVE_D97AEY_GITHUB_REPAIR_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEY_GITHUB_REPAIR_FULL_PASS_ASUS2_RUNTIME_PROOF_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -73,5 +73,14 @@ OS/build/arch, helper/codesign/self-test/sudo, helper pre-watch and service pre-
 
 Report: 96 lines / 5389 bytes / blob `dab425a8e09b88308e90f88e3d124a4cd31ef112` / SHA256 `39a4febf181d35437016a69ee7c4fc50a1ae339dd29670aebf3d35dc78d3510b`. No service launch/stop, system/Golden/target mutation, Root Patch or reboot. Classification: tooling false negative, no target-drift or runtime-text conclusion.
 
-## CURRENT ACTION — assistant GitHub D97AEY size-provenance repair
-User STOP. Correct the exact final-target size to `1636896` throughout helper source/manifest/build provenance and wrapper/identity/auditor/workflow, retaining SHA and all fail-closed gates. Rebuild and audit helper in GitHub, audit downloaded artifact, publish immutable helper, repin/re-audit wrapper in GitHub, audit downloaded wrapper artifact, publish immutable wrapper, and persist before any ASUS2 rerun. No local user compile, OCLP, Root Patch or reboot.
+## D97AEY end-to-end size-provenance repair
+The correction retained exact target SHA256 `524a16...a755` and every fail-closed identity gate while changing stale donor size `1636864` to live final-D97AD size `1636896` in source/site and the two matching workflow assertions. Source/site public commit `761c0cb98c7fa8791d0cb9698a0ce6833620f0eb`; blobs `6250bebcbe5fe3177f98eeba46cbfd523155b206` and `3743965fb9e3565f63acb4877264da99d1b5c854`.
+
+Corrected helper: private commit/tree `47e12a69ac5212978c1768acd3699f904dc4238b` / `ebacd2075b83ee95c3d4b09e3d0e8b7ce0fdf813`; successful run/job `33632008783` / `100253487864`; artifact `9847219598`, ZIP 94170 bytes / SHA256 `611e38dc05ced8ad00ed97f8849b10139bf9b386df147fe3427ba7b3f7702348`; all outer/inner safety and 22 payload checks passed. Signed helper blob `9f22460e8c1e51a2ae091eb7377e958f6a148e35`, SHA256 `f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9`, 94928 bytes, public commit/tree `4f46e3c97d5cbd89cf77efd5a6a0044aefab52a7` / `0e3a97a5abe4a81eb32848274f06190ad77418f8`.
+
+Corrected wrapper: private commit/tree `1e5fd2e730543df382ff1fe117d315c0aef25560` / `995081d0489187738aacd8f11bf54ce68754c7bb`; successful run/job `33633032040` / `100256947822`; artifact `9847598233`, ZIP 64896 bytes / SHA256 `80a416e8747ddc6d0ec9f13438bf5e6552a02a93c1767d7886f0d233ed9b4587`; 20 safe entries, 18/18 SHA256 and Git blobs PASS. Public wrapper commit/tree `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5` / `583bb1f6c549fe99a55e76a65e42873d440b2125`; blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`, 40522 bytes, 886 lines, mode 100755.
+
+All GitHub compile/codesign/self-test/provenance/static/RC/adversarial/log/packaging gates passed. Helper production scan and wrapper execution were NOT RUN; no service launch, system/Golden/target mutation, Root Patch or reboot.
+
+## CURRENT ACTION — corrected D97AEX ASUS2 runtime proof
+User may run exactly once the assistant-issued outer command pinned to public wrapper commit `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5`, blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`, 40522 bytes. Return full transcript plus unique Desktop report. No compilation, OCLP opening, Root Patch or reboot.
