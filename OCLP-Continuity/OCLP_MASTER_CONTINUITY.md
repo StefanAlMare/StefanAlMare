@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_GITHUB_FIRST_EXECUTION_CONTRACT_D97AEV_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEV_PREBOOT_SUBSTRING_FALSE_POSITIVE_D97AEW_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -46,9 +46,14 @@ D97AEU discovered main x86_64h cache plus `.01`–`.06` subcaches. Each parseabl
 
 D97AEU stopped at raw-hit cardinality `7` before reading any discriminator bytes. This is TOOLING FALSE FAILURE; no byte conclusion is permitted from that run.
 
-## CURRENT ACTION — D97AEV
-Run `OCLP7_D97AEV_LOGICAL_CACHE_IMAGE_DEDUP_UUID_SAFE_WRAPPER.command`, commit `b8350946e307ec2df253ffb795b31c2104034372`, blob `1060f611b3fec7fc66f80d7674d2fb06a2cdfe6d`.
+## D97AEV tooling false failure / D97AEW correction
+D97AEV passed wrapper/base identity, all three transform source cardinalities `1/1/1` and all required byte/safety anchors, then stopped before writing or executing the fixed core. Its raw forbidden-substring scanner matched `reboot` inside the legitimate read-only path `/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld`. Classification: TOOLING FALSE FAILURE; byte comparison NOT REACHED; no cache-byte conclusion permitted.
 
-D97AEV pins the D97AEU core, deduplicates replicated image-table hits by logical cache identity, separates cache-optimized UUID from filesystem LC_UUID, retains the safe `__TEXT.vmaddr` contract, and leaves all six D97AD pre/post byte discriminators plus shared-stub/D34/AIR00/P6/P7 windows unchanged.
+D97AEW pins the exact D97AEV wrapper and changes only that scanner block. It uses a command-boundary reboot detector, proves a reversible one-block delta, requires old/new scanner counts `0/1`, accepts `Preboot`/path/identifier negatives, rejects real reboot-command positives, retains all D97AEV transforms/anchors, zsh-parses the fixed wrapper and compiles its embedded Python. GitHub PR static audit provenance is recorded in the authoritative checkpoint.
+
+## CURRENT ACTION — D97AEW
+Run `OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command`, commit `2d14c7831d4adc9578daf5b80b55b72f663d836a`, blob `45876fa66e9018053882be7b01eeccabcfe8046b`, SHA256 `cdd976be2ee2981aec2d35055e96fc0559f2f3277a9e38d62f2476817ef74394`.
+
+D97AEW must reach and execute the unchanged D97AEV three-transform mapper, then return the complete D97AEW report. The decisive result remains all six cached D97AD classifier sites versus P7 preimages/D97AD postimages, with cache byte identity kept separate from runtime-cache execution proof.
 
 No Root Patch or reboot. Cache byte identity must remain separate from runtime-cache execution proof. D82 reserve-only; Patch8 unauthorized.
