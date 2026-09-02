@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AF_APP_DEPLOY_PASS_MANUAL_ROOT_PATCH_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AF_OLD_ROOT_PATCH_UNPATCH_PASS_VESA_REBOOT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -93,5 +93,10 @@ All 16 build job steps, exact `751567689`-byte artifact SHA256 `70a123bfad81e000
 
 Both old-process censuses were empty. Live `/Applications/OpenCore-Patcher.app` is now exact D97AF x86_64, `6595600` bytes, SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`; fresh exact-path PID `3678` passed. `D97AF_EXACT_GITHUB_ARTIFACT_AUDIT_DEPLOY=PASS` and `INSTALLED_APP_MUTATION_STATE=D97AF_DEPLOYED_EXACT`. No source/system target/Golden/Root Patch/reboot mutation occurred.
 
-## CURRENT ACTION — manual D97AF Root Patch, then STOP before reboot
-Deployment is audited PASS. In the exact D97AF OCLP application already open, the user may manually run `Post-Install Root Patch` / `Start Root Patching` once. When it finishes and offers/recommends reboot, STOP and return the complete Root Patch output. Do not reboot until that result is audited and a later checkpoint explicitly authorizes accelerated boot.
+## Legacy Root Patch unpatch PASS
+The next manual OCLP operation entered `Starting Unpatch Process`. It found exact local metallib `26.6.2-25G82`, skipped API fallback, completed the APFS snapshot revert, removed old Skylight plugins, and removed `AppleIntelFramebufferAzul.kext` plus `AppleIntelHD5000Graphics.kext` while cleaning the Auxiliary Kernel Collection. It ended `Unpatching complete` and explicitly requires reboot for the changes to take effect.
+
+Classification: `LEGACY_ROOT_PATCH_UNPATCH=OCLP_REPORTED_PASS_PENDING_REBOOT`, `SYSTEM_SNAPSHOT_MUTATION=YES_BY_MANUAL_UNPATCH`, `UNPATCH_ACTIVATION_REBOOT=NOT_YET_RUN`, `D97AF_ROOT_PATCH=NOT_STARTED`. The clean post-reboot state is not yet independently proven. This output is not a D97AF Root Patch result. Exact D97AF remains the last proven live application and exact D97AD remains in its timestamped backup.
+
+## CURRENT ACTION — manual unpatch-activation reboot into VESA, then STOP
+The OCLP-reported complete unpatch requires one manual reboot with the correct ASUS2 OpenCore/EFI. After unpatched Tahoe/VESA loads, STOP and report the return. The clean state and exact D97AF app identity will be checked before patching. Do not apply D97AF Root Patch in that same unobserved step; it will be the next separately authorized action. This reboot is preparatory and is not the later accelerated D97AF test boot.
