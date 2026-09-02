@@ -23,6 +23,8 @@ jobs:
       D97AEZ_PLIST: OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist
       D97AEZ_HELPER: OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER
       D97AEZ_HELPER_SOURCE: OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER.cpp
+      D97AEZ_ACTIVATION_WRAPPER: OCLP7_D97AEZ_ACTIVATE_OBSERVER_PINNED_WRAPPER.command
+      D97AEZ_RETRIEVAL_WRAPPER: OCLP7_D97AEZ_RETRIEVE_PINNED_WRAPPER.command
       D97AEZ_HELPER_BLOB: 9f22460e8c1e51a2ae091eb7377e958f6a148e35
       D97AEZ_HELPER_SHA256: f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9
       D97AEZ_HELPER_BYTES: "94928"
@@ -32,6 +34,8 @@ jobs:
     steps:
       - name: Checkout exact head
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Establish CI-only boundary
         shell: zsh {0}
@@ -736,6 +740,362 @@ jobs:
           print(matrix_path.read_text(encoding="utf-8"), end="")
           PY
 
+      - name: Audit and package exact release wrappers
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          /bin/zsh -n "$D97AEZ_ACTIVATION_WRAPPER"
+          /bin/zsh -n "$D97AEZ_RETRIEVAL_WRAPPER"
+          payload_git="$RUNNER_TEMP/d97aez-public-payload.git"
+          /usr/bin/git init --bare "$payload_git"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin:/usr/sbin:/sbin \
+            LANG=C \
+            LC_ALL=C \
+            GIT_CONFIG_NOSYSTEM=1 \
+            GIT_CONFIG_GLOBAL=/dev/null \
+            GIT_TERMINAL_PROMPT=0 \
+            /usr/bin/git --git-dir="$payload_git" fetch \
+              --no-tags --depth=1 \
+              https://github.com/StefanAlMare/StefanAlMare.git \
+              78d22ee42322cfde2bd7c5a26dd741ae9b249223
+          export D97AEZ_PUBLIC_PAYLOAD_GIT_DIR="$payload_git"
+          python3 - <<'PY'
+          from pathlib import Path
+          from collections import Counter
+          import hashlib
+          import os
+          import re
+          import stat
+          import subprocess
+
+          payload_commit = "78d22ee42322cfde2bd7c5a26dd741ae9b249223"
+          payload_tree = "46e6004e82256fb55b525931e351f42715cd00b3"
+          payload_entries = {
+              "OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command": (
+                  "100755", "cbd74f21f2bf0810088191d11f55ce5a95afad4a",
+                  "8018f0dabe5033d36577ddc63bbb65fc76578f6cdfcbad778426eb690c726059", 36661,
+              ),
+              "OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist": (
+                  "100644", "8ef97872d0a29c28a91c9d1818bf0c5c7492c080",
+                  "90c0801805319126520cc946d9f2bb4a69e95fd7a0be4a85914a1c3305ec03c5", 1027,
+              ),
+              "OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER": (
+                  "100755", "9f22460e8c1e51a2ae091eb7377e958f6a148e35",
+                  "f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9", 94928,
+              ),
+          }
+          wrappers = {
+              "ACTIVATION": (
+                  Path(os.environ["D97AEZ_ACTIVATION_WRAPPER"]),
+                  "2b36a8f70a526519fe2250bb767d8eaac3c69114",
+                  "ff22f78f547f5ba50cd7341b2453dac5263b46ed23f2d4f652172b221037c430",
+                  39883,
+              ),
+              "RETRIEVAL": (
+                  Path(os.environ["D97AEZ_RETRIEVAL_WRAPPER"]),
+                  "1f0dcff69943cdd4938a807af5e3841ef61979a0",
+                  "16e91533ca992538a1781fcb64be033b58e6df2598071efe513adfe93062ab7d",
+                  50220,
+              ),
+          }
+          audit_root = Path(os.environ["RUNNER_TEMP"]) / "d97aez-audit"
+
+          def command(*args):
+              return subprocess.check_output(args, text=True).strip()
+
+          def payload_command(*args):
+              git_dir = os.environ["D97AEZ_PUBLIC_PAYLOAD_GIT_DIR"]
+              clean_env = {
+                  "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+                  "LANG": "C",
+                  "LC_ALL": "C",
+                  "GIT_CONFIG_NOSYSTEM": "1",
+                  "GIT_CONFIG_GLOBAL": "/dev/null",
+                  "GIT_TERMINAL_PROMPT": "0",
+              }
+              return subprocess.check_output(
+                  ("git", f"--git-dir={git_dir}", *args),
+                  text=True,
+                  env=clean_env,
+              ).strip()
+
+          def git_blob_formula(data):
+              header = b"blob " + str(len(data)).encode("ascii") + b"\0"
+              return hashlib.sha1(header + data).hexdigest()
+
+          def readonly_values(text):
+              return dict(re.findall(r'(?m)^readonly\s+([A-Z0-9_]+)="([^"]*)"$', text))
+
+          assert payload_command("rev-parse", "FETCH_HEAD") == payload_commit
+          assert payload_command("cat-file", "-t", payload_commit) == "commit"
+          assert payload_command("rev-parse", f"{payload_commit}^{{tree}}") == payload_tree
+          for path, (mode, blob, sha256, byte_count) in payload_entries.items():
+              expected_tree_line = f"{mode} blob {blob}\t{path}"
+              assert payload_command("ls-tree", payload_commit, "--", path) == expected_tree_line
+              local = Path(path)
+              data = local.read_bytes()
+              assert len(data) == byte_count
+              assert hashlib.sha256(data).hexdigest() == sha256
+              assert git_blob_formula(data) == blob
+              assert command("git", "hash-object", path) == blob
+
+          activation_path = wrappers["ACTIVATION"][0]
+          retrieval_path = wrappers["RETRIEVAL"][0]
+          activation = activation_path.read_text(encoding="utf-8")
+          retrieval = retrieval_path.read_text(encoding="utf-8")
+          activation_pins = readonly_values(activation)
+          retrieval_pins = readonly_values(retrieval)
+
+          exact_activation = {
+              "PIN_SET_STATUS": "FINAL",
+              "PIN_COMMIT": payload_commit,
+              "PIN_TREE_EXPECTED": payload_tree,
+              "RUNNER_PUBLIC_MODE_EXPECTED": "100755",
+              "RUNNER_BLOB_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command"][1],
+              "RUNNER_SHA256_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command"][2],
+              "RUNNER_BYTES_EXPECTED": "36661",
+              "PLIST_PUBLIC_MODE_EXPECTED": "100644",
+              "PLIST_BLOB_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist"][1],
+              "PLIST_SHA256_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist"][2],
+              "PLIST_BYTES_EXPECTED": "1027",
+              "HELPER_PUBLIC_MODE_EXPECTED": "100755",
+              "HELPER_BLOB_EXPECTED": payload_entries["OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER"][1],
+              "HELPER_SHA256_EXPECTED": payload_entries["OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER"][2],
+              "HELPER_BYTES_EXPECTED": "94928",
+          }
+          exact_retrieval = {
+              "PAYLOAD_COMMIT": payload_commit,
+              "PAYLOAD_TREE_EXPECTED": payload_tree,
+              "RUNNER_BLOB_EXPECTED": exact_activation["RUNNER_BLOB_EXPECTED"],
+              "RUNNER_SHA256_EXPECTED": exact_activation["RUNNER_SHA256_EXPECTED"],
+              "RUNNER_BYTES_EXPECTED": "36661",
+              "PLIST_BLOB_EXPECTED": exact_activation["PLIST_BLOB_EXPECTED"],
+              "PLIST_SHA256_EXPECTED": exact_activation["PLIST_SHA256_EXPECTED"],
+              "PLIST_BYTES_EXPECTED": "1027",
+              "HELPER_BLOB_EXPECTED": exact_activation["HELPER_BLOB_EXPECTED"],
+              "HELPER_SHA256_EXPECTED": exact_activation["HELPER_SHA256_EXPECTED"],
+              "HELPER_BYTES_EXPECTED": "94928",
+          }
+          for key, value in exact_activation.items():
+              assert activation_pins.get(key) == value, (key, activation_pins.get(key))
+          for key, value in exact_retrieval.items():
+              assert retrieval_pins.get(key) == value, (key, retrieval_pins.get(key))
+          for pins in (exact_activation, exact_retrieval):
+              assert all("__D97AEZ_" not in value and "REPLACE" not in value for value in pins.values())
+
+          standalone_legacy = re.compile(r"(?<![A-Z0-9_])" + "A" + r"RM(?![A-Z0-9_])")
+          assert standalone_legacy.search(activation) is None
+          assert standalone_legacy.search(retrieval) is None
+          assert "/usr/bin/git" not in retrieval
+          assert "/usr/bin/printf 'blob %s\\000' \"$blob_bytes\"" in retrieval
+          assert "/bin/cat \"$blob_file\"" in retrieval
+          assert "| /usr/bin/shasum -a 1" in retrieval
+
+          forbidden_tools = (
+              "/sbin/reboot", "/sbin/shutdown", "/bin/shutdown", "/bin/halt",
+              "/usr/bin/open", "/usr/bin/osascript", "/usr/bin/pkill",
+              "/usr/bin/killall", "/usr/sbin/nvram", "/usr/bin/kmutil",
+              "/usr/sbin/diskutil", "/usr/sbin/softwareupdate",
+          )
+          for text in (activation, retrieval):
+              code = "\n".join(
+                  line for line in text.splitlines()
+                  if not line.lstrip().startswith("#")
+              )
+              assert not any(tool in code for tool in forbidden_tools)
+              assert not any(
+                  line.strip().startswith(('"$SERVICE"', '"$TARGET"'))
+                  for line in code.splitlines()
+              )
+          assert "/bin/launchctl" not in retrieval
+          launch_verbs = Counter(re.findall(r"/bin/launchctl\s+([a-z-]+)", activation))
+          assert launch_verbs == Counter({
+              "bootout": 2, "disable": 2, "print": 2,
+              "enable": 1, "print-disabled": 1, "bootstrap": 1,
+          }), launch_verbs
+          assert activation.count('/bin/launchctl bootstrap system "$PLIST"') == 1
+          assert activation.count('/bin/launchctl enable "system/$LABEL"') == 1
+          assert activation.count('"$STAGED_HELPER" --self-test') == 1
+          assert "--duration" not in activation
+
+          activation_anchors = (
+              'print -r -- "D97AEZ_DEPLOY_RECORD_SCHEMA=1"',
+              'print -r -- "D97AEZ_DEPLOY_RECORD_STATE=ACTIVATED_IN_VESA"',
+              'print -r -- "ACTIVATION_BOOT_UUID=$ACTIVATION_BOOT_UUID"',
+              'print -r -- "D97AEZ_DEPLOY_RECORD_END=END"',
+              '[[ "$DEPLOY_RECORD_LINES" == "35" ]]',
+              'emit "DEPLOY_RECORD_EXACT_35_LINE_SCHEMA=PASS"',
+              'emit "TARGET_PROCESS_CONTROL_MUTATION=NO"',
+              'emit "OCLP_APP_CONTROL=AUTO-NO"',
+              'emit "ROOT_PATCH=AUTO-NO"',
+              'emit "REBOOT=AUTO-NO"',
+          )
+          assert all(anchor in activation for anchor in activation_anchors)
+          retrieval_anchors = (
+              '(( physical_lines == 14 && ${#LINES} == 14 ))',
+              '[[ "$LINES[14]" == "D97AEZ_DONE_END=END" ]]',
+              'emit "DONE_EXACT_14_LINE_SCHEMA_AND_UUID_BINDING=PASS"',
+              'emit "D97AEZ_RETRIEVE_RESULT=UNKNOWN"',
+              'unknown_stop "CLAIM_ABSENT_PRECLAIM_OR_INCOMPLETE_STATE"',
+              'unknown_stop "CLAIM_PRESENT_DONE_ABSENT_INTERRUPTED_FREEZE_OR_INCOMPLETE"',
+              '"OBSERVER_REPORT_RAW|$OBSERVER_REPORT|400,600|$MAX_OBSERVER_REPORT_BYTES"',
+              '"HELPER_OUTPUT_RAW|$HELPER_OUTPUT|400,600|$MAX_HELPER_OUTPUT_BYTES"',
+              'emit "CLAIMED_BOOT_LANE=UNCLASSIFIED"',
+              'emit "EVIDENCE_TARGET_BOOT_UUID=$CLAIMED_BOOT_UUID"',
+              'emit "RETRIEVAL_BOOT_UUID_EXCLUDED_FROM_TEST_TARGET=$RETRIEVAL_BOOT_UUID"',
+              'emit "AUTHORIZED_CHRONOLOGY_CONTRACT=CLAIMED_UUID_IMMEDIATELY_PRECEDING_ACCELERATED_BOOT_CURRENT_VESA_RECOVERY_EXCLUDED"',
+              'emit "TARGETED_BOOT_CALLED_ACCELERATED=AUTO-NO"',
+              'emit "LAUNCHD_CONTROL=AUTO-NO"',
+              'emit "OBSERVER_REMOVAL=AUTO-NO"',
+          )
+          assert all(anchor in retrieval for anchor in retrieval_anchors)
+
+          wrapper_rows = []
+          for label_name, (path, expected_blob, expected_sha, expected_bytes) in wrappers.items():
+              data = path.read_bytes()
+              actual_blob = command("git", "hash-object", str(path))
+              formula_blob = git_blob_formula(data)
+              actual_sha = hashlib.sha256(data).hexdigest()
+              tree_line = command("git", "ls-files", "-s", "--", str(path))
+              assert actual_blob == expected_blob == formula_blob
+              assert actual_sha == expected_sha and len(data) == expected_bytes
+              assert tree_line.startswith(f"100755 {expected_blob} "), tree_line
+              assert stat.S_IMODE(path.stat().st_mode) == 0o755
+              wrapper_rows.extend([
+                  f"{label_name}_PATH={path}",
+                  f"{label_name}_TREE_MODE=100755",
+                  f"{label_name}_BLOB={actual_blob}",
+                  f"{label_name}_SHA256={actual_sha}",
+                  f"{label_name}_BYTES={len(data)}",
+              ])
+
+          manifest_lines = [
+              "D97AEZ_RELEASE_WRAPPER_MANIFEST_SCHEMA=1",
+              f"PAYLOAD_COMMIT={payload_commit}",
+              f"PAYLOAD_TREE={payload_tree}",
+              *wrapper_rows,
+              "RELEASE_PIN_PLACEHOLDERS=NONE",
+              "STANDALONE_LEGACY_TOKEN=NONE",
+              "ACTIVATION_DEPLOY_RECORD_SCHEMA_AUDIT=PASS",
+              "RETRIEVAL_DONE14_RAW_UNKNOWN_CHRONOLOGY_AUDIT=PASS",
+              "FORBIDDEN_AUTOMATION_STATIC_AUDIT=PASS",
+              "D97AEZ_RELEASE_WRAPPER_MANIFEST_END=END",
+          ]
+          manifest = audit_root / "RELEASE_WRAPPER_MANIFEST.txt"
+          manifest.write_text("\n".join(manifest_lines) + "\n", encoding="utf-8")
+          manifest_data = manifest.read_bytes()
+          manifest_sha = hashlib.sha256(manifest_data).hexdigest()
+          manifest_blob = git_blob_formula(manifest_data)
+          manifest_identity = audit_root / "RELEASE_WRAPPER_MANIFEST_IDENTITY.txt"
+          manifest_identity.write_text(
+              "\n".join([
+                  f"RELEASE_MANIFEST_BLOB={manifest_blob}",
+                  f"RELEASE_MANIFEST_SHA256={manifest_sha}",
+                  f"RELEASE_MANIFEST_BYTES={len(manifest_data)}",
+                  "RELEASE_MANIFEST_IDENTITY=PASS",
+                  "",
+              ]), encoding="utf-8"
+          )
+          audit = audit_root / "RELEASE_WRAPPER_STATIC_AUDIT.txt"
+          audit.write_text(
+              "\n".join([
+                  "D97AEZ_RELEASE_WRAPPERS_ZSH_PARSE=PASS",
+                  "D97AEZ_RELEASE_PINNED_PUBLIC_PAYLOAD_FETCH=PASS",
+                  "D97AEZ_RELEASE_PAYLOAD_COMMIT_TREE_PINS=PASS",
+                  "D97AEZ_RELEASE_PAYLOAD_TREE_ENTRIES=PASS",
+                  "D97AEZ_RELEASE_RUNNER_PLIST_HELPER_PINS=PASS",
+                  "D97AEZ_RELEASE_PIN_PLACEHOLDERS=NONE",
+                  "D97AEZ_RELEASE_STANDALONE_LEGACY_TOKEN=NONE",
+                  "D97AEZ_RELEASE_GIT_BLOB_FORMULA=PASS",
+                  "D97AEZ_RELEASE_FORBIDDEN_AUTOMATION_STATIC_AUDIT=PASS",
+                  "D97AEZ_ACTIVATION_SCHEMA_STATE_ANCHORS=PASS",
+                  "D97AEZ_RETRIEVAL_DONE14_RAW_UNKNOWN_PENULTIMATE_SELECTION_ANCHORS=PASS",
+                  "D97AEZ_RELEASE_WRAPPER_TREE_MODES_100755=PASS",
+                  "D97AEZ_RELEASE_WRAPPER_STATIC_AUDIT=PASS",
+                  "D97AEZ_RELEASE_WRAPPERS_ASUS2_EXECUTION=NOT_RUN_IN_GITHUB",
+                  "",
+              ]), encoding="utf-8"
+          )
+          print(audit.read_text(encoding="utf-8"), end="")
+          print(manifest_identity.read_text(encoding="utf-8"), end="")
+          PY
+
+          audit_root="$RUNNER_TEMP/d97aez-audit"
+          release_root="$RUNNER_TEMP/d97aez-release-package"
+          stage="$release_root/stage/OCLP7-D97AEZ-RELEASE-WRAPPERS"
+          extract="$release_root/extract"
+          mkdir -p "$stage" "$extract"
+          cp "$D97AEZ_ACTIVATION_WRAPPER" "$stage/"
+          cp "$D97AEZ_RETRIEVAL_WRAPPER" "$stage/"
+          cp "$audit_root/RELEASE_WRAPPER_MANIFEST.txt" "$stage/"
+          cp "$audit_root/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt" "$stage/"
+          cp "$audit_root/RELEASE_WRAPPER_STATIC_AUDIT.txt" "$stage/"
+          chmod 0755 \
+            "$stage/$D97AEZ_ACTIVATION_WRAPPER" \
+            "$stage/$D97AEZ_RETRIEVAL_WRAPPER"
+          chmod 0444 "$stage"/*.txt
+          chmod 0555 "$release_root/stage" "$stage"
+          find "$release_root/stage" -exec touch -h -t 202609020000 {} \;
+          release_tar="$audit_root/OCLP7-D97AEZ-RELEASE-WRAPPERS.tar"
+          COPYFILE_DISABLE=1 /usr/bin/tar --format ustar \
+            -C "$release_root/stage" -cf "$release_tar" \
+            OCLP7-D97AEZ-RELEASE-WRAPPERS
+          /usr/bin/shasum -a 256 "$release_tar" \
+            > "$audit_root/OCLP7-D97AEZ-RELEASE-WRAPPERS.tar.sha256.txt"
+          COPYFILE_DISABLE=1 /usr/bin/tar -C "$extract" -xf "$release_tar"
+          extracted="$extract/OCLP7-D97AEZ-RELEASE-WRAPPERS"
+          /usr/bin/diff -u "$D97AEZ_ACTIVATION_WRAPPER" "$extracted/$D97AEZ_ACTIVATION_WRAPPER"
+          /usr/bin/diff -u "$D97AEZ_RETRIEVAL_WRAPPER" "$extracted/$D97AEZ_RETRIEVAL_WRAPPER"
+          /usr/bin/cmp "$audit_root/RELEASE_WRAPPER_MANIFEST.txt" "$extracted/RELEASE_WRAPPER_MANIFEST.txt"
+          /usr/bin/cmp "$audit_root/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt" "$extracted/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt"
+          [[ "$(/usr/bin/stat -f '%Lp' "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == 755 ]]
+          [[ "$(/usr/bin/stat -f '%Lp' "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 755 ]]
+          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == 2b36a8f70a526519fe2250bb767d8eaac3c69114 ]]
+          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 1f0dcff69943cdd4938a807af5e3841ef61979a0 ]]
+          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_ACTIVATION_WRAPPER" | /usr/bin/awk '{print $1}')" == ff22f78f547f5ba50cd7341b2453dac5263b46ed23f2d4f652172b221037c430 ]]
+          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_RETRIEVAL_WRAPPER" | /usr/bin/awk '{print $1}')" == 16e91533ca992538a1781fcb64be033b58e6df2598071efe513adfe93062ab7d ]]
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import os
+          import tarfile
+
+          tar_path = Path(os.environ["RUNNER_TEMP"]) / "d97aez-audit" / "OCLP7-D97AEZ-RELEASE-WRAPPERS.tar"
+          expected = {
+              "OCLP7-D97AEZ-RELEASE-WRAPPERS",
+              "OCLP7-D97AEZ-RELEASE-WRAPPERS/OCLP7_D97AEZ_ACTIVATE_OBSERVER_PINNED_WRAPPER.command",
+              "OCLP7-D97AEZ-RELEASE-WRAPPERS/OCLP7_D97AEZ_RETRIEVE_PINNED_WRAPPER.command",
+              "OCLP7-D97AEZ-RELEASE-WRAPPERS/RELEASE_WRAPPER_MANIFEST.txt",
+              "OCLP7-D97AEZ-RELEASE-WRAPPERS/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt",
+              "OCLP7-D97AEZ-RELEASE-WRAPPERS/RELEASE_WRAPPER_STATIC_AUDIT.txt",
+          }
+          seen = set()
+          with tarfile.open(tar_path, "r:") as archive:
+              for member in archive.getmembers():
+                  pure = PurePosixPath(member.name)
+                  assert not pure.is_absolute() and ".." not in pure.parts
+                  assert member.isdir() or member.isfile()
+                  assert not member.issym() and not member.islnk()
+                  if member.isdir():
+                      assert member.mode == 0o555
+                  elif member.name.endswith(".command"):
+                      assert member.mode == 0o755
+                  else:
+                      assert member.mode == 0o444
+                  seen.add(member.name)
+          assert seen == expected, (seen, expected)
+          PY
+          tar_sha="$(/usr/bin/shasum -a 256 "$release_tar" | /usr/bin/awk '{print $1}')"
+          tar_bytes="$(/usr/bin/stat -f '%z' "$release_tar")"
+          {
+            print -r -- "RELEASE_WRAPPER_TAR_SHA256=$tar_sha"
+            print -r -- "RELEASE_WRAPPER_TAR_BYTES=$tar_bytes"
+            print -r -- "D97AEZ_RELEASE_WRAPPER_TAR_INVENTORY_MODES=PASS"
+            print -r -- "D97AEZ_RELEASE_WRAPPER_REEXTRACT_EXACT_DIFF_HASH=PASS"
+            print -r -- "D97AEZ_RELEASE_WRAPPER_AUDIT_PACKAGE=PASS"
+            print -r -- "D97AEZ_RELEASE_WRAPPERS_ASUS2_EXECUTION=NOT_RUN_IN_GITHUB"
+          } | tee "$audit_root/RELEASE_WRAPPER_PACKAGE_AUDIT.txt"
+
       - name: Consolidate exhaustive GitHub verdict
         shell: zsh {0}
         run: |
@@ -770,6 +1130,22 @@ jobs:
             'D97AEZ_TEST_RUNNER_LITERAL_REWRITE_ONLY=PASS'; do
             /usr/bin/grep -Fx "$marker" "$audit_root/SIMULATION_MATRIX.txt"
           done
+          for marker in \
+            'D97AEZ_RELEASE_PINNED_PUBLIC_PAYLOAD_FETCH=PASS' \
+            'D97AEZ_RELEASE_PAYLOAD_COMMIT_TREE_PINS=PASS' \
+            'D97AEZ_RELEASE_GIT_BLOB_FORMULA=PASS' \
+            'D97AEZ_ACTIVATION_SCHEMA_STATE_ANCHORS=PASS' \
+            'D97AEZ_RETRIEVAL_DONE14_RAW_UNKNOWN_PENULTIMATE_SELECTION_ANCHORS=PASS' \
+            'D97AEZ_RELEASE_WRAPPER_TREE_MODES_100755=PASS' \
+            'D97AEZ_RELEASE_WRAPPER_STATIC_AUDIT=PASS'; do
+            /usr/bin/grep -Fx "$marker" "$audit_root/RELEASE_WRAPPER_STATIC_AUDIT.txt"
+          done
+          /usr/bin/grep -Fx 'RELEASE_MANIFEST_IDENTITY=PASS' \
+            "$audit_root/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt"
+          /usr/bin/grep -Fx 'D97AEZ_RELEASE_WRAPPER_REEXTRACT_EXACT_DIFF_HASH=PASS' \
+            "$audit_root/RELEASE_WRAPPER_PACKAGE_AUDIT.txt"
+          /usr/bin/grep -Fx 'D97AEZ_RELEASE_WRAPPER_AUDIT_PACKAGE=PASS' \
+            "$audit_root/RELEASE_WRAPPER_PACKAGE_AUDIT.txt"
 
           runner_blob="$(/usr/bin/git hash-object "$D97AEZ_RUNNER")"
           runner_sha="$(/usr/bin/shasum -a 256 "$D97AEZ_RUNNER" | /usr/bin/awk '{print $1}')"
@@ -788,6 +1164,7 @@ jobs:
             print -r -- "D97AEZ_PLIST_SHA256=$plist_sha"
             print -r -- "D97AEZ_PLIST_BYTES=$plist_bytes"
             print -r -- "D97AEZ_PLIST_TREE_MODE=$plist_mode"
+            print -r -- "D97AEZ_RELEASE_WRAPPER_AUDIT_PACKAGE=PASS"
             print -r -- "D97AEZ_GITHUB_STATIC_BUILD_SELFTEST_SIMULATION_AUDIT=PASS"
             print -r -- "D97AEZ_PRODUCTION_RUNNER_EXECUTION=NOT_RUN_IN_GITHUB"
             print -r -- "D97AEZ_ASUS2_ACCELERATED_RUNTIME=NOT_RUN_IN_GITHUB"
@@ -801,11 +1178,15 @@ jobs:
           package_root="$RUNNER_TEMP/d97aez-package"
           inner_root="$package_root/stage/OCLP7-D97AEZ-GITHUB-AUDIT"
           outer_root="$package_root/outer"
-          mkdir -p "$inner_root/sources" "$inner_root/reports" "$outer_root"
+          mkdir -p "$inner_root/sources" "$inner_root/reports" "$inner_root/packages" "$outer_root"
           cp "$D97AEZ_RUNNER" "$inner_root/sources/"
           cp "$D97AEZ_PLIST" "$inner_root/sources/"
+          cp "$D97AEZ_ACTIVATION_WRAPPER" "$inner_root/sources/"
+          cp "$D97AEZ_RETRIEVAL_WRAPPER" "$inner_root/sources/"
           cp ".github/workflows/oclp7-d97aez-boot-bound-observer-audit.yml" "$inner_root/sources/"
           find "$audit_root" -maxdepth 1 -type f -name '*.txt' -exec cp {} "$inner_root/reports/" \;
+          cp "$audit_root/OCLP7-D97AEZ-RELEASE-WRAPPERS.tar" "$inner_root/packages/"
+          cp "$audit_root/OCLP7-D97AEZ-RELEASE-WRAPPERS.tar.sha256.txt" "$inner_root/packages/"
           find "$package_root/stage" -type d -exec chmod 0555 {} \;
           find "$package_root/stage" -type f -exec chmod 0444 {} \;
           find "$package_root/stage" -exec touch -h -t 202609020000 {} \;
