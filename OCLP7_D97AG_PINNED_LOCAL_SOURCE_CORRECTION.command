@@ -54,8 +54,13 @@ value="$(/usr/bin/xattr -s -p -x -- com.stefanalmare.d97ag "$PROBE" \
     echo "D97AG_PINNED_LOCAL=FAIL_CLOSED|REASON=XATTR_VALUE_MISMATCH"
     exit 2
 }
-/usr/bin/xattr -s -- "$TARGET" >/dev/null
 echo "D97AG_TAHOE_XATTR_BACKEND=PASS"
+if [[ -f "$TARGET" && ! -L "$TARGET" ]]; then
+    /usr/bin/xattr -s -- "$TARGET" >/dev/null
+    echo "D97AG_LIVE_SYSTEM_TARGET_XATTR_READ=PASS"
+else
+    echo "D97AG_LIVE_SYSTEM_TARGET=ABSENT_ACCEPTED_BEFORE_ROOT_PATCH_DONOR_INSTALL"
+fi
 
 /usr/bin/curl -fL "$BASE_URL/$WRAPPER_NAME" -o "$WRAPPER"
 /usr/bin/curl -fL "$BASE_URL/$PATCH_NAME" -o "$PATCH"
