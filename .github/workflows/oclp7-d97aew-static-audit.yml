@@ -1,3 +1,4 @@
+# GitHub-first static lane; the live ASUS2 cache mapper is never executed in CI.
 name: OCLP7 D97AEW static audit
 
 on:
