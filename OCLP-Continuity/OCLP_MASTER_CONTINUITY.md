@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEV_PREBOOT_SUBSTRING_FALSE_POSITIVE_D97AEW_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEW_CACHE_POSITIONAL_IDENTITY_NEGATIVE_SEMANTIC_REMAP_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -46,16 +46,16 @@ D97AEU discovered main x86_64h cache plus `.01`–`.06` subcaches. Each parseabl
 
 D97AEU stopped at raw-hit cardinality `7` before reading any discriminator bytes. This is TOOLING FALSE FAILURE; no byte conclusion is permitted from that run.
 
-## D97AEV tooling false failure / D97AEW correction
-D97AEV passed wrapper/base identity, all three transform source cardinalities `1/1/1` and all required byte/safety anchors, then stopped before writing or executing the fixed core. Its raw forbidden-substring scanner matched `reboot` inside the legitimate read-only path `/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld`. Classification: TOOLING FALSE FAILURE; byte comparison NOT REACHED; no cache-byte conclusion permitted.
+## D97AEW cache positional identity result
+D97AEW, D97AEV and the corrected D97AEU core completed with internal RC `0`. Wrapper/blob/SHA, scanner-only correction, all three D97AEV transforms, retained anchors, zsh parsing and embedded Python compilation passed exactly.
 
-D97AEW pins the exact D97AEV wrapper and changes only that scanner block. It uses a command-boundary reboot detector, proves a reversible one-block delta, requires old/new scanner counts `0/1`, accepts `Preboot`/path/identifier negatives, rejects real reboot-command positives, retains all D97AEV transforms/anchors, zsh-parses the fixed wrapper and compiles its embedded Python.
+The seven replicated `imagesText` records deduplicate to one cached 32023 image: UUID `D2265480-60EB-3526-BAF7-2D6596149186`, load `0x7FFD03141000`, text size `0xCE239`, executable bytes in subcache `.05`. Cached table UUID equals cached Mach-O LC_UUID, but differs from visible filesystem UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`.
 
-GitHub-first static audit is fully `PASS` in `StefanAlMare/Private-Work`: workflow ID `348172340`, run `33600569828`, job `100153125476`, head `3a152504867fa743750f5307749c9d152bf9164e`, all steps `success`. Artifact `9835010017` has GitHub ZIP digest `4f02b891ee4004806117e473ffc67f29fdf28ec65a7061e1e5b7b7e0c0fb339a`, independently matched after download. Exact provenance and report digest are recorded in the authoritative checkpoint. The ASUS2 mapper was intentionally not executed in GitHub because it requires the live Cryptex cache.
+At the six visible D97AD image offsets the cache result is `PRE=0|POST=0|OTHER=6`, while the visible filesystem file is D97AD POST at all six. The shared stub is OTHER in cache. All 16 retained functional windows are exact postimages in the visible file and `0/16` at the same cache offsets. Both historical sender-PC windows also differ. Classification: cache-versus-visible-filesystem positional byte identity NEGATIVE; semantic location/equivalence in the separately identified cached image UNKNOWN.
 
-## CURRENT ACTION — D97AEW
-Run `OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command`, commit `2d14c7831d4adc9578daf5b80b55b72f663d836a`, blob `45876fa66e9018053882be7b01eeccabcfe8046b`, SHA256 `cdd976be2ee2981aec2d35055e96fc0559f2f3277a9e38d62f2476817ef74394`.
+This does not prove runtime cache execution and does not prove that the semantics are absent elsewhere in the optimized cached image. Runtime text backing remains UNKNOWN. No source/system/Golden/service/Root Patch/reboot mutation occurred.
 
-D97AEW must reach and execute the unchanged D97AEV three-transform mapper, then return the complete D97AEW report. The decisive result remains all six cached D97AD classifier sites versus P7 preimages/D97AD postimages, with cache byte identity kept separate from runtime-cache execution proof.
+## CURRENT ACTION — assistant GitHub semantic remap
+The assistant must build and fully audit an identity-pinned read-only semantic cache mapper. It must compare Mach-O section topology and locate module/classifier boundaries through unique/semantic anchors instead of reusing visible-filesystem fixed offsets. Only after GitHub audit may the user receive a minimal ASUS2-only mapper command.
 
-No Root Patch or reboot. Cache byte identity must remain separate from runtime-cache execution proof. D82 reserve-only; Patch8 unauthorized.
+No user action, Root Patch or reboot is currently authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
