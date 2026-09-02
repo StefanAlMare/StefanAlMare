@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEZ_GITHUB_FULL_PASS_ACTIVATION_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEZ_FIRST_ACTIVATION_PRINT_DISABLED_ENABLED_FALSE_NEGATIVE.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -116,3 +116,11 @@ Downloaded artifact ID `9856618441`: ZIP SHA256 `f7d377c7080eb709781d3e41b408031
 Do not repeat the VESA foreground watch or induce a VESA workload. The causal question remains whether naturally spawned exact-path MTLCompilerService processes in a new accelerated boot map the current D97AD 31-window postimage or different runtime text.
 
 The GitHub lane is complete. The only authorized ASUS2 action now is one outer identity-pinned download/verification/execution of the activation wrapper from public release commit `eba63b606f4a48f747b1605e682d4ac2a624bb40`, followed by return of the complete Terminal transcript and Desktop activation report. Then STOP. Do not open OCLP, Root Patch or reboot until the assistant audits that report. No new Root Patch is presently expected because D97AD is already exact.
+
+## D97AEZ first ASUS2 activation — tooling false negative
+The exact activation wrapper passed its outer identity and all pinned/staged/helper/live-D97AD gates. The root observer files, empty logs and immutable 35-line deploy record were installed exactly. Tahoe then reported `"com.stefanalmare.oclp7.d97aez.boot-bound-one-shot" => enabled` after `launchctl enable`; the wrapper accepted only older `=> false`, causing false `OBSERVER_EXPLICIT_ENABLE_AUDIT_FAILED`.
+
+Fail-closed deactivation passed: the observer was not bootstrapped/loaded and is disabled; RC2. No CLAIM/DONE, production helper, accelerated boot evidence, OCLP, Root Patch, reboot, service control or target/Golden mutation. Transcript 394 lines / 11259 bytes / blob `013404ddecab88a8e189536586f6837d4fb1d806` / SHA256 `4ff333dac5b22b6bfa1719a9baeaea58fd0b8b7f752a99edb4a2715a3fc27e80`.
+
+## CURRENT ACTION — GitHub recovery correction; user STOP
+Assistant must produce and exhaustively audit a single recovery activation wrapper that accepts only exact semantically enabled `enabled|false` output, rejects disabled/true/absent/ambiguous output, and resumes only from the exact installed fail-closed residue while preserving the same-boot one-shot contract. User: STOP; do not rerun, delete residue, open OCLP, Root Patch or reboot.

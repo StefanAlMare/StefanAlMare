@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEZ_GITHUB_FULL_PASS_ACTIVATION_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEZ_FIRST_ACTIVATION_PRINT_DISABLED_ENABLED_FALSE_NEGATIVE.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -129,11 +129,22 @@ GitHub exposed and closed two real zsh defects before freeze: the compound `loca
 
 Downloaded artifact `9856618441` ZIP SHA256 `f7d377c7080eb709781d3e41b40803193be02fd74e02517e6d387b595d43f5e2`, inner tar SHA256 `d0ffcaf3164524013fbb6b6321288efddc83e53d9c2dc8650d34fc43faaa1969`, and nested release-wrapper tar SHA256 `dd05a77a309b6093c7045f259f6b9293ee7d3b27f3b8bacfddfcb480fcca2c11` passed downloaded CRC/path/type/hash and byte-for-byte wrapper/manifest audit. `D97AEZ_GITHUB_EXHAUSTIVE_AUDIT=PASS`; production runner, launchd system action and ASUS2 accelerated runtime were explicitly not run in GitHub.
 
-## ACTIVE FRONTIER / CURRENT NEXT ACTION — one ASUS2 activation command, then STOP
+## D97AEZ first ASUS2 activation — launchctl vocabulary false negative
+The exact public activation wrapper blob `484182b44283c338213faeae46b9c8b2592df744`, SHA256 `1fe59799df1e46822dca2ffb4a0d203bd8f06cc41923fa7cfc78c29acd81c115`, 39883 bytes ran once on ASUS2. Outer wrapper identity, Tahoe `26.6.2 / 25G82 / x86_64`, pinned commit/tree and all staged runner/plist/helper identities passed. Helper codesign and exact six-marker self-test passed. Live selector-only service SHA256 `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43` and final D97AD target SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`, 1636896 bytes, passed stable stat/hash/stat gates.
+
+The exclusive root observer install completed with exact runner/helper/plist identities, empty launchd logs, exact 35-line deploy record SHA256 `bdd4d5fa61614a82a1760d1505a2810b66f3575fac426288173867021c57f127`, and immutable flag PASS. Current activation boot UUID remains `85583BA8-8C7A-49F7-B7A5-F4D2E5285C3F`.
+
+After `launchctl enable`, Tahoe returned the exact enabled database line `"com.stefanalmare.oclp7.d97aez.boot-bound-one-shot" => enabled`. The wrapper incorrectly required only the older boolean spelling `=> false`, so it classified an actually enabled state as `OBSERVER_EXPLICIT_ENABLE_AUDIT_FAILED`. Classification: `D97AEZ_PRINT_DISABLED_ENABLED_VOCABULARY=TOOLING_FALSE_NEGATIVE`; no D97AD or runtime conclusion.
+
+Fail-closed behavior worked: bootstrap was not reached, bootout reported not loaded, disable passed, activation ended RC2. The observer is not loaded and is disabled. Exact installed residue remains for identity-bound recovery; no CLAIM, DONE, helper production output or accelerated evidence was produced. No OCLP opening, Root Patch, reboot, target-process control, service launch/stop, target/Golden byte mutation occurred.
+
+Returned transcript: 394 lines / 11259 bytes, blob `013404ddecab88a8e189536586f6837d4fb1d806`, SHA256 `4ff333dac5b22b6bfa1719a9baeaea58fd0b8b7f752a99edb4a2715a3fc27e80`.
+
+## ACTIVE FRONTIER / CURRENT NEXT ACTION — GitHub recovery correction; user STOP
 The exact unresolved hardware question remains: **during a new failed accelerated boot, do naturally spawned exact-path MTLCompilerService processes map the current D97AD 31-window postimage or different runtime text?** MATCH negates only the known bounded P7-vs-D97AD mismatch hypothesis within 31 windows of a completely captured cohort; MISMATCH moves to deployment/cache/image provenance; absent/denied/raced/wrong-boot/interrupted/incomplete evidence remains UNKNOWN.
 
-The GitHub lane is closed PASS. The user is now authorized for exactly one identity-pinned activation wrapper from immutable release commit `eba63b606f4a48f747b1605e682d4ac2a624bb40`, verifying activation blob `484182b44283c338213faeae46b9c8b2592df744`, SHA256 `1fe59799df1e46822dca2ffb4a0d203bd8f06cc41923fa7cfc78c29acd81c115`, 39883 bytes. The wrapper installs/activates only the passive observer, proves the same-boot skip, writes a Desktop report, then explicitly STOPs. It never opens OCLP, Root Patches, reboots, or launches/stops/controls MTLCompilerService.
+Assistant action: build and exhaustively audit in GitHub one identity-pinned recovery activation wrapper. It must recognize only the exact fail-closed installed residue, prove current boot/deploy binding, accept only semantically enabled `launchctl print-disabled` spellings (`enabled` or boolean `false`) with exact one-line cardinality, reject disabled/true/absent/ambiguous forms, enable/bootstrap the unchanged observer, prove the same-boot skip, and stop. Fresh-install behavior and runtime payload must remain unchanged.
 
-User action: run that one activation command, return the complete Terminal transcript and generated Desktop report, then STOP. Do not open OCLP, do not Root Patch and do not reboot yet. The assistant must audit the complete activation report before separately authorizing the accelerated boot. No new Root Patch is expected because D97AD is already installed and exact.
+User action is STOP. Do not rerun the old wrapper, do not delete the installed residue, do not open OCLP, do not Root Patch and do not reboot. No ASUS2 command is authorized until the corrected GitHub lane and downloaded artifact audit pass.
 
 Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
