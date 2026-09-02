@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AF_ROOT_PATCH_INVALID_PACKAGED_OS_LISTXATTR_FIX_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_TAHOE_XATTR_AND_LOCAL_SOURCE_INTEGRATION_PASS_GITHUB_BUILD_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -105,5 +105,14 @@ P1, P2b, P3, AIR00, D34, P6, P7 and D97AD all reported PASS, with D97AD committe
 
 OCLP caught the error, continued through patchset information, Auxiliary Kernel Collection handling and APFS snapshot creation, and printed generic `Patching complete`. This generic terminal message does not override the explicit custom-step exception. Classification: `D97AF_ROOT_PATCH=INVALID_PARTIAL`, `D97AF_LC_UUID_BUILD_STAMP=FAILED_NOT_APPLIED`, `POST_SNAPSHOT_MTL_IDENTITY=NOT_YET_READ`, `LAST_PROVEN_D97AF_APP_SHA256=ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, `ROOT_PATCH_INVOCATION_APP_IDENTITY=NOT_SEPARATELY_RECHECKED`, `REBOOT=NOT_AUTHORIZED`.
 
-## CURRENT ACTION — correct D97AF packaged-runtime metadata path; no reboot
-STOP in the current running session and do not reboot or rerun Root Patch from the current D97AF app. Replace the unavailable packaged-Python xattr dependency with an exact macOS-compatible mechanism, validate source and packaged runtime, run the substantial Intel build and full FASTLANE artifact/app audit, then deploy/open/STOP. A separately authorized recovery/unpatch action will follow only after the corrected app is proven.
+## D97AG Tahoe xattr backend and local source integration PASS
+D97AG corrects the exact D97AF packaged-runtime incompatibility without changing D97AD or the patch target contract. The `_xattrs` helper now invokes `/usr/bin/xattr -s` for names and `/usr/bin/xattr -s -p -x` for exact binary values, with fail-closed framing, cardinality, stderr, exit and hex validation. The shared Metal-chain catch now unmounts best-effort and bare re-raises, placing every later patchset-write, AuxKC and snapshot action beyond the failure boundary.
+
+A first pinned launcher correctly completed its temporary-file xattr operations but stopped because it over-constrained the unpatched live system to contain donor path `Versions/32023/MTLCompiler`. No source mutation occurred. The corrected pinned launcher, public commit `453c6b3ef450c9c3d80f1d68996dac14279a8cd4`, SHA256 `cd8b3da4fd88cea16b8c795007356a4fdbcd7fe9c7207dde31d1cbd83c7db35c`, `4042` bytes, explicitly accepts that pre-Root-Patch absence and completed with RC `0`.
+
+ASUS2 printed `D97AG_TAHOE_XATTR_BACKEND=PASS`. The exact source patch SHA256/blob/bytes are `2c4e93e57b2d13762ef90020496f87c2a95c7e39553ff60f948bfacd2b6b659b / 532f8729658b3bc287fa83963043a4d2a8aa816a / 3137`. Exact D97AF preimages, branch `alex-tahoe-25G82-custom` and HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06` passed. The transactional two-file integration produced helpers `ac4724159c0a6ce8802940f11ec02f803e85d8ca934d4629d3640ec1e58d32a2`, sys_patch `93988a13b809a29a7e1f2f67c885b74d574e456d1f229368740209aa0ceeed69`, unchanged metal_3802 `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`, and unchanged D97AD method `bb66b1d5d883251431d5a7fa7bc42c0cc9bcb15ec77c74506bb2eae5bf987a12`. Compile/AST/order/native-reader/fatal-boundary checks all passed. Backup is `/Users/alex/Desktop/OCLP7_D97AG_SOURCE_BACKUP_20260903-023142.w9fQQg`.
+
+No application, system target, Golden, Root Patch, snapshot or reboot mutation occurred. The last proven live app remains D97AF and is not authorized for another Root Patch.
+
+## CURRENT ACTION — substantial D97AG Intel build
+ASUS2 stays at STOP with no Root Patch and no reboot. The assistant runs and audits the substantial GitHub build: actual native and PyInstaller-frozen xattr backend execution, packaged semantic identity, bounded split artifacts and external reassembly, then exact backup/deploy/open/STOP. Manual Root Patch is a later separately authorized hardware action only after D97AG app deployment is proven.

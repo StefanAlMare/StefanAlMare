@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AF_ROOT_PATCH_INVALID_PACKAGED_OS_LISTXATTR_FIX_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AG_TAHOE_XATTR_AND_LOCAL_SOURCE_INTEGRATION_PASS_GITHUB_BUILD_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -95,7 +95,16 @@ The complete D97AF Root Patch log has SHA256 `b1a263a7bddadbbf46ad8c10abcbfb8204
 
 Source ordering proves this exception occurred during the initial D97AF metadata gate, at xattr enumeration, before target data-fork read, in-memory UUID transform, temporary file, destination sibling or atomic rename. Therefore `D97AF_METHOD_TARGET_MUTATION=NOT_REACHED`. OCLP caught the exception and nevertheless continued to patchset records, Auxiliary Kernel Collection handling and APFS snapshot creation, then printed the generic `Patching complete`. That message is not a D97AF PASS. `D97AF_ROOT_PATCH=INVALID_PARTIAL`; the new inactive snapshot is not authorized for reboot and its exact final MTLCompiler identity remains unread. The last proven live D97AF app identity remains SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, but the invocation app identity was not separately rechecked after the unpatch output. The deployed D97AF method is runtime-incompatible and must be replaced by a corrected, packaged-runtime-tested build before any further Root Patch attempt.
 
-## CURRENT ACTION — correct packaged-runtime metadata path; no reboot
-STOP in the current running session. Do not reboot into the partial snapshot and do not run Root Patch again from the current D97AF application.
+## D97AG Tahoe xattr capability and local source integration PASS
+The exact correction replaces only D97AF's unavailable packaged-Python `os.listxattr` / `os.getxattr` reader with fail-closed `/usr/bin/xattr -s` name enumeration and `-p -x` value reads. It also changes the shared Metal-chain exception boundary to best-effort root-volume unmount followed by bare re-raise, so a custom Metal failure can no longer continue into `_write_patchset`, AuxKC rebuild or APFS snapshot creation.
 
-The next engineering action is a minimal D97AF source correction that preserves exact xattrs without depending on absent PyInstaller `os.listxattr`, followed by compile/diff, a substantial Intel build, an executable packaged-runtime capability test, full artifact/app audit, exact backup/deploy and OCLP open/STOP. Only after that corrected application is proven will a separately authorized recovery/unpatch sequence and a later manual Root Patch be selected. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ remains retired.
+The pinned ASUS2 launcher at public commit `453c6b3ef450c9c3d80f1d68996dac14279a8cd4`, SHA256 `cd8b3da4fd88cea16b8c795007356a4fdbcd7fe9c7207dde31d1cbd83c7db35c`, `4042` bytes, completed with RC `0`. Its real Tahoe temporary-file write/list/read test printed `D97AG_TAHOE_XATTR_BACKEND=PASS`. The live path `MTLCompiler.framework/Versions/32023/MTLCompiler` was absent before Root Patch donor installation and was correctly classified `ABSENT_ACCEPTED_BEFORE_ROOT_PATCH_DONOR_INSTALL`; this is not a failure and does not assert the state of a future mounted root.
+
+The exact public correction patch is SHA256 `2c4e93e57b2d13762ef90020496f87c2a95c7e39553ff60f948bfacd2b6b659b`, git blob `532f8729658b3bc287fa83963043a4d2a8aa816a`, `3137` bytes. Local source integration passed on branch `alex-tahoe-25G82-custom`, HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06`. D97AD remained byte-identical. Post-correction hashes are helpers `ac4724159c0a6ce8802940f11ec02f803e85d8ca934d4629d3640ec1e58d32a2`, sys_patch `93988a13b809a29a7e1f2f67c885b74d574e456d1f229368740209aa0ceeed69`, and unchanged metal_3802 `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`. Compile/AST, exact call order, forbidden-Python-xattr absence, native reader and fatal unmount/re-raise gates all passed. Recoverable source backup: `/Users/alex/Desktop/OCLP7_D97AG_SOURCE_BACKUP_20260903-023142.w9fQQg`.
+
+No installed-app, system-target, Golden, Root Patch, snapshot or reboot mutation occurred. The last proven installed application remains D97AF; it is not authorized for another Root Patch.
+
+## CURRENT ACTION — D97AG substantial Intel build and packaged-runtime audit
+ASUS2 is at STOP: do not run Root Patch and do not reboot. The assistant now owns the substantial Intel GitHub build, including native and actual PyInstaller-frozen execution of the exact xattr backend, source/package semantic audit, bounded artifact delivery, external reassembly audit, exact application identity, recoverable backup/deploy, open OCLP and STOP.
+
+Only after exact D97AG deployment is proven will a separately authorized manual Root Patch be run in the current session. That later run must prove donor preimages, P1+P2b+P3+AIR00+D34, retained P6/P7, D97AD, D97AF final SHA `a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e`, no traceback, and snapshot completion before any reboot decision. Golden remains immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
