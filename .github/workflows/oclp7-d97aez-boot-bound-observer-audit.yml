@@ -458,7 +458,6 @@ jobs:
                   "PATH=/usr/bin:/bin:/usr/sbin:/sbin": f"PATH={tools_dir}",
                   "TMPDIR=/private/tmp": f"TMPDIR={tmp_dir}",
                   "kern.bootsessionuuid": "d97aez.test.bootsessionuuid",
-                  "/dev/null": str(root / "dev-null"),
               }
               for old in tool_paths:
                   mapping[old] = str(tools_dir / Path(old).name)
@@ -485,7 +484,6 @@ jobs:
                   item = system_dir / file_name
                   item.write_text(f"D97AEZ_FAKE_{file_name}\n", encoding="utf-8")
                   item.chmod(0o755)
-              (root / "dev-null").touch()
 
               dispatch = tools_dir / "_dispatch"
               dispatch.write_text(dispatcher, encoding="utf-8")
@@ -763,7 +761,7 @@ jobs:
             /usr/bin/git --git-dir="$payload_git" fetch \
               --no-tags --depth=1 \
               https://github.com/StefanAlMare/StefanAlMare.git \
-              78d22ee42322cfde2bd7c5a26dd741ae9b249223
+              b5f99c883ff7006f8c5800464c8e032631d5e8d2
           export D97AEZ_PUBLIC_PAYLOAD_GIT_DIR="$payload_git"
           python3 - <<'PY'
           from pathlib import Path
@@ -774,12 +772,12 @@ jobs:
           import stat
           import subprocess
 
-          payload_commit = "78d22ee42322cfde2bd7c5a26dd741ae9b249223"
-          payload_tree = "46e6004e82256fb55b525931e351f42715cd00b3"
+          payload_commit = "b5f99c883ff7006f8c5800464c8e032631d5e8d2"
+          payload_tree = "585b9113d5ffdb509b41bda1a80bbc12cb13917e"
           payload_entries = {
               "OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command": (
-                  "100755", "cbd74f21f2bf0810088191d11f55ce5a95afad4a",
-                  "8018f0dabe5033d36577ddc63bbb65fc76578f6cdfcbad778426eb690c726059", 36661,
+                  "100755", "1e962579811d897ec82546e1ecbd0f6b03354aac",
+                  "0dbc8e0c3e2880d105a4c139e0c278616ff339e06a40bd0f9a46827963feedf4", 36677,
               ),
               "OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist": (
                   "100644", "8ef97872d0a29c28a91c9d1818bf0c5c7492c080",
@@ -793,14 +791,14 @@ jobs:
           wrappers = {
               "ACTIVATION": (
                   Path(os.environ["D97AEZ_ACTIVATION_WRAPPER"]),
-                  "2b36a8f70a526519fe2250bb767d8eaac3c69114",
-                  "ff22f78f547f5ba50cd7341b2453dac5263b46ed23f2d4f652172b221037c430",
+                  "bea0032dc39d07e5718be3d9c27bbfa0e3c010c8",
+                  "d180fa939e0bff4047ade5b9914d04d407b0971f6def86f7869d44858c3d067b",
                   39883,
               ),
               "RETRIEVAL": (
                   Path(os.environ["D97AEZ_RETRIEVAL_WRAPPER"]),
-                  "1f0dcff69943cdd4938a807af5e3841ef61979a0",
-                  "16e91533ca992538a1781fcb64be033b58e6df2598071efe513adfe93062ab7d",
+                  "2a32158a8ea21b6852f33143d4b176cb350ba55f",
+                  "94fc454f564414b38c78c66ae213409d043e3011a08aae4b1054950cd1f5b5c2",
                   50220,
               ),
           }
@@ -859,7 +857,7 @@ jobs:
               "RUNNER_PUBLIC_MODE_EXPECTED": "100755",
               "RUNNER_BLOB_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command"][1],
               "RUNNER_SHA256_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command"][2],
-              "RUNNER_BYTES_EXPECTED": "36661",
+              "RUNNER_BYTES_EXPECTED": "36677",
               "PLIST_PUBLIC_MODE_EXPECTED": "100644",
               "PLIST_BLOB_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist"][1],
               "PLIST_SHA256_EXPECTED": payload_entries["OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist"][2],
@@ -874,7 +872,7 @@ jobs:
               "PAYLOAD_TREE_EXPECTED": payload_tree,
               "RUNNER_BLOB_EXPECTED": exact_activation["RUNNER_BLOB_EXPECTED"],
               "RUNNER_SHA256_EXPECTED": exact_activation["RUNNER_SHA256_EXPECTED"],
-              "RUNNER_BYTES_EXPECTED": "36661",
+              "RUNNER_BYTES_EXPECTED": "36677",
               "PLIST_BLOB_EXPECTED": exact_activation["PLIST_BLOB_EXPECTED"],
               "PLIST_SHA256_EXPECTED": exact_activation["PLIST_SHA256_EXPECTED"],
               "PLIST_BYTES_EXPECTED": "1027",
@@ -1056,10 +1054,10 @@ jobs:
           /usr/bin/cmp "$audit_root/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt" "$extracted/RELEASE_WRAPPER_MANIFEST_IDENTITY.txt"
           [[ "$(/usr/bin/stat -f '%Lp' "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == 755 ]]
           [[ "$(/usr/bin/stat -f '%Lp' "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 755 ]]
-          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == 2b36a8f70a526519fe2250bb767d8eaac3c69114 ]]
-          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 1f0dcff69943cdd4938a807af5e3841ef61979a0 ]]
-          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_ACTIVATION_WRAPPER" | /usr/bin/awk '{print $1}')" == ff22f78f547f5ba50cd7341b2453dac5263b46ed23f2d4f652172b221037c430 ]]
-          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_RETRIEVAL_WRAPPER" | /usr/bin/awk '{print $1}')" == 16e91533ca992538a1781fcb64be033b58e6df2598071efe513adfe93062ab7d ]]
+          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_ACTIVATION_WRAPPER")" == bea0032dc39d07e5718be3d9c27bbfa0e3c010c8 ]]
+          [[ "$(/usr/bin/git hash-object "$extracted/$D97AEZ_RETRIEVAL_WRAPPER")" == 2a32158a8ea21b6852f33143d4b176cb350ba55f ]]
+          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_ACTIVATION_WRAPPER" | /usr/bin/awk '{print $1}')" == d180fa939e0bff4047ade5b9914d04d407b0971f6def86f7869d44858c3d067b ]]
+          [[ "$(/usr/bin/shasum -a 256 "$extracted/$D97AEZ_RETRIEVAL_WRAPPER" | /usr/bin/awk '{print $1}')" == 94fc454f564414b38c78c66ae213409d043e3011a08aae4b1054950cd1f5b5c2 ]]
           python3 - <<'PY'
           from pathlib import Path, PurePosixPath
           import os
