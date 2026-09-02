@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEX_VESA_CALIBRATION_RECLASSIFIED_HARDWARE_TEST_CONTRACT_RESET.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_FASTLANE_GITHUB_EXHAUSTIVE_ASUS2_ONLY_FEEDBACK_CONTRACT_D97AEZ_MINIMAL_BUILD.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -94,5 +94,10 @@ Report identity: 227 lines / 12289 bytes / blob `619d6ce7e0e59da8243e63eca29103d
 ## User correction — foreground Terminal run was not the accelerated hardware test
 Opening Terminal and starting D97AEX cannot create MTLCompilerService: the helper is deliberately passive and states `SERVICE_LAUNCH=AUTO-NO`. The foreground VESA run accepted the corrected size/identity contract and watcher mechanics, but no natural service PID appeared, task-read was never exercised, and none of the runtime windows were read. Authoritative reclassification: `D97AEY_SIZE_CONTRACT_LIVE_ACCEPTANCE=PASS`; `D97AEX_ACCELERATED_HARDWARE_CAUSAL_TEST=NOT_PERFORMED`; exact runtime D97AD text remains UNKNOWN.
 
-## CURRENT ACTION — accelerated-hardware test contract first; user STOP
-Do not repeat the VESA foreground watch and do not substitute an induced VESA workload. Before any new collector implementation, the assistant must show the user the minimal test contract and causal decision table for the single unresolved question: whether naturally spawned exact-path MTLCompilerService processes in a new accelerated boot map the current D97AD 31-window postimage or different runtime text. MATCH can negate only the known P7-vs-D97AD bounded-provenance mismatch hypothesis within those tested windows of a completely captured observed cohort; it cannot establish whole-image or runtime-semantic identity. Only the orchestration may then be built/audited in GitHub; the decisive execution remains ASUS2 hardware during an explicitly authorized accelerated boot. No new patch, Root Patch, command or reboot is authorized now.
+## Permanent FASTLANE hardware-feedback correction
+The user reaffirmed the historical accelerated-test cycle and made its division explicit. The assistant must test in GitHub every property of the FASTLANE/diagnostic implementation that GitHub can exercise, including build/package when applicable, state/RC/adversarial/interruption fixtures, identities and artifact/report audit. The user is never asked to combine fragments, compile locally or repair GitHub work. The user performs only the single pinned step that inherently requires ASUS2, followed—after assistant audit—by any actually required manual Root Patch, the real no-image accelerated boot, bounded wait, manual hard reset/VESA recovery and pinned evidence retrieval. GitHub evidence is tool evidence only and never replaces hardware runtime evidence.
+
+For D97AEZ, D97AD is already installed and exact, so no new functional OCLP patch or Root Patch is justified. The correct transport is the smallest passive one-shot observer validated in GitHub, armed before boot, and retrieved after VESA. A foreground VESA command cannot substitute for that boot overlap.
+
+## CURRENT ACTION — D97AEZ minimal GitHub FASTLANE; user STOP
+Do not repeat the VESA foreground watch and do not substitute an induced VESA workload. The accepted causal question remains whether naturally spawned exact-path MTLCompilerService processes in a new accelerated boot map the current D97AD 31-window postimage or different runtime text. MATCH can negate only the known P7-vs-D97AD bounded-provenance mismatch hypothesis within those tested windows of a completely captured observed cohort; it cannot establish whole-image or runtime-semantic identity. Assistant now builds, tests, packages and audits the minimal one-shot orchestration entirely in GitHub. No ASUS2 command, Root Patch or reboot is authorized until that lane and artifact audit are complete.
