@@ -1,6 +1,7 @@
 # OCLP PERMANENT WORKING RULES
 
 Recovered/restored: 2026-09-01 EEST
+Updated: 2026-09-02 EEST — permanent GitHub-first execution contract
 Scope: ASUS2 Tahoe Haswell project and every continuation named OCLP6, OCLP7, OCLP8, OCLP9, OCLP10, OCLP11, OCLP12, etc.
 
 This file is the permanent procedural contract. Future checkpoints and conversations inherit it unless the user explicitly changes a rule.
@@ -125,34 +126,44 @@ A terminal diagnostic may deliberately stop execution; it must state terminality
 D34 cave `0xEF8..0xEFE` is protected. Every diagnostic cave allocation must be audited for identity, zero/preimage, xrefs, branch targets, symbols and overlap.
 
 ## 12. FASTLANE discipline
-Every new patch/runtime diagnostic uses one FASTLANE that performs:
-1. offline validation;
-2. source integration;
+FASTLANE is permanently split into a GitHub/assistant lane and, only when required, a target-local ASUS2/user lane.
+
+The GitHub/assistant lane performs everything that does not inherently depend on live ASUS2 state:
+1. offline/static validation;
+2. source and workflow integration;
 3. compile/diff;
-4. build;
+4. build/package;
 5. packaged-app audit;
-6. SHA/identity verification;
-7. backup/deploy to `/Applications/OpenCore-Patcher.app`;
-8. open OCLP;
-9. STOP.
+6. SHA/identity manifest generation and verification;
+7. artifact publication;
+8. complete assistant audit of workflow logs, build outputs and artifact identities.
+
+The target-local ASUS2/user lane is limited to operations that inherently require the real machine:
+1. verify the pinned GitHub repository/branch/workflow run/head/artifact identities;
+2. download and verify the already-built artifact when deployment is required;
+3. backup/deploy to `/Applications/OpenCore-Patcher.app` using a single audited wrapper;
+4. prove fresh-process/live-system provenance;
+5. open OCLP;
+6. STOP.
 
 Never auto-Root-Patch. Never auto-reboot. Audit the complete FASTLANE before Root Patch; audit the complete Root Patch before accelerated boot.
 
-Read-only/static mappers do not require build/Root Patch, but must produce a complete report and be identity-pinned.
+Read-only/static mappers run in GitHub whenever all required inputs are available there. Only mappers whose evidence inherently depends on live ASUS2 files, caches, logs, hardware or installed state are handed to the user. They do not require build/Root Patch, but must produce a complete report and be identity-pinned.
 
-### 12A. Mandatory interaction protocol
-1. Assistant designs one complete identity-pinned FASTLANE for the next single goal.
-2. User runs only that FASTLANE and returns the complete output.
-3. Assistant audits it; a printed PASS is not sufficient.
-4. Only after explicit authorization does the user manually Root Patch.
-5. User returns complete Root Patch output.
-6. Assistant audits it and only then authorizes accelerated boot.
-7. User boots accelerated, recovers via VESA if necessary, and returns requested evidence.
-8. Assistant analyzes only that immediately preceding accelerated boot, persists decisive evidence, and designs the next single action.
-9. If FASTLANE or Root Patch fails, STOP. Do not continue or apply scattered manual edits; build a corrected replacement FASTLANE.
-10. User controls VESA recovery, power cycling and manual boot selection.
+### 12A. Permanent GitHub-first responsibility and interaction protocol
+1. Everything technically executable in GitHub is executed there by the assistant. This expressly includes source authoring/integration, validation, compile/diff, build/package, packaged-app audit, SHA/manifest work, artifact publication, workflow monitoring and complete result audit.
+2. The user must not be asked to compile, build or package locally. A GitHub workflow failure is repaired and rerun by the assistant; it is not shifted to the user as a local compilation task.
+3. If GitHub execution is genuinely impossible because a required capability/input/runner is unavailable, STOP and record the exact blocker. Local compilation requires an explicit user override of this permanent rule; it is never the default fallback.
+4. For each GitHub build persist at least: repository, branch, workflow, run/job, runner, head SHA, artifact ID/digest, inner artifact SHA, packaged executable SHA and packaged audit result, when applicable.
+5. The user runs only the minimal identity-pinned action that inherently requires ASUS2: live cache/file/log/hardware inspection, exact installed-state proof, privileged backup/deploy, opening OCLP, manual Root Patch, accelerated boot, VESA recovery, power cycling or manual boot selection.
+6. Assistant audits every complete GitHub and target-local report; a printed PASS is not sufficient.
+7. Only after explicit assistant authorization does the user manually Root Patch and return the complete Root Patch output.
+8. Assistant audits Root Patch and only then authorizes accelerated boot.
+9. User boots accelerated, recovers via VESA if necessary, and returns requested evidence.
+10. Assistant analyzes only that immediately preceding accelerated boot, persists decisive evidence, and designs the next single action.
+11. If a target-local wrapper or Root Patch fails, STOP. Do not continue or apply scattered manual edits; the assistant builds and validates a corrected replacement through the appropriate GitHub/target-local lane.
 
-Rhythm: `assistant FASTLANE -> user runs -> assistant audits -> user Root Patches -> assistant audits -> user boots -> assistant analyzes -> persist -> next FASTLANE`.
+Rhythm: `assistant GitHub validate/integrate/compile/build/audit/publish -> assistant reports and persists -> user runs only target-local proof/deploy if required -> assistant audits -> user manually Root Patches if authorized -> assistant audits -> user boots/VESA-recovers -> assistant analyzes and persists -> next single action`.
 
 ## 13. Runtime evidence discipline
 Analyze only the immediately preceding accelerated diagnostic boot, excluding the later VESA recovery boot.

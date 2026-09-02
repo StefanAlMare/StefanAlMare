@@ -3,11 +3,14 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEU_REPLICATED_TABLE_TOOLING_FAIL_D97AEV_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_GITHUB_FIRST_EXECUTION_CONTRACT_D97AEV_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
-Identity-pinned FASTLANE -> complete audit -> manual Root Patch -> complete audit -> accelerated boot -> VESA recovery -> selected accelerated-boot analysis -> persist. Golden immutable/read-only. No automatic Root Patch/reboot. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+Permanent GitHub-first split: assistant executes all GitHub-capable validation, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact publication and CI audit. User performs only identity-pinned ASUS2-dependent evidence/deploy plus manual Root Patch/boot/VESA recovery after explicit authorization. No user local compilation/build/package by default; no automatic Root Patch/reboot. Golden immutable/read-only. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+
+## GitHub-first execution methodology
+User-directed permanent methodology change on 2026-09-02: work must not be shifted to the user when it can run in GitHub. GitHub failures are repaired/rerun by the assistant. A genuine GitHub capability blocker causes STOP and must be recorded; local compilation requires explicit user override. Historical user-run full-FASTLANE wording is superseded prospectively. D97AD private GitHub Actions build/deploy provenance already proves the split model operationally. D97AEV remains the current ASUS2-only exception because its decisive input is the real machine's Cryptex dyld shared cache.
 
 ## Functional baseline
 P1 -> P2b -> P3 -> AIR00 -> D34. True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. P6/P7 retained, runtime sufficiency NEGATIVE.
