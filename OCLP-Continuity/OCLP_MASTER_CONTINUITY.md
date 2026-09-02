@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEY_GITHUB_REPAIR_FULL_PASS_ASUS2_RUNTIME_PROOF_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEY_REPAIR_PASS_D97AEX_ZERO_COHORT_RC3_D97AEZ_DESIGN_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -99,9 +99,22 @@ The corrected wrapper is 886 lines / 40522 bytes, mode `100755`, blob `79178583c
 
 The stale `1636864` value is proven to come from the PSP Git donor SHA256 `4f65fb...5641`, while live final D97AD is stable `1636896` / SHA256 `524a16...a755`. PSP CI re-signing strongly explains why Git donor size is not authoritative for the installed final donor, but the exact +32-byte operation is not claimed byte-for-byte without the release-DMG donor. Classification remains tooling false negative, now repaired end-to-end. No service launch/stop, source/system/Golden/target mutation, Root Patch or reboot occurred.
 
-## CURRENT ACTION — corrected D97AEX ASUS2 runtime proof
-The assistant GitHub lane is complete and audited. The user is authorized to execute exactly once the identity-pinned corrected public wrapper at commit `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5`, blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`, 40522 bytes, using only the exact outer command issued by the assistant.
+## D97AEY corrected ASUS2 acceptance / D97AEX valid-empty production watch
+The exact corrected public wrapper at commit `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5`, blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`, 40522 bytes, passed its outer identity gate and ran once on ASUS2. The exact corrected helper commit/tree `4f46e3c97d5cbd89cf77efd5a6a0044aefab52a7` / `0e3a97a5abe4a81eb32848274f06190ad77418f8`, blob `9f22460e8c1e51a2ae091eb7377e958f6a148e35`, SHA256 `f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9`, 94928 bytes, passed download, identity, codesign and the exact six-marker self-test.
 
-The wrapper may request the sudo password, runs the exact helper self-test, then observes all naturally occurring exact-path MTLCompilerService PIDs for 120 seconds at 25 ms with minimum three complete samples. It does not launch or stop the service. Return the complete terminal transcript and unique Desktop report.
+Tahoe `26.6.2 / 25G82 / x86_64`, selector-only service SHA256 `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, final D97AD target size `1636896` and SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755` all passed before the watch and remained stable after it. `PRE_WATCH_IDENTITY_GATES=PASS` closes the earlier mixed-provenance byte-count false negative end-to-end.
 
-No compilation, OCLP opening, Root Patch or reboot is authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+The production helper genuinely ran for 120 seconds at 25 ms with minimum three complete samples on stable boot UUID `85583BA8-8C7A-49F7-B7A5-F4D2E5285C3F`. It completed 3696 polls and observed zero exact-path instances, zero complete D5CE captures, `MATCH=0`, `MISMATCH=0`, and no race or pending classifications. The sole valid terminal result is `D97AEX_RESULT=COVERAGE_INCOMPLETE_STOP`, helper/wrapper/outer RC `3`. Summary parsing, counter invariants, terminal contract and transcript tee all passed. This is a valid empty fail-closed observation, not a tooling failure and not a runtime match or mismatch.
+
+The guarded Unified Log query completed and parsed exact trailer `{"count":0,"finished":1}` with zero visible records/PIDs. Its 25-byte NDJSON SHA256 is `6a105b91d25933f6c54289af691d9c991a86c63c340ca13a472b5a44aa88c346`. This corroborates only an empty log-visible window; inter-poll visibility, Unified Log completeness and global spawn-cohort coverage remain unproven.
+
+The returned report is 227 lines / 12289 bytes, blob `619d6ce7e0e59da8243e63eca29103d4820f967b`, SHA256 `607a246b5025be220952e0d49499c83a613dd5477085407c8181569e969cc43b`. The terminal transcript is 14324 bytes, blob `0e63734f0fd5f9c4321ce01e7e201fb1b496ffa7`, SHA256 `7ada726dcfcff7c49bfa76b8f39b37a6c3e3df891584cdec29f9edadef54a8b6`. All 227 report lines appear in the transcript in exact order and value after presentation blanks and the sole TTY `Password:` line are removed; `REPORT_FINAL_IDENTITY=PASS` and outer RC `3` are exact. The later Terminal session-save warning is unrelated postlude.
+
+No production PID was captured, so `task_read_for_pid` authorization against a live target remains NOT TESTED; runtime LC_UUID and all 31 bounded windows / 330 bytes remain unread; `COHORT_BOUNDED_31_WINDOW_BYTES_PROVEN=UNKNOWN`; exact runtime D97AD text remains UNKNOWN. No source/system/Golden/target-code/process-control mutation, target service launch/stop, Root Patch or reboot occurred.
+
+## ACTIVE FRONTIER / CURRENT NEXT ACTION — D97AEZ GitHub-first reliable cohort-capture design
+D97AEY repair and ASUS2 live acceptance are closed PASS. Do not repeat the same idle online/VESA watch and do not weaken minimum-complete or infer from zero observations. The current online boot is ordinarily the VESA recovery lane under the permanent recovery rule, while the unresolved causal cohort occurs during accelerated boot.
+
+The assistant now owns D97AEZ investigation and GitHub-first design/audit of the smallest finite, passive, universal/no-PID mechanism that can overlap the same proven 31-window helper with a naturally occurring relevant cohort. A one-shot boot-bound collector around a later explicitly authorized accelerated boot is the primary design candidate, but is not yet authorized for ASUS2 deployment. It must have exact payload/plist/report identities, unique boot-session provenance, bounded execution, fail-closed install/run/remove gates, no direct launch/stop of MTLCompilerService, no target/Golden mutation and no automatic Root Patch or reboot. Any system-file instrumentation requires a separately audited, identity-pinned authorization before use.
+
+User action is STOP. No local compilation, command, OCLP opening, Root Patch or reboot is currently authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.

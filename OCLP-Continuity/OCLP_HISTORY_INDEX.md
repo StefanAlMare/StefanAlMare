@@ -3,7 +3,7 @@
 Updated: 2026-09-02 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEY_GITHUB_REPAIR_FULL_PASS_ASUS2_RUNTIME_PROOF_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260902_D97AEY_REPAIR_PASS_D97AEX_ZERO_COHORT_RC3_D97AEZ_DESIGN_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -82,5 +82,14 @@ Corrected wrapper: private commit/tree `1e5fd2e730543df382ff1fe117d315c0aef25560
 
 All GitHub compile/codesign/self-test/provenance/static/RC/adversarial/log/packaging gates passed. Helper production scan and wrapper execution were NOT RUN; no service launch, system/Golden/target mutation, Root Patch or reboot.
 
-## CURRENT ACTION — corrected D97AEX ASUS2 runtime proof
-User may run exactly once the assistant-issued outer command pinned to public wrapper commit `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5`, blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`, 40522 bytes. Return full transcript plus unique Desktop report. No compilation, OCLP opening, Root Patch or reboot.
+## D97AEY live acceptance / D97AEX valid-empty runtime watch
+The corrected public wrapper commit/tree `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5` / `583bb1f6c549fe99a55e76a65e42873d440b2125`, blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`, 40522 bytes, passed outer identity and ran once on ASUS2. Corrected helper commit/tree `4f46e3c97d5cbd89cf77efd5a6a0044aefab52a7` / `0e3a97a5abe4a81eb32848274f06190ad77418f8`, blob `9f22460e8c1e51a2ae091eb7377e958f6a148e35`, SHA256 `f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9`, 94928 bytes, passed download, codesign and exact six-marker self-test.
+
+OS/build/arch, helper, selector-only service SHA256 `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, and final D97AD target `1636896` bytes / SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755` all passed pre-watch and remained stable post-watch. `PRE_WATCH_IDENTITY_GATES=PASS` closes the old mixed donor/final-size false negative.
+
+The production watcher ran 120 seconds / 25 ms / minimum three on stable boot UUID `85583BA8-8C7A-49F7-B7A5-F4D2E5285C3F`: 3696 polls, zero exact-path instances visible, zero complete D5CE captures, MATCH0, MISMATCH0 and zero race/pending classifications. Exact result `COVERAGE_INCOMPLETE_STOP`, RC3, is a valid fail-closed empty observation, not a tool failure or runtime mismatch. The complete Unified Log parser exposed zero records/PIDs and exact 25-byte trailer-only NDJSON SHA256 `6a105b91d25933f6c54289af691d9c991a86c63c340ca13a472b5a44aa88c346`; this is log-visible only and does not prove global absence.
+
+Report identity: 227 lines / 12289 bytes / blob `619d6ce7e0e59da8243e63eca29103d4820f967b` / SHA256 `607a246b5025be220952e0d49499c83a613dd5477085407c8181569e969cc43b`. Transcript identity: 14324 bytes / blob `0e63734f0fd5f9c4321ce01e7e201fb1b496ffa7` / SHA256 `7ada726dcfcff7c49bfa76b8f39b37a6c3e3df891584cdec29f9edadef54a8b6`. Exact report embedding, final report identity and outer RC3 passed. No live PID meant task-read authorization was not exercised and none of the 31 windows / 330 bytes were read; exact runtime D97AD text remains UNKNOWN. No service launch/stop, target/Golden mutation, Root Patch or reboot.
+
+## CURRENT ACTION — D97AEZ assistant GitHub design; user STOP
+Do not repeat the same idle online/VESA watch or weaken the minimum-complete gate. Assistant work is now D97AEZ GitHub-first investigation/design/build/audit of a finite passive one-shot capture overlapping the existing universal/no-PID 31-window helper with the natural accelerated-boot cohort. A boot-bound collector is the selected design direction, but no deployment or system-file mutation is yet authorized. It must be identity-pinned, boot-UUID-bound, fail closed, have audited retrieval/removal, never launch/stop MTLCompilerService, never mutate target/Golden, and never auto Root Patch or reboot. User action remains STOP: no command, OCLP opening, Root Patch or reboot now.
