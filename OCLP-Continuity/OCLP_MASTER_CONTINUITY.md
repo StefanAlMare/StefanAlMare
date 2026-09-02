@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEX_WRAPPER_GITHUB_ARTIFACT_AUDIT_PASS_ASUS2_RUNTIME_PROOF_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEX_PREWATCH_MIXED_SIZE_PROVENANCE_FALSE_NEGATIVE_D97AEY_GITHUB_REPAIR_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -77,10 +77,18 @@ Downloaded artifact `9842808563` is exact: ZIP 64888 bytes / SHA256 `08b91fc6528
 
 The exact wrapper is public at immutable merge commit `da979b5938a8a52bba4e976b5606ccf5c1d951aa`, publication tree `84af62761a14a171253262f6538f7ede31d4cb0a`, path `OCLP7_D97AEX_PINNED_WRAPPER.command`, mode `100755`, blob `5e0cbe4e0041537666d1655fba32161d756e4df7`. Public content identity matches the frozen SHA256/bytes. `D97AEX_PINNED_WRAPPER_GITHUB_AUDIT=PASS`, `D97AEX_PINNED_WRAPPER_DOWNLOADED_ARTIFACT_AUDIT=PASS`, `D97AEX_PINNED_WRAPPER_PUBLIC_IDENTITY=PASS`, `D97AEX_PRODUCTION_EXECUTION=NOT_RUN`.
 
-## CURRENT ACTION — ASUS2-only D97AEX runtime-text proof
-The GitHub-capable lane is complete. The only authorized next action is one identity-pinned execution of the exact public wrapper on ASUS2. It downloads and verifies the already-published helper, runs the exact self-test, validates Tahoe `26.6.2 / 25G82`, service and target identities before and after, requests only the private read-only task port through the exact helper, watches naturally occurring universal/no-PID instances for 120 seconds, and performs a retrospective read-only `LOG_VISIBLE` census. It never launches or stops MTLCompilerService.
+## D97AEX first ASUS2 execution — pre-watch mixed-provenance size false negative
+The exact public wrapper at commit `da979b5938a8a52bba4e976b5606ccf5c1d951aa`, blob `5e0cbe4e0041537666d1655fba32161d756e4df7`, SHA256 `98361e388c40556565b00c11283ed3600386acc996b8e1a7e06ae8169075fd37`, 40522 bytes, passed its outer identity gate and ran once on ASUS2.
 
-Return the complete terminal transcript and the exact Desktop report named by `REPORT=`. RC `0` means bounded observed-cohort match; RC `4` bounded observed-cohort mismatch; RC `3` incomplete coverage STOP; RC `2` fail-closed blocker STOP. Any result is evidence only and must be audited and persisted before another action.
+Tahoe `26.6.2 / 25G82 / x86_64`, helper download/blob/SHA/bytes/mode, codesign, exact six-line self-test, sudo credential validation, pre-watch helper identity and selector-only service identity all passed. The target was a stable regular nlink-1 file across stat/hash/stat with size `1636896` and exact authoritative D97AD SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`, but wrapper constant `TARGET_BYTES_EXPECTED=1636864` caused `PRE_WATCH_TARGET_IDENTITY=FAIL|REASON=BYTE_COUNT_MISMATCH`, fail-closed RC `2`.
 
-Only this read-only ASUS2 proof is authorized. No Root Patch or reboot is authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+`1636864` is the exact size of the unmodified PSP donor with different SHA256 `4f65fb8890a5b18a222c9b0171b6c8240672fb48334fb7739892b7591ffc5641`; the pin combined donor size with final transformed D97AD SHA. The helper source independently contains the same mixed-provenance `kExpectedTargetFileSize=1636864`, so wrapper-only repair would still fail before polling. Classification: `D97AEX_PREWATCH_IDENTITY_CONTRACT_MIXED_PROVENANCE=TOOLING_FALSE_NEGATIVE`; target drift/corruption is not supported; runtime text result remains `NOT_RUN/UNKNOWN`.
 
+The returned Desktop report is 96 lines / 5389 bytes, blob `dab425a8e09b88308e90f88e3d124a4cd31ef112`, SHA256 `39a4febf181d35437016a69ee7c4fc50a1ae339dd29670aebf3d35dc78d3510b`. Production helper execution, task-read attachment, watcher, temporal gate, log census and post-watch gates were not reached. Helper execution was self-test only. No service launch/stop, source/system/Golden/target-code/process-control mutation, Root Patch or reboot occurred.
+
+## CURRENT ACTION — assistant GitHub D97AEY size-provenance repair
+The user remains at STOP. The assistant must repair in GitHub the complete end-to-end identity contract, not bypass it: set the final D97AD target size to exact `1636896` in the helper source, source/site manifest, helper build workflow/provenance audit, pinned wrapper, wrapper identity manifest, static auditor and wrapper workflow/fixtures while retaining exact target SHA256 `524a16...a755`, regular-file/nlink and pre/post stat/hash/stat gates.
+
+The assistant must rebuild, sign, self-test, package and audit the corrected helper on macOS GitHub Actions; download and independently audit the artifact; publish the corrected helper immutably; repin and fully re-audit the corrected wrapper in GitHub; download/audit its artifact; publish the corrected wrapper immutably; then persist the new identities before any fresh ASUS2 command.
+
+No user action is currently authorized. No local compilation, OCLP opening, Root Patch or reboot is authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
