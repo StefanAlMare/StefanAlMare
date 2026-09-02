@@ -1,0 +1,891 @@
+# GitHub-first audit lane. CI never executes the production runner and never
+# touches launchd, OCLP, Root Patch, reboot, or Tahoe target/service paths.
+name: OCLP7 D97AEZ boot-bound observer audit
+
+on:
+  push:
+    branches:
+      - oclp7-d97aez-boot-observer
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: macos-15-intel
+    timeout-minutes: 25
+    env:
+      D97AEZ_RUNNER: OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command
+      D97AEZ_PLIST: OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT.plist
+      D97AEZ_HELPER: OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER
+      D97AEZ_HELPER_SOURCE: OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER.cpp
+      D97AEZ_HELPER_BLOB: 9f22460e8c1e51a2ae091eb7377e958f6a148e35
+      D97AEZ_HELPER_SHA256: f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9
+      D97AEZ_HELPER_BYTES: "94928"
+      D97AEZ_SOURCE_BLOB: 6250bebcbe5fe3177f98eeba46cbfd523155b206
+      D97AEZ_SOURCE_SHA256: 009ca0c749f2921ef6c0a0bf089ff11eab24c6e0ffc6af34d2b845523a8c8c16
+      D97AEZ_SOURCE_BYTES: "68382"
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v4
+
+      - name: Establish CI-only boundary
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/d97aez-audit"
+          {
+            print -r -- "D97AEZ_CI_REPOSITORY=$GITHUB_REPOSITORY"
+            print -r -- "D97AEZ_CI_HEAD_SHA=$GITHUB_SHA"
+            print -r -- "D97AEZ_CI_RUNNER_OS=$RUNNER_OS"
+            print -r -- "D97AEZ_CI_RUNNER_ARCH=$RUNNER_ARCH"
+            print -r -- "D97AEZ_PRODUCTION_RUNNER_EXECUTION=NOT_RUN_IN_GITHUB"
+            print -r -- "D97AEZ_LAUNCHD_EXECUTION=NOT_RUN_IN_GITHUB"
+            print -r -- "D97AEZ_OCLP_ROOT_PATCH_REBOOT=NOT_RUN_IN_GITHUB"
+            print -r -- "D97AEZ_ASUS2_ACCELERATED_RUNTIME=NOT_RUN_IN_GITHUB"
+          } | tee "$RUNNER_TEMP/d97aez-audit/CI_BOUNDARY.txt"
+
+      - name: Parse and static-audit exact runner and plist
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          /bin/zsh -n "$D97AEZ_RUNNER"
+          /usr/bin/plutil -lint "$D97AEZ_PLIST"
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          import plistlib
+          import re
+
+          runner = Path(os.environ["D97AEZ_RUNNER"]).read_text(encoding="utf-8")
+          with Path(os.environ["D97AEZ_PLIST"]).open("rb") as stream:
+              plist = plistlib.load(stream)
+          out = Path(os.environ["RUNNER_TEMP"]) / "d97aez-audit" / "STATIC_AUDIT.txt"
+
+          assert runner.count("/usr/sbin/sysctl -n kern.bootsessionuuid") == 2
+          assert "/usr/bin/sysctl" not in runner
+          assert runner.count("/usr/bin/chflags") >= 6
+          assert re.search(r"(?<!/usr)/bin/chflags\b", runner) is None
+          assert 'ARCHITECTURE_EXPECTED="x86_64"' in runner
+          assert "ACTIVATION_BOOT_UUID" in runner
+          assert "DEPLOY_RECORD" in runner
+
+          helper_argv = (
+              '"$HELPER" --duration 120 --interval-ms 25 --min-complete 3'
+          )
+          assert runner.count(helper_argv) == 1
+          helper_exec_lines = [
+              line.strip() for line in runner.splitlines()
+              if line.strip().startswith('"$HELPER"')
+          ]
+          assert helper_exec_lines == [helper_argv]
+          assert not any(
+              line.strip().startswith(('"$SERVICE"', '"$TARGET"'))
+              for line in runner.splitlines()
+          )
+
+          for exact in (
+              'HELPER_SHA256_EXPECTED="f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9"',
+              'HELPER_BYTES_EXPECTED="94928"',
+              'SERVICE_SHA256_EXPECTED="a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43"',
+              'SERVICE_BYTES_EXPECTED="85520"',
+              'TARGET_SHA256_EXPECTED="524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755"',
+              'TARGET_BYTES_EXPECTED="1636896"',
+              'WATCHDOG_SECONDS="150"',
+              'SERVICE_LAUNCH=AUTO-NO',
+              'SERVICE_STOP=AUTO-NO',
+              'TARGET_PROCESS_CONTROL_MUTATION=NO',
+              'ROOT_PATCH=AUTO-NO',
+              'REBOOT=AUTO-NO',
+          ):
+              assert exact in runner, exact
+
+          code = "\n".join(
+              line for line in runner.splitlines()
+              if not line.lstrip().startswith("#")
+          )
+          forbidden = re.compile(
+              r"(?m)^\s*(?:/[^\s]+/)?(?:sudo|launchctl|reboot|shutdown|halt|"
+              r"bless|kmutil|kextload|kextunload|csrutil|nvram|diskutil|"
+              r"softwareupdate|osascript|open|pkill|killall)\b"
+          )
+          assert forbidden.search(code) is None
+          assert "curl " not in code and "wget " not in code
+          for line in code.splitlines():
+              if line.strip().startswith("/bin/kill "):
+                  assert any(token in line for token in (
+                      "$HELPER_PID", "$WATCHDOG_PID", "$PARENT_PID"
+                  )), line
+
+          expected_keys = {
+              "Label", "ProgramArguments", "UserName", "GroupName",
+              "RunAtLoad", "KeepAlive", "LaunchOnlyOnce", "Umask",
+              "StandardInPath", "StandardOutPath", "StandardErrorPath",
+          }
+          assert set(plist) == expected_keys
+          assert plist["Label"] == "com.stefanalmare.oclp7.d97aez.boot-bound-one-shot"
+          assert plist["ProgramArguments"] == [
+              "/bin/zsh", "-f",
+              "/Library/Application Support/OCLP7-D97AEZ/"
+              "OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command",
+          ]
+          assert plist["UserName"] == "root" and plist["GroupName"] == "wheel"
+          assert plist["RunAtLoad"] is True
+          assert plist["KeepAlive"] is False
+          assert plist["LaunchOnlyOnce"] is True
+          assert plist["Umask"] == 63
+          assert plist["StandardInPath"] == "/dev/null"
+          assert plist["StandardOutPath"] == "/var/db/OCLP7-D97AEZ/LAUNCHD_STDOUT.log"
+          assert plist["StandardErrorPath"] == "/var/db/OCLP7-D97AEZ/LAUNCHD_STDERR.log"
+
+          markers = [
+              "D97AEZ_RUNNER_ZSH_PARSE=PASS",
+              "D97AEZ_PLIST_LINT=PASS",
+              "D97AEZ_DARWIN_SYSCTL_PATH=PASS",
+              "D97AEZ_DARWIN_CHFLAGS_PATH=PASS",
+              "D97AEZ_X86_64_CONTRACT_STATIC=PASS",
+              "D97AEZ_ACTIVATION_TERMINOLOGY=PASS",
+              "D97AEZ_HELPER_ARGV_EXACT_UNIQUE=PASS",
+              "D97AEZ_EXACT_IDENTITY_PINS=PASS",
+              "D97AEZ_FORBIDDEN_AUTOMATION_STATIC_AUDIT=PASS",
+              "D97AEZ_OWN_CHILD_PROCESS_CONTROL_ONLY=PASS",
+              "D97AEZ_PLIST_ONE_SHOT_AND_OBSERVER_LOGS=PASS",
+              "D97AEZ_PRODUCTION_RUNNER_EXECUTION=NOT_RUN_IN_GITHUB",
+              "D97AEZ_ASUS2_ACCELERATED_RUNTIME=NOT_RUN_IN_GITHUB",
+          ]
+          out.write_text("\n".join(markers) + "\n", encoding="utf-8")
+          print(out.read_text(encoding="utf-8"), end="")
+          PY
+
+      - name: Prove exact helper identity and self-test
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/d97aez-audit/EXACT_HELPER_SELF_TEST.txt"
+          blob="$(/usr/bin/git hash-object "$D97AEZ_HELPER")"
+          sha="$(/usr/bin/shasum -a 256 "$D97AEZ_HELPER" | /usr/bin/awk '{print $1}')"
+          bytes="$(/usr/bin/stat -f '%z' "$D97AEZ_HELPER")"
+          tree_mode="$(/usr/bin/git ls-files -s -- "$D97AEZ_HELPER" | /usr/bin/awk '{print $1}')"
+          [[ "$blob" == "$D97AEZ_HELPER_BLOB" ]]
+          [[ "$sha" == "$D97AEZ_HELPER_SHA256" ]]
+          [[ "$bytes" == "$D97AEZ_HELPER_BYTES" ]]
+          [[ "$tree_mode" == "100755" ]]
+          "$GITHUB_WORKSPACE/$D97AEZ_HELPER" --self-test > "$out"
+          /usr/bin/grep -Fx 'D97AEX_SELF_TEST_MANIFEST=PASS|ENTRIES=31|BYTES=330' "$out"
+          /usr/bin/grep -Fx 'D97AEX_SELF_TEST_CLASSIFIER=PASS|PRE_POST_OTHER_INVARIANT' "$out"
+          /usr/bin/grep -Fx 'D97AEX_SELF_TEST_AGGREGATION=PASS|PATCH_MISMATCH_CASES=23|INVARIANT_MISMATCH_CASES=8' "$out"
+          /usr/bin/grep -Fx 'D97AEX_SELF_TEST_MACHO=PASS|HEADER_BYTES=3832|UUID_D5CE=YES|TOPOLOGY=EXACT' "$out"
+          /usr/bin/grep -Fx 'D97AEX_SELF_TEST_SEGMENT_TRANSLATION=PASS|WINDOWS=31' "$out"
+          /usr/bin/grep -Fx 'D97AEX_SELF_TEST=PASS' "$out"
+          {
+            print -r -- "D97AEZ_HELPER_BLOB=$blob"
+            print -r -- "D97AEZ_HELPER_SHA256=$sha"
+            print -r -- "D97AEZ_HELPER_BYTES=$bytes"
+            print -r -- "D97AEZ_HELPER_TREE_MODE=$tree_mode"
+            print -r -- "D97AEZ_EXACT_HELPER_IDENTITY_SELF_TEST=PASS"
+          } | tee "$RUNNER_TEMP/d97aez-audit/EXACT_HELPER_PROVENANCE.txt"
+
+      - name: Compile exact source and self-test rebuilt helper
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          source_blob="$(/usr/bin/git hash-object "$D97AEZ_HELPER_SOURCE")"
+          source_sha="$(/usr/bin/shasum -a 256 "$D97AEZ_HELPER_SOURCE" | /usr/bin/awk '{print $1}')"
+          source_bytes="$(/usr/bin/stat -f '%z' "$D97AEZ_HELPER_SOURCE")"
+          [[ "$source_blob" == "$D97AEZ_SOURCE_BLOB" ]]
+          [[ "$source_sha" == "$D97AEZ_SOURCE_SHA256" ]]
+          [[ "$source_bytes" == "$D97AEZ_SOURCE_BYTES" ]]
+          build_root="$RUNNER_TEMP/d97aez-build"
+          mkdir -p "$build_root"
+          /usr/bin/xcrun --sdk macosx clang++ \
+            -std=c++17 -O2 -Wall -Wextra -Werror -arch x86_64 \
+            "$D97AEZ_HELPER_SOURCE" -o "$build_root/D97AEX_REBUILT" -lbsm
+          /usr/bin/codesign --force --sign - "$build_root/D97AEX_REBUILT"
+          /usr/bin/lipo -archs "$build_root/D97AEX_REBUILT" | /usr/bin/grep -Fx x86_64
+          "$build_root/D97AEX_REBUILT" --self-test \
+            > "$RUNNER_TEMP/d97aez-audit/REBUILT_HELPER_SELF_TEST.txt"
+          /usr/bin/cmp \
+            "$RUNNER_TEMP/d97aez-audit/EXACT_HELPER_SELF_TEST.txt" \
+            "$RUNNER_TEMP/d97aez-audit/REBUILT_HELPER_SELF_TEST.txt"
+          {
+            print -r -- "D97AEZ_SOURCE_BLOB=$source_blob"
+            print -r -- "D97AEZ_SOURCE_SHA256=$source_sha"
+            print -r -- "D97AEZ_SOURCE_BYTES=$source_bytes"
+            print -r -- "D97AEZ_REBUILD_ARCH=x86_64"
+            print -r -- "D97AEZ_REBUILD_SELF_TEST=PASS"
+            print -r -- "D97AEZ_REBUILD_PRODUCTION_SCAN=NOT_RUN"
+          } | tee "$RUNNER_TEMP/d97aez-audit/REBUILD_PROVENANCE.txt"
+
+      - name: Simulate the one-shot state machine in an isolated literal-rewritten copy
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import os
+          import shutil
+          import signal
+          import stat
+          import subprocess
+          import time
+
+          workspace = Path(os.environ["GITHUB_WORKSPACE"])
+          production_runner = workspace / os.environ["D97AEZ_RUNNER"]
+          production_plist = workspace / os.environ["D97AEZ_PLIST"]
+          audit_root = Path(os.environ["RUNNER_TEMP"]) / "d97aez-audit"
+          cases_root = audit_root / "sandbox-cases"
+          cases_root.mkdir(parents=True, exist_ok=True)
+          source = production_runner.read_text(encoding="utf-8")
+          activation_boot = "11111111-1111-1111-1111-111111111111"
+          next_boot = "22222222-2222-2222-2222-222222222222"
+          label = "com.stefanalmare.oclp7.d97aez.boot-bound-one-shot"
+
+          dispatcher = r'''#!/bin/zsh -f
+          set -u
+          name="${0:t}"
+          root="$D97AEZ_TEST_ROOT"
+          case "$name" in
+            id)
+              [[ "${1:-}" == "-u" ]] && { print -r -- 0; exit 0; }
+              exec /usr/bin/id "$@" ;;
+            stat)
+              if [[ "${1:-}" == "-f" && $# -eq 3 && "$3" == "$root"* ]]; then
+                fmt="$2"; path="$3"
+                if [[ "${D97AEZ_SIM_POST_WATCHDOG_FAILURE:-0}" == 1 && \
+                      -f "$root/state/WATCHDOG_TIMEOUT" && \
+                      "$path" == "$root/state/D97AEX_HELPER_OUTPUT.partial" ]]; then
+                  exit 1
+                fi
+                case "$fmt" in
+                  '%u:%g:%Lp')
+                    mode="$(/usr/bin/stat -f '%Lp' "$path")" || exit 1
+                    print -r -- "0:0:$mode"; exit 0 ;;
+                  '%u:%g:%Lp:%l')
+                    mode="$(/usr/bin/stat -f '%Lp' "$path")" || exit 1
+                    print -r -- "0:0:$mode:1"; exit 0 ;;
+                  '%u:%g:%l') print -r -- '0:0:1'; exit 0 ;;
+                  '%f')
+                    [[ "$path" == "$root/state/DEPLOY_RECORD" ]] && { print -r -- 2; exit 0; } ;;
+                  '%z')
+                    [[ "$path" == "$root/install/OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER" ]] && { print -r -- 94928; exit 0; }
+                    [[ "$path" == "$root/system/MTLCompilerService" ]] && { print -r -- 85520; exit 0; }
+                    [[ "$path" == "$root/system/MTLCompiler" ]] && { print -r -- 1636896; exit 0; } ;;
+                esac
+              fi
+              exec /usr/bin/stat "$@" ;;
+            shasum)
+              path="${@[-1]}"
+              if [[ "$path" == "$root/install/OCLP7_D97AEX_READONLY_D5CE_RUNTIME_TEXT_PROVENANCE_READER" ]]; then
+                identity="${D97AEZ_SIM_HELPER_IDENTITY:-good}"
+                if [[ "$identity" == bad ]]; then
+                  print -r -- "0000000000000000000000000000000000000000000000000000000000000000  $path"; exit 0
+                fi
+                if [[ "$identity" == post-drift ]]; then
+                  count_file="$root/helper-shasum-count"; count=0
+                  [[ -f "$count_file" ]] && read -r count < "$count_file"
+                  (( count += 1 )); print -r -- "$count" >| "$count_file"
+                  if (( count > 1 )); then
+                    print -r -- "0000000000000000000000000000000000000000000000000000000000000000  $path"; exit 0
+                  fi
+                fi
+                print -r -- "f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9  $path"; exit 0
+              fi
+              [[ "$path" == "$root/system/MTLCompilerService" ]] && { print -r -- "a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43  $path"; exit 0; }
+              [[ "$path" == "$root/system/MTLCompiler" ]] && { print -r -- "524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755  $path"; exit 0; }
+              exec /usr/bin/shasum "$@" ;;
+            sw_vers)
+              [[ "${1:-}" == -productVersion ]] && { print -r -- 26.6.2; exit 0; }
+              [[ "${1:-}" == -buildVersion ]] && { print -r -- 25G82; exit 0; }
+              exit 2 ;;
+            uname) print -r -- "$D97AEZ_SIM_ARCHITECTURE" ;;
+            sysctl) print -r -- "$D97AEZ_SIM_BOOT_UUID" ;;
+            chflags)
+              print -r -- "chflags $*" >> "$root/chflags-calls"; exit 0 ;;
+            sync) exit 0 ;;
+            sleep)
+              [[ "${1:-}" == 150 ]] && exec /bin/sleep 0.25
+              exec /bin/sleep 0.01 ;;
+            grep)
+              if [[ "${D97AEZ_SIM_GREP_ERROR:-0}" == 1 && "${@[-1]}" == "$root/state/D97AEX_HELPER_OUTPUT.partial" ]]; then
+                exit 2
+              fi
+              exec /usr/bin/grep "$@" ;;
+            kill)
+              if [[ "${1:-}" == -USR1 ]]; then
+                /bin/kill "$@"; rc=$?
+                : >| "$root/watchdog-usr1-sent"
+                /bin/sleep 0.20
+                exit "$rc"
+              fi
+              exec /bin/kill "$@" ;;
+            env|mktemp|shasum|stat|sw_vers|tail|uname|wc)
+              exec "/usr/bin/$name" "$@" ;;
+            cat|chmod|date|mkdir|mv|sleep|sync|zsh)
+              exec "/bin/$name" "$@" ;;
+            *) print -u2 -r -- "unexpected shim: $name"; exit 97 ;;
+          esac
+          '''
+
+          contracts = [
+              "WATCH_DURATION_SECONDS=120",
+              "WATCH_INTERVAL_MILLISECONDS=25",
+              "MINIMUM_COMPLETE_INSTANCES=3",
+              "GLOBAL_SPAWN_COHORT_COVERAGE=UNKNOWN",
+              "SERVICE_LAUNCH=AUTO-NO",
+              "ROOT_PATCH=AUTO-NO",
+              "REBOOT=AUTO-NO",
+          ]
+
+          def helper_output(kind):
+              if kind == "watchdog" or kind == "interrupt":
+                  return None
+              lines = list(contracts)
+              if kind in ("match", "post-drift", "grep-error"):
+                  lines += [
+                      "COHORT_SUMMARY=POLLS=8|UNIQUE_EXACT_SERVICE_INSTANCES=3|COMPLETE_D5CE_INSTANCES=3|COMPLETE_BOUNDED31_MATCH=3|COMPLETE_BOUNDED31_MISMATCH=0|UUID_NEGATIVE_OFFSETS_SKIPPED=0|CAPTURE_EXIT_RACE_INCOMPLETE=0|PREFILTER_IDENTITY_RACE_INCOMPLETE=0|PENDING_OR_ENDED_INCOMPLETE=0|MINIMUM_REQUIRED=3",
+                      "COHORT_COVERAGE=ALL_DISCOVERED_EXACT_INSTANCES_COMPLETE",
+                      "COHORT_BOUNDED_31_WINDOW_BYTES_PROVEN=YES|SCOPE=OBSERVED_COHORT_31_WINDOWS_330_BYTES_EACH",
+                      "COHORT_BOUNDED_31_WINDOW_PROVENANCE=MATCH",
+                      "D97AEX_RESULT=OBSERVED_COHORT_BOUNDED_31_WINDOW_PROVENANCE_MATCH",
+                  ]
+                  return lines, 0
+              if kind == "task-denial":
+                  lines += [
+                      "COHORT_BOUNDED_31_WINDOW_BYTES_PROVEN=UNKNOWN",
+                      "D97AEX_STOP=TASK_PORT_DENIED",
+                  ]
+                  return lines, 2
+              if kind == "incomplete":
+                  lines += [
+                      "COHORT_SUMMARY=POLLS=8|UNIQUE_EXACT_SERVICE_INSTANCES=0|COMPLETE_D5CE_INSTANCES=0|COMPLETE_BOUNDED31_MATCH=0|COMPLETE_BOUNDED31_MISMATCH=0|UUID_NEGATIVE_OFFSETS_SKIPPED=0|CAPTURE_EXIT_RACE_INCOMPLETE=0|PREFILTER_IDENTITY_RACE_INCOMPLETE=0|PENDING_OR_ENDED_INCOMPLETE=0|MINIMUM_REQUIRED=3",
+                      "COHORT_COVERAGE=INCOMPLETE",
+                      "COHORT_BOUNDED_31_WINDOW_BYTES_PROVEN=UNKNOWN",
+                      "D97AEX_RESULT=COVERAGE_INCOMPLETE_STOP",
+                  ]
+                  return lines, 3
+              if kind == "mismatch":
+                  lines += [
+                      "COHORT_SUMMARY=POLLS=8|UNIQUE_EXACT_SERVICE_INSTANCES=3|COMPLETE_D5CE_INSTANCES=3|COMPLETE_BOUNDED31_MATCH=2|COMPLETE_BOUNDED31_MISMATCH=1|UUID_NEGATIVE_OFFSETS_SKIPPED=0|CAPTURE_EXIT_RACE_INCOMPLETE=0|PREFILTER_IDENTITY_RACE_INCOMPLETE=0|PENDING_OR_ENDED_INCOMPLETE=0|MINIMUM_REQUIRED=3",
+                      "COHORT_COVERAGE=ALL_DISCOVERED_EXACT_INSTANCES_COMPLETE",
+                      "COHORT_BOUNDED_31_WINDOW_BYTES_PROVEN=NEGATIVE",
+                      "COHORT_BOUNDED_31_WINDOW_PROVENANCE=MISMATCH",
+                      "D97AEX_RESULT=OBSERVED_COHORT_BOUNDED_31_WINDOW_PROVENANCE_MISMATCH",
+                  ]
+                  return lines, 4
+              if kind == "contradictory":
+                  base, _ = helper_output("match")
+                  base.append("D97AEX_RESULT=OBSERVED_COHORT_BOUNDED_31_WINDOW_PROVENANCE_MISMATCH")
+                  return base, 0
+              if kind == "truncated-summary":
+                  base, _ = helper_output("match")
+                  base = [line for line in base if not line.startswith("COHORT_SUMMARY=")]
+                  base.insert(7, "COHORT_SUMMARY=POLLS=8|UNIQUE_EXACT_SERVICE_INSTANCES=3")
+                  return base, 0
+              raise AssertionError(kind)
+
+          def fake_helper_text(root, kind):
+              counter = root / "helper-run-count"
+              if kind in ("watchdog", "interrupt"):
+                  body = "/bin/sleep 5\nexit 125"
+              else:
+                  lines, rc = helper_output(kind)
+                  quoted = "\n".join(
+                      "print -r -- " + repr(line) for line in lines
+                  )
+                  body = f"{quoted}\nexit {rc}"
+              return f'''#!/bin/zsh -f
+          count=0
+          [[ -f {str(counter)!r} ]] && read -r count < {str(counter)!r}
+          (( count += 1 ))
+          print -r -- "$count" >| {str(counter)!r}
+          {body}
+          '''
+
+          tool_paths = [
+              "/bin/cat", "/bin/chmod", "/bin/date", "/bin/kill",
+              "/bin/mkdir", "/bin/mv", "/bin/sleep", "/bin/sync",
+              "/bin/zsh", "/usr/bin/env", "/usr/bin/grep", "/usr/bin/id",
+              "/usr/bin/chflags", "/usr/bin/mktemp", "/usr/bin/shasum",
+              "/usr/bin/stat", "/usr/bin/sw_vers", "/usr/bin/tail",
+              "/usr/bin/uname", "/usr/bin/wc", "/usr/sbin/sysctl",
+          ]
+
+          def sha256(path):
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          def file_mode(path):
+              return stat.S_IMODE(path.stat().st_mode)
+
+          def parse_unique_kv(path):
+              values = {}
+              for line in path.read_text(encoding="utf-8").splitlines():
+                  if "=" not in line:
+                      continue
+                  key, value = line.split("=", 1)
+                  assert key not in values, (path, key)
+                  values[key] = value
+              return values
+
+          def prepare(name, kind="match", boot=next_boot, architecture="x86_64",
+                      identity="good", truncated_deploy=False, grep_error=False,
+                      post_watchdog_failure=False):
+              root = cases_root / name
+              install = root / "install"
+              state_dir = root / "state"
+              launchd_dir = root / "launchd"
+              system_dir = root / "system"
+              tools_dir = root / "tools"
+              tmp_dir = root / "tmp"
+              for directory in (root, install, state_dir, launchd_dir, system_dir, tools_dir, tmp_dir):
+                  directory.mkdir(parents=True, exist_ok=True)
+                  directory.chmod(0o700)
+
+              mapping = {
+                  "/Library/Application Support/OCLP7-D97AEZ": str(install),
+                  "/Library/LaunchDaemons": str(launchd_dir),
+                  "/var/db/OCLP7-D97AEZ": str(state_dir),
+                  "/System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService": str(system_dir / "MTLCompilerService"),
+                  "/System/Library/PrivateFrameworks/MTLCompiler.framework/Versions/32023/MTLCompiler": str(system_dir / "MTLCompiler"),
+                  "PATH=/usr/bin:/bin:/usr/sbin:/sbin": f"PATH={tools_dir}",
+                  "TMPDIR=/private/tmp": f"TMPDIR={tmp_dir}",
+                  "kern.bootsessionuuid": "d97aez.test.bootsessionuuid",
+                  "/dev/null": str(root / "dev-null"),
+              }
+              for old in tool_paths:
+                  mapping[old] = str(tools_dir / Path(old).name)
+              transformed = source
+              for old in sorted(mapping, key=len, reverse=True):
+                  assert transformed.count(old) > 0, old
+                  transformed = transformed.replace(old, mapping[old])
+              assert all(old not in transformed for old in mapping)
+              reverse = transformed
+              for old in sorted(mapping, key=lambda key: len(mapping[key]), reverse=True):
+                  reverse = reverse.replace(mapping[old], old)
+              assert reverse == source, "test runner differs beyond literal replacements"
+
+              runner_copy = install / production_runner.name
+              runner_copy.write_text(transformed, encoding="utf-8")
+              runner_copy.chmod(0o500)
+              helper_copy = install / os.environ["D97AEZ_HELPER"]
+              helper_copy.write_text(fake_helper_text(root, kind), encoding="utf-8")
+              helper_copy.chmod(0o500)
+              plist_copy = launchd_dir / f"{label}.plist"
+              shutil.copyfile(production_plist, plist_copy)
+              plist_copy.chmod(0o644)
+              for file_name in ("MTLCompilerService", "MTLCompiler"):
+                  item = system_dir / file_name
+                  item.write_text(f"D97AEZ_FAKE_{file_name}\n", encoding="utf-8")
+                  item.chmod(0o755)
+              (root / "dev-null").touch()
+
+              dispatch = tools_dir / "_dispatch"
+              dispatch.write_text(dispatcher, encoding="utf-8")
+              dispatch.chmod(0o500)
+              for old in tool_paths:
+                  shim = tools_dir / Path(old).name
+                  if not shim.exists():
+                      shim.symlink_to(dispatch)
+
+              deploy_lines = [
+                  "D97AEZ_DEPLOY_RECORD_SCHEMA=1",
+                  "D97AEZ_DEPLOY_RECORD_STATE=ACTIVATED_IN_VESA",
+                  f"ACTIVATION_BOOT_UUID={activation_boot}",
+                  "PRODUCT_VERSION_EXPECTED=26.6.2",
+                  "BUILD_VERSION_EXPECTED=25G82",
+                  "ARCHITECTURE_EXPECTED=x86_64",
+                  f"RUNNER_PATH={runner_copy}",
+                  f"RUNNER_SHA256={sha256(runner_copy)}",
+                  f"RUNNER_BYTES={runner_copy.stat().st_size}",
+                  "RUNNER_MODE=500",
+                  f"HELPER_PATH={helper_copy}",
+                  "HELPER_SHA256=f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9",
+                  "HELPER_BYTES=94928",
+                  "HELPER_MODE=500",
+                  f"PLIST_PATH={plist_copy}",
+                  f"PLIST_SHA256={sha256(plist_copy)}",
+                  f"PLIST_BYTES={plist_copy.stat().st_size}",
+                  "PLIST_MODE=644",
+                  f"SERVICE_PATH={system_dir / 'MTLCompilerService'}",
+                  "SERVICE_SHA256=a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43",
+                  "SERVICE_BYTES=85520",
+                  "SERVICE_MODE=755",
+                  f"TARGET_PATH={system_dir / 'MTLCompiler'}",
+                  "TARGET_SHA256=524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755",
+                  "TARGET_BYTES=1636896",
+                  "TARGET_MODE=755",
+                  "WATCH_DURATION_SECONDS=120",
+                  "WATCH_INTERVAL_MILLISECONDS=25",
+                  "WATCH_MINIMUM_COMPLETE=3",
+                  "SERVICE_LAUNCH=AUTO-NO",
+                  "SERVICE_STOP=AUTO-NO",
+                  "TARGET_PROCESS_CONTROL_MUTATION=NO",
+                  "ROOT_PATCH=AUTO-NO",
+                  "REBOOT=AUTO-NO",
+                  "D97AEZ_DEPLOY_RECORD_END=END",
+              ]
+              assert len(deploy_lines) == 35
+              if truncated_deploy:
+                  deploy_lines.pop()
+              deploy = state_dir / "DEPLOY_RECORD"
+              deploy.write_text("\n".join(deploy_lines) + "\n", encoding="utf-8")
+              deploy.chmod(0o400)
+
+              env = os.environ.copy()
+              env.update({
+                  "D97AEZ_TEST_ROOT": str(root),
+                  "D97AEZ_SIM_BOOT_UUID": boot,
+                  "D97AEZ_SIM_ARCHITECTURE": architecture,
+                  "D97AEZ_SIM_HELPER_IDENTITY": identity,
+                  "D97AEZ_SIM_GREP_ERROR": "1" if grep_error else "0",
+                  "D97AEZ_SIM_POST_WATCHDOG_FAILURE": "1" if post_watchdog_failure else "0",
+              })
+              assert runner_copy.resolve() != production_runner.resolve()
+              assert str(runner_copy.resolve()).startswith(str(Path(os.environ["RUNNER_TEMP"]).resolve()))
+              return root, runner_copy, env
+
+          def invoke(name, runner, env, timeout=15):
+              result = subprocess.run(
+                  ["/bin/zsh", "-f", str(runner)], cwd=str(runner.parent),
+                  env=env, text=True, stdout=subprocess.PIPE,
+                  stderr=subprocess.STDOUT, check=False, timeout=timeout,
+              )
+              (audit_root / f"SIM_{name}.txt").write_text(
+                  f"RC={result.returncode}\n{result.stdout}", encoding="utf-8"
+              )
+              return result.returncode
+
+          def assert_no_claim(root):
+              for name in ("CLAIM", "OCLP7_D97AEZ_BOOT_BOUND_REPORT.partial", "DONE", "D97AEX_HELPER_OUTPUT.partial"):
+                  assert not (root / "state" / name).exists(), (root, name)
+
+          def assert_sealed(root, result, runner_rc, helper_rc, mapping):
+              state_dir = root / "state"
+              report = state_dir / "OCLP7_D97AEZ_BOOT_BOUND_REPORT.partial"
+              done = state_dir / "DONE"
+              claim = state_dir / "CLAIM"
+              assert report.is_file() and done.is_file() and claim.is_dir()
+              assert file_mode(report) == 0o400 and file_mode(done) == 0o400
+              assert file_mode(claim) == 0o500 and file_mode(claim / "RECORD") == 0o400
+              values = parse_unique_kv(done)
+              assert values["ACTIVATION_BOOT_UUID"] == activation_boot
+              assert values["CLAIMED_BOOT_UUID"] == next_boot
+              assert values["REPORT_PATH"] == str(report)
+              assert values["REPORT_SHA256"] == sha256(report)
+              assert values["REPORT_BYTES"] == str(report.stat().st_size)
+              assert values["HELPER_RC"] == str(helper_rc)
+              assert values["HELPER_MAPPING"] == mapping
+              assert values["RUNNER_RESULT"] == result
+              assert values["RUNNER_RC"] == str(runner_rc)
+              assert values["D97AEZ_DONE_END"] == "END"
+              assert not list(state_dir.glob(".DONE.*"))
+              calls = (root / "chflags-calls").read_text(encoding="utf-8")
+              assert str(report) in calls and str(done) in calls
+              return report, done
+
+          matrix = []
+
+          root, runner, env = prepare("same-activation", boot=activation_boot)
+          assert invoke("same_activation", runner, env) == 0
+          assert_no_claim(root)
+          assert not (root / "helper-run-count").exists()
+          matrix.append("D97AEZ_SIM_SAME_ACTIVATION_BOOT_SKIP=PASS")
+
+          root, runner, env = prepare("match")
+          assert invoke("match_first_next", runner, env) == 0
+          report, done = assert_sealed(
+              root, "OBSERVED_COHORT_BOUNDED_PROVENANCE_MATCH", 0, 0, "RC0_MATCH"
+          )
+          assert (root / "helper-run-count").read_text().strip() == "1"
+          report_sha, done_sha = sha256(report), sha256(done)
+          assert invoke("match_duplicate", runner, env) == 0
+          assert (root / "helper-run-count").read_text().strip() == "1"
+          assert sha256(report) == report_sha and sha256(done) == done_sha
+          matrix += [
+              "D97AEZ_SIM_X86_64_FIRST_NEXT_BOOT_RC0_MATCH=PASS",
+              "D97AEZ_SIM_ATOMIC_FIRST_NEXT_BOOT_CLAIM=PASS",
+              "D97AEZ_SIM_DUPLICATE_INVOCATION_NO_RERUN=PASS",
+              "D97AEZ_SIM_REPORT_DONE_BINDINGS=PASS",
+          ]
+
+          root, runner, env = prepare("task-denial", kind="task-denial")
+          assert invoke("task_denial", runner, env) == 2
+          assert_sealed(root, "HELPER_FAIL_CLOSED", 2, 2, "RC2_FAIL_CLOSED")
+          matrix.append("D97AEZ_SIM_RC2_TASK_DENIAL_FAIL_CLOSED=PASS")
+
+          root, runner, env = prepare("incomplete", kind="incomplete")
+          assert invoke("incomplete", runner, env) == 3
+          report, _ = assert_sealed(root, "COVERAGE_INCOMPLETE_STOP", 3, 3, "RC3_COVERAGE_INCOMPLETE")
+          assert "D97AEX_RESULT=COVERAGE_INCOMPLETE_STOP" in report.read_text(encoding="utf-8")
+          matrix.append("D97AEZ_SIM_RC3_INCOMPLETE_REPORT_SEALED=PASS")
+
+          root, runner, env = prepare("mismatch", kind="mismatch")
+          assert invoke("mismatch", runner, env) == 4
+          assert_sealed(root, "OBSERVED_COHORT_BOUNDED_PROVENANCE_MISMATCH", 4, 4, "RC4_MISMATCH")
+          matrix.append("D97AEZ_SIM_RC4_MISMATCH=PASS")
+
+          root, runner, env = prepare("arm64-negative", architecture="arm64")
+          assert invoke("arm64_negative", runner, env) == 2
+          assert_sealed(root, "PREFLIGHT_FAIL_CLOSED", 2, "NOT_RUN", "NONE")
+          assert not (root / "helper-run-count").exists()
+          matrix.append("D97AEZ_SIM_ARCHITECTURE_NON_X86_64_FAIL_CLOSED_NO_HELPER=PASS")
+
+          root, runner, env = prepare("identity-bad", identity="bad")
+          assert invoke("identity_bad", runner, env) == 2
+          assert_sealed(root, "PREFLIGHT_FAIL_CLOSED", 2, "NOT_RUN", "NONE")
+          assert not (root / "helper-run-count").exists()
+          matrix.append("D97AEZ_SIM_PRE_HELPER_IDENTITY_DRIFT_FAIL_CLOSED=PASS")
+
+          root, runner, env = prepare("post-drift", kind="post-drift", identity="post-drift")
+          assert invoke("post_drift", runner, env) == 2
+          assert_sealed(root, "FAIL_CLOSED", 2, 0, "RC0_MATCH")
+          matrix.append("D97AEZ_SIM_POST_HELPER_IDENTITY_DRIFT_FAIL_CLOSED=PASS")
+
+          root, runner, env = prepare("contradictory", kind="contradictory")
+          assert invoke("contradictory", runner, env) == 2
+          assert_sealed(root, "FAIL_CLOSED", 2, 0, "INVALID")
+          matrix.append("D97AEZ_SIM_CONTRADICTORY_TERMINALS_FAIL_CLOSED=PASS")
+
+          root, runner, env = prepare("truncated-summary", kind="truncated-summary")
+          assert invoke("truncated_summary", runner, env) == 2
+          assert_sealed(root, "FAIL_CLOSED", 2, 0, "INVALID")
+          matrix.append("D97AEZ_SIM_TRUNCATED_SUMMARY_FAIL_CLOSED=PASS")
+
+          root, runner, env = prepare("grep-error", kind="grep-error", grep_error=True)
+          assert invoke("grep_error", runner, env) == 2
+          _, done = assert_sealed(root, "FAIL_CLOSED", 2, 0, "INVALID")
+          assert parse_unique_kv(done)["RUNNER_REASON"] == "HELPER_OUTPUT_GREP_FAILED"
+          matrix.append("D97AEZ_SIM_GREP_ERROR_DISTINCT_FROM_ZERO_MATCH=PASS")
+
+          root, runner, env = prepare("watchdog", kind="watchdog")
+          assert invoke("watchdog", runner, env) == 2
+          assert_sealed(root, "WATCHDOG_TIMEOUT_UNKNOWN", 2, 124, "WATCHDOG_TIMEOUT")
+          matrix.append("D97AEZ_SIM_WATCHDOG_HANG_UNKNOWN_SEALED=PASS")
+
+          root, runner, env = prepare(
+              "watchdog-secondary-failure", kind="watchdog", post_watchdog_failure=True
+          )
+          assert invoke("watchdog_secondary_failure", runner, env) == 2
+          _, done = assert_sealed(
+              root, "WATCHDOG_TIMEOUT_UNKNOWN", 2, 124, "WATCHDOG_TIMEOUT"
+          )
+          assert parse_unique_kv(done)["RUNNER_REASON"].startswith("WATCHDOG_PLUS:")
+          matrix.append("D97AEZ_SIM_WATCHDOG_PLUS_SECONDARY_FAILURE_STAYS_TIMEOUT=PASS")
+
+          root, runner, env = prepare("watchdog-signal-overlap", kind="watchdog")
+          process = subprocess.Popen(
+              ["/bin/zsh", "-f", str(runner)], cwd=str(runner.parent), env=env,
+              text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+          )
+          deadline = time.monotonic() + 5
+          while not (root / "watchdog-usr1-sent").exists():
+              assert time.monotonic() < deadline, "watchdog did not signal before overlap fixture"
+              time.sleep(0.005)
+          process.send_signal(signal.SIGTERM)
+          output, _ = process.communicate(timeout=10)
+          (audit_root / "SIM_watchdog_signal_overlap.txt").write_text(
+              f"RC={process.returncode}\n{output}", encoding="utf-8"
+          )
+          assert process.returncode == 2
+          _, done = assert_sealed(
+              root, "WATCHDOG_TIMEOUT_UNKNOWN", 2, 124, "WATCHDOG_TIMEOUT"
+          )
+          assert parse_unique_kv(done)["RUNNER_REASON"] == "SIGNAL_AFTER_WATCHDOG:TERM"
+          matrix.append("D97AEZ_SIM_WATCHDOG_SIGNAL_OVERLAP_STAYS_TIMEOUT=PASS")
+
+          root, runner, env = prepare("truncated-deploy", truncated_deploy=True)
+          assert invoke("truncated_deploy", runner, env) == 2
+          state_dir = root / "state"
+          report = state_dir / "OCLP7_D97AEZ_BOOT_BOUND_REPORT.partial"
+          assert (state_dir / "CLAIM").is_dir() and report.is_file()
+          assert file_mode(report) == 0o400 and not (state_dir / "DONE").exists()
+          assert not (root / "helper-run-count").exists()
+          assert invoke("truncated_deploy_duplicate", runner, env) == 0
+          matrix.append("D97AEZ_SIM_TRUNCATED_DEPLOY_CONSUMED_NO_RERUN=PASS")
+
+          root, runner, env = prepare("interrupted", kind="interrupt")
+          process = subprocess.Popen(
+              ["/bin/zsh", "-f", str(runner)], cwd=str(runner.parent), env=env,
+              text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+          )
+          deadline = time.monotonic() + 5
+          while not (root / "helper-run-count").exists():
+              assert time.monotonic() < deadline, "helper did not start before interruption"
+              time.sleep(0.01)
+          process.send_signal(signal.SIGTERM)
+          output, _ = process.communicate(timeout=10)
+          (audit_root / "SIM_interrupted.txt").write_text(
+              f"RC={process.returncode}\n{output}", encoding="utf-8"
+          )
+          assert process.returncode == 143
+          assert_sealed(root, "INTERRUPTED_UNKNOWN", 143, "INTERRUPTED", "INTERRUPTED")
+          matrix.append("D97AEZ_SIM_INTERRUPTED_PARTIAL_ATOMIC_DONE=PASS")
+
+          matrix += [
+              "D97AEZ_TEST_RUNNER_LITERAL_REWRITE_ONLY=PASS",
+              "D97AEZ_PRODUCTION_RUNNER_EXECUTION=NOT_RUN_IN_GITHUB",
+              "D97AEZ_SUDO_LAUNCHD_SYSTEM_TARGET_EXECUTION=NOT_RUN_IN_GITHUB",
+              "D97AEZ_ASUS2_ACCELERATED_RUNTIME=NOT_RUN_IN_GITHUB",
+          ]
+          matrix_path = audit_root / "SIMULATION_MATRIX.txt"
+          matrix_path.write_text("\n".join(matrix) + "\n", encoding="utf-8")
+          print(matrix_path.read_text(encoding="utf-8"), end="")
+          PY
+
+      - name: Consolidate exhaustive GitHub verdict
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          audit_root="$RUNNER_TEMP/d97aez-audit"
+          for marker in \
+            'D97AEZ_FORBIDDEN_AUTOMATION_STATIC_AUDIT=PASS' \
+            'D97AEZ_HELPER_ARGV_EXACT_UNIQUE=PASS' \
+            'D97AEZ_PLIST_ONE_SHOT_AND_OBSERVER_LOGS=PASS'; do
+            /usr/bin/grep -Fx "$marker" "$audit_root/STATIC_AUDIT.txt"
+          done
+          for marker in \
+            'D97AEZ_SIM_SAME_ACTIVATION_BOOT_SKIP=PASS' \
+            'D97AEZ_SIM_X86_64_FIRST_NEXT_BOOT_RC0_MATCH=PASS' \
+            'D97AEZ_SIM_ATOMIC_FIRST_NEXT_BOOT_CLAIM=PASS' \
+            'D97AEZ_SIM_DUPLICATE_INVOCATION_NO_RERUN=PASS' \
+            'D97AEZ_SIM_RC2_TASK_DENIAL_FAIL_CLOSED=PASS' \
+            'D97AEZ_SIM_RC3_INCOMPLETE_REPORT_SEALED=PASS' \
+            'D97AEZ_SIM_RC4_MISMATCH=PASS' \
+            'D97AEZ_SIM_ARCHITECTURE_NON_X86_64_FAIL_CLOSED_NO_HELPER=PASS' \
+            'D97AEZ_SIM_PRE_HELPER_IDENTITY_DRIFT_FAIL_CLOSED=PASS' \
+            'D97AEZ_SIM_POST_HELPER_IDENTITY_DRIFT_FAIL_CLOSED=PASS' \
+            'D97AEZ_SIM_CONTRADICTORY_TERMINALS_FAIL_CLOSED=PASS' \
+            'D97AEZ_SIM_TRUNCATED_SUMMARY_FAIL_CLOSED=PASS' \
+            'D97AEZ_SIM_GREP_ERROR_DISTINCT_FROM_ZERO_MATCH=PASS' \
+            'D97AEZ_SIM_WATCHDOG_HANG_UNKNOWN_SEALED=PASS' \
+            'D97AEZ_SIM_WATCHDOG_PLUS_SECONDARY_FAILURE_STAYS_TIMEOUT=PASS' \
+            'D97AEZ_SIM_WATCHDOG_SIGNAL_OVERLAP_STAYS_TIMEOUT=PASS' \
+            'D97AEZ_SIM_TRUNCATED_DEPLOY_CONSUMED_NO_RERUN=PASS' \
+            'D97AEZ_SIM_INTERRUPTED_PARTIAL_ATOMIC_DONE=PASS' \
+            'D97AEZ_SIM_REPORT_DONE_BINDINGS=PASS' \
+            'D97AEZ_TEST_RUNNER_LITERAL_REWRITE_ONLY=PASS'; do
+            /usr/bin/grep -Fx "$marker" "$audit_root/SIMULATION_MATRIX.txt"
+          done
+
+          runner_blob="$(/usr/bin/git hash-object "$D97AEZ_RUNNER")"
+          runner_sha="$(/usr/bin/shasum -a 256 "$D97AEZ_RUNNER" | /usr/bin/awk '{print $1}')"
+          runner_bytes="$(/usr/bin/stat -f '%z' "$D97AEZ_RUNNER")"
+          runner_mode="$(/usr/bin/git ls-files -s -- "$D97AEZ_RUNNER" | /usr/bin/awk '{print $1}')"
+          plist_blob="$(/usr/bin/git hash-object "$D97AEZ_PLIST")"
+          plist_sha="$(/usr/bin/shasum -a 256 "$D97AEZ_PLIST" | /usr/bin/awk '{print $1}')"
+          plist_bytes="$(/usr/bin/stat -f '%z' "$D97AEZ_PLIST")"
+          plist_mode="$(/usr/bin/git ls-files -s -- "$D97AEZ_PLIST" | /usr/bin/awk '{print $1}')"
+          {
+            print -r -- "D97AEZ_RUNNER_BLOB=$runner_blob"
+            print -r -- "D97AEZ_RUNNER_SHA256=$runner_sha"
+            print -r -- "D97AEZ_RUNNER_BYTES=$runner_bytes"
+            print -r -- "D97AEZ_RUNNER_TREE_MODE=$runner_mode"
+            print -r -- "D97AEZ_PLIST_BLOB=$plist_blob"
+            print -r -- "D97AEZ_PLIST_SHA256=$plist_sha"
+            print -r -- "D97AEZ_PLIST_BYTES=$plist_bytes"
+            print -r -- "D97AEZ_PLIST_TREE_MODE=$plist_mode"
+            print -r -- "D97AEZ_GITHUB_STATIC_BUILD_SELFTEST_SIMULATION_AUDIT=PASS"
+            print -r -- "D97AEZ_PRODUCTION_RUNNER_EXECUTION=NOT_RUN_IN_GITHUB"
+            print -r -- "D97AEZ_ASUS2_ACCELERATED_RUNTIME=NOT_RUN_IN_GITHUB"
+          } | tee "$audit_root/CONSOLIDATED_AUDIT.txt"
+
+      - name: Build and verify safe inner tar and outer artifact
+        shell: zsh {0}
+        run: |
+          set -euo pipefail
+          audit_root="$RUNNER_TEMP/d97aez-audit"
+          package_root="$RUNNER_TEMP/d97aez-package"
+          inner_root="$package_root/stage/OCLP7-D97AEZ-GITHUB-AUDIT"
+          outer_root="$package_root/outer"
+          mkdir -p "$inner_root/sources" "$inner_root/reports" "$outer_root"
+          cp "$D97AEZ_RUNNER" "$inner_root/sources/"
+          cp "$D97AEZ_PLIST" "$inner_root/sources/"
+          cp ".github/workflows/oclp7-d97aez-boot-bound-observer-audit.yml" "$inner_root/sources/"
+          find "$audit_root" -maxdepth 1 -type f -name '*.txt' -exec cp {} "$inner_root/reports/" \;
+          find "$package_root/stage" -type d -exec chmod 0555 {} \;
+          find "$package_root/stage" -type f -exec chmod 0444 {} \;
+          find "$package_root/stage" -exec touch -h -t 202609020000 {} \;
+          COPYFILE_DISABLE=1 /usr/bin/tar --format ustar \
+            -C "$package_root/stage" \
+            -cf "$outer_root/OCLP7-D97AEZ-GITHUB-AUDIT.inner.tar" \
+            OCLP7-D97AEZ-GITHUB-AUDIT
+          /usr/bin/shasum -a 256 "$outer_root/OCLP7-D97AEZ-GITHUB-AUDIT.inner.tar" \
+            > "$outer_root/OCLP7-D97AEZ-GITHUB-AUDIT.inner.tar.sha256"
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import hashlib
+          import os
+          import stat
+          import tarfile
+
+          package = Path(os.environ["RUNNER_TEMP"]) / "d97aez-package"
+          stage = package / "stage"
+          outer = package / "outer"
+          tar_path = outer / "OCLP7-D97AEZ-GITHUB-AUDIT.inner.tar"
+          expected = []
+          for path in sorted(stage.rglob("*")):
+              expected.append(path.relative_to(stage).as_posix() + ("/" if path.is_dir() else ""))
+          expected.insert(0, "OCLP7-D97AEZ-GITHUB-AUDIT/")
+          expected = sorted(set(expected))
+
+          seen = []
+          with tarfile.open(tar_path, "r:") as archive:
+              for member in archive.getmembers():
+                  normalized = member.name + ("/" if member.isdir() and not member.name.endswith("/") else "")
+                  pure = PurePosixPath(member.name)
+                  assert not pure.is_absolute() and ".." not in pure.parts
+                  assert member.name == "OCLP7-D97AEZ-GITHUB-AUDIT" or member.name.startswith("OCLP7-D97AEZ-GITHUB-AUDIT/")
+                  assert member.isdir() or member.isfile()
+                  assert not member.issym() and not member.islnk()
+                  if member.isdir():
+                      assert member.mode == 0o555, (member.name, oct(member.mode))
+                  else:
+                      assert member.mode == 0o444, (member.name, oct(member.mode))
+                  seen.append(normalized)
+          assert sorted(seen) == expected, (sorted(seen), expected)
+          assert len(seen) == len(set(seen))
+
+          digest = hashlib.sha256(tar_path.read_bytes()).hexdigest()
+          sha_line = (outer / "OCLP7-D97AEZ-GITHUB-AUDIT.inner.tar.sha256").read_text().split()[0]
+          assert digest == sha_line
+          inventory = outer / "OCLP7-D97AEZ-GITHUB-AUDIT.inner.inventory.txt"
+          inventory.write_text("\n".join(sorted(seen)) + "\n", encoding="utf-8")
+          manifest = outer / "OCLP7-D97AEZ-GITHUB-AUDIT.outer-manifest.txt"
+          manifest.write_text(
+              "\n".join([
+                  "D97AEZ_ARTIFACT_SCHEMA=OCLP7_D97AEZ_GITHUB_AUDIT_V1",
+                  f"INNER_TAR_SHA256={digest}",
+                  f"INNER_TAR_BYTES={tar_path.stat().st_size}",
+                  f"INNER_ENTRY_COUNT={len(seen)}",
+                  "INNER_PATH_SAFETY=PASS",
+                  "INNER_TYPES_REGULAR_OR_DIRECTORY_ONLY=PASS",
+                  "INNER_MODES_DIRECTORIES_0555_FILES_0444=PASS",
+                  "D97AEZ_PRODUCTION_RUNNER_EXECUTION=NOT_RUN_IN_GITHUB",
+                  "D97AEZ_ASUS2_ACCELERATED_RUNTIME=NOT_RUN_IN_GITHUB",
+                  "",
+              ]), encoding="utf-8"
+          )
+          print(manifest.read_text(encoding="utf-8"), end="")
+          PY
+          /usr/bin/shasum -a 256 \
+            "$outer_root/OCLP7-D97AEZ-GITHUB-AUDIT.inner.tar" \
+            "$outer_root/OCLP7-D97AEZ-GITHUB-AUDIT.inner.tar.sha256" \
+            "$outer_root/OCLP7-D97AEZ-GITHUB-AUDIT.inner.inventory.txt" \
+            "$outer_root/OCLP7-D97AEZ-GITHUB-AUDIT.outer-manifest.txt" \
+            > "$outer_root/OUTER_SHA256SUMS.txt.tmp"
+          /bin/mv "$outer_root/OUTER_SHA256SUMS.txt.tmp" "$outer_root/OUTER_SHA256SUMS.txt"
+          print -r -- 'D97AEZ_SAFE_INNER_TAR_OUTER_ARTIFACT_AUDIT=PASS'
+          print -r -- 'D97AEZ_GITHUB_EXHAUSTIVE_AUDIT=PASS'
+          print -r -- 'D97AEZ_ASUS2_ACCELERATED_RUNTIME=NOT_RUN_IN_GITHUB'
+
+      - name: Upload audited outer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OCLP7-D97AEZ-GitHub-audit
+          path: ${{ runner.temp }}/d97aez-package/outer
+          if-no-files-found: error
+          retention-days: 30

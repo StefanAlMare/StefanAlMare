@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.stefanalmare.oclp7.d97aez.boot-bound-one-shot</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>-f</string>
+        <string>/Library/Application Support/OCLP7-D97AEZ/OCLP7_D97AEZ_BOOT_BOUND_ONE_SHOT_RUNNER.command</string>
+    </array>
+    <key>UserName</key>
+    <string>root</string>
+    <key>GroupName</key>
+    <string>wheel</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <false/>
+    <key>LaunchOnlyOnce</key>
+    <true/>
+    <key>Umask</key>
+    <integer>63</integer>
+    <key>StandardInPath</key>
+    <string>/dev/null</string>
+    <key>StandardOutPath</key>
+    <string>/var/db/OCLP7-D97AEZ/LAUNCHD_STDOUT.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/db/OCLP7-D97AEZ/LAUNCHD_STDERR.log</string>
+</dict>
+</plist>
