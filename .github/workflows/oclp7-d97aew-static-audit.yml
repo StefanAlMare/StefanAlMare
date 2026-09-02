@@ -7,6 +7,15 @@ on:
     paths:
       - OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command
       - .github/workflows/oclp7-d97aew-static-audit.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - OCLP7_D97AEW_PREBOOT_SUBSTRING_FALSE_POSITIVE_FIX_WRAPPER.command
+      - .github/workflows/oclp7-d97aew-static-audit.yml
+      - OCLP-Continuity/OCLP_MASTER_CONTINUITY.md
+      - OCLP-Continuity/OCLP_HISTORY_INDEX.md
+      - OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEV_PREBOOT_SUBSTRING_FALSE_POSITIVE_D97AEW_READY.md
   workflow_dispatch:
 
 permissions:
