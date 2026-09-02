@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEX_PREWATCH_MIXED_SIZE_PROVENANCE_FALSE_NEGATIVE_D97AEY_GITHUB_REPAIR_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260902_D97AEY_GITHUB_REPAIR_FULL_PASS_ASUS2_RUNTIME_PROOF_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-02 EEST
@@ -86,9 +86,22 @@ Tahoe `26.6.2 / 25G82 / x86_64`, helper download/blob/SHA/bytes/mode, codesign, 
 
 The returned Desktop report is 96 lines / 5389 bytes, blob `dab425a8e09b88308e90f88e3d124a4cd31ef112`, SHA256 `39a4febf181d35437016a69ee7c4fc50a1ae339dd29670aebf3d35dc78d3510b`. Production helper execution, task-read attachment, watcher, temporal gate, log census and post-watch gates were not reached. Helper execution was self-test only. No service launch/stop, source/system/Golden/target-code/process-control mutation, Root Patch or reboot occurred.
 
-## CURRENT ACTION — assistant GitHub D97AEY size-provenance repair
-The user remains at STOP. The assistant must repair in GitHub the complete end-to-end identity contract, not bypass it: set the final D97AD target size to exact `1636896` in the helper source, source/site manifest, helper build workflow/provenance audit, pinned wrapper, wrapper identity manifest, static auditor and wrapper workflow/fixtures while retaining exact target SHA256 `524a16...a755`, regular-file/nlink and pre/post stat/hash/stat gates.
+## D97AEY complete GitHub correction, artifact audits and public identities
+The mixed-provenance size contract was corrected without loosening any gate: helper source and site manifest changed only final-target size `1636864 -> 1636896`; helper workflow changed only its two matching assertions. Target SHA256 remains exactly `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Source/publication merge commit is `761c0cb98c7fa8791d0cb9698a0ce6833620f0eb`: source blob `6250bebcbe5fe3177f98eeba46cbfd523155b206`, SHA256 `009ca0c749f2921ef6c0a0bf089ff11eab24c6e0ffc6af34d2b845523a8c8c16`, 68382 bytes; site blob `3743965fb9e3565f63acb4877264da99d1b5c854`, SHA256 `7db43b482fe34a8bbca622927a7f5801af6227589bac592f6363310941add341`, 5928 bytes.
 
-The assistant must rebuild, sign, self-test, package and audit the corrected helper on macOS GitHub Actions; download and independently audit the artifact; publish the corrected helper immutably; repin and fully re-audit the corrected wrapper in GitHub; download/audit its artifact; publish the corrected wrapper immutably; then persist the new identities before any fresh ASUS2 command.
+Corrected-helper private commit/tree `47e12a69ac5212978c1768acd3699f904dc4238b` / `ebacd2075b83ee95c3d4b09e3d0e8b7ce0fdf813` produced successful macOS Intel run `33632008783`, job `100253487864`. All compile/link, source/site/public provenance, 31-window contract, universal/no-PID boundary, Mach-O/import/minimum-OS, ad-hoc codesign/no-entitlement, exact six-marker self-test and packaging steps passed. Production scan was not run. Downloaded artifact `9847219598` is exact: ZIP 94170 bytes, SHA256 `611e38dc05ced8ad00ed97f8849b10139bf9b386df147fe3427ba7b3f7702348`; safe six-file outer ZIP, safe 28-entry inner tar, and all 22 payload checksums passed independent audits.
 
-No user action is currently authorized. No local compilation, OCLP opening, Root Patch or reboot is authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+The corrected signed helper is 94928 bytes, x86_64, UUID `CF378D7F-333C-3603-86BD-E2C5FAAFCEDF`, mode `100755`, blob `9f22460e8c1e51a2ae091eb7377e958f6a148e35`, SHA256 `f55b79d498e52a63b5d7c6cdbfde8b7a4c109e14158c7fe1b8c47e2883a85dc9`; public immutable merge commit/tree `4f46e3c97d5cbd89cf77efd5a6a0044aefab52a7` / `0e3a97a5abe4a81eb32848274f06190ad77418f8`.
+
+The wrapper changed only helper commit/tree/blob/SHA pins and final target bytes; helper bytes remain 94928. Corrected-wrapper private commit/tree `1e5fd2e730543df382ff1fe117d315c0aef25560` / `995081d0489187738aacd8f11bf54ce68754c7bb` produced successful macOS X64 run `33633032040`, job `100256947822`. Exact checkout, zsh parse/mode, supply chain, RC fixture matrix, adversarial rejection, report/log gates, public helper provenance/codesign/self-test, exact Unified Log trailer and runtime primitives all passed. Wrapper execution and production helper execution were not run. Artifact `9847598233` is exact: ZIP 64896 bytes, SHA256 `80a416e8747ddc6d0ec9f13438bf5e6552a02a93c1767d7886f0d233ed9b4587`; 20 safe unique regular entries, CRC PASS, all 18 payload SHA256 and Git-blob records PASS.
+
+The corrected wrapper is 886 lines / 40522 bytes, mode `100755`, blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`; public immutable merge commit/tree `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5` / `583bb1f6c549fe99a55e76a65e42873d440b2125`.
+
+The stale `1636864` value is proven to come from the PSP Git donor SHA256 `4f65fb...5641`, while live final D97AD is stable `1636896` / SHA256 `524a16...a755`. PSP CI re-signing strongly explains why Git donor size is not authoritative for the installed final donor, but the exact +32-byte operation is not claimed byte-for-byte without the release-DMG donor. Classification remains tooling false negative, now repaired end-to-end. No service launch/stop, source/system/Golden/target mutation, Root Patch or reboot occurred.
+
+## CURRENT ACTION — corrected D97AEX ASUS2 runtime proof
+The assistant GitHub lane is complete and audited. The user is authorized to execute exactly once the identity-pinned corrected public wrapper at commit `6fcac6e8cc96b90861ca83aad1aebb85b94ae3a5`, blob `79178583cb84a3f3f8ed6aa0e64d3c1752e17f7d`, SHA256 `65d2b3bf418af1980b37de9c653a142133f6991afab531fcc4fc15d32fc33ec0`, 40522 bytes, using only the exact outer command issued by the assistant.
+
+The wrapper may request the sudo password, runs the exact helper self-test, then observes all naturally occurring exact-path MTLCompilerService PIDs for 120 seconds at 25 ms with minimum three complete samples. It does not launch or stop the service. Return the complete terminal transcript and unique Desktop report.
+
+No compilation, OCLP opening, Root Patch or reboot is authorized. Baseline remains P1+P2b+P3+AIR00+D34; Golden immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
