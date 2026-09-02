@@ -561,6 +561,11 @@ jobs:
               (audit_root / f"SIM_{name}.txt").write_text(
                   f"RC={result.returncode}\n{result.stdout}", encoding="utf-8"
               )
+              print(f"D97AEZ_SIM_INVOKE={name}|RC={result.returncode}")
+              if result.returncode != 0:
+                  print(f"===== BEGIN D97AEZ SIM {name} OUTPUT =====")
+                  print(result.stdout, end="" if result.stdout.endswith("\n") else "\n")
+                  print(f"===== END D97AEZ SIM {name} OUTPUT =====")
               return result.returncode
 
           def assert_no_claim(root):
