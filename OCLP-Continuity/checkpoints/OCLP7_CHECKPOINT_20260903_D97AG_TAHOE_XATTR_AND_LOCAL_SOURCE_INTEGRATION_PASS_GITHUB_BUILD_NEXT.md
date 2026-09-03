@@ -75,9 +75,21 @@ REBOOT=NO
 
 Baseline stays exactly P1+P2b+P3+AIR00+D34. P6/P7 are retained with runtime sufficiency NEGATIVE. Golden is immutable/read-only. D50/D68/D82 are reserve-only; D84 retired; Patch8 unauthorized. D97AEX/D97AEZ external observer is retired.
 
+## 2026-09-03 permanent execution-lane correction
+Explicit user authority supersedes any broader GitHub-first reading.
+
+- Routine/small tests, ordinary validations, source inspection, small edits, local probes, diagnostic iteration, diff checks, capability checks and packaged-runtime tests run on ASUS2 so the user retains direct control and visibility.
+- GitHub is used only for major/substantial compilation, build or packaging workloads.
+- Existing audited artifact-delivery mechanisms are reused to bring the major-build outputs to ASUS2.
+- Technical executability on GitHub is not enough to move a routine test there.
+- Local compilation of a major build is not an implicit fallback and requires explicit user authorization.
+- Root Patch and reboot remain manual-only and separately authorized.
+
 ## ACTIVE FRONTIER / CURRENT NEXT ACTION
 ASUS2 STOP. Do not run Root Patch and do not reboot.
 
-The assistant must finish the substantial Intel GitHub FASTLANE: exact D97AD snapshot -> D97AF transition -> D97AG correction -> compile/AST/diff -> native macOS xattr probe -> actual PyInstaller-frozen xattr probe -> x86_64 app build -> packaged code-object/identity audit -> bounded artifact delivery -> independent download/reassembly/app audit -> exact backup/deploy -> open OCLP -> STOP.
+The assistant may use GitHub only for the major/substantial D97AG Intel application compilation/build/package. GitHub must not be used for the routine validation/test lane. After the major build artifact exists, use the already-established artifact-delivery path to ASUS2.
+
+On ASUS2, perform the bounded ordinary checks and tests under user control: exact artifact/reassembly identity, packaged executable identity, packaged-code audit as needed, actual PyInstaller-frozen xattr backend execution, any short native/runtime validation, recoverable backup/deploy, exact live application identity, open OCLP and STOP.
 
 Only after the corrected D97AG application is proven live may the user run a separately authorized manual Root Patch in the current session. Before any reboot, the returned Root Patch log must prove exact donor identity, every active patch stage, D97AF final target SHA256 `a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e`, no traceback, AuxKC and snapshot completion. Never auto Root Patch or reboot.
