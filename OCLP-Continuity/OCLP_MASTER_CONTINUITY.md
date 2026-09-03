@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AH_ROOTPATCH_FULL_PASS_ACCELERATED_BOOT_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AH_ACCEL_NEGATIVE_D97AF_RUNTIME_PROVENANCE_28OF28_H4_NEGATIVE.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -32,12 +32,12 @@ Evidence labels remain distinct: REACHED, CONTROL-FLOW PROVEN, SEMANTIC PROVEN, 
 Exactly P1 selector -> P2b request layout -> P3 serialized bitcode -> AIR00 AIR2.6/Metal3.1 -> D34 semantic-equivalent reset. P6/P7 retained with runtime sufficiency NEGATIVE. D22 is semantic proof for AIR2.6/Metal3.1.
 
 ## Durable D97 state
-D97AD final MTLCompiler SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`; selector-only service SHA256 `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`. D97AD build/deploy/manual Root Patch passed. Selected accelerated boot `2026-09-02 00:10`; later VESA `00:12` is excluded for that accelerated evidence.
+D97AD final MTLCompiler SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`; selector-only service SHA256 `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`. D97AD build/deploy/manual Root Patch passed. Selected historical accelerated boot `2026-09-02 00:10`; later VESA `00:12` is excluded for that historical accelerated evidence.
 
-D97AEQ proved 28/28 normal exit(1) and invalidated the whole-stage classifier experiment. D97AES proved all 33 diagnostics over 28/28 PIDs came from `Versions/32023/MTLCompiler`, UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`; 3802 NEGATIVE for that cohort. D226 cache is a separate input lineage; physical cache reads are valid but semantic cross-image site correlation from D5CE is not established. Exact current D97AD runtime text remains UNKNOWN. D97AEZ external task-port observation is retired after exact-path process reach but `errno=1` read denial.
+D97AEQ proved 28/28 normal exit(1) and invalidated the whole-stage classifier experiment. D97AES proved all 33 historical diagnostics over 28/28 PIDs came from `Versions/32023/MTLCompiler`, UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`; 3802 NEGATIVE for that cohort. D97AER statically mapped five late simulator-limit diagnostics after D97AD candidate exit110 at REL `0x58B`. D97AET historical sender PCs/backtraces did not prove traversal past that terminal. D226 cache is a separate input lineage; physical cache reads are valid but semantic cross-image site correlation is not established. D97AEZ external task-port observation is retired after exact-path process reach but `errno=1` read denial.
 
 ## D97AF LC_UUID contract
-Frozen UUID `A4F456DF-7447-49BF-AC4F-102D90023A1E`. Exact D97AD preimage SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`; UUID-only expected postimage SHA256 `a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e`. The stamp is provenance evidence for covered diagnostic-sender cohorts, not a direct runtime text read.
+Frozen UUID `A4F456DF-7447-49BF-AC4F-102D90023A1E`. Exact D97AD preimage SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`; UUID-only expected postimage SHA256 `a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e`. The stamp is provenance evidence for covered diagnostic-sender cohorts, not a direct runtime text-byte read.
 
 ## D97AF -> D97AG
 D97AF build/deploy passed, but its manual Root Patch was invalid because packaged Python lacked `os.listxattr`. The custom target mutation was not reached, while old exception handling incorrectly allowed later patchset/AuxKC/snapshot continuation. `D97AF_ROOT_PATCH=INVALID_PARTIAL`.
@@ -113,21 +113,44 @@ D97AF_LC_UUID_BUILD_STAMP=PASS
 
 Because D97AH differs from D97AG only by the two exact method-local `chflags` path tokens, the previous `/bin/chflags` blocker is eliminated in the real Root Patch path and the entire corrected staged-write/metadata/atomic-commit transaction is PROVEN complete.
 
-Downstream work also passed: patchset information written, RSR handling completed, AuxKC built/forced, APFS snapshot creation reached, root volume unmounted, then `Patching complete` and reboot request.
+Downstream work also passed: patchset information written, RSR handling completed, AuxKC built/forced, APFS snapshot creation reached, root volume unmounted, then `Patching complete` and reboot request. Classification: `D97AH_ROOT_PATCH=FULL_PASS`.
 
-Classification: `D97AH_ROOT_PATCH=FULL_PASS`.
+## D97AH accelerated boot and D97AF stamped runtime provenance
+The D97AH accelerated/root-patched boot began around 23:15. Exact current VESA recovery `kern.boottime` is `2026-09-03 23:17:53 +0300` (`sec=1788466673`), so all evidence strictly before that timestamp belongs to the accelerated boot; the VESA session itself is excluded.
 
-Runtime limitations remain explicit:
-`D97AF_RUNTIME_PROVENANCE=NOT_YET_TESTED` and `D97AF_DIRECT_RUNTIME_TEXT_BYTE_READ=NOT_PERFORMED`.
+The accelerated boot did not produce a usable GUI. Intel Haswell acceleration components were initialized, but MTLCompilerService repeatedly disappeared during Metal shader compilation and WindowServer entered the known XPC-interruption/pipeline-failure/SIGABRT chain. Classification: `D97AH_ACCELERATED_BOOT=NEGATIVE_NO_USABLE_GUI`.
 
-## CURRENT ACTION — D97AH accelerated boot
-Root Patch has been audited and accepted. Reboot is authorized for this D97AH test only.
+A read-only `log show --style json` audit of the accelerated cohort found 28 MTLCompilerService PIDs and exactly 28 simulator-diagnostic records. Every diagnostic record has:
 
-Manual next action:
-1. reboot into the normal/root-patched D97AH configuration;
-2. observe whether a usable accelerated GUI appears;
-3. if no usable image appears, hard restart/power-cycle and boot the known VESA recovery configuration;
-4. return to ChatGPT from VESA if necessary;
-5. make no additional Root Patch/source/app/diagnostic mutation before reporting.
+```text
+senderImagePath=/System/Library/PrivateFrameworks/MTLCompiler.framework/Versions/32023/MTLCompiler
+senderImageUUID=A4F456DF-7447-49BF-AC4F-102D90023A1E
+processImagePath=/System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+processImageUUID=3716D20F-B990-3906-B3E5-44E88AE63AF8
+```
 
-On return, establish exact `last reboot` chronology first. The accelerated boot immediately preceding VESA recovery is authoritative D97AH runtime evidence; the later VESA boot must be excluded. Then audit D97AF runtime provenance/MTLCompilerService evidence from the accelerated boot only.
+Aggregate evidence:
+
+```text
+DIAGNOSTIC_RECORD_COUNT=28
+DIAG_SENDER_COUNT=28|PATH=/System/Library/PrivateFrameworks/MTLCompiler.framework/Versions/32023/MTLCompiler|UUID=A4F456DF-7447-49BF-AC4F-102D90023A1E
+EXPECTED_STAMP_UUID_ALL_RECORD_MATCHES=28
+OLD_UUID_ALL_RECORD_MATCHES=0
+EXPECTED_STAMP_UUID_DIAG_MATCHES=28
+OLD_UUID_DIAG_MATCHES=0
+```
+
+Therefore `D97AF_RUNTIME_PROVENANCE=PROVEN_28_OF_28_DIAGNOSTIC_COHORT`. The failing diagnostic sender is the exact 32023 generation carrying the project-unique A4F D97AF stamp; the old D5CE sender identity is NEGATIVE for this complete cohort. H4 had already been rejected for generation selection by historical D97AES; D97AF now removes the remaining stale/alternate-D5CE sender ambiguity for this cohort.
+
+Do not overclaim direct text-byte capture: `D97AF_DIRECT_RUNTIME_TEXT_BYTE_READ=NOT_PERFORMED`. The exact MTLCompilerService termination status in this D97AH boot was not recovered by the JSON collector and remains `UNKNOWN/INCONCLUSIVE`; zero textual matches for 110–114 or exit1 are not NEGATIVE evidence.
+
+## CURRENT ACTION — reconcile stamped-image control-flow contradiction, read-only only
+No Root Patch and no reboot are authorized.
+
+D97AER had statically proved five late simulator-limit diagnostic xrefs in 32023 after D97AD candidate terminal REL `0x58B` / image offset `0x9D6BD`. Historical runtime provenance could not prove which D5CE text variant executed. D97AF now proves the real failing diagnostic cohort is emitted by 32023 carrying the A4F stamp created from the exact D97AD preimage.
+
+The next action must therefore be one bounded read-only ASUS2 audit of the currently installed A4F postimage around `validSimulatorMetadata`: verify exact file SHA/UUID, disassemble/map the D97AD terminal and the five late diagnostic blocks, and determine whether any static predecessor can reach those late blocks while bypassing the exit110 terminal. This is a control-flow reconciliation step, not another provenance probe.
+
+If a bypass path exists, map the earliest such handoff and return to H1/H2/H3 payload/state analysis there. If no bypass path exists, preserve the contradiction and investigate runtime execution semantics without inventing a late-validator patch.
+
+No source/system/Golden mutation, service launch, Root Patch or reboot. One bounded action, complete raw output, then STOP.
