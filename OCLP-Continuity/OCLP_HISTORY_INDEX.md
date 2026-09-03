@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_TAHOE_XATTR_AND_LOCAL_SOURCE_INTEGRATION_PASS_GITHUB_BUILD_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_GITHUB_BUILD_PASS_ASUS2_ARTIFACT_RUNTIME_AUDIT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -117,7 +117,16 @@ No application, system target, Golden, Root Patch, snapshot or reboot mutation o
 ## 2026-09-03 execution-lane correction
 Explicit user authority: routine/small tests and validation work are performed on ASUS2 for direct user control. GitHub is reserved only for major/substantial compilation, build or packaging work. Existing artifact-delivery mechanisms are reused to move major-build outputs to ASUS2. Local major compilation is not an implicit fallback and requires explicit user authorization.
 
-## CURRENT ACTION — major D97AG Intel build; ASUS2 tests/audits
-ASUS2 stays at STOP with no Root Patch and no reboot. The assistant uses GitHub only for the major/substantial D97AG Intel application compilation/build/package. Routine validations/tests are not run on GitHub.
+## D97AG major Intel GitHub build PASS
+The major build already existed when this continuation resumed and was not rerun. Private repo/branch/head are `StefanAlMare/Private-Work` / `oclp7-d97ag-github-build` / `4bde01b09717d076499ebf3640b5e4c0378798dd`. Workflow/run/job are `348947684 / 33696449978 / 100466229401` on Intel/x86_64; every substantive build/package/upload step completed `success`.
 
-After the major build artifact exists, use the established artifact-delivery path to ASUS2. On ASUS2, run the bounded identity/reassembly checks, packaged executable/code checks, actual PyInstaller-frozen xattr test, any short native/runtime validation, exact backup/deploy, live app identity check, open OCLP and STOP. Manual Root Patch is a later separately authorized ASUS2 action only after D97AG app deployment is proven.
+Exact final application identities are app ZIP `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846` and packaged executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64. The reports artifact `9872066045` was independently downloaded and actual SHA256 matched the GitHub digest exactly: `da5b9e2d2a55786c1b6a4f3c64c054779ad73f394578e1a5e07c2bd0fd287217`.
+
+Delivery part artifacts are `9872061067` and `9872064375`. Their exact wrapper and inner-part hashes plus the frozen auditor identity are persisted in the authoritative checkpoint. GitHub historical frozen-runtime PASS remains build evidence only; ASUS2 must repeat the frozen xattr code-object runtime test locally before deployment.
+
+## CURRENT ACTION — ASUS2 artifact/reassembly + packaged frozen runtime audit
+ASUS2 stays at STOP with no Root Patch and no reboot. Major GitHub compile/build/package is complete.
+
+The next bounded action is ASUS2-only and non-system-mutating: exact run/job/artifact binding, download the two part artifacts plus reports, verify outer and inner hashes/member sets, reassemble the exact D97AG app ZIP `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`, verify packaged executable `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64, execute the exact frozen auditor locally against it, and STOP without `/Applications` mutation or OCLP launch.
+
+Only after that returned local audit passes may a separate backup/deploy/open-OCLP/STOP action be authorized. Manual Root Patch is later and separately authorized only after exact D97AG live app identity is proven.
