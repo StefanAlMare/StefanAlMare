@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AG_LIVE_APP_DEPLOY_PASS_ROOT_PATCH_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AG_ROOT_PATCH_FAIL_CHFLAGS_PATH_PROBE_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -162,9 +162,19 @@ Live `/Applications/OpenCore-Patcher.app` is now exact D97AG x86_64, `6596544` b
 
 No source/system-target/Golden/Root Patch/reboot mutation occurred during deployment.
 
-## CURRENT ACTION — manual D97AG Root Patch / STOP before reboot
-ASUS2 remains at STOP. Exact D97AG is live and open.
+## D97AG manual Root Patch — fail-closed at chflags path
+The returned D97AG Root Patch log is SHA256 `d44389530c34274c4a2552d5256f4f8e531bb64263c27b62cc9ef3b8d3f4c66a`, `26582` bytes. Root Patch passed capability/preflight and installed the normal patchsets, then P1, P2b, P3, AIR00, D34, P6, P7 and D97AD all reported PASS with exact D97AD committed SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`.
 
-The next bounded action is user-manual Root Patch from the already-open exact D97AG application. Allow the patch operation itself to finish, but do not reboot afterward. Return the complete Root Patch log/output for audit.
+The D97AF/D97AG build-stamp method successfully read the target metadata using the corrected D97AG xattr backend: flags `524288`, xattrs `[]`, ACL `NONE`, exact target pre-SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Thus the old packaged `os.listxattr` defect is closed in the real Root Patch path.
 
-The audit must prove the D97AG xattr/LC_UUID path succeeds without the D97AF `os.listxattr` exception, verify D97AD/D97AF/D97AG step ordering and target identities, inspect AuxKC/snapshot completion, and not rely on generic `Patching complete` alone. Accelerated reboot remains `NOT_AUTHORIZED` until that log is accepted.
+The new failure is `FileNotFoundError: File not found: /bin/chflags`. Exact source ordering places the first `/bin/chflags` invocation on the owned staged sibling after metadata copy but before `/bin/dd` writes the D97AF postimage, and before the later atomic `/bin/mv -f staged_target target`. Therefore the D97AF/D97AG LC_UUID postimage was not committed to the original target. The method then propagated fatally; OCLP printed `- Unmounting root volume` followed by `We have a problem to execute patches and rebuild the Kernel Cache.` No later AuxKC/snapshot completion or generic `Patching complete` appears.
+
+Classification:
+`D97AG_XATTR_BACKEND_REAL_ROOT_PATCH=PROVEN_REACHED_AND_WORKING`; `D97AF_STAGED_POSTIMAGE_DD=NOT_REACHED`; `D97AF_ATOMIC_TARGET_RENAME=NOT_REACHED`; `D97AF_LC_UUID_BUILD_STAMP_COMMIT=NOT_REACHED`; `D97AG_FATAL_BOUNDARY=PROVEN_WORKING`; `D97AG_ROOT_PATCH=FAIL_CLOSED_NEW_TOOL_PATH_DEFECT`; `D97AG_NEW_SNAPSHOT_COMMIT=NOT_REACHED`; `REBOOT=NOT_AUTHORIZED`.
+
+## CURRENT ACTION — ASUS2 chflags/tool-path probe
+ASUS2 remains at STOP. Do not Root Patch again and do not reboot.
+
+The next bounded action is a read-only ASUS2 tool-path audit: prove `/bin/chflags` vs `/usr/bin/chflags`, shell resolution, and the existence/executable identity of every other absolute tool used by the D97AF/D97AG transactional method (`/bin/sh`, `/bin/cp`, `/bin/dd`, `/bin/mv`, `/bin/ls`, `/usr/bin/stat`, `/usr/bin/xattr`). Do not edit source yet.
+
+Only after that local probe passes may the source correction be defined. If Tahoe proves `/usr/bin/chflags` and all other absolute tools are valid, the expected source delta is limited to the two hard-coded `/bin/chflags` literals. Routine source edit and validation remain ASUS2-local; a later substantial packaged-app rebuild remains GitHub-only.
