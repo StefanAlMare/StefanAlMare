@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AH_ASUS2_AUDIT_V2_PASS_DEPLOY_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AH_DEPLOY_OPEN_PASS_ROOTPATCH_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -46,7 +46,7 @@ D97AG corrected `_xattrs` to fail-closed `/usr/bin/xattr` use and changed the sh
 
 D97AG major Intel build: private branch `oclp7-d97ag-github-build`, head `4bde01b09717d076499ebf3640b5e4c0378798dd`, workflow/run/job `348876070 / 33696449978 / 100466229401`, success. App ZIP `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`; executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`, x86_64.
 
-ASUS2 D97AG artifact/reassembly and frozen xattr runtime audit passed. Exact D97AG is currently live at `/Applications/OpenCore-Patcher.app`; D97AF backup remains `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-20260903-165317`.
+ASUS2 D97AG artifact/reassembly and frozen xattr runtime audit passed. Exact D97AG was live until the D97AH deployment below; D97AF backup remains `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-20260903-165317`.
 
 ## D97AG real Root Patch / D97AH cause
 Manual D97AG Root Patch passed P1/P2b/P3/AIR00/D34/P6/P7/D97AD. The corrected xattr backend is real-Root-Patch PROVEN: flags `524288`, xattrs `[]`, ACL NONE and exact D97AD preimage were read successfully.
@@ -90,46 +90,51 @@ Exact v5 app ZIP: `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a37
 Delivery uses private release ID `382116519`, tag `oclp7-d97ah-run-33769927671-attempt-1`, target head `d04ddd28c784a0b30c6629feeface10804d5d591`, with seven exact uploaded assets/digests. `OCLP7_D97AH_GITHUB_BUILD_AND_RELEASE_DELIVERY=PASS`. Signing/notarization remains unverified and is not classified PASS.
 
 ## D97AH ASUS2 private-release audit v2 PASS
-Audit attempt 1 passed through report checksum validation but false-failed only because `/bin/cmp` was absent. ASUS2 then proved `/usr/bin/cmp` valid/executable and the corrected v2 audit wrapper changed only that temporary tool path.
+The complete ASUS2 v2 audit passed release binding, all seven asset identities/checksum sets, exact split reassembly and ZIP integrity, exact packaged executable identity, report ZIP/file/checksum audit, explicit report/app executable byte identity and all report-content gates.
 
-Complete v2 rerun passed release binding, all seven asset identities/checksum sets, exact split reassembly and ZIP integrity, exact packaged executable identity, report ZIP/file/checksum audit, explicit report/app executable byte identity and all report-content gates.
+Exact audited ZIP identity: `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`. Exact packaged executable: `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
 
-Authoritative local verified ZIP:
-`/Users/alex/Desktop/OCLP7_D97AH_VERIFIED_RUN33769927671_OpenCore-Patcher.app.zip`
+Decisive markers include `D97AH_REPORT_AND_APP_EXECUTABLE_BYTE_IDENTITY=PASS`, `D97AH_REPORT_CONTENT_AUDIT=PASS`, `D97AH_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT=PASS`, `D97AH_AUDIT_V2=PASS`, `D97AH_AUDIT_V2_OUTER_RC=0`.
 
-Exact retained ZIP: `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`.
-Exact packaged executable: `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf` / x86_64.
+The user's later deletion of Desktop-visible files explained the repeated missing-ZIP deploy preflight failures; the exact Trash copy remained identical and was used to recreate the Desktop ZIP immediately before final deploy. This was user file housekeeping, not an OCLP/system defect.
 
-Required decisive markers all passed, including:
-`D97AH_REPORT_AND_APP_EXECUTABLE_BYTE_IDENTITY=PASS`, `D97AH_REPORT_CONTENT_AUDIT=PASS`, `D97AH_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT=PASS`, `D97AH_AUDIT_V2=PASS`, `D97AH_AUDIT_V2_OUTER_RC=0`.
+## D97AH exact deploy/open PASS — currently live
+Final one-shot deploy re-verified the exact ZIP and staged executable, proved the live D97AG preimage exact, created an exact timestamped D97AG backup, switched exact D97AH live, opened it and proved a fresh exact-path process.
 
-No source, `/Applications`, system target, Golden, Root Patch or reboot mutation occurred during artifact audit. Therefore build/package/delivery/ASUS2 artifact verification is closed PASS.
+Exact retained D97AG backup:
+`/Applications/OpenCore-Patcher.app.D97AG-before-D97AH-20260903-200708`
 
-## Exact D97AH deploy/open substrate
-Public wrapper prepared without GitHub execution/testing:
+D97AG backup executable: `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`.
+
+Current live D97AH executable at `/Applications/OpenCore-Patcher.app/Contents/MacOS/OpenCore-Patcher`:
+`6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
+
+Fresh exact-path PID after open: `13110`.
+
+Decisive deploy markers:
 
 ```text
-PATH=OCLP7_D97AH_ASUS2_EXACT_APP_DEPLOY_OPEN_STOP.command
-COMMIT=fe47aa9c06bd416d387e3f64a137b18d471479c1
-GIT_BLOB=55304b6e3db1d1d9ab4e86b7e3b9aa154a744567
+D97AH_STAGED_APP_IDENTITY=PASS
+D97AG_LIVE_PREIMAGE=PASS
+D97AH_NEW_APP_READY_EXACT=PASS
+D97AG_EXACT_PATH_PROCESS_DRAIN=PASS
+D97AH_LIVE_APP_IDENTITY=PASS
+D97AH_EXACT_APP_DEPLOY_OPEN_STOP=PASS
+INSTALLED_APP_MUTATION_STATE=D97AH_DEPLOYED_EXACT_OPENED
+D97AH_DEPLOY_OUTER_RC=0
+D97AH_DEPLOY_V4_WRAPPER_RC=0
+D97AH_ONE_SHOT_DEPLOY_OUTER_RC=0
 ```
 
-It pins the already ASUS2-passed D97AG exact deployment substrate at commit `fcd817dec08e1ff782316516f7d2432e2b5d51df`, blob `e8dca8761903de7f612629ff85ea9ec81bc5d65c`, then collision-safely shifts roles D97AF->D97AG and D97AG->D97AH, replaces only exact D97AH/D97AG identities/run values, validates critical/semantic markers and stale-identity absence, locally parses the transformed deployment script and only then executes it on ASUS2. The recovery contract is inherited: if switch/audit/open fails before final exact-open state, restore exact D97AG.
+Deploy report: `/Users/alex/Desktop/OCLP7_D97AH_EXACT_APP_DEPLOY_OPEN_STOP_REPORT_20260903-200708.txt`.
 
-## CURRENT ACTION — exact D97AG -> D97AH app deploy/open/STOP
-ASUS2 only. Run exactly one public-commit-pinned deployment action through the wrapper above. It must:
-1. re-verify retained D97AH ZIP identity;
-2. extract and prove exact staged D97AH executable;
-3. prove current live `/Applications/OpenCore-Patcher.app` is exact D97AG;
-4. prepare exact D97AH beside live after sudo gate;
-5. drain only exact live OCLP path;
-6. move exact D97AG to timestamped backup;
-7. switch exact D97AH into `/Applications/OpenCore-Patcher.app`;
-8. verify live D97AH bytes/SHA/arch;
-9. open exact D97AH and prove a fresh exact-path process;
-10. STOP.
+No OCLP source, system target, Golden, Root Patch or reboot mutation occurred during deploy/open.
 
-Required live preimage D97AG: `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`, x86_64.
-Required new D97AH: `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
+## CURRENT ACTION — manual D97AH Root Patch
+D97AH exact application is live and open. The FASTLANE through packaged audit, exact identity, backup/deploy, open and fresh-process proof is complete PASS.
 
-STOP immediately after deploy/open output. Do not Root Patch and do not reboot. Actual privileged D97AH `/usr/bin/chflags` execution remains a later manual real-Root-Patch test and cannot be inferred before it runs.
+The next action is one manual ASUS2 Root Patch initiated by the user from the currently open exact D97AH application. Return the complete Root Patch output and STOP. Do not reboot after Root Patch until that output is audited.
+
+This Root Patch is specifically required to prove the real privileged D97AH transaction beyond the former D97AG `/bin/chflags` failure. The raw output must establish whether `/usr/bin/chflags` is reached successfully, whether staged postimage `dd`, staged metadata verification, exact postimage SHA/UUID, target CAS, atomic target rename/commit and later patchset/AuxKC/snapshot stages complete. Printed `Patching complete` alone is not sufficient.
+
+Accelerated boot/reboot remains separately unauthorized until the Root Patch output is returned and accepted.
