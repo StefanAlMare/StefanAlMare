@@ -17,9 +17,9 @@ Before any technical change read in full:
 ## Permanent contract
 Target Tahoe `26.6.2 / 25G82`, Haswell HD4600/4400 family, SMBIOS `MacBookAir6,2`. Local OCLP branch `alex-tahoe-25G82-custom`, expected HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06`. Golden root-patched MTLCompiler SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`, immutable/read-only. True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`.
 
-Protocol now defaults to short, visible, explained ASUS2 collaboration with one bounded action and STOP gate at a time. GitHub is used only for a substantial compilation/build/package job when it is clearly faster than waiting through that job with the user; technical possibility alone is not sufficient. Substantial GitHub builds remain assistant-run and fully audited. Hardware, installed-state, accelerated-boot and VESA evidence remain ASUS2-only. Never auto Root Patch or reboot. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+Protocol now defaults to short, visible, explained ASUS2 collaboration with one bounded action and STOP gate at a time. Routine tests, ordinary validations, source inspection, small edits, probes, diff checks and diagnostic iteration stay on ASUS2 under user control. GitHub is reserved only for major/substantial compilation, build or packaging workloads. Substantial GitHub builds remain assistant-run and fully audited. Existing audited artifact-delivery mechanisms are reused to bring those build outputs to ASUS2. Hardware, installed-state, accelerated-boot and VESA evidence remain ASUS2-only. Never auto Root Patch or reboot. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
 
-Interaction chain: `short explained ASUS2 action -> user result -> assistant audit -> next bounded action`; only a substantial clearly faster compile/build inserts `assistant GitHub build/audit -> identity-pinned ASUS2 deploy` before the normal Root Patch/accelerated-boot/VESA sequence.
+Interaction chain: `short explained ASUS2 action -> user result -> assistant audit -> next bounded action`; only a major/substantial compile/build inserts `assistant GitHub compile/build/package -> artifact delivery -> ASUS2 audit/test/deploy` before the normal Root Patch/accelerated-boot/VESA sequence.
 
 Architecture: `Tahoe producer -> earliest non-equivalent handoff -> adapter/normalizer -> unchanged working donor path -> image`.
 
@@ -104,7 +104,11 @@ The exact public correction patch is SHA256 `2c4e93e57b2d13762ef90020496f87c2a95
 
 No installed-app, system-target, Golden, Root Patch, snapshot or reboot mutation occurred. The last proven installed application remains D97AF; it is not authorized for another Root Patch.
 
-## CURRENT ACTION — D97AG substantial Intel build and packaged-runtime audit
-ASUS2 is at STOP: do not run Root Patch and do not reboot. The assistant now owns the substantial Intel GitHub build, including native and actual PyInstaller-frozen execution of the exact xattr backend, source/package semantic audit, bounded artifact delivery, external reassembly audit, exact application identity, recoverable backup/deploy, open OCLP and STOP.
+## CURRENT ACTION — D97AG major Intel build; ASUS2 routine test/audit lane
+ASUS2 is at STOP: do not run Root Patch and do not reboot.
+
+GitHub is authorized only for the major/substantial D97AG Intel application compilation/build/package itself. Routine tests and validations do not move to GitHub. After the major build artifact exists, use the established audited artifact-delivery mechanism to bring it to ASUS2.
+
+On ASUS2, under user control, perform the ordinary bounded verification/test lane: artifact/reassembly identity, packaged executable identity, packaged-code checks as needed, actual PyInstaller-frozen xattr backend execution, any short native/runtime validation, recoverable backup/deploy, exact live application identity, open OCLP and STOP.
 
 Only after exact D97AG deployment is proven will a separately authorized manual Root Patch be run in the current session. That later run must prove donor preimages, P1+P2b+P3+AIR00+D34, retained P6/P7, D97AD, D97AF final SHA `a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e`, no traceback, and snapshot completion before any reboot decision. Golden remains immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
