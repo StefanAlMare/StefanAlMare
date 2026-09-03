@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_GITHUB_BUILD_PASS_ASUS2_ARTIFACT_RUNTIME_AUDIT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_PASS_DEPLOY_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -118,15 +118,29 @@ No application, system target, Golden, Root Patch, snapshot or reboot mutation o
 Explicit user authority: routine/small tests and validation work are performed on ASUS2 for direct user control. GitHub is reserved only for major/substantial compilation, build or packaging work. Existing artifact-delivery mechanisms are reused to move major-build outputs to ASUS2. Local major compilation is not an implicit fallback and requires explicit user authorization.
 
 ## D97AG major Intel GitHub build PASS
-The major build already existed when this continuation resumed and was not rerun. Private repo/branch/head are `StefanAlMare/Private-Work` / `oclp7-d97ag-github-build` / `4bde01b09717d076499ebf3640b5e4c0378798dd`. Workflow/run/job are `348947684 / 33696449978 / 100466229401` on Intel/x86_64; every substantive build/package/upload step completed `success`.
+The major build already existed when this continuation resumed and was not rerun. Private repo/branch/head are `StefanAlMare/Private-Work` / `oclp7-d97ag-github-build` / `4bde01b09717d076499ebf3640b5e4c0378798dd`. Correct workflow/run/job are `348876070 / 33696449978 / 100466229401` on Intel/x86_64; every substantive build/package/upload step completed `success`.
 
-Exact final application identities are app ZIP `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846` and packaged executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64. The reports artifact `9872066045` was independently downloaded and actual SHA256 matched the GitHub digest exactly: `da5b9e2d2a55786c1b6a4f3c64c054779ad73f394578e1a5e07c2bd0fd287217`.
+Exact final application identities are app ZIP `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846` and packaged executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64. The reports artifact `9872066045` actual SHA256 matches the GitHub digest exactly: `da5b9e2d2a55786c1b6a4f3c64c054779ad73f394578e1a5e07c2bd0fd287217`. Delivery part artifacts are `9872061067` and `9872064375`.
 
-Delivery part artifacts are `9872061067` and `9872064375`. Their exact wrapper and inner-part hashes plus the frozen auditor identity are persisted in the authoritative checkpoint. GitHub historical frozen-runtime PASS remains build evidence only; ASUS2 must repeat the frozen xattr code-object runtime test locally before deployment.
+## D97AG first ASUS2 artifact audit — stale workflow pin false failure
+The first exact wrapper invocation verified its public blob and local zsh parse, then stopped at `RUN_IDENTITY_MISMATCH:workflow_id:348876070:348947684`. GitHub and ASUS2 both prove `348876070` is the actual workflow ID for run `33696449978`. No artifact download, application mutation, system mutation, Root Patch or reboot occurred. Classification: `TOOLING_FALSE_FAILURE_NO_MUTATION`.
 
-## CURRENT ACTION — ASUS2 artifact/reassembly + packaged frozen runtime audit
-ASUS2 stays at STOP with no Root Patch and no reboot. Major GitHub compile/build/package is complete.
+The original public wrapper is commit `b506cc1e90c278de483fd95955e078027df5c228`, blob `36c43b17d3493b7b7cb35b8590653e6e20ebe60c`, SHA256 `0a9d3fd19d202c35ee2148af35fb1a99469b5c3798c64bc219630321a6aadadc`, 21778 bytes. ASUS2 changed exactly one stale workflow-ID literal to `348876070`; corrected local SHA256 `1d112e1dc76e1a0356cd692de8ccc06855c8bce1bd1b07bdbc22791ccf3d9fef`, blob-style SHA1 `6982b9dedfeddb4b84abde9209a0e5a3689ebff3`, same 21778 bytes; local zsh parse PASS.
 
-The next bounded action is ASUS2-only and non-system-mutating: exact run/job/artifact binding, download the two part artifacts plus reports, verify outer and inner hashes/member sets, reassemble the exact D97AG app ZIP `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`, verify packaged executable `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64, execute the exact frozen auditor locally against it, and STOP without `/Applications` mutation or OCLP launch.
+## D97AG ASUS2 artifact/reassembly + frozen runtime audit PASS
+Corrected wrapper outer RC was `0`. Exact run/job/head/branch/path passed, all 25 reported job steps were successful, required step set complete, all three artifact wrapper metadata/digest/size/expiration and downloaded SHA checks passed, member sets were safe, shared `PARTS.SHA256` and split manifests matched all three copies, report checksum set passed, both part payload identities passed, and reassembly produced exact app ZIP `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`.
 
-Only after that returned local audit passes may a separate backup/deploy/open-OCLP/STOP action be authorized. Manual Root Patch is later and separately authorized only after exact D97AG live app identity is proven.
+Packaged executable from that exact ZIP is Mach-O x86_64, `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`, and is byte-identical to the executable in the reports artifact.
+
+The exact frozen auditor executed on ASUS2 against that exact packaged executable. It returned `D97AG_RUNTIME_AUDIT_MODE=PACKAGED_FROZEN`, `D97AG_RUNTIME_PROCESS_FROZEN=YES`, `D97AG_RUNTIME_OS_LISTXATTR_AVAILABLE=NO`, exact backend fingerprint `71959f823a2da72c12e53581c85773ebdfd0100b22a780152bf8c69fe2d56286`, exact backend source SHA `d02e98be14d1881202565560198a9eb5b3ec3200057db98c4b0820454dab2019`, empty manifest PASS, empty/text/binary value PASS and `D97AG_EXACT_XATTR_CODE_OBJECT_RUNTIME=PASS`. Required runtime lines missing set was empty.
+
+Final classifications: `D97AG_ASUS2_FROZEN_XATTR_RUNTIME=PASS`, `D97AG_ASUS2_ARTIFACT_REASSEMBLY=PASS`, `D97AG_ASUS2_PACKAGED_EXECUTABLE_IDENTITY=PASS`, `D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT=PASS`, `D97AG_LOCAL_PACKAGED_RUNTIME_COMPATIBILITY=PROVEN_PASS`.
+
+Verified ZIP retained at `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`; audit report `/Users/alex/Desktop/OCLP7_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_REPORT_20260903-162932.txt`. No source, installed app, system target, Golden, snapshot, Root Patch or reboot mutation occurred. Last proven installed app remains exact D97AF SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, 6595600 bytes.
+
+## CURRENT ACTION — ASUS2 exact D97AG application backup/deploy/open/STOP
+ASUS2 stays at STOP with no Root Patch and no reboot.
+
+Next bounded action is application-only: verify the retained exact D97AG ZIP, stage and verify exact D97AG x86_64 app/executable, prove current live exact D97AF preimage, stop/drain exact-path OCLP processes, create a timestamped recoverable D97AF backup, deploy exact D97AG to `/Applications/OpenCore-Patcher.app`, reverify live identity, open exact OCLP, prove fresh exact-path process and STOP.
+
+Only after that returned deployment output passes may a separate manual Root Patch be authorized.
