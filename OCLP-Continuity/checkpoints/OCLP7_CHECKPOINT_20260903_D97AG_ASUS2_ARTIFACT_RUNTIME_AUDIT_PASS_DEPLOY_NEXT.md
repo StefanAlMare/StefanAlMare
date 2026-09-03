@@ -115,16 +115,28 @@ REBOOT=AUTO-NO
 
 The last proven installed `/Applications/OpenCore-Patcher.app` remains exact D97AF x86_64 executable SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, 6595600 bytes. It remains unauthorized for Root Patch.
 
+## Exact next-action delivery identity
+The bounded ASUS2 application transition wrapper is published but was not executed or tested in GitHub; GitHub is used only to persist the source identity. Syntax parsing and runtime execution belong to ASUS2.
+
+```text
+DELIVERY_FILE=OCLP7_D97AG_ASUS2_EXACT_APP_DEPLOY_OPEN_STOP.command
+DELIVERY_COMMIT=fcd817dec08e1ff782316516f7d2432e2b5d51df
+DELIVERY_GIT_BLOB=e8dca8761903de7f612629ff85ea9ec81bc5d65c
+GITHUB_EXECUTION=NOT_RUN_BY_DESIGN
+```
+
+The wrapper is fail-closed before mutation on ZIP/staged/live-preimage identity mismatch. It requests `sudo` only at the bounded `/Applications` transition gate, creates and verifies a timestamped D97AF backup, deploys only exact D97AG, re-verifies the live executable, opens exact OCLP and requires a fresh exact-path process. Ordinary EXIT/HUP/INT/TERM recovery attempts to restore exact D97AF while the transition is incomplete. The short two-rename interval is not claimed crash-atomic against SIGKILL/kernel crash/power loss.
+
 ## ACTIVE FRONTIER / CURRENT NEXT ACTION
 ASUS2 STOP. Do not Root Patch and do not reboot.
 
-Authorize one bounded ASUS2 application-only transition:
+Run the exact public-commit-pinned wrapper above on ASUS2. It must:
 1. verify the retained D97AG ZIP is exact `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`;
 2. extract to a private staging directory and verify exactly one `OpenCore-Patcher.app`, executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64;
 3. verify current live application preimage is exact D97AF executable SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470` / 6595600 bytes;
 4. stop/drain only processes using the exact live OCLP executable path;
 5. move current exact D97AF app to a timestamped recoverable `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-*` backup;
-6. install the staged exact D97AG app to `/Applications/OpenCore-Patcher.app`;
+6. install exact D97AG to `/Applications/OpenCore-Patcher.app`;
 7. reverify exact live D97AG executable identity and x86_64 architecture;
 8. open exact live OCLP and prove a fresh exact-path process;
 9. STOP and return full terminal output.
