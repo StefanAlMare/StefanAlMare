@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AH_DEPLOY_OPEN_PASS_ROOTPATCH_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AH_ROOTPATCH_FULL_PASS_ACCELERATED_BOOT_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This is an index/frontier summary. Exact historical detail remains in incremental checkpoints and repository history.
@@ -72,15 +72,8 @@ Delivery is private release ID `382116519`, tag `oclp7-d97ah-run-33769927671-att
 
 Signing/notarization remains unverified and is not classified PASS.
 
-## D97AH ASUS2 artifact audit evolution
-Private-release audit attempt 1 passed release binding, all seven asset hashes/sizes/checksum sets, exact app ZIP reassembly/CRC/safe-member audit, exact packaged x86_64 executable identity, reports ZIP safe-member/file-set/checksum audit. It then stopped because wrapper v1 invoked absent `/bin/cmp`; this was a tooling false failure, no verified ZIP retained and no mutation.
-
-Read-only ASUS2 probe proved `/bin/cmp` absent and `/usr/bin/cmp` present/executable universal x86_64+arm64e; all shell resolution pointed only to `/usr/bin/cmp`.
-
-Corrected audit wrapper v2 commit/blob `85b5f8b3487cc940918dc446890b959daa7cc4ed / c5a91b5d50a82b17cc4ea2a60303934182540fb0` changed only the temporary complete cmp line to `/usr/bin/cmp`, with exact pre/post cardinality and local zsh-parse proof.
-
 ## D97AH ASUS2 private-release audit v2 PASS
-Full v2 rerun passed from release API through exact asset checks, split/reassembly, ZIP CRC/safe-member audit, packaged executable identity, reports ZIP/file/checksum audit, explicit byte-for-byte report/app executable comparison and all report content gates.
+Full v2 rerun passed exact release assets, split/reassembly, ZIP CRC/safe-member audit, packaged executable identity, reports checksums, explicit byte-for-byte report/app executable comparison and all report content gates.
 
 Decisive output included:
 
@@ -99,7 +92,7 @@ D97AH_AUDIT_V2_OUTER_RC=0
 
 Exact audited ZIP identity: `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`. Executable `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
 
-The user's later deletion of Desktop-visible files explained the repeated missing-ZIP deploy preflight failures; exact artifact identity remained intact in Trash. This was user housekeeping, not an OCLP/system failure.
+The user's later deletion of Desktop-visible files explained repeated missing-ZIP preflight failures; exact artifact identity remained intact in Trash. This was user housekeeping, not an OCLP/system failure.
 
 ## D97AH deploy tooling evolution
 The first D97AH deploy-transform wrapper false-failed because its placeholder itself contained `D97AG`. Subsequent local validator audits found two additional tooling-only assumptions: `D97AH-deploying` appears three times, not two, and the final state assignment uses shell quotes. All failures occurred before inner deployment/application mutation.
@@ -107,7 +100,7 @@ The first D97AH deploy-transform wrapper false-failed because its placeholder it
 The final public deploy-v4 wrapper applied exactly those three validator corrections, with pinned identity and local parse gates. Final transformed inner deploy SHA256 `590b11ec37b0c9d7162e365460a788132c33881c9bee6599f40af6a9a4381285`, `14858` bytes.
 
 ## D97AH exact deploy/open PASS
-The one-shot final action recreated the exact audited Desktop ZIP from the exact Trash copy immediately before deployment, then ran the pinned v4 deployment flow.
+The final one-shot action recreated the exact audited Desktop ZIP from the exact Trash copy immediately before deployment, then ran the pinned v4 deployment flow.
 
 Exact live D97AG preimage before switch:
 `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`, x86_64.
@@ -137,13 +130,37 @@ D97AH_ONE_SHOT_DEPLOY_OUTER_RC=0
 ```
 
 Deploy report: `/Users/alex/Desktop/OCLP7_D97AH_EXACT_APP_DEPLOY_OPEN_STOP_REPORT_20260903-200708.txt`.
-No source/system-target/Golden/Root Patch/reboot mutation occurred during deploy/open.
+
+## D97AH manual Root Patch — FULL PASS
+The complete raw Root Patch output was audited. Exact local metallib `26.6.2-25G82` was used; elevated mount, preflight and patchsets completed. P1/P2b/P3/AIR00/D34 plus retained P6/P7 and D97AD passed again. D97AD committed SHA remained `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`.
+
+The real privileged D97AH LC_UUID transaction crossed the former D97AG `/bin/chflags` blocker and completed:
+
+```text
+D97AF_TARGET_FLAGS_PRE=524288
+D97AF_TARGET_XATTRS_PRE=[]
+D97AF_TARGET_ACL_PRE=NONE
+D97AF_LC_UUID_BUILD_STAMP_PRE_SHA=524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755
+D97AF_LC_UUID_BUILD_STAMP_OLD=D5CE0008-587C-3861-971A-4BAEFB7B9C5B
+D97AF_LC_UUID_BUILD_STAMP_NEW=A4F456DF-7447-49BF-AC4F-102D90023A1E
+D97AF_LC_UUID_BUILD_STAMP_OFFSET=0xAB0
+D97AF_LC_UUID_BUILD_STAMP_POST_SHA=a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e
+D97AF_LC_UUID_ATOMIC_SAME_VOLUME_RENAME=PASS
+D97AF_TARGET_METADATA_PRESERVE_EXACT=PASS
+D97AF_LC_UUID_BUILD_STAMP=PASS
+```
+
+Therefore the corrected D97AH `chflags` transaction and staged-write/metadata/atomic-rename commit are PROVEN complete in the real Root Patch path.
+
+Downstream patching also completed normally: patchset info write, RSR handling, AuxKC build/force, APFS snapshot creation, root-volume unmount, then `Patching complete` and reboot request.
+
+Classification: `D97AH_ROOT_PATCH=FULL_PASS`.
+
+Runtime limits remain explicit: `D97AF_RUNTIME_PROVENANCE=NOT_YET_TESTED`; `D97AF_DIRECT_RUNTIME_TEXT_BYTE_READ=NOT_PERFORMED`.
 
 ## CURRENT ACTION
-Exact D97AH is live and open. FASTLANE through packaged audit, identity, backup/deploy, open and fresh-process proof is complete PASS.
+Root Patch is accepted. Reboot is now authorized for the D97AH accelerated/root-patched test.
 
-Next action: user manually initiates Root Patch from the currently open exact D97AH OCLP application and returns the complete Root Patch output. Do not reboot after Root Patch until assistant audits the raw output.
+User should boot the normal/root-patched configuration and observe whether a usable accelerated GUI appears. If not, hard restart/power-cycle and boot the known VESA recovery configuration. Return without any additional Root Patch/source/app/diagnostic mutation.
 
-The key new runtime proof is whether real privileged D97AH progresses beyond the former D97AG `/bin/chflags` failure through `/usr/bin/chflags`, staged `dd`, metadata/postimage verification, target CAS, atomic rename/commit and later patchset/AuxKC/snapshot stages. Printed completion alone is insufficient.
-
-Root Patch is now authorized; reboot/accelerated boot remains unauthorized until the Root Patch output is accepted.
+On return, establish exact `last reboot` chronology first. Analyze only the immediately preceding accelerated D97AH boot; exclude the later VESA recovery boot. Then audit D97AF runtime provenance/MTLCompilerService evidence from that accelerated boot only.
