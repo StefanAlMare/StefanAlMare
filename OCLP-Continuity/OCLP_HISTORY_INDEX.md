@@ -1,9 +1,9 @@
 # OCLP PROJECT HISTORY INDEX — ASUS2 / OCLP1 → future phases
 
-Updated: 2026-09-03 EEST
+Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AJ_A4F_FULLY_RESOLVED_CFG_NO_LATE_BYPASS_DIAGNOSTIC_ORIGIN_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AJ_INTERPRETATION_CORRECTED_D97AK_THEN_P7_NATURAL_FLOW.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This is an index/frontier summary. Exact historical detail remains in incremental checkpoints and repository history.
@@ -162,13 +162,16 @@ All five late diagnostic xrefs are `REACHABLE_NORMAL=NO` and `REACHABLE_WITH_EXI
 Authoritative classification:
 `D97AJ_STATIC_LATE_BLOCK_BYPASS_EXIT110=NEGATIVE_IN_FULLY_RESOLVED_REACHABLE_CFG`.
 
-Internal CFG bypass is closed as an explanation.
+## D97AJ interpretation correction / natural-flow decision
+The D97AD exits `110..114` are project-invented terminal diagnostic outcomes, not donor/Sequoia behavior. At `0x9D6BD`, pre-D97AD/P7 contains ordinary donor bytes `8b8d10feffff83f941`; D97AD replaces them with terminal bytes `6a6e5fe9bb38f6ff90`. Therefore D97AJ closes only the possibility of a hidden bypass around our artificial terminal inside the instrumented A4F image; it does not prove that the natural donor/P7 path cannot continue through the original compare/branch logic.
+
+The correct natural-flow experiment, if D97AK finds no alternative diagnostic origin, is NOT to remove only exit110. It is to remove the entire D97AD whole-stage classifier: restore all six exact P7 terminal preimages and clear the shared exit-stub cave, proving exact P7 SHA256 `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda` before applying a NEW provenance UUID.
+
+P7 is first because it changes one variable only. If P7 natural-flow remains negative, a later separate test may return to true-five without P6/P7. A4F is permanently reserved for the D97AD-instrumented 28/28 cohort and must never be reused for the natural-flow image.
 
 ## CURRENT ACTION
 No Root Patch and no reboot.
 
-The next bounded read-only ASUS2 action is a full-image A4F diagnostic-origin/external-entry audit: enumerate every code xref to the five exact simulator-limit string literals and its owning function; enumerate direct branches/calls from outside `validSimulatorMetadata` into its interior, especially late region `0x9D6C5..0x9D77F`; enumerate statically recoverable address-taken/RIP-relative references into those internal addresses.
+Run D97AK first: a bounded read-only full-image A4F audit of every code xref to the five simulator-limit strings, their owner functions, direct external entries into `validSimulatorMetadata`/late region, and statically recoverable address-taken/RIP-relative entries.
 
-If another xref or external entry exists, map its earliest upstream payload/state handoff for H1/H2/H3. If neither exists, persist the stamped-runtime-vs-fully-resolved-static contradiction before any new runtime observer.
-
-No source/system/Golden mutation, service launch, Root Patch or reboot. Return complete raw output and STOP.
+If D97AK finds another origin/entry, analyze it first. If it finds only the known unreachable xrefs and no external entry, next is a bounded local source-design/audit for complete D97AD removal to exact P7 plus a new provenance UUID; only after that audit may a major GitHub build be considered. Root Patch/reboot remain separately gated.
