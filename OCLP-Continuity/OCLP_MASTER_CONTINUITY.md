@@ -1,9 +1,9 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AJ_A4F_FULLY_RESOLVED_CFG_NO_LATE_BYPASS_DIAGNOSTIC_ORIGIN_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AJ_INTERPRETATION_CORRECTED_D97AK_THEN_P7_NATURAL_FLOW.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
-Updated: 2026-09-03 EEST
+Updated: 2026-09-04 EEST
 
 ## Mandatory startup
 Before any technical change read in full:
@@ -155,22 +155,22 @@ CFG_REACHABLE_WITH_EXIT110_BLOCKED_AND_SWITCH=314
 REACHABLE_UNRESOLVED_INDIRECT_COUNT_AFTER_KNOWN_SWITCH=0
 ```
 
-All five late diagnostic xrefs are unreachable from the normal function entry and remain unreachable with the exit110 region blocked. Authoritative classification:
+All five late diagnostic xrefs are unreachable from the normal instrumented function entry and remain unreachable with the exit110 region blocked. Authoritative classification:
 
 `D97AJ_STATIC_LATE_BLOCK_BYPASS_EXIT110=NEGATIVE_IN_FULLY_RESOLVED_REACHABLE_CFG`
 
-This closes the internal-bypass hypothesis. Do not weaken or suppress the late validator.
+## D97AJ interpretation correction and natural-flow decision
+D97AD exit codes `110..114` are project-invented terminal diagnostics, not original donor/Sequoia semantics. At image offset `0x9D6BD`, the pre-D97AD/P7 bytes were ordinary donor code `8b8d10feffff83f941`; D97AD replaced them with terminal bytes `6a6e5fe9bb38f6ff90` (`push 110; pop rdi; jmp exit`). Therefore D97AJ proves no hidden bypass around our artificial terminal in the instrumented A4F image; it does not prove the natural donor/P7 flow cannot traverse the original compare/branch sequence.
 
-## CURRENT ACTION — full-image diagnostic origin / external-entry audit
+Do not remove only exit110. A clean natural-flow experiment must remove the entire D97AD classifier: all six terminal windows plus shared exit stub, restoring exact P7 preimages and proving exact P7 SHA256 `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda` before any new provenance stamp.
+
+P7 is the correct first natural-flow substrate because it changes only one variable: D97AD instrumentation removed while P1/P2b/P3/AIR00/D34/P6/P7 remain. If P7 natural-flow remains negative, a later separate experiment may return to the accepted true-five functional baseline without P6/P7.
+
+A4F must never be reused for P7 natural-flow. A4F remains permanently bound to the already-proven D97AD-instrumented 28/28 cohort. Any natural-flow image requires a new frozen UUID.
+
+## CURRENT ACTION — D97AK read-only gate before mutation
 No Root Patch and no reboot are authorized.
 
-The contradiction is now: runtime proves A4F/32023 as the 28/28 diagnostic sender, while a fully resolved CFG from the normal `validSimulatorMetadata` entry cannot reach the five mapped late diagnostic xrefs at all.
+Run D97AK first because it is already prepared and obtains the last no-reboot/static fact before changing the image. D97AK audits exact current A4F for every xref to the five simulator-limit strings, every owner function, every direct external entry into `validSimulatorMetadata`/late region, and statically recoverable address-taken/RIP-relative entries.
 
-Next single bounded action is read-only ASUS2 full-image mapping of diagnostic origin:
-1. enumerate every code xref across exact A4F to the five exact simulator-limit string literals, not only xrefs within `validSimulatorMetadata`;
-2. identify the symbol/function owner of every xref;
-3. enumerate direct branches/calls from outside `validSimulatorMetadata` into its interior, especially `0x9D6C5..0x9D77F`;
-4. enumerate statically recoverable address-taken/RIP-relative references into those internal late addresses;
-5. if another diagnostic xref or external entry exists, map the earliest upstream payload/state handoff for H1/H2/H3; if neither exists, persist the contradiction before any new runtime observer.
-
-No source/system/Golden mutation, service launch, Root Patch or reboot. One bounded action, complete raw output, then STOP.
+If D97AK finds another origin/entry, analyze it before mutation. If D97AK finds only the known unreachable xrefs and no external entry, next action is a bounded local source-design/audit to remove the entire D97AD classifier to exact P7 plus a NEW provenance UUID. Major compilation/build/package, if then required, remains GitHub-only. Root Patch and reboot remain separately gated.
