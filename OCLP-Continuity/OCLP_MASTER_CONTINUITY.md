@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AM_ASUS2_ARTIFACT_AUDIT_FULL_PASS_DEPLOY_OPEN_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AM_DEPLOY_OPEN_FULL_PASS_ROOT_PATCH_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-04 EEST
@@ -51,7 +51,7 @@ Authoritative D97AH major build/private release:
 - app ZIP `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`;
 - packaged executable `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
 
-Exact D97AH app remains live at `/Applications/OpenCore-Patcher.app`; D97AG backup remains `/Applications/OpenCore-Patcher.app.D97AG-before-D97AH-20260903-200708` until the next deploy completes.
+D97AH is now retained as backup at `/Applications/OpenCore-Patcher.app.D97AH-before-D97AM-20260904-020713`; older D97AG backup remains `/Applications/OpenCore-Patcher.app.D97AG-before-D97AH-20260903-200708`.
 
 ## D97AH Root Patch / accelerated / A4F provenance
 D97AH manual Root Patch is FULL PASS. The real privileged transaction committed exact A4F UUID-only postimage, preserved metadata and completed atomic same-volume rename, AuxKC and APFS snapshot.
@@ -95,7 +95,7 @@ D97AM_SOURCE_TRANSACTION=PASS
 ```
 
 Local backup: `/Users/alex/Desktop/OCLP7_D97AM_SOURCE_BACKUP_20260904-010010_2161`.
-Installed app/system target/Golden were not mutated by source integration. One cosmetic residue remains inside an error string (`expected exact D97AD preimage`) while the actual enforced preimage constant is exact P7; it does not affect transaction semantics.
+One cosmetic residue remains inside an error string (`expected exact D97AD preimage`) while the actual enforced preimage constant is exact P7; it does not affect transaction semantics.
 
 ## D97AM GitHub build evolution
 Private repo `StefanAlMare/Private-Work`, branch `oclp7-d97am-github-build`, based on audited D97AH head `d04ddd28c784a0b30c6629feeface10804d5d591`.
@@ -206,14 +206,61 @@ D97AM_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT=FULL_PASS
 
 Artifact audit mutation ledger: source NO; installed app NO; system target NO; Golden NO; Root Patch AUTO-NO; reboot AUTO-NO.
 
-## CURRENT ACTION — exact D97AM backup/deploy/open/STOP
-FASTLANE package/artifact validation is complete. Next bounded ASUS2 action:
-1. reacquire exact D97AM app ZIP from exact private release with pinned asset IDs/digests;
-2. verify ZIP `751495650 / d6aca517...` and staged executable `6596496 / fbcb69e... / x86_64`;
-3. revalidate live D97AH preimage exact `6596544 / 207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf / x86_64`;
-4. create timestamped D97AH backup without touching retained older D97AG backup;
-5. deploy exact D97AM fail-closed with rollback on post-switch failure;
-6. open fresh exact-path D97AM process and prove a fresh PID;
-7. STOP with OCLP open.
+## D97AM exact ASUS2 deploy/open — FULL PASS
+Deploy/open wrapper commit/blob `e2284bc23dc90aac0b926b0012b4724af28a33a0` / `577acb4f98dd3c0bbdd20ccdc46962a3284d394c`.
 
-Do not Root Patch in the deploy command. Do not reboot. Root Patch remains separately authorized only after the complete deploy/open report is audited.
+Exact live D97AH preimage was revalidated before switching:
+
+```text
+LIVE_PRE_BYTES=6596544
+LIVE_PRE_SHA256=207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf
+LIVE_PRE_ARCHS=x86_64
+D97AH_LIVE_PREIMAGE=PASS
+```
+
+The exact D97AM private release was reacquired, both parts and reassembled ZIP were reverified, and staged executable was exact `6596496 / fbcb69e... / x86_64`.
+
+Timestamped D97AH backup retained:
+`/Applications/OpenCore-Patcher.app.D97AH-before-D97AM-20260904-020713`.
+
+Exact live D97AM after switch:
+
+```text
+LIVE_POST_BYTES=6596496
+LIVE_POST_SHA256=fbcb69e946583beca9793aac7aa722c774b1167965fcddb5a65b757f79d953a3
+LIVE_POST_ARCHS=x86_64
+D97AM_LIVE_APP_IDENTITY=PASS
+```
+
+A fresh process was proven from exact live path:
+`FRESH_D97AM_EXACT_PIDS=2980`.
+
+Final deployment markers:
+
+```text
+D97AM_EXACT_APP_DEPLOY_OPEN_STOP=PASS
+INSTALLED_APP_MUTATION_STATE=D97AM_DEPLOYED_EXACT_OPENED
+FINAL_LIVE_EXE_BYTES=6596496
+FINAL_LIVE_EXE_SHA256=fbcb69e946583beca9793aac7aa722c774b1167965fcddb5a65b757f79d953a3
+SOURCE_MUTATION=NO
+SYSTEM_TARGET_MUTATION=NO
+GOLDEN_MUTATION=NO
+ROOT_PATCH=AUTO-NO
+REBOOT=AUTO-NO
+```
+
+Classification: `D97AM_ASUS2_EXACT_APP_DEPLOY_OPEN=FULL_PASS`.
+
+## CURRENT ACTION — manual D97AM Root Patch
+FASTLANE through deploy/open is complete and audited. The next bounded ASUS2 action is manual Root Patch from the already-open exact D97AM app.
+
+Expected critical transaction:
+1. P1/P2b/P3/AIR00/D34/P6/P7 pass;
+2. D97AD classifier is not invoked;
+3. D97AM accepts exact P7 preimage SHA256 `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`;
+4. UUID changes exactly `D5CE0008-587C-3861-971A-4BAEFB7B9C5B -> 0FC4C627-2A5D-491B-8101-00CAAA7116B7`;
+5. target post-SHA becomes exactly `e7739c155b5f6f091a1b8d25cee77549655f7944f2f8baaba7a2b431eca3eea9`;
+6. D97AG xattr/fatal-boundary and D97AH `/usr/bin/chflags` semantics remain operational;
+7. AuxKC/APFS snapshot/unmount/patch completion succeeds.
+
+STOP after complete Root Patch output. Do not reboot until assistant audits the Root Patch.
