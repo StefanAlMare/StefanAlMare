@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AH_CMP_PROBE_PASS_AUDIT_V2_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AH_ASUS2_AUDIT_V2_PASS_DEPLOY_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This is an index/frontier summary. Exact historical detail remains in incremental checkpoints and repository history.
@@ -72,18 +72,49 @@ Delivery is private release ID `382116519`, tag `oclp7-d97ah-run-33769927671-att
 
 Signing/notarization remains unverified and is not classified PASS.
 
-## D97AH ASUS2 audit attempt 1 and cmp path proof
-ASUS2 private-release audit attempt 1 passed release binding, all seven release asset hashes/sizes/checksum sets, exact app ZIP reassembly/CRC/safe-member audit, exact packaged x86_64 executable identity, reports ZIP safe-member/file-set/checksum audit. It then stopped because audit wrapper v1 invoked absent `/bin/cmp`; the generic executable-difference label was a tooling false failure because `cmp` itself did not launch. No verified ZIP was retained and no mutation occurred.
+## D97AH ASUS2 artifact audit evolution
+Private-release audit attempt 1 passed release binding, all seven asset hashes/sizes/checksum sets, exact app ZIP reassembly/CRC/safe-member audit, exact packaged x86_64 executable identity, reports ZIP safe-member/file-set/checksum audit. It then stopped because wrapper v1 invoked absent `/bin/cmp`; this was a tooling false failure, no verified ZIP retained and no mutation.
 
-Read-only ASUS2 probe then proved `/bin/cmp` absent and `/usr/bin/cmp` present, regular, executable, universal x86_64+arm64e. `command -v`, `whence -a`, `type -a` and `/usr/bin/which -a` all resolve only `/usr/bin/cmp`.
+Read-only ASUS2 probe proved `/bin/cmp` absent and `/usr/bin/cmp` present/executable universal x86_64+arm64e; all shell resolution pointed only to `/usr/bin/cmp`.
 
-Corrected public audit wrapper v2: `OCLP7_D97AH_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT_V2.command`, commit `85b5f8b3487cc940918dc446890b959daa7cc4ed`, blob `c5a91b5d50a82b17cc4ea2a60303934182540fb0`. It pins wrapper v1 and changes only the exact temporary comparison line from `/bin/cmp` to `/usr/bin/cmp`, with exact line-cardinality and local zsh-parse gates, then reruns the complete original audit from the beginning. No GitHub execution/test was used for this routine wrapper.
+Corrected audit wrapper v2 commit/blob `85b5f8b3487cc940918dc446890b959daa7cc4ed / c5a91b5d50a82b17cc4ea2a60303934182540fb0` changed only the temporary complete cmp line to `/usr/bin/cmp`, with exact pre/post cardinality and local zsh-parse proof.
+
+## D97AH ASUS2 private-release audit v2 PASS
+Full v2 rerun passed from release API through exact asset checks, split/reassembly, ZIP CRC/safe-member audit, packaged executable identity, reports ZIP/file/checksum audit, explicit byte-for-byte report/app executable comparison and all report content gates.
+
+Decisive output:
+
+```text
+D97AH_REPORT_AND_APP_EXECUTABLE_BYTE_IDENTITY=PASS
+D97AH_REPORT_CONTENT_AUDIT=PASS
+D97AH_REPORT_APP_IDENTITY=PASS
+D97AH_ASUS2_PRIVATE_RELEASE_DOWNLOAD=PASS
+D97AH_ASUS2_ARTIFACT_REASSEMBLY=PASS
+D97AH_ASUS2_PACKAGED_EXECUTABLE_IDENTITY=PASS
+D97AH_ASUS2_REPORTS_AUDIT=PASS
+D97AH_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT=PASS
+D97AH_AUDIT_V2=PASS
+D97AH_AUDIT_V2_OUTER_RC=0
+```
+
+Verified ZIP retained on ASUS2:
+`/Users/alex/Desktop/OCLP7_D97AH_VERIFIED_RUN33769927671_OpenCore-Patcher.app.zip`
+
+Exact identity: `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`. Executable `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
+
+Audit report: `/Users/alex/Desktop/OCLP7_D97AH_ASUS2_PRIVATE_RELEASE_AUDIT_REPORT_20260903-185409-11761.txt`.
+No source/application/system/Golden/Root Patch/reboot mutation occurred.
+
+## Exact D97AH deploy/open wrapper prepared
+Public wrapper `OCLP7_D97AH_ASUS2_EXACT_APP_DEPLOY_OPEN_STOP.command`, commit `fe47aa9c06bd416d387e3f64a137b18d471479c1`, blob `55304b6e3db1d1d9ab4e86b7e3b9aa154a744567`, prepared without GitHub execution.
+
+It derives from the already ASUS2-passed D97AG deployment substrate commit/blob `fcd817dec08e1ff782316516f7d2432e2b5d51df / e8dca8761903de7f612629ff85ea9ec81bc5d65c`, preserving its backup/switch/recovery behavior while collision-safely shifting roles D97AF->D97AG and D97AG->D97AH and replacing exact build/run identities. Local parse occurs on ASUS2 before inner deployment.
 
 ## CURRENT ACTION
-ASUS2 STOP. Live installed app remains exact D97AG. Do not deploy, Root Patch or reboot.
+ASUS2 only. Exact D97AG remains live until the next action.
 
-Run one bounded ASUS2-only execution of the public-commit-pinned audit wrapper v2. Verify its public blob and local zsh parse, then let v2 verify pinned v1, apply only the temporary cmp path line correction, locally parse the patched v1 and rerun the complete release/reassembly/reports audit.
+Run one bounded D97AG->D97AH backup/deploy/open/STOP through the public-commit-pinned deploy wrapper. Required live preimage D97AG: `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`, x86_64. Required D97AH: `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
 
-Required final evidence: explicit report/app executable byte identity PASS, report-content PASS gates, exact verified Desktop ZIP retention, `D97AH_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT=PASS` and v2/outer PASS. Printed PASS alone is insufficient; return complete terminal output.
+The action must retain a timestamped exact D97AG backup, switch exact D97AH live, verify/open a fresh exact-path D97AH process, and STOP. If switch/audit/open fails before final exact-open state, automatic recovery must restore exact D97AG.
 
-Only after complete ASUS2 audit v2 PASS may a separate D97AG->D97AH backup/deploy/open/STOP action be authorized. Root Patch and reboot remain unauthorized.
+Do not Root Patch and do not reboot. Root Patch remains a separate later manual gate after deploy/open output is returned and accepted.
