@@ -3,155 +3,68 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_LIVE_APP_DEPLOY_PASS_ROOT_PATCH_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AH_LOCAL_SOURCE_PASS_GITHUB_BUILD_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
-## Permanent protocol
-Permanent current default: short, visible, explained ASUS2 collaboration, one bounded action and STOP gate at a time. Routine/small tests, ordinary validations, source inspection, small edits, probes, diff checks and diagnostic iteration stay on ASUS2 under user control. GitHub is used only for major/substantial compilation, build or packaging workloads. A justified major GitHub build remains assistant-run and fully audited. Existing audited artifact-delivery mechanisms bring those build outputs to ASUS2. No automatic Root Patch/reboot. Golden immutable/read-only. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+This file is an index/frontier summary. Exact historical detail remains preserved in the incremental checkpoints and repository history.
 
-## Local/GitHub execution methodology
-The earlier 2026-09-02 GitHub-first rule was explicitly superseded. Work stays local on ASUS2 for routine source inspection, edits, validations, tests, probes, diff checks and direct diagnostic iteration so the user retains direct control and immediate feedback. GitHub is reserved only for large/major compilation, build or packaging work. When used, the assistant runs and audits the major build; GitHub is never a substitute for ASUS2 testing or hardware/live-state evidence. FASTLANE ordering and manual-only Root Patch/reboot remain unchanged.
+## Permanent protocol
+Current default is short, visible, explained ASUS2 collaboration, one bounded action and STOP gate at a time. Routine/small tests, ordinary validations, source inspection, small edits, probes, diff checks, packaged-runtime tests, artifact/reassembly checks and live-state evidence stay on ASUS2. GitHub is used only for major/substantial compile/build/package workloads. No automatic Root Patch/reboot. Golden immutable/read-only. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
 
 ## Functional baseline
-P1 -> P2b -> P3 -> AIR00 -> D34. True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. P6/P7 retained, runtime sufficiency NEGATIVE.
+P1 -> P2b -> P3 -> AIR00 -> D34. True-five SHA256 `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. P6/P7 retained, runtime sufficiency NEGATIVE.
 
-## Durable milestones
-D22 AIR semantics PROVEN. D69/D70 WindowServer downstream. D71R compiler lifecycle observable. D83 upstream llvm::Module*. D93 RMP contract. D95D wrapped LLVM bitcode structural-semantic proof. D96C/D97JB late validator frontier/static CFG.
+## Durable milestone index
+D22 AIR semantics PROVEN. D69/D70 WindowServer downstream. D71R compiler lifecycle observable. D83 upstream llvm::Module*. D93 RMP contract. D95/D95D wrapped LLVM bitcode structural-semantic proof. D96C/D97JB stable late boundary/static CFG.
 
-## D97 provenance / exact transition
-D97AA proved runtime 32023 selection in an earlier cohort. D97AC statically mapped validator finite outcomes. D97AD exact transition produced selector-only service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43` and final MTLCompiler SHA `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. Private build/deploy and manual Root Patch passed exactly.
+D97AA proved runtime 32023 selection in an earlier cohort. D97AC mapped finite validator outcomes. D97AD produced exact final MTLCompiler SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`; private build/deploy/manual Root Patch passed. Selected accelerated boot `2026-09-02 00:10`, VESA `00:12` excluded.
 
-## Accelerated D97AD boot
-Selected boot `2026-09-02 00:10`; VESA `00:12` excluded. D97AEQ: exact visible D97AD identity PASS, 28/28 normal exit(1), zero signals/missing, zero exits110–114; runtime whole-stage outcome INVALID.
+D97AEQ: 28/28 normal exit(1), no signals, classifier experiment invalid. D97AER: visible late simulator xrefs after candidate terminal. D97AES: 33 diagnostics across 28/28 PIDs from 32023/D5CE, 3802 NEGATIVE for the cohort. D97AET: archived PCs do not directly prove traversal beyond terminal.
 
-D97AER proved visible late simulator-limit xrefs are after candidate REL+0x58B. D97AES proved all diagnostic senders are 32023 path/UUID; 3802 NEGATIVE. D97AET proved the Cryptex x86_64h shared cache contains 32023 path and not 3802; archived PC/backtrace did not directly prove traversal beyond the visible terminal.
+D97AEU/D97AEW established the D226 x86_64h cache image topology but not semantic cross-image site mapping: physical reads valid, cross-image correlation not established, cache discriminator inconclusive. D97AES directly proves D5CE as immediate sender for its diagnostic cohort; exact runtime D97AD text remains UNKNOWN.
 
-## D97AEU
-D97AEU discovered main x86_64h cache and `.01`–`.06` subcaches. The target MTLCompiler 32023 record is replicated in each `imagesText` table with the same logical identity: cache UUID `D2265480-60EB-3526-BAF7-2D6596149186`, load `0x7FFD03141000`, text size `0xCE239`, same path. The load maps into subcache `.05`.
+D97AEZ natural PID watcher reached exact-path service PID but task-port read was denied (`errno=1`) before byte capture; external task-port method retired.
 
-The mapper stopped at `CACHED_IMAGE_HIT_CARDINALITY_FAIL:7` before byte comparison. Classification: TOOLING FALSE FAILURE caused by counting replicated tables as distinct images. No cache byte result was produced.
+## D97AF
+Frozen LC_UUID `A4F456DF-7447-49BF-AC4F-102D90023A1E`; exact D97AD preimage `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`; deterministic UUID-only postimage `a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e`.
 
-## D97AEV / D97AEW
-D97AEV passed pinned wrapper/base identities, all three transform cardinalities and all required anchors, but its raw `reboot` substring check falsely matched the legitimate `/System/Volumes/Preboot/...` cache path. It stopped before fixed-wrapper write/parse/core execution. Classification: TOOLING FALSE FAILURE; all cache-byte comparisons NOT REACHED; no mutation/Root Patch/reboot.
+D97AF source/build/deploy passed, but Root Patch failed because packaged Python lacked `os.listxattr`. The custom step failed before target mutation, while old exception handling allowed later patchset/AuxKC/snapshot work. Classified `D97AF_ROOT_PATCH=INVALID_PARTIAL`.
 
-D97AEW pins D97AEV commit `b8350946e307ec2df253ffb795b31c2104034372` / blob `1060f611b3fec7fc66f80d7674d2fb06a2cdfe6d` and replaces only the scanner block with a reversible command-boundary correction plus safe/dangerous regression corpus. The GitHub-audited D97AEW wrapper is commit `2d14c7831d4adc9578daf5b80b55b72f663d836a`, blob `45876fa66e9018053882be7b01eeccabcfe8046b`, SHA256 `cdd976be2ee2981aec2d35055e96fc0559f2f3277a9e38d62f2476817ef74394`.
+## D97AG
+D97AG replaced unavailable packaged `os.listxattr/getxattr` with fail-closed `/usr/bin/xattr` enumeration/value reads and changed the shared Metal-chain exception handler to unmount + bare re-raise before later patchset/AuxKC/snapshot continuation.
 
-GitHub-first validation completed `success` in private workflow ID `348172340`, run `33600569828`, job `100153125476`, exact audit head `3a152504867fa743750f5307749c9d152bf9164e`; every job step passed. Artifact `9835010017` ZIP digest `4f02b891ee4004806117e473ffc67f29fdf28ec65a7061e1e5b7b7e0c0fb339a` matched after download; its single complete report also passed content audit. At that historical point, live ASUS2 mapper execution was the only remaining step; the following sections record its completion and superseding results.
+Major Intel build: private branch `oclp7-d97ag-github-build`, head `4bde01b09717d076499ebf3640b5e4c0378798dd`, workflow/run/job `348876070 / 33696449978 / 100466229401`, success. Exact app ZIP SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`, executable SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`, x86_64.
 
-## D97AEW live result
-D97AEW/D97AEV/D97AEU completed with RC `0`. Seven raw cache records deduplicated to one logical 32023 image, UUID `D2265480-60EB-3526-BAF7-2D6596149186`, distinct from visible filesystem UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`.
+ASUS2 artifact/reassembly and exact frozen-runtime audit passed. Exact D97AG was deployed live to `/Applications/OpenCore-Patcher.app`; D97AF backup retained at `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-20260903-165317`.
 
-At the six visible D97AD image offsets the cache is OTHER `6/6` (`PRE=0`, `POST=0`), while the visible file is D97AD POST `6/6`. The cache shared stub is OTHER; retained functional postimages match visible filesystem `16/16` but cache `0/16` at those same offsets; both sender-PC windows differ. Positional cache/filesystem byte identity is NEGATIVE. Semantic cache-site mapping and runtime cache execution remain UNKNOWN; no cache intervention is authorized.
+Manual D97AG Root Patch proved the corrected xattr backend in the real patch path: flags `524288`, xattrs `[]`, ACL NONE, exact D97AD preimage. It then failed closed at a new tooling defect: hard-coded `/bin/chflags`. The D97AG fatal boundary worked; no post-exception AuxKC/snapshot completion and no misleading `Patching complete`. Reboot remained unauthorized.
 
-## D97AEW primary-source correction / D5CE provenance
-Apple dyld source proves the `imagesText` UUID is copied from the selected input Mach-O slice and is not regenerated by cache optimization. D97AEW's D226 `.05` reads are physically valid, but D5CE offsets cannot be transferred to D226 without same-input identity. The former OTHER/0-of-16 results are therefore numerical cross-image observations, not semantic classifier results: `CACHE_PHYSICAL_BYTE_READ=VALID`, `CROSS_IMAGE_SITE_CORRELATION=NOT_ESTABLISHED`, `D97AD_CACHE_PATCH_DISCRIMINATOR=INCONCLUSIVE`.
+## chflags path proof
+ASUS2 read-only probe proved `/bin/chflags` absent and `/usr/bin/chflags` valid/executable universal x86_64+arm64e; shell resolution points only to `/usr/bin/chflags`. Other absolute transaction tools are valid at their existing locations.
 
-The exact official release lineage is OCLP 1.3.0 -> PatcherSupportPkg 1.4.6 -> 14.2 Beta 1 MTLCompiler 32023. The exact unmodified packaged PSP payload UUID is `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`, git blob `ef4389a312867860b2034a42ca75e95162a0f10e`, SHA256 `4f65fb8890a5b18a222c9b0171b6c8240672fb48334fb7739892b7591ffc5641`. Public dsce v7 and v10 change only the first four UUID bytes and preserve the final twelve; exact v8 source is internal/unpublished. The 2023 release provenance independently separates D5CE from the current Tahoe D226 input, and the differing tails corroborate that lineage under the documented algorithm.
+## D97AH local source correction PASS
+First D97AH attempt used substring counting and falsely counted `/bin/chflags` inside an existing `/usr/bin/chflags`; it stopped before mutation. Classification `TOOLING_FALSE_FAILURE_SUBSTRING_OVERLAP_NO_MUTATION`.
 
-D97AES is reclassified as direct runtime provenance: 33/33 simulator diagnostics across 28/28 PIDs came from immediate sender DSO 32023/D5CE; current cache D226 is NEGATIVE as the immediate sender of those records. This does not exclude D226 elsewhere and does not prove exact D97AD postimage bytes because the known P7-to-D97AD transform lineage preserves D5CE. Exact runtime D97AD text remains UNKNOWN. The earlier semantic-D226 next action is superseded and becomes reserve-only static cross-build research.
+Corrected AST/token-exact D97AH action pinned exact D97AG preimages and selected exactly the two `/bin/chflags` string tokens inside `patch_mtl_compiler_tahoe_d97af_lc_uuid_build_stamp`. It changed only those two tokens to `/usr/bin/chflags`, preserving inode/metadata and compiling cleanly.
 
-## D97AEZ accelerated observer result / retirement
-D97AEZ was activated in VESA UUID `C57F4AEF-B109-463A-940A-AC10B1F7A02A` and claimed the user-identified accelerated boot UUID `0FCD86FE-6A94-450C-A250-45B6A8255A82`; later VESA UUID `7BC61319-78D8-46C5-A084-65C40B7F0941` is excluded. All pre/post identities passed for the observer and exact service/D97AD target.
+Exact D97AH local identities:
 
-The universal/no-PID watcher caught natural exact-path MTLCompilerService PID `434`, but `task_read_for_pid` failed immediately with return `-1`, `errno=1`. Zero runtime text windows were read; helper/runner stopped fail-closed RC `2`; watchdog did not fire. Natural PID observation is PROVEN, task-port method is NEGATIVE/RETIRED, and exact runtime D97AD text remains UNKNOWN—not mismatched. No LLDB/SIP/AMFI bypass is authorized.
+```text
+HELPERS_POST_SHA256=6c4c396975c646c60895b0beb4780cb7fb3f88bc7be05016218df9b000f09d8c
+D97AH_METHOD_POST_SHA256=fea34f69735ac244a064b55b58e4b95a6972e270f282d6d4f4d1fbecefd0503a
+D97AH_PATCH_SHA256=66c536cb069d6eb04184294c79fce4b720f0d7d603b99c083969bed8776ee59c
+D97AH_PATCH_BYTES=1005
+SYSPATCH_POST_SHA256=93988a13b809a29a7e1f2f67c885b74d574e456d1f229368740209aa0ceeed69
+METAL_POST_SHA256=fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24
+```
 
-The observer is disabled. The user directed complete deletion of its ASUS2 artifacts; returned proof of deletion remains pending, so status is `REQUESTED_RESULT_NOT_YET_RETURNED`. The first bounded search found no source only within its searched locations; a targeted follow-up superseded that limited negative and located the local D97AD source at canonical path `/Volumes/AsusLaptop - Data/Users/alex/Developer/OpenCore-Legacy-Patcher-T2-Tahoe-25G82`. The `/Volumes/AsusLaptop/...` alternative is the same APFS-backed helper identity `16777225:61074310:497704`, with `TWO_PATHS_SAME_HELPERS=PASS`.
+Backup `/Users/alex/Desktop/OCLP7_D97AH_SOURCE_BACKUP_20260903-172844-10591`; patch `/Users/alex/Desktop/OCLP7_D97AH_CHFLAGS_SOURCE_CORRECTION_20260903-172844-10591.patch`; report `/Users/alex/Desktop/OCLP7_D97AH_LOCAL_SOURCE_CORRECTION_REPORT_20260903-172844-10591.txt`.
 
-The source is on branch `alex-tahoe-25G82-custom`, HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06`, with exactly three reported tracked modifications: `metal_3802.py` SHA256 `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`, `sys_patch.py` SHA256 `115153b0465102cba0fdd477cc6215c4531e50b2927a99c1c64d12325c64d948`, and `sys_patch_helpers.py` SHA256 `fd37ede683ccb0612a7ba77ffe82b80bb8e081f4192f7485d05cdf8f9b51f515`. The D97AD definition count is exactly one.
+Mutation: source exactly one file (`sys_patch_helpers.py`); no installed-app/system-target/Golden/Root Patch/reboot mutation.
 
-## D97AF UUID frozen / static transform established
-The returned local input archive SHA256 is `19c1b9dc34ede0533c3a7e6a7af9b00f2dcfd732cce9da6e47cdad6e93a06c41`, `673209` bytes, and contains the exact D97AD binary and authoritative three-file source input/diff.
+## CURRENT ACTION
+ASUS2 STOP. Do not Root Patch and do not reboot.
 
-The user generated and persisted D97AF UUID `A4F456DF-7447-49BF-AC4F-102D90023A1E`. Independent recomputation against D97AD SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755` proved that changing only all 16 bytes of the `LC_UUID` payload at `0xAB0..0xABF` yields deterministic expected SHA256 `a0e78b297add5a4f76cf5ef71ce81a24750a6769167b225fc2f3a9248ba81c1e`. Executable instructions, D34, retained functional patches and D97AD classifier sites remain unchanged.
+Next action is a major Intel GitHub build/package derived from exact D97AG build lineage plus exact D97AH one-file/two-token patch. It must prove the D97AG preimage, apply only D97AH, verify helpers SHA256 `6c4c396975c646c60895b0beb4780cb7fb3f88bc7be05016218df9b000f09d8c`, preserve sys_patch/metal identities, prove method literal cardinality old=0/new=2, build and audit the x86_64 packaged app, and export split delivery artifacts plus reports.
 
-This stamp can establish marker-build provenance only for the diagnostic-sender cohort actually covered by future Unified Logs. It is not a direct runtime text-byte read and does not prove all runtime D97AD bytes. The D97AEX/D97AEZ external task-port method remains retired.
-
-## D97AF local source integrator audited / ready
-Final delivery identity is `OCLP7_D97AF_LOCAL_LC_UUID_SOURCE_INTEGRATOR.command`, SHA256 `3554473851eec1f315e558694bcd4c0bc321629efaebdf27c679167ec9477682`, git blob `ce6d626d3352d5d7c6bd0212a8c3e79c05d88308`, `62980` bytes. Independent syntax, embedded compile, static transform/AST/order, transaction/CAS/metadata/report and bounded fault-injection audit is `DELIVERY_PASS`.
-
-Expected post-source identities are helpers `a240a3cb62ce25381ef6bd9e2d78e36dc379c25f9e9c5641e07cd9841e820d8e`, sys_patch `ccf5ad96de9ef9051cc30ac61bf3c24522628f5e26122d6c0af5abb352f777c9`, unchanged metal_3802 `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`, and D97AF method `d48d6daec4affdcd9469bf2bb60ddadddb5dc43cebbdfeb6051336a0766ee7b7`. At that audited-ready checkpoint ASUS2 execution was `NOT_RUN`; no source/app/system/Root Patch/reboot mutation was claimed at that stage.
-
-## D97AF local source integration live PASS
-The first live integrator invocation stopped fail-closed before mutation because the UUID file was absent. The frozen UUID file was recreated with the already-authoritative value; no replacement UUID was generated. The second exact wrapper invocation completed with RC `0` and report capture PASS.
-
-Live post-source identities equal the audited expected outputs exactly: helpers `a240a3cb62ce25381ef6bd9e2d78e36dc379c25f9e9c5641e07cd9841e820d8e`, sys_patch `ccf5ad96de9ef9051cc30ac61bf3c24522628f5e26122d6c0af5abb352f777c9`, unchanged metal_3802 `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`, unchanged D97AD method `bb66b1d5d883251431d5a7fa7bc42c0cc9bcb15ec77c74506bb2eae5bf987a12`, and D97AF method `d48d6daec4affdcd9469bf2bb60ddadddb5dc43cebbdfeb6051336a0766ee7b7`. Transactional backup, AST/order and exact two-file integration passed. No app/system/Root Patch/reboot mutation occurred.
-
-## D97AF GitHub build and external byte audit PASS
-The substantial build completed on private head `76d45e6d4f37ad394a9f30a61c8bfc97dc587c4e`, workflow/run/job `348814365 / 33686570072 / 100435354962`, `macos-15-intel / x86_64`. Exact D97AD snapshot reconstruction, two-file D97AF transition, compile/AST/order and packaged PyInstaller audit passed. D97AD remained unchanged, D97AF occurs once, retired helpers are absent, and the packaged executable is x86_64 with SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`. Inner app ZIP SHA256 is `728dd30d7a4483bc7318300f3911e8aae8590f0d9ff59afbcf7db66651d8e907`.
-
-Original artifact `9868515225` is `751567689` bytes with GitHub digest `70a123bfad81e00072ed2691fc769fa81c25f07c48a2ddb39a092d06d1947d9b`. The connector's `536870912`-byte ceiling required a no-rebuild byte split. Audited split workflow/run `ecda263f8e986e3ed8713c19c6f6e06c38ca32b459f3985eebf1830515cb3f04 / 33688046460` verified the original archive, split and pre-upload reassembly. Both resulting wrappers were independently downloaded. Their hashes, the two exact part hashes, full outer reassembly/digest/size, all inner SHA records, app ZIP CRC, reports and single packaged executable identity passed. Signing/notarization validation was skipped and is not classified PASS. No ASUS2 app/system/Root Patch/reboot mutation occurred.
-
-## D97AF deploy FASTLANE audited / ready
-Exact wrapper `OCLP7_D97AF_EXACT_GITHUB_ARTIFACT_AUDIT_DEPLOY.command`, SHA256 `e82a5748abd09684a88932380d98d4ae8d83e0bfea94c462866080cfe7b535b4`, git blob `02b4a322eaabb1eff0c3a14089a9ce6508882bc6`, `26914` bytes, passed zsh parse, all three embedded Python compiles, independent pinning/archive/path audits and ordinary error/signal fault matrices.
-
-Before `/Applications` mutation it re-verifies the exact private run/job/artifact, outer and inner ZIPs, full SHA records, unique x86_64 packaged executable and exact installed D97AD preimage. It prepares and re-verifies D97AF beside live, drains the exact old OCLP path, moves D97AD to a re-verified timestamped backup, performs a second gap census, installs/re-verifies exact D97AF, opens it and stops. EXIT/HUP/INT/TERM recovery removes owned staging or restores exact D97AD during ordinary failures. The two-rename interval is not represented as crash-atomic against SIGKILL/kernel crash/power loss. At that audited-ready checkpoint deployment was `NOT_STARTED`; the live result below supersedes that execution state.
-
-## D97AF live app deployment PASS
-The exact public delivery from commit `15c1a141cb362a03c1e63d8bfbb8dac72b693d0e` ran on ASUS2 with wrapper blob `02b4a322eaabb1eff0c3a14089a9ce6508882bc6`, SHA256 `e82a5748abd09684a88932380d98d4ae8d83e0bfea94c462866080cfe7b535b4`, `26914` bytes and outer RC `0`.
-
-All 16 build job steps, exact `751567689`-byte artifact SHA256 `70a123bfad81e00072ed2691fc769fa81c25f07c48a2ddb39a092d06d1947d9b`, eight-member outer archive, complete SHA records, inner app ZIP SHA256 `728dd30d7a4483bc7318300f3911e8aae8590f0d9ff59afbcf7db66651d8e907`, reports and staged executable passed again on ASUS2. Exact live D97AD preimage SHA256 `5a214ab2a3dc28b70b0443b583a1c7999adf04a3647dbe29e85165f1b7a795b0` passed and is preserved at `/Applications/OpenCore-Patcher.app.D97AD-before-D97AF-20260903-013623`.
-
-Both old-process censuses were empty. Live `/Applications/OpenCore-Patcher.app` is now exact D97AF x86_64, `6595600` bytes, SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`; fresh exact-path PID `3678` passed. `D97AF_EXACT_GITHUB_ARTIFACT_AUDIT_DEPLOY=PASS` and `INSTALLED_APP_MUTATION_STATE=D97AF_DEPLOYED_EXACT`. No source/system target/Golden/Root Patch/reboot mutation occurred.
-
-## Legacy Root Patch unpatch PASS
-The next manual OCLP operation entered `Starting Unpatch Process`. It found exact local metallib `26.6.2-25G82`, skipped API fallback, completed the APFS snapshot revert, removed old Skylight plugins, and removed `AppleIntelFramebufferAzul.kext` plus `AppleIntelHD5000Graphics.kext` while cleaning the Auxiliary Kernel Collection. It ended `Unpatching complete` and explicitly requires reboot for the changes to take effect.
-
-Classification at that checkpoint: `LEGACY_ROOT_PATCH_UNPATCH=OCLP_REPORTED_PASS_PENDING_REBOOT`, `SYSTEM_SNAPSHOT_MUTATION=YES_BY_MANUAL_UNPATCH`, `UNPATCH_ACTIVATION_REBOOT=NOT_YET_RUN`, `D97AF_ROOT_PATCH=NOT_STARTED`. The clean post-reboot state was not independently proven. This output was not a D97AF Root Patch result. Exact D97AF remained the last proven live application and exact D97AD remained in its timestamped backup.
-
-## D97AF Root Patch invalid — packaged `os.listxattr` unavailable
-The next returned evidence is a complete manual Root Patch log. No separate reboot/VESA return or clean-state/application-identity audit was returned between the unpatch output and this log; `LEGACY_UNPATCH_ACTIVATION_REBOOT=NOT_SEPARATELY_PROVEN`. The Root Patch log is SHA256 `b1a263a7bddadbbf46ad8c10abcbfb82043edb17a5c15a21637de6ecae0a24a1`, git blob `b22c777844a2253a8e7fafab851acd86149b9067`, `26879` bytes and `731` logical lines.
-
-P1, P2b, P3, AIR00, D34, P6, P7 and D97AD all reported PASS, with D97AD committed SHA256 `524a16a716a4da8c26caf576dcf1fff7ed454e332cbfff81225578c934c8a755`. The D97AF method then raised `AttributeError: module 'os' has no attribute 'listxattr'` at `_xattrs` through `_target_metadata`. Exact source ordering proves the failure preceded every D97AF target byte read or write, temporary file, sibling reservation and rename; `D97AF_METHOD_TARGET_MUTATION=NOT_REACHED`.
-
-OCLP caught the error, continued through patchset information, Auxiliary Kernel Collection handling and APFS snapshot creation, and printed generic `Patching complete`. This generic terminal message does not override the explicit custom-step exception. Classification: `D97AF_ROOT_PATCH=INVALID_PARTIAL`, `D97AF_LC_UUID_BUILD_STAMP=FAILED_NOT_APPLIED`, `POST_SNAPSHOT_MTL_IDENTITY=NOT_YET_READ`, `LAST_PROVEN_D97AF_APP_SHA256=ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, `ROOT_PATCH_INVOCATION_APP_IDENTITY=NOT_SEPARATELY_RECHECKED`, `REBOOT=NOT_AUTHORIZED`.
-
-## D97AG Tahoe xattr backend and local source integration PASS
-D97AG corrects the exact D97AF packaged-runtime incompatibility without changing D97AD or the patch target contract. The `_xattrs` helper now invokes `/usr/bin/xattr -s` for names and `/usr/bin/xattr -s -p -x` for exact binary values, with fail-closed framing, cardinality, stderr, exit and hex validation. The shared Metal-chain catch now unmounts best-effort and bare re-raises, placing every later patchset-write, AuxKC and snapshot action beyond the failure boundary.
-
-A first pinned launcher correctly completed its temporary-file xattr operations but stopped because it over-constrained the unpatched live system to contain donor path `Versions/32023/MTLCompiler`. No source mutation occurred. The corrected pinned launcher, public commit `453c6b3ef450c9c3d80f1d68996dac14279a8cd4`, SHA256 `cd8b3da4fd88cea16b8c795007356a4fdbcd7fe9c7207dde31d1cbd83c7db35c`, `4042` bytes, explicitly accepts that pre-Root-Patch absence and completed with RC `0`.
-
-ASUS2 printed `D97AG_TAHOE_XATTR_BACKEND=PASS`. The exact source patch SHA256/blob/bytes are `2c4e93e57b2d13762ef90020496f87c2a95c7e39553ff60f948bfacd2b6b659b / 532f8729658b3bc287fa83963043a4d2a8aa816a / 3137`. Exact D97AF preimages, branch `alex-tahoe-25G82-custom` and HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06` passed. The transactional two-file integration produced helpers `ac4724159c0a6ce8802940f11ec02f803e85d8ca934d4629d3640ec1e58d32a2`, sys_patch `93988a13b809a29a7e1f2f67c885b74d574e456d1f229368740209aa0ceeed69`, unchanged metal_3802 `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`, and unchanged D97AD method `bb66b1d5d883251431d5a7fa7bc42c0cc9bcb15ec77c74506bb2eae5bf987a12`. Compile/AST/order/native-reader/fatal-boundary checks all passed. Backup is `/Users/alex/Desktop/OCLP7_D97AG_SOURCE_BACKUP_20260903-023142.w9fQQg`.
-
-No application, system target, Golden, Root Patch, snapshot or reboot mutation occurred. The last proven live app remains D97AF and is not authorized for another Root Patch.
-
-## 2026-09-03 execution-lane correction
-Explicit user authority: routine/small tests and validation work are performed on ASUS2 for direct user control. GitHub is reserved only for major/substantial compilation, build or packaging work. Existing artifact-delivery mechanisms are reused to move major-build outputs to ASUS2. Local major compilation is not an implicit fallback and requires explicit user authorization.
-
-## D97AG major Intel GitHub build PASS
-The major build already existed when this continuation resumed and was not rerun. Private repo/branch/head are `StefanAlMare/Private-Work` / `oclp7-d97ag-github-build` / `4bde01b09717d076499ebf3640b5e4c0378798dd`. Correct workflow/run/job are `348876070 / 33696449978 / 100466229401` on Intel/x86_64; every substantive build/package/upload step completed `success`.
-
-Exact final application identities are app ZIP `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846` and packaged executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64. The reports artifact `9872066045` actual SHA256 matches the GitHub digest exactly: `da5b9e2d2a55786c1b6a4f3c64c054779ad73f394578e1a5e07c2bd0fd287217`. Delivery part artifacts are `9872061067` and `9872064375`.
-
-## D97AG first ASUS2 artifact audit — stale workflow pin false failure
-The first exact wrapper invocation verified its public blob and local zsh parse, then stopped at `RUN_IDENTITY_MISMATCH:workflow_id:348876070:348947684`. GitHub and ASUS2 both prove `348876070` is the actual workflow ID for run `33696449978`. No artifact download, application mutation, system mutation, Root Patch or reboot occurred. Classification: `TOOLING_FALSE_FAILURE_NO_MUTATION`.
-
-The original public wrapper is commit `b506cc1e90c278de483fd95955e078027df5c228`, blob `36c43b17d3493b7b7cb35b8590653e6e20ebe60c`, SHA256 `0a9d3fd19d202c35ee2148af35fb1a99469b5c3798c64bc219630321a6aadadc`, 21778 bytes. ASUS2 changed exactly one stale workflow-ID literal to `348876070`; corrected local SHA256 `1d112e1dc76e1a0356cd692de8ccc06855c8bce1bd1b07bdbc22791ccf3d9fef`, blob-style SHA1 `6982b9dedfeddb4b84abde9209a0e5a3689ebff3`, same 21778 bytes; local zsh parse PASS.
-
-## D97AG ASUS2 artifact/reassembly + frozen runtime audit PASS
-Corrected wrapper outer RC was `0`. Exact run/job/head/branch/path passed, all 25 reported job steps were successful, required step set complete, all three artifact wrapper metadata/digest/size/expiration and downloaded SHA checks passed, member sets were safe, shared `PARTS.SHA256` and split manifests matched all three copies, report checksum set passed, both part payload identities passed, and reassembly produced exact app ZIP `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`.
-
-Packaged executable from that exact ZIP is Mach-O x86_64, `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`, and is byte-identical to the executable in the reports artifact.
-
-The exact frozen auditor executed on ASUS2 against that exact packaged executable. It returned `D97AG_RUNTIME_AUDIT_MODE=PACKAGED_FROZEN`, `D97AG_RUNTIME_PROCESS_FROZEN=YES`, `D97AG_RUNTIME_OS_LISTXATTR_AVAILABLE=NO`, exact backend fingerprint `71959f823a2da72c12e53581c85773ebdfd0100b22a780152bf8c69fe2d56286`, exact backend source SHA `d02e98be14d1881202565560198a9eb5b3ec3200057db98c4b0820454dab2019`, empty manifest PASS, empty/text/binary value PASS and `D97AG_EXACT_XATTR_CODE_OBJECT_RUNTIME=PASS`. Required runtime lines missing set was empty.
-
-Final classifications: `D97AG_ASUS2_FROZEN_XATTR_RUNTIME=PASS`, `D97AG_ASUS2_ARTIFACT_REASSEMBLY=PASS`, `D97AG_ASUS2_PACKAGED_EXECUTABLE_IDENTITY=PASS`, `D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT=PASS`, `D97AG_LOCAL_PACKAGED_RUNTIME_COMPATIBILITY=PROVEN_PASS`.
-
-Verified ZIP retained at `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`; audit report `/Users/alex/Desktop/OCLP7_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_REPORT_20260903-162932.txt`. No source, installed app, system target, Golden, snapshot, Root Patch or reboot mutation occurred. Last proven installed app remained exact D97AF SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, 6595600 bytes at that stage.
-
-## D97AG deployment — location false failure then exact live PASS
-First exact deploy wrapper invocation stopped fail-closed at `VERIFIED_ZIP_MISSING_OR_SYMLINK` before application mutation. Bounded ASUS2 search found the exact verified ZIP in `$HOME/.Trash` with exact `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`. It was restored exactly to `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`; source/destination identities matched. Classification: `TOOLING_INPUT_LOCATION_FALSE_FAILURE_NO_APPLICATION_MUTATION`.
-
-The unchanged exact public deploy wrapper commit `fcd817dec08e1ff782316516f7d2432e2b5d51df`, blob `e8dca8761903de7f612629ff85ea9ec81bc5d65c`, SHA256 `64d7ceb501c8b909b7633a836c371257f1e2c48fd13d4f1f290095b6a4123c96`, 14858 bytes was rerun and completed outer RC `0`.
-
-Stage passed exact D97AG executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64. Live preimage passed exact D97AF `6595600` bytes / SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470` / x86_64. Exact old PID `805` was drained; post-drain was NONE.
-
-D97AF backup is `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-20260903-165317`, reverified exact SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`. Live `/Applications/OpenCore-Patcher.app` is now exact D97AG x86_64, `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`. Fresh exact-path PID `8877` proved launch. `D97AG_EXACT_APP_DEPLOY_OPEN_STOP=PASS`; `INSTALLED_APP_MUTATION_STATE=D97AG_DEPLOYED_EXACT_OPENED`.
-
-No source/system-target/Golden/Root Patch/reboot mutation occurred in deploy. Report: `/Users/alex/Desktop/OCLP7_D97AG_EXACT_APP_DEPLOY_OPEN_STOP_REPORT_20260903-165317.txt`.
-
-## CURRENT ACTION — manual D97AG Root Patch / STOP before reboot
-ASUS2 stays at STOP. Exact D97AG is live and open.
-
-Next bounded action is user-manual Root Patch in the already-open D97AG app. Let the patch process finish, then STOP and return the complete Root Patch log/output. Do not reboot.
-
-Audit must prove D97AG xattr/LC_UUID success and absence of the D97AF `os.listxattr` exception, verify D97AD/D97AF/D97AG order and target identities, and inspect AuxKC/snapshot completion. Generic `Patching complete` alone is insufficient. Reboot remains `NOT_AUTHORIZED` until audit passes.
+After that major build, work returns to ASUS2 for exact artifact/reassembly and packaged-runtime validation before deployment. Root Patch/reboot remain unauthorized.
