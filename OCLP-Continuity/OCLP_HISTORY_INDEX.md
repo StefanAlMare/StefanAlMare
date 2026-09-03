@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_PASS_DEPLOY_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_LIVE_APP_DEPLOY_PASS_ROOT_PATCH_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
@@ -136,11 +136,22 @@ The exact frozen auditor executed on ASUS2 against that exact packaged executabl
 
 Final classifications: `D97AG_ASUS2_FROZEN_XATTR_RUNTIME=PASS`, `D97AG_ASUS2_ARTIFACT_REASSEMBLY=PASS`, `D97AG_ASUS2_PACKAGED_EXECUTABLE_IDENTITY=PASS`, `D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT=PASS`, `D97AG_LOCAL_PACKAGED_RUNTIME_COMPATIBILITY=PROVEN_PASS`.
 
-Verified ZIP retained at `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`; audit report `/Users/alex/Desktop/OCLP7_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_REPORT_20260903-162932.txt`. No source, installed app, system target, Golden, snapshot, Root Patch or reboot mutation occurred. Last proven installed app remains exact D97AF SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, 6595600 bytes.
+Verified ZIP retained at `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`; audit report `/Users/alex/Desktop/OCLP7_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_REPORT_20260903-162932.txt`. No source, installed app, system target, Golden, snapshot, Root Patch or reboot mutation occurred. Last proven installed app remained exact D97AF SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, 6595600 bytes at that stage.
 
-## CURRENT ACTION — ASUS2 exact D97AG application backup/deploy/open/STOP
-ASUS2 stays at STOP with no Root Patch and no reboot.
+## D97AG deployment — location false failure then exact live PASS
+First exact deploy wrapper invocation stopped fail-closed at `VERIFIED_ZIP_MISSING_OR_SYMLINK` before application mutation. Bounded ASUS2 search found the exact verified ZIP in `$HOME/.Trash` with exact `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`. It was restored exactly to `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`; source/destination identities matched. Classification: `TOOLING_INPUT_LOCATION_FALSE_FAILURE_NO_APPLICATION_MUTATION`.
 
-Next bounded action is application-only: verify the retained exact D97AG ZIP, stage and verify exact D97AG x86_64 app/executable, prove current live exact D97AF preimage, stop/drain exact-path OCLP processes, create a timestamped recoverable D97AF backup, deploy exact D97AG to `/Applications/OpenCore-Patcher.app`, reverify live identity, open exact OCLP, prove fresh exact-path process and STOP.
+The unchanged exact public deploy wrapper commit `fcd817dec08e1ff782316516f7d2432e2b5d51df`, blob `e8dca8761903de7f612629ff85ea9ec81bc5d65c`, SHA256 `64d7ceb501c8b909b7633a836c371257f1e2c48fd13d4f1f290095b6a4123c96`, 14858 bytes was rerun and completed outer RC `0`.
 
-Only after that returned deployment output passes may a separate manual Root Patch be authorized.
+Stage passed exact D97AG executable `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64. Live preimage passed exact D97AF `6595600` bytes / SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470` / x86_64. Exact old PID `805` was drained; post-drain was NONE.
+
+D97AF backup is `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-20260903-165317`, reverified exact SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`. Live `/Applications/OpenCore-Patcher.app` is now exact D97AG x86_64, `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`. Fresh exact-path PID `8877` proved launch. `D97AG_EXACT_APP_DEPLOY_OPEN_STOP=PASS`; `INSTALLED_APP_MUTATION_STATE=D97AG_DEPLOYED_EXACT_OPENED`.
+
+No source/system-target/Golden/Root Patch/reboot mutation occurred in deploy. Report: `/Users/alex/Desktop/OCLP7_D97AG_EXACT_APP_DEPLOY_OPEN_STOP_REPORT_20260903-165317.txt`.
+
+## CURRENT ACTION — manual D97AG Root Patch / STOP before reboot
+ASUS2 stays at STOP. Exact D97AG is live and open.
+
+Next bounded action is user-manual Root Patch in the already-open D97AG app. Let the patch process finish, then STOP and return the complete Root Patch log/output. Do not reboot.
+
+Audit must prove D97AG xattr/LC_UUID success and absence of the D97AF `os.listxattr` exception, verify D97AD/D97AF/D97AG order and target identities, and inspect AuxKC/snapshot completion. Generic `Patching complete` alone is insufficient. Reboot remains `NOT_AUTHORIZED` until audit passes.
