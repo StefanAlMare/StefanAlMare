@@ -1,4 +1,4 @@
-# OCLP7 CHECKPOINT — D97AG ROOT PATCH FAILS CLOSED AT CHFLAGS PATH; ASUS2 PATH PROBE NEXT
+# OCLP7 CHECKPOINT — D97AG ROOT PATCH FAILS CLOSED AT CHFLAGS PATH; D97AH SOURCE FIX NEXT
 
 Date: 2026-09-03 EEST
 Authority: ASUS2 Tahoe `26.6.2 / 25G82`, Intel x86_64 Haswell, SMBIOS `MacBookAir6,2`.
@@ -56,7 +56,7 @@ FileNotFoundError: File not found: /bin/chflags
 
 The stack identifies `patch_mtl_compiler_tahoe_d97af_lc_uuid_build_stamp` through `subprocess_wrapper.run_as_root_and_verify`.
 
-Authoritative D97AF source ordering proves the first hard-coded `['/bin/chflags', '0', staged_target]` invocation occurs only after an exclusively reserved same-directory staged sibling is created and metadata is copied to it, but before `/bin/dd` writes the transformed postimage into that staged inode. The later second `/bin/chflags` restore and the final same-filesystem `/bin/mv -f staged_target target` atomic commit are still downstream.
+Authoritative source ordering proves the first hard-coded `['/bin/chflags', '0', staged_target]` invocation occurs only after an exclusively reserved same-directory staged sibling is created and metadata is copied to it, but before `/bin/dd` writes the transformed postimage into that staged inode. The later second `/bin/chflags` restore and the final same-filesystem `/bin/mv -f staged_target target` atomic commit remain downstream.
 
 Thus:
 
@@ -93,17 +93,49 @@ REBOOT=NOT_AUTHORIZED
 
 The live application remains the exact D97AG executable SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`; retained D97AF backup remains `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-20260903-165317`.
 
-## Static path hypothesis
-The current D97AF/D97AG source contains two hard-coded `/bin/chflags` calls inside the transactional build-stamp method: one to clear flags on the staged sibling before data-fork write and one to restore the original numeric flags after the staged write. Public macOS references place `chflags` at `/usr/bin/chflags`; this is only a hypothesis until ASUS2 proves the exact Tahoe installation path and executable identity locally.
+## ASUS2 absolute-tool path probe PASS
+The bounded read-only ASUS2 probe proves the path hypothesis exactly:
+
+```text
+/bin/chflags=ABSENT
+/usr/bin/chflags=EXISTS
+/usr/bin/chflags=REGULAR_FILE
+/usr/bin/chflags=EXECUTABLE
+/usr/bin/chflags_ARCHS=x86_64 arm64e
+COMMAND_V_CHFLAGS=/usr/bin/chflags
+WHENCE_A_CHFLAGS=/usr/bin/chflags
+TYPE_A_CHFLAGS=/usr/bin/chflags
+WHICH_A_CHFLAGS=/usr/bin/chflags
+```
+
+The other absolute tools used by the transaction are all present and executable at their current paths: `/bin/sh`, `/bin/cp`, `/bin/dd`, `/bin/mv`, `/bin/ls`, `/usr/bin/stat`, `/usr/bin/xattr`. All probed Mach-O tools contain x86_64 support on ASUS2.
+
+The exact D97AF/D97AG transaction contains two `/bin/chflags` calls: clear staged-sibling flags before data-fork overwrite, then restore original flags after the overwrite. On this Tahoe installation both calls must use `/usr/bin/chflags`; no other absolute-tool path correction is supported by the probe.
+
+Probe mutation ledger:
+
+```text
+SOURCE_MUTATION=NO
+INSTALLED_APP_MUTATION=NO
+SYSTEM_TARGET_MUTATION=NO
+GOLDEN_MUTATION=NO
+ROOT_PATCH=AUTO-NO
+SNAPSHOT_MUTATION=NO
+REBOOT=AUTO-NO
+```
+
+Detailed successor record: `OCLP7_CHECKPOINT_20260903_D97AG_ROOT_PATCH_FAIL_BIN_CHFLAGS_D97AH_SOURCE_FIX_NEXT.md`.
 
 ## ACTIVE FRONTIER / CURRENT NEXT ACTION
 ASUS2 STOP. Do not Root Patch again and do not reboot.
 
-Run one bounded, read-only ASUS2 path/capability probe. It must:
-1. report existence, regular-file/symlink status, executable bit, architecture/file identity for `/bin/chflags` and `/usr/bin/chflags`;
-2. report `command -v chflags` and all shell-resolved chflags candidates;
-3. verify the other absolute tools used in the D97AF/D97AG transaction (`/bin/sh`, `/bin/cp`, `/bin/dd`, `/bin/mv`, `/bin/ls`, `/usr/bin/stat`, `/usr/bin/xattr`) so this path class is audited as a set rather than one command at a time;
-4. make no source, app, system-target, Golden, Root Patch, snapshot or reboot mutation;
-5. STOP and return complete output.
+Run one bounded **D97AH local source correction**. It must fail closed unless:
+1. local source remains branch `alex-tahoe-25G82-custom`, HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06`;
+2. `sys_patch_helpers.py` preimage SHA256 is exactly `ac4724159c0a6ce8802940f11ec02f803e85d8ca934d4629d3640ec1e58d32a2`;
+3. `sys_patch.py` remains `93988a13b809a29a7e1f2f67c885b74d574e456d1f229368740209aa0ceeed69`;
+4. `metal_3802.py` remains `fe751967a67d09d2b2b49a7fc360097db804208ff6893b6c46b7f44c246cdf24`;
+5. the exact D97AF/D97AG method contains exactly two `/bin/chflags` literals and no `/usr/bin/chflags` replacement already applied.
 
-Only after that ASUS2 probe is accepted may the exact source correction be defined. If `/usr/bin/chflags` is proven and all other tools pass, the expected correction is limited to the two `/bin/chflags` literals; routine source edit/validation remains ASUS2-local, while any subsequent substantial packaged-app rebuild remains GitHub-only.
+If all gates pass, replace exactly those two literals with `/usr/bin/chflags`, preserve file metadata, create a recoverable local source backup plus exact unified patch artifact, compile/AST-validate the modified Python and prove this D97AH delta changes only `sys_patch_helpers.py`. STOP and return complete output.
+
+No local major compilation, no `/Applications` mutation, no Root Patch and no reboot. Only after the returned D97AH local source evidence passes may a new major GitHub build/package be authorized.
