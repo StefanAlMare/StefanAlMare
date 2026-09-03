@@ -7,10 +7,10 @@ Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AG_TAHOE_XATTR_AND_LOCAL_SOURC
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Permanent protocol
-Permanent current default: short, visible, explained ASUS2 collaboration, one bounded action and STOP gate at a time. GitHub is used only for a substantial compile/build/package job when it is clearly faster than waiting through that job with the user; technical possibility alone does not justify remote work. A justified substantial GitHub build remains assistant-run and fully audited. No automatic Root Patch/reboot. Golden immutable/read-only. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
+Permanent current default: short, visible, explained ASUS2 collaboration, one bounded action and STOP gate at a time. Routine/small tests, ordinary validations, source inspection, small edits, probes, diff checks and diagnostic iteration stay on ASUS2 under user control. GitHub is used only for major/substantial compilation, build or packaging workloads. A justified major GitHub build remains assistant-run and fully audited. Existing audited artifact-delivery mechanisms bring those build outputs to ASUS2. No automatic Root Patch/reboot. Golden immutable/read-only. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized.
 
 ## Local/GitHub execution methodology
-The earlier 2026-09-02 GitHub-first rule was later superseded explicitly by the user after D97AEZ. Work must now stay local for short source inspection, edits, validations, probes and direct diagnostic iteration so the user can see and return immediate feedback. GitHub is reserved for a large/substantial compilation or build that is clearly faster there. When used, it remains the assistant's responsibility to run, repair and completely audit that build; it is never a substitute for ASUS2 hardware evidence. FASTLANE ordering and manual-only Root Patch/reboot remain unchanged.
+The earlier 2026-09-02 GitHub-first rule was explicitly superseded. Work stays local on ASUS2 for routine source inspection, edits, validations, tests, probes, diff checks and direct diagnostic iteration so the user retains direct control and immediate feedback. GitHub is reserved only for large/major compilation, build or packaging work. When used, the assistant runs and audits the major build; GitHub is never a substitute for ASUS2 testing or hardware/live-state evidence. FASTLANE ordering and manual-only Root Patch/reboot remain unchanged.
 
 ## Functional baseline
 P1 -> P2b -> P3 -> AIR00 -> D34. True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. P6/P7 retained, runtime sufficiency NEGATIVE.
@@ -114,5 +114,10 @@ ASUS2 printed `D97AG_TAHOE_XATTR_BACKEND=PASS`. The exact source patch SHA256/bl
 
 No application, system target, Golden, Root Patch, snapshot or reboot mutation occurred. The last proven live app remains D97AF and is not authorized for another Root Patch.
 
-## CURRENT ACTION — substantial D97AG Intel build
-ASUS2 stays at STOP with no Root Patch and no reboot. The assistant runs and audits the substantial GitHub build: actual native and PyInstaller-frozen xattr backend execution, packaged semantic identity, bounded split artifacts and external reassembly, then exact backup/deploy/open/STOP. Manual Root Patch is a later separately authorized hardware action only after D97AG app deployment is proven.
+## 2026-09-03 execution-lane correction
+Explicit user authority: routine/small tests and validation work are performed on ASUS2 for direct user control. GitHub is reserved only for major/substantial compilation, build or packaging work. Existing artifact-delivery mechanisms are reused to move major-build outputs to ASUS2. Local major compilation is not an implicit fallback and requires explicit user authorization.
+
+## CURRENT ACTION — major D97AG Intel build; ASUS2 tests/audits
+ASUS2 stays at STOP with no Root Patch and no reboot. The assistant uses GitHub only for the major/substantial D97AG Intel application compilation/build/package. Routine validations/tests are not run on GitHub.
+
+After the major build artifact exists, use the established artifact-delivery path to ASUS2. On ASUS2, run the bounded identity/reassembly checks, packaged executable/code checks, actual PyInstaller-frozen xattr test, any short native/runtime validation, exact backup/deploy, live app identity check, open OCLP and STOP. Manual Root Patch is a later separately authorized ASUS2 action only after D97AG app deployment is proven.
