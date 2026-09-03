@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AG_GITHUB_BUILD_PASS_ASUS2_ARTIFACT_RUNTIME_AUDIT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_PASS_DEPLOY_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -126,15 +126,38 @@ ASUS2 printed `D97AG_TAHOE_XATTR_BACKEND=PASS`. The exact source patch SHA256/bl
 No application, system target, Golden, Root Patch, snapshot or reboot mutation occurred. The last proven live app remains D97AF and is not authorized for another Root Patch.
 
 ## D97AG major Intel GitHub build PASS
-The major build was found already completed and was not rerun. Private repo/branch/head are `StefanAlMare/Private-Work` / `oclp7-d97ag-github-build` / `4bde01b09717d076499ebf3640b5e4c0378798dd`. Workflow/run/job are `348947684 / 33696449978 / 100466229401` on Intel/x86_64; every substantive build/package/upload step completed `success`.
+The major build was found already completed and was not rerun. Private repo/branch/head are `StefanAlMare/Private-Work` / `oclp7-d97ag-github-build` / `4bde01b09717d076499ebf3640b5e4c0378798dd`. Workflow/run/job are `348876070 / 33696449978 / 100466229401` on Intel/x86_64; every substantive build/package/upload step completed `success`.
 
 The exact reports artifact `9872066045` was independently downloaded and its local SHA256 equals the GitHub artifact digest `da5b9e2d2a55786c1b6a4f3c64c054779ad73f394578e1a5e07c2bd0fd287217`. Final app ZIP identity is `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`; packaged executable is `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64. Packaged/source code fingerprints agree, D97AD is unchanged, D97AG appears exactly once and forbidden packaged `listxattr/getxattr` APIs are absent.
 
-Delivery artifacts are part00 `9872061067` and part01 `9872064375`, with exact wrapper digests and inner payload hashes persisted in the authoritative checkpoint. Historical GitHub-side frozen xattr execution is informative build evidence only and does not replace ASUS2 local runtime validation.
+Delivery artifacts are part00 `9872061067` and part01 `9872064375`. Historical GitHub-side frozen xattr execution is build evidence only.
 
-## CURRENT ACTION — ASUS2 exact artifact/reassembly + frozen runtime audit
+## D97AG ASUS2 artifact/reassembly + frozen runtime audit PASS
+The first ASUS2 audit attempt failed closed before download/mutation solely because the wrapper pinned stale workflow ID `348947684`; actual run metadata is `348876070`. This is `TOOLING_FALSE_FAILURE_NO_MUTATION`.
+
+After a deterministic one-occurrence local correction, the audit reran with outer RC `0`. Exact run/job/head/branch/path, all three artifact wrappers, safe member sets, shared manifest/checksum files, reports checksum set, part payloads and exact reassembly all passed.
+
+Exact locally proven identities are:
+
+```text
+D97AG_APP_ZIP_BYTES=751494420
+D97AG_APP_ZIP_SHA256=d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846
+D97AG_PACKAGED_EXE_BYTES=6596544
+D97AG_PACKAGED_EXE_SHA256=29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628
+D97AG_PACKAGED_ARCH=x86_64
+D97AG_ASUS2_ARTIFACT_REASSEMBLY=PASS
+D97AG_ASUS2_PACKAGED_EXECUTABLE_IDENTITY=PASS
+```
+
+The exact x86_64 frozen auditor executed on ASUS2 against that exact packaged executable and returned `PACKAGED_FROZEN`, `PROCESS_FROZEN=YES`, `OS_LISTXATTR_AVAILABLE=NO`, exact backend fingerprint `71959f823a2da72c12e53581c85773ebdfd0100b22a780152bf8c69fe2d56286`, exact backend source SHA `d02e98be14d1881202565560198a9eb5b3ec3200057db98c4b0820454dab2019`, empty manifest PASS, empty/text/binary values PASS and exact xattr code-object runtime PASS. Therefore `D97AG_ASUS2_FROZEN_XATTR_RUNTIME=PASS` and `D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT=PASS`.
+
+Verified application ZIP retained at `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`. Audit report: `/Users/alex/Desktop/OCLP7_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_REPORT_20260903-162932.txt`.
+
+No source, installed-app, system-target, Golden, Root Patch, snapshot or reboot mutation occurred during the audit. Last proven live application remains exact D97AF executable SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, 6595600 bytes.
+
+## CURRENT ACTION — ASUS2 exact D97AG app backup/deploy/open/STOP
 ASUS2 remains at STOP: do not Root Patch and do not reboot.
 
-GitHub build/package work is complete. The next action is one bounded ASUS2-only audit with no `/Applications` mutation and no OCLP launch: verify run/job/artifact identities, download the two part artifacts plus reports, verify exact outer and inner hashes/member sets, reassemble exact app ZIP `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`, verify executable `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64, and execute the frozen xattr code-object auditor locally against that exact packaged executable.
+The next bounded action is application-only: verify the retained exact D97AG ZIP, stage and verify exactly one D97AG app/executable `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64, prove the current live exact D97AF preimage `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, drain only exact-path OCLP processes, create a timestamped recoverable D97AF backup, deploy exact D97AG to `/Applications/OpenCore-Patcher.app`, reverify exact live identity, open exact OCLP, prove a fresh exact-path process and STOP.
 
-Only after the returned ASUS2 audit is accepted may a separate recoverable backup/deploy/open-OCLP/STOP action be authorized. Root Patch remains later, manual-only and separately authorized. Golden remains immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
+Only `/Applications/OpenCore-Patcher.app` may be mutated by this action. OCLP source, system target, root-patched snapshot and Golden remain untouched. Root Patch and reboot remain later, manual-only and separately authorized. Golden remains immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
