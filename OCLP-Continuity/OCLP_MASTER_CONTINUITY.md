@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AM_GITHUB_BUILD_RELEASE_FULL_PASS_ASUS2_ARTIFACT_AUDIT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AM_ASUS2_ARTIFACT_AUDIT_FULL_PASS_DEPLOY_OPEN_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-04 EEST
@@ -51,7 +51,7 @@ Authoritative D97AH major build/private release:
 - app ZIP `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`;
 - packaged executable `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
 
-Exact D97AH app remains live at `/Applications/OpenCore-Patcher.app`; D97AG backup remains `/Applications/OpenCore-Patcher.app.D97AG-before-D97AH-20260903-200708`.
+Exact D97AH app remains live at `/Applications/OpenCore-Patcher.app`; D97AG backup remains `/Applications/OpenCore-Patcher.app.D97AG-before-D97AH-20260903-200708` until the next deploy completes.
 
 ## D97AH Root Patch / accelerated / A4F provenance
 D97AH manual Root Patch is FULL PASS. The real privileged transaction committed exact A4F UUID-only postimage, preserved metadata and completed atomic same-volume rename, AuxKC and APFS snapshot.
@@ -95,7 +95,7 @@ D97AM_SOURCE_TRANSACTION=PASS
 ```
 
 Local backup: `/Users/alex/Desktop/OCLP7_D97AM_SOURCE_BACKUP_20260904-010010_2161`.
-Installed app/system target/Golden were not mutated; no local major build, Root Patch or reboot occurred. One cosmetic residue remains inside an error string (`expected exact D97AD preimage`) while the actual enforced preimage constant is exact P7; it does not affect transaction semantics.
+Installed app/system target/Golden were not mutated by source integration. One cosmetic residue remains inside an error string (`expected exact D97AD preimage`) while the actual enforced preimage constant is exact P7; it does not affect transaction semantics.
 
 ## D97AM GitHub build evolution
 Private repo `StefanAlMare/Private-Work`, branch `oclp7-d97am-github-build`, based on audited D97AH head `d04ddd28c784a0b30c6629feeface10804d5d591`.
@@ -171,12 +171,49 @@ RELEASE_TARGET_HEAD=6cf6d143bed3e2c5601a7f19c9f16c5e5dd9d01d
 RELEASE_ASSET_COUNT=7
 ```
 
-All seven assets were uploaded and digest-audited by the authoritative workflow. Classification:
-`D97AM_GITHUB_MAJOR_BUILD_PACKAGE_PRIVATE_RELEASE=FULL_PASS`.
+All seven assets were uploaded and digest-audited by the authoritative workflow. Classification: `D97AM_GITHUB_MAJOR_BUILD_PACKAGE_PRIVATE_RELEASE=FULL_PASS`.
 
-This is build/package/release provenance only. It is not installed-state, Root Patch, runtime, accelerated-GUI or functional-success evidence.
+## D97AM ASUS2 private-release artifact audit — FULL PASS
+Artifact auditor V1 commit/blob `80f652130f6d0fc32319b727211576388cdb3b10` / `7fb4215818665850b7e42e61d4e96c1ffe7568e0` had one tooling false failure: after already proving 7/7 local asset identities and checksum files, it incorrectly required a non-existent redundant `GITHUB_REPOSITORY` field inside the split manifest. The build generator never writes that field; repository binding is independently enforced through the exact private release API endpoint and release identity.
 
-## CURRENT ACTION — ASUS2 artifact audit only
-The next technical action, in a subsequent bounded step, is to retrieve and audit the exact D97AM private release on ASUS2: bind release/tag/head/7 assets, verify both part digests, reassemble exact app ZIP, verify `751495650` bytes / SHA256 `d6aca517...`, audit ZIP CRC/safe-member properties, verify packaged executable `6596496` bytes / SHA256 `fbcb69e...` / x86_64, and audit reports/manifest contents.
+Auditor V2 commit/blob `4d41ac00685d325910360a05d9b816e130e0fd15` / `086c1c866519232276c6f4f26c911c4c21a003ea` removed exactly that one redundant manifest requirement in memory and changed no other audit logic.
 
-Do not deploy D97AM yet. Do not replace/open the installed OCLP app yet. Do not Root Patch. Do not reboot. Deployment requires a separate assistant audit after the ASUS2 artifact audit.
+ASUS2 V2 proved:
+
+```text
+D97AM_RELEASE_METADATA_BINDING=PASS
+D97AM_ALL_SEVEN_LOCAL_ASSET_IDENTITIES=PASS
+D97AM_RELEASE_ASSETS_SHA256_FILE=PASS
+D97AM_PARTS_SHA256_FILE=PASS
+D97AM_SPLIT_MANIFEST_CONTENT=PASS
+D97AM_RELEASE_IDENTITY_CONTENT=PASS
+REASSEMBLED_APP_ZIP_BYTES=751495650
+REASSEMBLED_APP_ZIP_SHA256=d6aca517ae89c7676d3cd416178e4a3a9ba4b23d7658b9e7d3bf879faeabc9ca
+D97AM_TWO_PART_REASSEMBLY_LOCAL=PASS
+APP_ZIP_CRC=PASS
+APP_ZIP_SAFE_MEMBERS=PASS
+APP_ZIP_EXECUTABLE_BYTES=6596496
+APP_ZIP_EXECUTABLE_SHA256=fbcb69e946583beca9793aac7aa722c774b1167965fcddb5a65b757f79d953a3
+APP_ZIP_EXECUTABLE_ARCHS=x86_64
+D97AM_APP_ZIP_EXECUTABLE_EXACT=PASS
+REPORTS_ZIP_CRC=PASS
+REPORTS_ZIP_SAFE_MEMBERS=PASS
+REPORTS_PACKAGED_EXECUTABLE_SHA256=fbcb69e946583beca9793aac7aa722c774b1167965fcddb5a65b757f79d953a3
+REPORTS_SPLIT_MANIFEST_BYTE_IDENTITY=PASS
+D97AM_REPORTS_CONTENT_BINDING=PASS
+D97AM_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT=FULL_PASS
+```
+
+Artifact audit mutation ledger: source NO; installed app NO; system target NO; Golden NO; Root Patch AUTO-NO; reboot AUTO-NO.
+
+## CURRENT ACTION — exact D97AM backup/deploy/open/STOP
+FASTLANE package/artifact validation is complete. Next bounded ASUS2 action:
+1. reacquire exact D97AM app ZIP from exact private release with pinned asset IDs/digests;
+2. verify ZIP `751495650 / d6aca517...` and staged executable `6596496 / fbcb69e... / x86_64`;
+3. revalidate live D97AH preimage exact `6596544 / 207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf / x86_64`;
+4. create timestamped D97AH backup without touching retained older D97AG backup;
+5. deploy exact D97AM fail-closed with rollback on post-switch failure;
+6. open fresh exact-path D97AM process and prove a fresh PID;
+7. STOP with OCLP open.
+
+Do not Root Patch in the deploy command. Do not reboot. Root Patch remains separately authorized only after the complete deploy/open report is audited.
