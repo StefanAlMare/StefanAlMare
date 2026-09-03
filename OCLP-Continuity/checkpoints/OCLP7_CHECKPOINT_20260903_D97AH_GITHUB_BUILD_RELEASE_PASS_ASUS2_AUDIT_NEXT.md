@@ -130,11 +130,26 @@ ASSET_ID=542931734 | RELEASE-ASSETS.SHA256 | BYTES=587 | SHA256=92307b80c3fdb106
 
 GitHub reports all seven assets in state `uploaded`; v5 audited exact asset set/cardinality, size and SHA256 digest where supplied. `OCLP7_D97AH_GITHUB_BUILD_AND_RELEASE_DELIVERY=PASS`.
 
+## ASUS2 private-release audit attempt 1 — tooling false failure at cmp
+ASUS2 ran the exact public wrapper commit `d926fbb736198409931e6bee13aeb3da896dcd73`, blob `7f11298c46a43c15d2ac1a77d80fd05d4e1e2f08`; wrapper SHA256 `3dd4d4a71be5e2bb4ca6003d035e1c3f5b7851959e9c1e6c62f41bea3c2a1ecf`, bytes `19937`, local zsh parse PASS.
+
+Before the failure, ASUS2 proved all of the following PASS:
+- exact private release API binding, release ID/head, and seven-asset set;
+- exact downloaded asset bytes/SHA256 for all seven assets;
+- `RELEASE-ASSETS.SHA256`, `PARTS.SHA256`, and split manifest consistency;
+- exact reassembled ZIP bytes `751494634` / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`, ZIP CRC and safe-member audit;
+- exact packaged executable bytes `6596544` / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf` / x86_64;
+- reports ZIP safe-member audit, exact report file set and `REPORTS.SHA256` checksum set.
+
+The wrapper then emitted `/bin/cmp: no such file or directory` at the intended report-executable versus app-executable byte comparison. Source inspection proves the wrapper had already independently required the carried report executable to match the exact expected bytes and SHA256, then executed literal `/bin/cmp -s "$REPORT_EXE" "$APP_EXE"`. Because the executable `/bin/cmp` itself could not be launched, the generic failure label `REPORT_AND_APP_EXECUTABLE_DIFFER` does NOT prove a byte difference. Classification: `D97AH_ASUS2_AUDIT_ATTEMPT1=TOOLING_FALSE_FAILURE_CMP_ABSOLUTE_PATH_NO_MUTATION`.
+
+No verified ZIP was retained by that incomplete run. No source, `/Applications`, system target, Golden, Root Patch, snapshot or reboot mutation occurred.
+
 ## Mutation ledger
 
 ```text
 ASUS2_SOURCE_MUTATION=ALREADY_D97AH_EXACT_ONE_FILE
-ASUS2_INSTALLED_APP_MUTATION=NO_NEW_MUTATION_DURING_BUILD
+ASUS2_INSTALLED_APP_MUTATION=NO_NEW_MUTATION_DURING_BUILD_OR_AUDIT_ATTEMPT1
 LIVE_APP_REMAINS=D97AG_EXACT
 SYSTEM_TARGET_MUTATION=NO_NEW_MUTATION
 GOLDEN_MUTATION=NO
@@ -147,17 +162,8 @@ The live installed app remains D97AG executable SHA256 `29078c174b4b1058fe903e6e
 ## ACTIVE FRONTIER / CURRENT NEXT ACTION
 ASUS2 STOP. Do not deploy, Root Patch or reboot.
 
-Run one bounded ASUS2-only private-release artifact audit using the already authenticated GitHub CLI. It must:
-1. prove active GitHub login and exact private release tag/head/release ID;
-2. download exactly the seven release assets above into a private temporary directory;
-3. verify exact names, sizes and SHA256 hashes for all seven assets;
-4. verify `RELEASE-ASSETS.SHA256`, `PARTS.SHA256`, and split manifest consistency;
-5. reassemble the two parts and prove exact app ZIP `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48` plus ZIP integrity;
-6. extract exactly one `OpenCore-Patcher.app`, verify executable `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf` / x86_64;
-7. extract and checksum-audit the reports ZIP, verify its carried packaged executable is byte-identical to the executable from the app ZIP and verify source/package audit reports contain D97AH exact patch/source/module/LOAD_CONST/xattr/fatal-boundary PASS evidence;
-8. retain the exact verified D97AH app ZIP on Desktop only after complete PASS;
-9. STOP with no `/Applications` mutation, no OCLP launch, no Root Patch and no reboot.
+Run one bounded read-only ASUS2 capability/path probe for `cmp` only. Prove whether `/bin/cmp` exists, whether `/usr/bin/cmp` exists and is executable, and the shell resolution from `command -v`, `whence -a`, `type -a`, and `/usr/bin/which -a` when available. No source, application, system, Golden, Root Patch or reboot mutation.
 
-The existing ASUS2 `/usr/bin/chflags` capability proof plus the v5 packaged code identity demonstrate the corrected command path structurally. The actual privileged D97AH `chflags` transaction remains a later real-Root-Patch runtime test and must not be inferred before exact D97AH deployment.
+If and only if ASUS2 proves a valid executable `cmp` at a different absolute path, correct only the ASUS2 audit wrapper's `cmp` tool path in a new public wrapper identity, then rerun the complete private-release artifact audit from the beginning. Do not infer complete audit PASS from matching SHA256 alone; preserve the explicit byte-comparison gate.
 
-Only after this ASUS2 release/reassembly audit is returned and accepted may a separate backup/deploy/open-OCLP/STOP action be authorized.
+Only after a complete ASUS2 release/reassembly audit is returned and accepted may a separate backup/deploy/open-OCLP/STOP action be authorized.
