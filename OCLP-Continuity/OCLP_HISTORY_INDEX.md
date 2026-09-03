@@ -3,7 +3,7 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AM_P7_NATURAL_FLOW_SOURCE_INTEGRATION_PASS_GITHUB_BUILD_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AM_GITHUB_BUILD_RELEASE_FULL_PASS_ASUS2_ARTIFACT_AUDIT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is an index/frontier summary. Exact historical detail is preserved in incremental checkpoints and repository history; older checkpoints are not superseded except where a later checkpoint explicitly corrects an interpretation.
@@ -38,11 +38,11 @@ D97AJ revalidated the known seven-entry switch and proved zero reachable unresol
 D97AK proved each of the five simulator-limit strings occurs exactly once and has exactly its known direct xref inside `validSimulatorMetadata`. No alternate origin/entry exists: additional direct xrefs 0, indirect pointer xrefs 0, external direct interior/late entries 0, external RIP references 0, raw absolute late pointers 0.
 
 ## D97AL P7 natural-flow design — FULL PASS
-D97AL reverified local source and active order `selector -> control -> P6 -> P7 -> D97AD -> D97AF`, then in-memory reversed A4F -> exact D97AD -> exact P7. Exact P7 SHA256: `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`.
-New frozen natural-flow UUID: `0FC4C627-2A5D-491B-8101-00CAAA7116B7`. P7 + new UUID changes exactly 16 bytes at `0xAB0..0xABF` and has deterministic SHA256 `e7739c155b5f6f091a1b8d25cee77549655f7944f2f8baaba7a2b431eca3eea9`.
+D97AL reverified local source and active order `selector -> control -> P6 -> P7 -> D97AD -> D97AF`, then in-memory reversed A4F -> exact D97AD -> exact P7. Exact P7 SHA256 `6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda`.
+New frozen natural-flow UUID `0FC4C627-2A5D-491B-8101-00CAAA7116B7`. P7 + new UUID changes exactly 16 bytes at `0xAB0..0xABF` and has deterministic SHA256 `e7739c155b5f6f091a1b8d25cee77549655f7944f2f8baaba7a2b431eca3eea9`.
 
 ## D97AM local P7 natural-flow source integration — FULL PASS
-D97AM integrator artifact commit/blob: `c7532f00b241d4e197b3408fd6d2e3010203541c` / `e758a5fb2b8c2fed2f7d2efd1678cbb8c477aa53`.
+D97AM integrator artifact commit/blob `c7532f00b241d4e197b3408fd6d2e3010203541c` / `e758a5fb2b8c2fed2f7d2efd1678cbb8c477aa53`.
 Preimage gates and candidate AST/compile audit passed; recoverable backup created at `/Users/alex/Desktop/OCLP7_D97AM_SOURCE_BACKUP_20260904-010010_2161`.
 
 Exact post-state:
@@ -64,9 +64,61 @@ METAL_BYTE_IDENTITY_PRESERVED=PASS
 D97AM_SOURCE_TRANSACTION=PASS
 ```
 
-Installed app/system target/Golden were unchanged; no local major build, Root Patch or reboot occurred. A cosmetic error-message phrase still says `expected exact D97AD preimage`, but the enforced preimage SHA is P7; transaction semantics are unaffected.
+Installed app/system target/Golden were unchanged; no local major build, Root Patch or reboot occurred. One cosmetic error-message phrase still says `expected exact D97AD preimage`, while the enforced preimage SHA is P7; transaction semantics are unaffected.
+
+## D97AM private build tooling evolution
+Private build repo/branch: `StefanAlMare/Private-Work` / `oclp7-d97am-github-build`, based on audited D97AH head `d04ddd28c784a0b30c6629feeface10804d5d591`.
+
+Two non-authoritative tooling false failures occurred before any major build:
+- v1 head `114b25b0a9bf3921901a0bfe4cb10b89b88bd92e`, workflow/run/job `349701944 / 33812043670 / 100835838242`: wrong initially guessed transform SHA/size pin; D97AH replay passed, D97AM transform/build not reached;
+- v2 head `4a207fdcc2dc98c36352ef3fa9a56de44417f21a`, workflow/run/job `349721036 / 33812588726 / 100837592383`: GNU-only `base64 -w0` in macOS pre-build locator; build core skipped.
+
+These are tooling history only, not Haswell evidence.
+
+## D97AM authoritative v3 GitHub build/private release — FULL PASS
+Exact identity:
+
+```text
+PRIVATE_REPOSITORY=StefanAlMare/Private-Work
+BUILD_BRANCH=oclp7-d97am-github-build
+HEAD_SHA=6cf6d143bed3e2c5601a7f19c9f16c5e5dd9d01d
+WORKFLOW_ID=349724427
+RUN_ID=33812721798
+RUN_ATTEMPT=1
+JOB_ID=100838020678
+RUNNER_LABEL=macos-15-intel
+JOB_CONCLUSION=success
+```
+
+The authoritative run reconstructed exact D97AH source, applied the deterministic D97AM transform and reproduced exact ASUS2 source hashes. Observed transform identity: manifest Git blob `21e84bef05891c0f7876d85cf67177fd641deacc`, transform Git blob `7aa39868e406b54d3ffa5b5df08cb2cc4c4a2918`, transform SHA256 `d91da748c01f5bd4921de3c8c0bc3e9799a563cee348a33075e2538c4be5d870`, `11116` bytes.
+
+GitHub source audit proved exact D97AM method SHA, dormant D97AD helper unchanged, D97AD active call zero, exact selector/control/P6/P7/D97AM call order, required P7/new-UUID/new-post-SHA constants, forbidden D97AD/A4F constants absent, D97AG xattr/fatal boundary retained and D97AH `/usr/bin/chflags` retained.
+
+Major Intel build PASS. Signing/notarization remained explicitly skipped/not verified.
+
+Packaged PyInstaller audit PASS. Exact executable:
+`6596496` bytes / SHA256 `fbcb69e946583beca9793aac7aa722c774b1167965fcddb5a65b757f79d953a3` / x86_64.
+
+Exact app ZIP:
+`751495650` bytes / SHA256 `d6aca517ae89c7676d3cd416178e4a3a9ba4b23d7658b9e7d3bf879faeabc9ca`.
+
+Split:
+- part00 `390000000` bytes / SHA256 `9181f6e5d100d971755d430fbf7e12a45dea921029900c90d3ec960f08e73e67`;
+- part01 `361495650` bytes / SHA256 `80f626024d92d9add35099ee903809e770c9e0ee85312d4fe46ce08d44159f08`;
+- reassembly PASS.
+
+Reports ZIP `6517739` bytes / SHA256 `ab0e5926efed5ddbe3c4032bfd7584097a309b2bd1964e2e6349e3734eb03481`.
+
+Private release:
+- release ID `382366988`;
+- tag `oclp7-d97am-run-33812721798-attempt-1`;
+- target exact head `6cf6d143bed3e2c5601a7f19c9f16c5e5dd9d01d`;
+- 7 exact assets, all uploaded and digest-audited by the workflow.
+
+Classification: `D97AM_GITHUB_MAJOR_BUILD_PACKAGE_PRIVATE_RELEASE=FULL_PASS`.
+This is build/package/release provenance only, not installed-state, Root Patch, runtime or functional-success evidence.
 
 ## CURRENT ACTION
-Sync exact D97AM source to private `StefanAlMare/Private-Work` and perform a dedicated GitHub Intel/x86_64 major build/package. Audit source identities, packaged call order, D97AD active-call absence, P7/new UUID/new expected SHA constants, dormant D97AD definition where packaged, D97AG/D97AH transaction semantics, and identity-pinned artifact/release delivery.
+Next bounded technical action is ASUS2 private-release artifact verification only: retrieve the exact seven D97AM private release assets with identity binding, verify part/release digests, reassemble exact app ZIP, verify ZIP CRC/safe members and exact ZIP identity, verify packaged executable size/SHA/x86_64 and audit reports/manifests against the authoritative GitHub run.
 
-No local major build. STOP after assistant GitHub build/package audit. Do not deploy, Root Patch or reboot until separately authorized.
+Do not deploy D97AM yet. Do not replace/open installed OCLP. Do not Root Patch or reboot. STOP before deployment until the ASUS2 artifact audit is returned and audited.
