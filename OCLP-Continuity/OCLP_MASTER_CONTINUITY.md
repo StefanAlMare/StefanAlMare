@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AH_ACCEL_NEGATIVE_D97AF_RUNTIME_PROVENANCE_28OF28_H4_NEGATIVE.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AJ_A4F_FULLY_RESOLVED_CFG_NO_LATE_BYPASS_DIAGNOSTIC_ORIGIN_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -144,13 +144,33 @@ Therefore `D97AF_RUNTIME_PROVENANCE=PROVEN_28_OF_28_DIAGNOSTIC_COHORT`. The fail
 
 Do not overclaim direct text-byte capture: `D97AF_DIRECT_RUNTIME_TEXT_BYTE_READ=NOT_PERFORMED`. The exact MTLCompilerService termination status in this D97AH boot was not recovered by the JSON collector and remains `UNKNOWN/INCONCLUSIVE`; zero textual matches for 110–114 or exit1 are not NEGATIVE evidence.
 
-## CURRENT ACTION — reconcile stamped-image control-flow contradiction, read-only only
+## D97AI / D97AJ A4F control-flow reconciliation
+D97AI verified exact A4F SHA/UUID, exact D97AD exit110 bytes at image offset `0x9D6BD`, and the five late simulator-limit xrefs at `0x9D6C8`, `0x9D6EE`, `0x9D712`, `0x9D73A`, `0x9D75D`. Its generic CFG left exactly one reachable unresolved indirect `jmpq *%rax` at REL+`0x279`, so D97AI correctly remained INCONCLUSIVE.
+
+D97AJ revalidated the historical D97AB seven-entry switch resolution on the exact A4F image. All seven entries are exact instruction boundaries on current A4F, and the switch construction is unchanged. After replacing that one known indirect with its seven proven targets:
+
+```text
+CFG_REACHABLE_INSTRUCTION_COUNT_WITH_SWITCH=317
+CFG_REACHABLE_WITH_EXIT110_BLOCKED_AND_SWITCH=314
+REACHABLE_UNRESOLVED_INDIRECT_COUNT_AFTER_KNOWN_SWITCH=0
+```
+
+All five late diagnostic xrefs are unreachable from the normal function entry and remain unreachable with the exit110 region blocked. Authoritative classification:
+
+`D97AJ_STATIC_LATE_BLOCK_BYPASS_EXIT110=NEGATIVE_IN_FULLY_RESOLVED_REACHABLE_CFG`
+
+This closes the internal-bypass hypothesis. Do not weaken or suppress the late validator.
+
+## CURRENT ACTION — full-image diagnostic origin / external-entry audit
 No Root Patch and no reboot are authorized.
 
-D97AER had statically proved five late simulator-limit diagnostic xrefs in 32023 after D97AD candidate terminal REL `0x58B` / image offset `0x9D6BD`. Historical runtime provenance could not prove which D5CE text variant executed. D97AF now proves the real failing diagnostic cohort is emitted by 32023 carrying the A4F stamp created from the exact D97AD preimage.
+The contradiction is now: runtime proves A4F/32023 as the 28/28 diagnostic sender, while a fully resolved CFG from the normal `validSimulatorMetadata` entry cannot reach the five mapped late diagnostic xrefs at all.
 
-The next action must therefore be one bounded read-only ASUS2 audit of the currently installed A4F postimage around `validSimulatorMetadata`: verify exact file SHA/UUID, disassemble/map the D97AD terminal and the five late diagnostic blocks, and determine whether any static predecessor can reach those late blocks while bypassing the exit110 terminal. This is a control-flow reconciliation step, not another provenance probe.
-
-If a bypass path exists, map the earliest such handoff and return to H1/H2/H3 payload/state analysis there. If no bypass path exists, preserve the contradiction and investigate runtime execution semantics without inventing a late-validator patch.
+Next single bounded action is read-only ASUS2 full-image mapping of diagnostic origin:
+1. enumerate every code xref across exact A4F to the five exact simulator-limit string literals, not only xrefs within `validSimulatorMetadata`;
+2. identify the symbol/function owner of every xref;
+3. enumerate direct branches/calls from outside `validSimulatorMetadata` into its interior, especially `0x9D6C5..0x9D77F`;
+4. enumerate statically recoverable address-taken/RIP-relative references into those internal late addresses;
+5. if another diagnostic xref or external entry exists, map the earliest upstream payload/state handoff for H1/H2/H3; if neither exists, persist the contradiction before any new runtime observer.
 
 No source/system/Golden mutation, service launch, Root Patch or reboot. One bounded action, complete raw output, then STOP.
