@@ -3,7 +3,7 @@
 Updated: 2026-09-03 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AH_ACCEL_NEGATIVE_D97AF_RUNTIME_PROVENANCE_28OF28_H4_NEGATIVE.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260903_D97AJ_A4F_FULLY_RESOLVED_CFG_NO_LATE_BYPASS_DIAGNOSTIC_ORIGIN_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This is an index/frontier summary. Exact historical detail remains in incremental checkpoints and repository history.
@@ -146,11 +146,29 @@ Thus `D97AF_RUNTIME_PROVENANCE=PROVEN_28_OF_28_DIAGNOSTIC_COHORT`. Historical D9
 
 Direct memory text-byte reading remains not performed. Exact MTLCompilerService exit status for this D97AH boot remains UNKNOWN/INCONCLUSIVE from the current JSON collector; zero textual matches for exit110–114 or exit1 are not NEGATIVE evidence.
 
+## D97AI / D97AJ fully resolved A4F CFG
+D97AI verified exact A4F SHA/UUID and exact D97AD exit110 bytes at `0x9D6BD`; it confirmed the five late simulator-limit xrefs at `0x9D6C8`, `0x9D6EE`, `0x9D712`, `0x9D73A`, `0x9D75D`. D97AI remained INCONCLUSIVE only because its generic CFG did not resolve `jmpq *%rax` at REL+`0x279`.
+
+D97AB/D97AC history identified that exact indirect as a seven-entry switch. D97AJ revalidated all seven entries on the exact current A4F image and replaced only that known indirect edge set. Result:
+
+```text
+CFG_REACHABLE_INSTRUCTION_COUNT_WITH_SWITCH=317
+CFG_REACHABLE_WITH_EXIT110_BLOCKED_AND_SWITCH=314
+REACHABLE_UNRESOLVED_INDIRECT_COUNT_AFTER_KNOWN_SWITCH=0
+```
+
+All five late diagnostic xrefs are `REACHABLE_NORMAL=NO` and `REACHABLE_WITH_EXIT110_BLOCKED=NO`.
+
+Authoritative classification:
+`D97AJ_STATIC_LATE_BLOCK_BYPASS_EXIT110=NEGATIVE_IN_FULLY_RESOLVED_REACHABLE_CFG`.
+
+Internal CFG bypass is closed as an explanation.
+
 ## CURRENT ACTION
 No Root Patch and no reboot.
 
-D97AER statically proved the late 32023 simulator-limit diagnostic blocks after D97AD candidate terminal REL `0x58B` / image offset `0x9D6BD`. The old unresolved question was whether runtime was actually executing the visible/stamped project image. D97AF now supplies the missing stamped sender identity for the complete failing cohort.
+The next bounded read-only ASUS2 action is a full-image A4F diagnostic-origin/external-entry audit: enumerate every code xref to the five exact simulator-limit string literals and its owning function; enumerate direct branches/calls from outside `validSimulatorMetadata` into its interior, especially late region `0x9D6C5..0x9D77F`; enumerate statically recoverable address-taken/RIP-relative references into those internal addresses.
 
-Next action is one bounded read-only ASUS2 control-flow reconciliation of the current A4F postimage around `MTLSimCompiler::validSimulatorMetadata`: verify exact SHA/UUID, map/disassemble the exit110 terminal and five late diagnostic blocks, and determine whether any predecessor reaches a late block while bypassing exit110. If a bypass exists, move to its earliest payload/state handoff for H1/H2/H3 comparison. If no bypass exists, retain the contradiction and investigate runtime execution semantics without a late-validator suppression patch.
+If another xref or external entry exists, map its earliest upstream payload/state handoff for H1/H2/H3. If neither exists, persist the stamped-runtime-vs-fully-resolved-static contradiction before any new runtime observer.
 
 No source/system/Golden mutation, service launch, Root Patch or reboot. Return complete raw output and STOP.
