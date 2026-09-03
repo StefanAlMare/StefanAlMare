@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AM_ROOT_PATCH_FULL_PASS_ACCELERATED_BOOT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AM_ACCEL_0229_NEGATIVE_WINDOWSERVER_XPC_INTERRUPTED_D97AN_RUNTIME_AUDIT_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-04 EEST
@@ -56,7 +56,7 @@ D97AH is now retained as backup at `/Applications/OpenCore-Patcher.app.D97AH-bef
 ## D97AH Root Patch / accelerated / A4F provenance
 D97AH manual Root Patch is FULL PASS. The real privileged transaction committed exact A4F UUID-only postimage, preserved metadata and completed atomic same-volume rename, AuxKC and APFS snapshot.
 
-Accelerated boot around 23:15 remained `NEGATIVE_NO_USABLE_GUI`. Current recovery VESA `kern.boottime` is `2026-09-03 23:17:53 +0300`, sec `1788466673`.
+Accelerated boot around 23:15 remained `NEGATIVE_NO_USABLE_GUI`. Pre-D97AM VESA recovery `kern.boottime` was `2026-09-03 23:17:53 +0300`, sec `1788466673`.
 
 Structured JSON runtime audit proved 28/28 failing diagnostic PIDs had sender exact 32023 path with UUID A4F; old D5CE count was zero. Classification: `D97AF_RUNTIME_PROVENANCE=PROVEN_28_OF_28_DIAGNOSTIC_COHORT`. Direct runtime text-byte capture remains not performed; exact D97AH MTLCompilerService exit status remains UNKNOWN/INCONCLUSIVE.
 
@@ -150,9 +150,18 @@ AuxKC build/forcing, APFS snapshot creation, root-volume unmount and `Patching c
 
 Classification: `D97AM_ROOT_PATCH=FULL_PASS`.
 
-## CURRENT ACTION — first D97AM accelerated boot
-User is authorized to reboot manually into the normal accelerated/root-patched configuration. No additional patching or mutation is authorized before this boot.
+## D97AM accelerated boot 02:29 — NEGATIVE_NO_USABLE_GUI
+Exact reboot chronology returned by the user is `02:29` accelerated D97AM followed by `02:32` VESA recovery; `02:17` is older and excluded. The fixed accelerated evidence window is `2026-09-04 02:29:00..02:31:59` local time.
 
-If accelerated GUI is usable, keep that boot and return with the observed state. If no usable image appears, hard restart/power-cycle and boot VESA recovery according to `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`, then return. The immediately preceding accelerated D97AM boot is the authoritative runtime evidence window; the later VESA recovery boot must be excluded.
+WindowServer PID 498 launched at `02:31:16.1804` and crashed at `02:31:30.5263`, `Time Awake Since Boot=120 seconds`, proving the crash belongs to the 02:29 boot. Termination is `COREANIMATION Code 4` with `Compilation failed due to an interrupted connection: XPC_ERROR_CONNECTION_INTERRUPTED` after retries. Stack reaches `CA::OGL::MetalContext::create_pipeline_state`, QuartzCore, SkyLight MetalCompositeLayer and CompositorMetal. Haswell `AppleIntelHD5000GraphicsMTLDriver` and GPUCompiler 32023 support libraries are present.
 
-On return, establish exact reboot chronology before collecting/interpreting logs. No further Root Patch is authorized in this sequence.
+Classification: `D97AM_ACCELERATED_BOOT=NEGATIVE_NO_USABLE_GUI`.
+
+This proves removing D97AD did not by itself restore a usable GUI. WindowServer remains downstream; exact MTLCompilerService natural-flow provenance/lifecycle is not yet inferred from this crash.
+
+## CURRENT ACTION — D97AN read-only runtime audit
+Run public wrapper `OCLP7_D97AN_READONLY_ACCEL_0229_NATURAL_FLOW_RUNTIME_PROVENANCE_AUDIT.command`, commit `8685d4e9d5080b533ed06e9661aee759ec174217`, blob `a12775867f57e9edd949fefdbeacba6991d3aa48`.
+
+D97AN is fixed to the 02:29 accelerated window and separates all exact 32023 MTLCompiler sender records from the five late simulator-diagnostic families. It compares the new UUID `0FC4C627-2A5D-491B-8101-00CAAA7116B7` against old D5CE/A4F, reports per-PID coverage, launchd lifecycle/exit text and WindowServer correlation.
+
+STOP after D97AN. No Root Patch, reboot, source/app/system/Golden/snapshot mutation.
