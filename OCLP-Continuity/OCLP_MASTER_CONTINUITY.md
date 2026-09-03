@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_PASS_DEPLOY_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AG_LIVE_APP_DEPLOY_PASS_ROOT_PATCH_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -153,11 +153,18 @@ The exact x86_64 frozen auditor executed on ASUS2 against that exact packaged ex
 
 Verified application ZIP retained at `/Users/alex/Desktop/OCLP7_D97AG_VERIFIED_RUN33696449978_OpenCore-Patcher.app.zip`. Audit report: `/Users/alex/Desktop/OCLP7_D97AG_ASUS2_ARTIFACT_RUNTIME_AUDIT_REPORT_20260903-162932.txt`.
 
-No source, installed-app, system-target, Golden, Root Patch, snapshot or reboot mutation occurred during the audit. Last proven live application remains exact D97AF executable SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, 6595600 bytes.
+## D97AG exact live application deployment PASS
+First deploy attempt stopped before mutation because the verified ZIP had been moved to `$HOME/.Trash`. Bounded ASUS2 search proved that Trash copy was exact `751494420` bytes / SHA256 `d6cc47143cee0a2bde55ab3de66b15fc39969299db175f9a336e615fb8e10846`; it was restored exactly to Desktop. Classification: tooling/input-location false failure with no application mutation.
 
-## CURRENT ACTION — ASUS2 exact D97AG app backup/deploy/open/STOP
-ASUS2 remains at STOP: do not Root Patch and do not reboot.
+The unchanged deploy wrapper then completed with outer RC `0`. Exact live D97AF preimage was `6595600` bytes / SHA256 `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470` / x86_64. Exact-path PID `805` was drained. D97AF was preserved at `/Applications/OpenCore-Patcher.app.D97AF-before-D97AG-20260903-165317` with the same exact identity.
 
-The next bounded action is application-only: verify the retained exact D97AG ZIP, stage and verify exactly one D97AG app/executable `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64, prove the current live exact D97AF preimage `ec20b42afaf79ea0340180dd1f50f5d8927f847e4fa4c05164b945b6e6eda470`, drain only exact-path OCLP processes, create a timestamped recoverable D97AF backup, deploy exact D97AG to `/Applications/OpenCore-Patcher.app`, reverify exact live identity, open exact OCLP, prove a fresh exact-path process and STOP.
+Live `/Applications/OpenCore-Patcher.app` is now exact D97AG x86_64, `6596544` bytes, SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628`. Fresh exact-path PID `8877` proved the exact live app opened successfully. `D97AG_EXACT_APP_DEPLOY_OPEN_STOP=PASS` and `INSTALLED_APP_MUTATION_STATE=D97AG_DEPLOYED_EXACT_OPENED`. Deploy report: `/Users/alex/Desktop/OCLP7_D97AG_EXACT_APP_DEPLOY_OPEN_STOP_REPORT_20260903-165317.txt`.
 
-Only `/Applications/OpenCore-Patcher.app` may be mutated by this action. OCLP source, system target, root-patched snapshot and Golden remain untouched. Root Patch and reboot remain later, manual-only and separately authorized. Golden remains immutable/read-only; D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
+No source/system-target/Golden/Root Patch/reboot mutation occurred during deployment.
+
+## CURRENT ACTION — manual D97AG Root Patch / STOP before reboot
+ASUS2 remains at STOP. Exact D97AG is live and open.
+
+The next bounded action is user-manual Root Patch from the already-open exact D97AG application. Allow the patch operation itself to finish, but do not reboot afterward. Return the complete Root Patch log/output for audit.
+
+The audit must prove the D97AG xattr/LC_UUID path succeeds without the D97AF `os.listxattr` exception, verify D97AD/D97AF/D97AG step ordering and target identities, inspect AuxKC/snapshot completion, and not rely on generic `Patching complete` alone. Accelerated reboot remains `NOT_AUTHORIZED` until that log is accepted.
