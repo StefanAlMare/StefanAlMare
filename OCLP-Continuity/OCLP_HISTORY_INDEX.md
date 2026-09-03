@@ -3,7 +3,7 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AM_ROOT_PATCH_FULL_PASS_ACCELERATED_BOOT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AM_ACCEL_0229_NEGATIVE_WINDOWSERVER_XPC_INTERRUPTED_D97AN_RUNTIME_AUDIT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is an index/frontier summary. Exact historical detail is preserved in incremental checkpoints and repository history; older checkpoints are not superseded except where a later checkpoint explicitly corrects an interpretation.
@@ -185,9 +185,18 @@ AuxKC build/forcing, APFS snapshot creation, root-volume unmount and `Patching c
 
 Classification: `D97AM_ROOT_PATCH=FULL_PASS`.
 
+## D97AM accelerated boot 02:29 — NEGATIVE_NO_USABLE_GUI
+Reboot chronology returned by the user fixes `02:29` as D97AM accelerated and `02:32` as VESA recovery. The authoritative historical window is `2026-09-04 02:29:00..02:31:59` local time.
+
+WindowServer PID 498 launched at `02:31:16.1804` and crashed at `02:31:30.5263` with `COREANIMATION Code 4`, `Compilation failed due to an interrupted connection: XPC_ERROR_CONNECTION_INTERRUPTED` after retries. Stack again reaches QuartzCore Metal pipeline-state creation and SkyLight/CompositorMetal. Haswell MTL driver and GPUCompiler 32023 support libraries are present.
+
+Classification: `D97AM_ACCELERATED_BOOT=NEGATIVE_NO_USABLE_GUI`.
+
+This proves complete D97AD removal did not by itself recover GUI. WindowServer remains downstream; exact natural-flow MTLCompilerService behavior is not inferred from this alone.
+
 ## CURRENT ACTION
-First D97AM accelerated/root-patched boot is authorized. No additional patching or mutation is authorized before that boot.
+Run D97AN read-only wrapper `OCLP7_D97AN_READONLY_ACCEL_0229_NATURAL_FLOW_RUNTIME_PROVENANCE_AUDIT.command`, commit `8685d4e9d5080b533ed06e9661aee759ec174217`, blob `a12775867f57e9edd949fefdbeacba6991d3aa48`.
 
-If the accelerated GUI is usable, remain in that boot and return with the observed state. If no usable image appears, hard restart/power-cycle and boot VESA recovery according to the permanent VESA rule, then return. The immediately preceding accelerated D97AM boot is the authoritative runtime evidence window; the later VESA recovery boot must be excluded.
+It audits the fixed 02:29 accelerated cohort for exact 32023 MTLCompiler sender UUID/path, the five late simulator diagnostic families, per-PID coverage, launchd lifecycle/exit text, artificial 110..114 text evidence and WindowServer correlation.
 
-On return, establish exact reboot chronology before collecting/interpreting logs. No further Root Patch is authorized in this sequence.
+STOP after D97AN. No Root Patch, reboot, source/app/system/Golden/snapshot mutation.
