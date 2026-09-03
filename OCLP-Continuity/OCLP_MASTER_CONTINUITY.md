@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AH_GITHUB_BUILD_RELEASE_PASS_ASUS2_AUDIT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260903_D97AH_CMP_PROBE_PASS_AUDIT_V2_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-03 EEST
@@ -87,28 +87,20 @@ All 15 job steps passed. Exact D97AH patch/source/method identities match ASUS2.
 
 Exact v5 app ZIP: `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`. Packaged executable: `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
 
-Delivery uses a private release tied to the same build head because Actions artifact storage was full:
+Delivery uses private release ID `382116519`, tag `oclp7-d97ah-run-33769927671-attempt-1`, target head `d04ddd28c784a0b30c6629feeface10804d5d591`, with seven exact uploaded assets/digests. `OCLP7_D97AH_GITHUB_BUILD_AND_RELEASE_DELIVERY=PASS`. Signing/notarization remains unverified and is not classified PASS.
 
-```text
-RELEASE_ID=382116519
-RELEASE_TAG=oclp7-d97ah-run-33769927671-attempt-1
-RELEASE_TARGET_HEAD=d04ddd28c784a0b30c6629feeface10804d5d591
-```
+## D97AH ASUS2 audit attempt 1 / cmp probe
+Audit attempt 1 passed release binding, all seven asset identities/checksum sets, exact ZIP reassembly/CRC/safe-member audit, exact packaged executable identity and reports ZIP safe-member/file-set/checksum audit. It then false-failed because wrapper v1 invoked absent `/bin/cmp`; this does not prove report/app executable byte difference. No verified ZIP was retained and no mutation occurred.
 
-Release assets:
-- part00 `390000000` bytes / SHA256 `bca0943a2ca8f3ce219cdf2dc28306cab4aa20c9ec1b49c20658c006d502faa5` / asset `542931717`;
-- part01 `361494634` bytes / SHA256 `8eb51af7b095b96d9755f8dfa8ba8e20d045038fbe76524d8b51370b2687df7e` / asset `542931727`;
-- split manifest `829` bytes / SHA256 `2997451ebf1a1b16e7425e897c06e03c9b8dc81d2080e2e247e61a7903518ddd` / asset `542931721`;
-- `PARTS.SHA256` `222` bytes / SHA256 `ec7dfa09ad14a7c6e9f8c79d9cc8e630a5ff16b9b1c128b6090b61d0b4cb5799` / asset `542931718`;
-- reports ZIP `6515462` bytes / SHA256 `54d382b74aabd02ceba0fcb62a0489ba9f93f95932657a75f8ecc1652f0428d5` / asset `542931720`;
-- release identity `776` bytes / SHA256 `3a5b6cca6e01c4c8b8fa6c084b223ae277737d74c38a89a7053502f4c23f8114` / asset `542931733`;
-- release asset sums `587` bytes / SHA256 `92307b80c3fdb1063bb212a5a1b780e8cebe74b3ec69b0dd106b617ec99ae61f` / asset `542931734`.
+Bounded ASUS2 probe then proved `/bin/cmp` absent and `/usr/bin/cmp` present, regular, executable, universal x86_64+arm64e; `command -v`, `whence -a`, `type -a` and `/usr/bin/which -a` all resolve only `/usr/bin/cmp`.
 
-Release API independently confirms tag/head and all seven assets uploaded with exact sizes/digests. `OCLP7_D97AH_GITHUB_BUILD_AND_RELEASE_DELIVERY=PASS`. Signing/notarization remains unverified and is not classified PASS.
+Corrected public audit wrapper v2 is `OCLP7_D97AH_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT_V2.command`, commit `85b5f8b3487cc940918dc446890b959daa7cc4ed`, blob `c5a91b5d50a82b17cc4ea2a60303934182540fb0`. It pins wrapper v1 and changes only the exact temporary comparison line `/bin/cmp ...` -> `/usr/bin/cmp ...`, with exact line-cardinality and local parse gates, then reruns the complete v1 audit from the beginning. It is not executed/tested on GitHub.
 
-## CURRENT ACTION — ASUS2 exact private-release artifact/reassembly audit
+## CURRENT ACTION — ASUS2 D97AH private-release audit v2
 ASUS2 remains at STOP. Do not deploy, Root Patch or reboot.
 
-Next action is one bounded ASUS2-only audit using authenticated GitHub CLI: prove exact private release ID/tag/head; download exactly seven assets; verify all names/sizes/SHA256; verify release sums, part sums and manifest; reassemble exact app ZIP `751494634` / `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`; verify ZIP integrity and exact single x86_64 executable `6596544` / `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`; audit reports ZIP and confirm its packaged executable is byte-identical and its source/package reports contain the exact D97AH patch/source/LOAD_CONST/xattr/fatal-boundary PASS evidence; retain verified app ZIP on Desktop only after complete PASS; STOP.
+Run one bounded ASUS2-only execution of the public-commit-pinned v2 wrapper. First prove v2 public wrapper blob and local zsh parse. Then v2 must verify pinned v1, perform exactly the temporary cmp-path line correction, parse the patched v1 locally and rerun the full release/reassembly/reports audit from the beginning.
 
-Only after that ASUS2 audit is returned and accepted may a separate backup/deploy/open-OCLP/STOP action be authorized. Actual privileged D97AH `chflags` execution remains a later real Root Patch runtime test; Root Patch/reboot remain unauthorized now.
+Required final evidence includes explicit `D97AH_REPORT_AND_APP_EXECUTABLE_BYTE_IDENTITY=PASS`, complete report-content PASS gates, exact verified Desktop ZIP retention, `D97AH_ASUS2_PRIVATE_RELEASE_ARTIFACT_AUDIT=PASS`, and v2/outer PASS. Printed PASS alone is insufficient; return complete terminal output.
+
+Only after that complete ASUS2 audit v2 is returned and accepted may a separate backup/deploy/open-OCLP/STOP action be authorized. Actual privileged D97AH `chflags` execution remains a later real Root Patch runtime test; Root Patch/reboot remain unauthorized now.
