@@ -78,6 +78,17 @@ Audit report:
 
 `/Users/alex/Desktop/OCLP7_D97AH_ASUS2_PRIVATE_RELEASE_AUDIT_REPORT_20260903-185409-11761.txt`
 
+## Exact deploy/open wrapper prepared
+Public wrapper prepared without GitHub execution/testing:
+
+```text
+PATH=OCLP7_D97AH_ASUS2_EXACT_APP_DEPLOY_OPEN_STOP.command
+COMMIT=fe47aa9c06bd416d387e3f64a137b18d471479c1
+GIT_BLOB=55304b6e3db1d1d9ab4e86b7e3b9aa154a744567
+```
+
+It pins the previously ASUS2-passed D97AG deploy substrate at commit `fcd817dec08e1ff782316516f7d2432e2b5d51df`, blob `e8dca8761903de7f612629ff85ea9ec81bc5d65c`, SHA256 `64d7ceb501c8b909b7633a836c371257f1e2c48fd13d4f1f290095b6a4123c96`, `14858` bytes. In a private temporary copy it performs a collision-safe role shift (`D97AF -> D97AG`, `D97AG -> D97AH`) and exact identity replacements for verified run `33769927671`, D97AH ZIP/executable and D97AG live preimage. It validates critical pre/post cardinalities, required deployment/recovery semantic markers and forbidden stale D97AF/old-run identities, locally parses the transformed deploy script, then executes it on ASUS2. It preserves the previously proven switch/recovery mechanism rather than inventing a new deployment implementation.
+
 ## Mutation ledger
 
 ```text
@@ -92,7 +103,7 @@ REBOOT=AUTO-NO
 Therefore D97AH build/package/delivery/ASUS2 artifact and report audit are complete. The actual privileged D97AH `/usr/bin/chflags` path remains untested until the later manual real Root Patch.
 
 ## ACTIVE FRONTIER / CURRENT NEXT ACTION
-Authorize exactly one separate ASUS2 state-changing action: verify the retained D97AH ZIP again, stage exact D97AH, prove current live app is exact D97AG, create a timestamped exact D97AG backup, drain only the exact live OCLP executable path, atomically switch `/Applications/OpenCore-Patcher.app` to exact D97AH, verify the live executable identity, open the exact D97AH app, prove a fresh exact-path process and STOP.
+Run exactly one separate ASUS2 state-changing action through the public-commit-pinned deploy/open wrapper above: verify the retained D97AH ZIP again, stage exact D97AH, prove current live app is exact D97AG, create a timestamped exact D97AG backup, drain only the exact live OCLP executable path, switch `/Applications/OpenCore-Patcher.app` to exact D97AH, verify the live executable identity, open exact D97AH, prove a fresh exact-path process and STOP.
 
 Required preimage/live identities:
 - current D97AG live executable: `6596544` bytes / SHA256 `29078c174b4b1058fe903e6e9b76b39f681b59985274048df1071a4c51a2e628` / x86_64;
