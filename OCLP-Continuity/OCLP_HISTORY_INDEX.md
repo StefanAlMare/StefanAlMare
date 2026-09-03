@@ -3,7 +3,7 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AM_DEPLOY_OPEN_FULL_PASS_ROOT_PATCH_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AM_ROOT_PATCH_FULL_PASS_ACCELERATED_BOOT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is an index/frontier summary. Exact historical detail is preserved in incremental checkpoints and repository history; older checkpoints are not superseded except where a later checkpoint explicitly corrects an interpretation.
@@ -29,7 +29,7 @@ Authoritative D97AH major build/private release:
 - app ZIP `751494634` bytes / SHA256 `d917185eea69829b9b0d3be47a0fd85a3795dea781c77ebfea6acb1ae84f6a48`;
 - packaged executable `6596544` bytes / SHA256 `207b4e0e0c6fa6229f5539cad70d4e06cf3472a6ad59079f8b48f30495ef7acf`, x86_64.
 
-Exact D97AH app remained live until D97AM deploy; D97AG backup retained. D97AH manual Root Patch is FULL PASS; accelerated boot remained `NEGATIVE_NO_USABLE_GUI`. Current VESA recovery begins `2026-09-03 23:17:53 +0300`, sec `1788466673`. D97AF structured runtime provenance is PROVEN 28/28 for exact 32023/A4F diagnostic sender; old D5CE count zero.
+Exact D97AH app remained live until D97AM deploy; D97AG backup retained. D97AH manual Root Patch is FULL PASS; accelerated boot remained `NEGATIVE_NO_USABLE_GUI`. Current pre-D97AM VESA recovery began `2026-09-03 23:17:53 +0300`, sec `1788466673`. D97AF structured runtime provenance is PROVEN 28/28 for exact 32023/A4F diagnostic sender; old D5CE count zero.
 
 ## D97AI / D97AJ fully resolved A4F CFG and correction
 D97AJ revalidated the known seven-entry switch and proved zero reachable unresolved indirects and no bypass to the five late xrefs in the instrumented A4F CFG. Interpretation correction: exits 110..114 are project-invented terminal diagnostics, not donor/Sequoia behavior. Natural P7 bytes at `0x9D6BD` are `8b8d10feffff83f941`; D97AD replaces them with terminal `6a6e5fe9bb38f6ff90`. Therefore natural-flow testing requires complete D97AD removal, not only exit110 removal.
@@ -152,7 +152,42 @@ REBOOT=AUTO-NO
 
 Classification: `D97AM_ASUS2_EXACT_APP_DEPLOY_OPEN=FULL_PASS`.
 
-## CURRENT ACTION
-The next bounded ASUS2 action is manual Root Patch from the already-open exact D97AM app. D97AD must remain inactive; D97AM must accept exact P7 preimage `6e0e312d...`, stamp UUID `0FC4C627-2A5D-491B-8101-00CAAA7116B7`, and produce exact target post-SHA `e7739c155b5f6f091a1b8d25cee77549655f7944f2f8baaba7a2b431eca3eea9`.
+## D97AM manual Root Patch — FULL PASS
+The complete Root Patch output was audited raw. Exact local metallib `26.6.2-25G82` was used and normal OCLP preflight/patchsets completed.
 
-STOP after complete Root Patch output. Do not reboot until assistant audits the Root Patch.
+Functional chain:
+
+```text
+D81P_TRUE_FIVE_FINAL_MTL_SHA=6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01
+P6_REQUEST_DIALECT_CALLSITE_PORTS=PASS
+P7_COMMITTED_MTL_SHA=6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda
+P7_RAW88_A8_READ_PORTS=PASS
+```
+
+The complete Root Patch log contains zero occurrences of `D97AD`; the terminal classifier did not run.
+
+Exact D97AM natural-flow transaction:
+
+```text
+D97AM_LC_UUID_BUILD_STAMP_PRE_SHA=6e0e312d0f4dc1c79ce320e9691a77312df95f05e41602e4d0d64d1dc2724bda
+D97AM_LC_UUID_BUILD_STAMP_OLD=D5CE0008-587C-3861-971A-4BAEFB7B9C5B
+D97AM_LC_UUID_BUILD_STAMP_NEW=0FC4C627-2A5D-491B-8101-00CAAA7116B7
+D97AM_LC_UUID_BUILD_STAMP_OFFSET=0xAB0
+D97AM_LC_UUID_BUILD_STAMP_POST_SHA=e7739c155b5f6f091a1b8d25cee77549655f7944f2f8baaba7a2b431eca3eea9
+D97AM_LC_UUID_ATOMIC_SAME_VOLUME_RENAME=PASS
+D97AM_TARGET_METADATA_PRESERVE_EXACT=PASS
+D97AM_LC_UUID_BUILD_STAMP=PASS
+D97AM_RUNTIME_PROVENANCE=NOT_YET_TESTED
+D97AM_DIRECT_RUNTIME_TEXT_BYTE_READ=NOT_PERFORMED
+```
+
+AuxKC build/forcing, APFS snapshot creation, root-volume unmount and `Patching complete` all completed. No FAIL/traceback/exception/error marker exists in the raw log.
+
+Classification: `D97AM_ROOT_PATCH=FULL_PASS`.
+
+## CURRENT ACTION
+First D97AM accelerated/root-patched boot is authorized. No additional patching or mutation is authorized before that boot.
+
+If the accelerated GUI is usable, remain in that boot and return with the observed state. If no usable image appears, hard restart/power-cycle and boot VESA recovery according to the permanent VESA rule, then return. The immediately preceding accelerated D97AM boot is the authoritative runtime evidence window; the later VESA recovery boot must be excluded.
+
+On return, establish exact reboot chronology before collecting/interpreting logs. No further Root Patch is authorized in this sequence.
