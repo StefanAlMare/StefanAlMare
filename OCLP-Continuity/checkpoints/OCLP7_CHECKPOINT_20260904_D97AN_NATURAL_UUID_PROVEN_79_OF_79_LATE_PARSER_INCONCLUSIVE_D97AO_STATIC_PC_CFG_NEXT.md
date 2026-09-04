@@ -131,15 +131,24 @@ INCONCLUSIVE / UNKNOWN:
 3. exact semantic meaning of outer runtime sender PCs `0x9FFEE`, `0xA0521`, `0xA5F81` until statically mapped on the exact natural-flow image;
 4. direct runtime text-byte read remains NOT PERFORMED.
 
-## ACTIVE FRONTIER / CURRENT NEXT ACTION — D97AO read-only static/runtime-PC reconciliation
-Next bounded ASUS2 action is a read-only audit on current VESA recovery. No Root Patch/reboot/source/app/system/Golden mutation.
+## D97AO prepared — exact read-only wrapper identity
+Public wrapper:
+- `OCLP7_D97AO_READONLY_NATURAL_P7_RUNTIME_PC_AND_RESOLVED_CFG_AUDIT.command`;
+- commit `2401be6af44180ae35040ad752ea3b361238d0b7`;
+- Git blob `969701ab1fb00bea91d44196b463e3a400efd258`.
 
-D97AO should:
+The wrapper pins exact current target SHA/UUID, exact current VESA boot sec, exact natural bytes at the former D97AD/exit110 site, the D97AB seven-entry switch resolution, the five late xrefs, and D97AN's three runtime-PC offsets/counts. It performs no service launch and no mutation.
+
+## ACTIVE FRONTIER / CURRENT NEXT ACTION — D97AO read-only static/runtime-PC reconciliation
+Next bounded ASUS2 action is D97AO on current VESA recovery. No Root Patch/reboot/source/app/system/Golden mutation.
+
+D97AO will:
 1. pin current VESA boot sec `1788478349`;
 2. pin exact current 32023 target SHA `e7739c155b5f6f091a1b8d25cee77549655f7944f2f8baaba7a2b431eca3eea9` and UUID `0FC4C627-2A5D-491B-8101-00CAAA7116B7`;
-3. statically map runtime sender PCs `0x9FFEE`, `0xA0521`, `0xA5F81` to exact instructions, nearest symbols/functions, and local disassembly context;
-4. enumerate all simulator/`were used` string literals and their direct xrefs/owners relevant to those outer PCs, so truncated unified-log records are not guessed from text fragments;
-5. reconstruct the natural-P7 `validSimulatorMetadata` CFG using the already-proven D97AB seven-entry switch resolution, with natural bytes at `0x9D6BD` and no D97AD terminal, then report whether the five known late xrefs `0x9D6C8,0x9D6EE,0x9D712,0x9D73A,0x9D75D` are statically reachable from normal entry;
-6. report zero/unresolved indirect branches after known-switch resolution and keep runtime reachability separate from static reachability.
+3. verify natural bytes `8b8d10feffff83f941` at `0x9D6BD` where D97AD formerly installed exit110;
+4. statically map runtime sender PCs `0x9FFEE`, `0xA0521`, `0xA5F81` to exact instructions, nearest symbols/functions, and local disassembly context;
+5. enumerate simulator/`were used` annotated string/xref evidence across the image;
+6. reconstruct the natural-P7 `validSimulatorMetadata` CFG using the already-proven D97AB seven-entry switch resolution and report whether the five known late xrefs `0x9D6C8,0x9D6EE,0x9D712,0x9D73A,0x9D75D` are statically reachable from normal entry;
+7. report remaining reachable unresolved indirects separately and keep static reachability distinct from runtime reachability.
 
 STOP after D97AO. No Root Patch. No reboot.
