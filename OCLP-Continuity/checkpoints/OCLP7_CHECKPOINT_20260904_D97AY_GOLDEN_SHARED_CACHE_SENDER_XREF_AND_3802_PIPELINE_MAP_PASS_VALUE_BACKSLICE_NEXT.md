@@ -50,61 +50,53 @@ Additional xrefs:
 - `requestType` also at `0x7FF80D44B9E1` (Metal +`0x1089E1`);
 - `data` also at `0x7FF80D41E881` (Metal +`0xDB881`).
 
-Exact xref census counts:
-- requestType=2;
-- sandboxTokens=1;
-- llvmVersion=1;
-- pluginPath=1;
-- targetData=1;
-- data=2;
-- client_name=1;
-- APISpecifiedTimeoutInSeconds=1.
-
-The enormous raw string hit counts for generic keys such as `data` are not themselves sender semantics. Only Metal-owned exact RIP xrefs are promoted.
+Exact xref census counts: requestType=2, sandboxTokens=1, llvmVersion=1, pluginPath=1, targetData=1, data=2, client_name=1, APISpecifiedTimeoutInSeconds=1.
+The enormous raw string hit counts for generic keys such as `data` are not sender semantics; only Metal-owned exact RIP xrefs are promoted.
 
 ## G1 — value semantics still open
-D97AY intentionally did NOT claim the values passed to the XPC setters. Therefore:
-- exact Golden runtime/static source for `llvmVersion` remains to be back-sliced from the request-builder;
-- exact source/enum semantics for `requestType` remain open;
-- the six remaining fields need source/value classification where feasible;
-- no runtime value is inferred merely from key presence/xref.
+D97AY intentionally did NOT claim the values passed to the XPC setters. Exact Golden runtime/static source for `llvmVersion`, source/enum semantics for `requestType`, and the other six value sources remain open. No runtime value is inferred merely from key presence/xref.
 
 Classification: `G1_GOLDEN_XPC_WRITER_VALUE_SOURCES=UNKNOWN_PENDING_BACKSLICE`.
 
 ## Golden 3802 lane — exact semantic map
-Observed runtime PC `0x238E3` maps to:
-`MTLCompilerObject::backendCompileExecutableRequest(BinaryRequestData&)` immediately after the `Build request: pipeline` os_log and at the following `mach_absolute_time` call.
+Observed runtime PC `0x238E3` maps to `MTLCompilerObject::backendCompileExecutableRequest(BinaryRequestData&)` immediately after `Build request: pipeline` and at the following `mach_absolute_time` call.
+Observed runtime PC `0x1DFA3` maps to `MTLCompilerObject::serializeBackendCompilationOutput(...)` immediately after `Compilation (pipeline) time %f ms`.
 
-Observed runtime PC `0x1DFA3` maps to:
-`MTLCompilerObject::serializeBackendCompilationOutput(...)` immediately after `Compilation (pipeline) time %f ms` os_log.
-
-Therefore Golden 3802 runtime lane has observed pipeline start plus later completion/timing/serialization-stage evidence, not merely arbitrary compiler traffic.
-
-Classification:
-`GOLDEN_3802_PIPELINE_START_AND_TIMING_PATH=STATIC_MAPPED_TO_RUNTIME_PCS`.
-This is control/lane evidence, not yet full semantic payload equivalence.
+Therefore Golden 3802 runtime lane has observed pipeline start plus later completion/timing/serialization-stage evidence. Classification: `GOLDEN_3802_PIPELINE_START_AND_TIMING_PATH=STATIC_MAPPED_TO_RUNTIME_PCS`.
 
 ## Current Golden contract status
-D97AX + D97AY now give:
-1. receiver-side eight-key XPC schema;
-2. sender-side Metal exact eight-key request-builder xref cluster;
-3. Golden original donor memory dialect;
-4. Golden dual-generation runtime lane;
-5. exact 3802 pipeline start/timing mapping;
-6. positive driver->compiler->Metal compositor success corridor.
+D97AX + D97AY now give receiver-side eight-key schema, sender-side exact eight-key request-builder xref cluster, original donor memory dialect, dual-generation runtime lane, exact 3802 pipeline start/timing mapping, and positive driver->compiler->Metal compositor success corridor.
 
-Highest-priority remaining G1 task is no longer discovery. It is value/dataflow recovery from the common request-builder cluster.
+Highest-priority remaining G1 task is value/dataflow recovery from the common request-builder cluster.
 
-## CURRENT ACTION
+## CURRENT ACTION — D97AZ V3
 Remain in Golden; do NOT start Tahoe eligibility bypass yet.
 
-Next bounded collector: read-only `D97AZ` Golden Metal primary request-builder value/dataflow backslice.
-Goals:
-- identify the containing function/range for Metal +`0x2D81F..0x2DA13`;
-- identify the XPC setter call paired with each of the eight key xrefs;
-- recover argument/value source for `llvmVersion` and `requestType` first, then the other six where statically resolvable;
-- preserve alternate requestType/data xrefs separately;
-- classify each field as `STATIC_VALUE_SOURCE_PROVEN`, `STRUCTURAL_SOURCE_MAPPED`, or `UNKNOWN`;
-- no debugger attach, persistent instrumentation, Root Patch, reboot or Golden system mutation.
+D97AZ core is persisted but not to be run directly:
+- core file `OCLP7_D97AZ_GOLDEN_METAL_REQUEST_BUILDER_VALUE_BACKSLICE.command`;
+- commit `fb509db4b1e40c8e9c466fed45b53c8462ed408c`;
+- Git blob `fec92ab86cad92cc69307284c6ad3cd26ed74c19`.
+
+The first hardened V2 wrapper is retired UNRUN after assistant preflight noticed that arbitrary pre-xref range starts could begin mid-instruction and misalign x86 disassembly.
+
+Authoritative aligned wrapper:
+`OCLP7_D97AZ_V3_GOLDEN_METAL_REQUEST_BUILDER_VALUE_BACKSLICE_ALIGNED_HARDENED_WRAPPER.command`
+- commit `6260523f326fdda28c429ad90095babde696e979`;
+- Git blob `1f9ab406f35a3ae51c125584473b3ab64b0ed327`.
+
+V3 verifies the exact immutable core blob, then applies exactly four tooling transforms in-memory only:
+1. primary range begins exactly at proven instruction boundary `0x7FF80D37081F`;
+2. alternate data range begins exactly at proven boundary `0x7FF80D41E881`;
+3. alternate requestType range begins exactly at proven boundary `0x7FF80D44B9E1`;
+4. synthetic-Mach-O relative call targets are translated as signed 64-bit section-relative values.
+It then checks zsh syntax, exactly one Python heredoc, Python compile, aligned-range invariants and all eight keys before execution.
+
+D97AZ goals:
+- pair each of the eight primary key xrefs with the next un-clobbered XPC setter call;
+- backslice setter value argument `RDX` to immediate/memory/register source where safely resolvable;
+- prioritize exact source for `llvmVersion` and `requestType`;
+- keep alternate `data` and `requestType` builders separate;
+- classify each field `STATIC_VALUE_SOURCE_PROVEN`, `STRUCTURAL_SOURCE_MAPPED`, or `UNKNOWN`;
+- no debugger attach, persistent instrumentation, system mutation, Root Patch or reboot.
 
 Only after D97AZ should repeated Golden boots / a short Metal System Trace be selected for fields whose exact runtime values remain UNKNOWN.
