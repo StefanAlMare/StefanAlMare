@@ -72,19 +72,6 @@ echo "D97AU_GOLDEN_32023_IDENTITY=PASS"
 
 BOOT_RAW="$(/usr/sbin/sysctl -n kern.boottime 2>/dev/null || true)"
 echo "KERN_BOOTTIME=$BOOT_RAW"
-read -r BOOT_START BOOT_END <<EOF
-$("$PYTHON" - "$BOOT_RAW" <<'PY'
-import datetime,re,sys
-m=re.search(r'sec\s*=\s*(\d+)',sys.argv[1])
-if not m: raise SystemExit('NO_BOOT_SEC')
-sec=int(m.group(1))
-start=datetime.datetime.fromtimestamp(sec).astimezone()
-end=start+datetime.timedelta(seconds=180)
-print(start.strftime('%Y-%m-%d %H:%M:%S'),end.strftime('%Y-%m-%d %H:%M:%S'))
-PY
-)
-EOF
-# read above splits dates, so recompute robustly into two lines
 BOOT_START="$("$PYTHON" - "$BOOT_RAW" <<'PY'
 import datetime,re,sys
 sec=int(re.search(r'sec\s*=\s*(\d+)',sys.argv[1]).group(1)); print(datetime.datetime.fromtimestamp(sec).astimezone().strftime('%Y-%m-%d %H:%M:%S'))
@@ -133,7 +120,7 @@ def pid(r):
 def summarize(label,recs,u32,u38):
     byuuid=collections.Counter(); pcs=collections.Counter(); perpid=collections.defaultdict(lambda:collections.Counter())
     for r in recs:
-        u=str(v(r,'senderImageUUID') or '').upper(); p=str(v(r,'senderImagePath') or ''); pc=v(r,'senderProgramCounter'); n=pid(r)
+        u=str(v(r,'senderImageUUID') or '').upper(); pc=v(r,'senderProgramCounter'); n=pid(r)
         if u in (u32,u38):
             key='32023' if u==u32 else '3802'; byuuid[key]+=1; perpid[n][key]+=1
             if u==u32:
@@ -168,10 +155,16 @@ PY
 
 echo
 echo "===== LIVE MTLCOMPILERSERVICE PID INVENTORY ====="
-LIVE_PIDS="$(/usr/bin/pgrep -x MTLCompilerService 2>/dev/null | /usr/bin/tr '\n' ' ' | /usr/bin/sed 's/[[:space:]]*$//' || true)"
+LIVE_PIDS=""
+for POLL in {1..10}; do
+  LIVE_PIDS="$(/usr/bin/pgrep -x MTLCompilerService 2>/dev/null | /usr/bin/tr '\n' ' ' | /usr/bin/sed 's/[[:space:]]*$//' || true)"
+  [[ -n "$LIVE_PIDS" ]] && break
+  /bin/sleep 1
+done
 echo "LIVE_MTLCOMPILERSERVICE_PIDS=${LIVE_PIDS:-NONE}"
 if [[ -n "$LIVE_PIDS" ]]; then
-  /bin/ps -o pid=,ppid=,etime=,state=,command= -p ${LIVE_PIDS// /,} 2>/dev/null || true
+  PID_CSV="${LIVE_PIDS// /,}"
+  /bin/ps -o pid=,ppid=,etime=,state=,command= -p "$PID_CSV" 2>/dev/null || true
 fi
 
 cat > "$LLDB_PY" <<'PY'
@@ -215,8 +208,7 @@ def install(debugger,command,result,internal_dict):
     file_addr=int(parts[0],0); STATE['limit']=int(parts[1]); target=debugger.GetSelectedTarget()
     mods=[]
     for i in range(target.GetNumModules()):
-        m=target.GetModuleAtIndex(i)
-        p=(m.GetFileSpec().fullpath or '')
+        m=target.GetModuleAtIndex(i); p=(m.GetFileSpec().fullpath or '')
         if _module_uuid(m)==EXPECTED_UUID and '/MTLCompiler.framework/Versions/32023/MTLCompiler' in p: mods.append(m)
     if len(mods)!=1:
         result.PutCString('GOLDEN_LLDB_INSTALL=FAIL_EXACT_32023_MODULE_COUNT_%d'%len(mods)); return
@@ -237,10 +229,10 @@ echo "===== EXISTING-PID LLDB RAW COUNTER CAPTURE ====="
 TOTAL_HITS=0
 ATTEMPTS=0
 if [[ -n "$LIVE_PIDS" ]]; then
-  for PID in $LIVE_PIDS; do
+  for PID in ${=LIVE_PIDS}; do
     ATTEMPTS=$((ATTEMPTS+1))
     (( ATTEMPTS <= MAX_PID_ATTEMPTS )) || break
-    [[ -d "/proc/$PID" ]] 2>/dev/null || /bin/kill -0 "$PID" 2>/dev/null || continue
+    /bin/kill -0 "$PID" 2>/dev/null || continue
     CMD="$TMP/lldb-$PID.cmd"; LOUT="$TMP/lldb-$PID.out"
     cat > "$CMD" <<EOF
 command script import $LLDB_PY
@@ -282,7 +274,7 @@ fi
 echo
 echo "===== BUILD STRUCTURED RESULT ====="
 "$PYTHON" - "$OUT" "$JSON_OUT" <<'PY'
-import json,re,sys
+import json,sys
 from pathlib import Path
 lines=Path(sys.argv[1]).read_text(errors='replace').splitlines(); caps=[]; kv={}
 for line in lines:
@@ -294,8 +286,7 @@ for line in lines:
             if '=' in item:
                 k,v=item.split('=',1); row[k]=v
         caps.append(row)
-out={'summary':kv,'raw_captures':caps}
-Path(sys.argv[2]).write_text(json.dumps(out,indent=2),encoding='utf-8')
+Path(sys.argv[2]).write_text(json.dumps({'summary':kv,'raw_captures':caps},indent=2),encoding='utf-8')
 print('D97AU_JSON_REPORT='+sys.argv[2])
 print('D97AU_RAW_CAPTURE_JSON_COUNT='+str(len(caps)))
 PY
