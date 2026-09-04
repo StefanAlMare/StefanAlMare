@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AT_GOLDEN_WORKING_COMPARATOR_STATIC_EXACT_LIVE_WAITFOR_INCONCLUSIVE_D97AU_EXISTING_PID_CAPTURE_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AT_GOLDEN_COMPARATOR_D97AU_V2_HARDENED_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-04 EEST
@@ -62,9 +62,11 @@ Golden recent logs also show both 3802 and 32023 heavily active. Tahoe failing s
 
 D97AT LLDB raw counter capture: 4 rounds, zero hits, each timing out around `process attach --name MTLCompilerService --waitfor`. Breakpoint relocation used `ResolveFileAddress`; zero hits are classified INCONCLUSIVE, likely because new-process wait mode did not test already-active persistent service PID. Do not infer counter values from zero hits.
 
-## CURRENT ACTION — D97AU while still in Golden
-Run public wrapper `OCLP7_D97AU_GOLDEN_EXISTING_PID_RAW_COUNTER_AND_BOOT_GENERATION_COMPARATOR.command`, commit `19e61d3a85bacfed2bcab03020a2a2ad4e895a70`, Git blob `c10d4cd98700fe465b1d2cc659bf4cc619a42245`.
+## CURRENT ACTION — D97AU V2 while still in Golden
+Authoritative wrapper `OCLP7_D97AU_GOLDEN_EXISTING_PID_RAW_COUNTER_AND_BOOT_GENERATION_COMPARATOR.command`, commit `68046cbe634f11b0654a1a659b7dbaa627e01c31`, Git blob `7cc3efc69a3b7fd00e6f0506d15017cb7391239c`.
 
-D97AU fail-closes on exact Golden OS/build and 32023 SHA. It reconstructs the first 3 minutes after Golden boot and compares 3802/32023 sender generation activity and exact 32023 outer PCs against Tahoe D97AN reference counts. Then it attaches temporarily to already-live MTLCompilerService PIDs, selects exact 32023 module by UUID/path, resolves file address `0x7FFB162C76C3`, and captures up to 8 raw six-counter hits plus threshold mask and backtrace. No experimental Root Patch/reboot/system-file mutation.
+Initial unrun D97AU V1 `19e61d3a... / c10d4cd9...` is retired before execution because zsh multi-PID scalar iteration was hardened. V2 polls for live service PID(s) and iterates them with native zsh forced splitting.
 
-Remain in Golden and return D97AU report+JSON. Do not reboot Tahoe before D97AU is audited.
+D97AU V2 fail-closes on exact Golden OS/build and 32023 SHA. It reconstructs the first 3 minutes after Golden boot and compares 3802/32023 sender generation activity and exact 32023 outer PCs against Tahoe D97AN reference counts. Then it attaches temporarily to already-live MTLCompilerService PIDs, selects exact 32023 module by UUID/path, resolves file address `0x7FFB162C76C3`, and captures up to 8 raw six-counter hits plus threshold mask and backtrace. No experimental Root Patch/reboot/system-file mutation.
+
+Remain in Golden and return D97AU V2 report+JSON. Do not reboot Tahoe before D97AU is audited.
