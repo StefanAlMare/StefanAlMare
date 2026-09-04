@@ -3,7 +3,7 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AY_V2_PIN_MISMATCH_TOOLING_ONLY_V3_DOUBLE_PIN_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AY_GOLDEN_SHARED_CACHE_SENDER_XREF_AND_3802_PIPELINE_MAP_PASS_VALUE_BACKSLICE_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Protocol / historical baseline
@@ -33,27 +33,42 @@ Returned exact files:
 - TXT `103237` bytes / SHA256 `ef01061f252f7ce64102b5f5959cc760cf1bd008f4a4a2506c539fccdc61c04e`;
 - JSON `44765` bytes / SHA256 `6a69706a1ea523669413c9bf6ea4349eec93d67b200d6c4eca4ec471775f40b5`.
 
-G1 receiver schema SCHEMA_STATIC_PROVEN: `requestType:uint64`, `sandboxTokens:value`, `llvmVersion:uint64`, `pluginPath:string`, `targetData:value`, `data:value`, `client_name:string`, `APISpecifiedTimeoutInSeconds:uint64`. Sender-side Metal zero-recovery is INCONCLUSIVE visibility, not negative.
-
-Extended same boot: 1913 records, 32023=894, 3802=778, OTHER=241, 49 exact-generation PIDs. G2 original donor dialect includes `+0xD0/+0x88/+0x8C` in getReadParameters and `+0xC4/+0xC8/+0xCC/+0xDC/+0xE0` in invokeLowerModule. D97AX direct-callgraph retired as tooling-inconclusive.
-
-G3 positive corridor: Azul/HD5000 load -> framebuffer events -> WindowServer opens MTLCompilerService -> shader compilation -> `Metal compositor activated` at `12:55:25.092/25.093`. Metal System Trace is available but not yet recorded.
+G1 receiver schema SCHEMA_STATIC_PROVEN: `requestType:uint64`, `sandboxTokens:value`, `llvmVersion:uint64`, `pluginPath:string`, `targetData:value`, `data:value`, `client_name:string`, `APISpecifiedTimeoutInSeconds:uint64`.
+G2 original donor dialect includes `+0xD0/+0x88/+0x8C` in getReadParameters and `+0xC4/+0xC8/+0xCC/+0xDC/+0xE0` in invokeLowerModule. D97AX direct-callgraph retired as tooling-inconclusive.
+G3 positive corridor: Azul/HD5000 load -> WindowServer MTLCompilerService -> shader compilation -> `Metal compositor activated` at `12:55:25.092/25.093`.
 
 ## D97AY V2 — tooling-only fail closed
-V2 wrapper `c4d8795734b93cfeac1e0d7005b9914c0fddd01d / 34530755218e024bc27ea60c36acb6993557f5c2` passed outer identity but contained a wrong expected core blob `1ae81e...`.
+V2 wrapper contained a wrong expected core blob and stopped before core execution. Actual immutable core at commit `f76b04832150a0a8fd1eb80867785bf147f94537`: Git blob `3b07f1d4d52da948268fbd437781dd73092bef1c`, SHA256 `203f7255019ffb99e4d83084a8b22a6d9184f5134bab503891faf5d9863c7674`, 14109 bytes. No semantic result from V2.
 
-User's exact downloaded core at immutable commit `f76b04832150a0a8fd1eb80867785bf147f94537` was:
-- Git blob `3b07f1d4d52da948268fbd437781dd73092bef1c`;
-- SHA256 `203f7255019ffb99e4d83084a8b22a6d9184f5134bab503891faf5d9863c7674`;
-- 14109 bytes.
+## D97AY V3/core — Golden shared-cache sender xref + 3802 map PASS
+Returned:
+- JSON 112785392 bytes / SHA256 `2b873f21f71016b3911b2d028e01dc993a118b8f13c68260a6ec760c18c52184`;
+- TXT 69660570 bytes / SHA256 `abfe1a04d512697df6c2bb57f31935108aed2a4d1cd8d5325fadc7f903db40e5`.
 
-Wrapper stopped at `BASE_BLOB_MISMATCH` before executing the core. Therefore D97AY V2 produced no semantic/cache-scan result and made no mutation, cache mmap/extraction, debugger attach, Root Patch or reboot.
+Final classifications:
+`G1_GOLDEN_SHARED_CACHE_EIGHT_KEY_OWNER_MAP=STATIC_CENSUS_COMPLETE`;
+`G1_GOLDEN_METAL_KEY_RIP_XREF_MAP=STATIC_CENSUS_COMPLETE`;
+`G1_GOLDEN_XPC_WRITER_VALUE_SOURCES=NOT_YET_CLAIMED`;
+`GOLDEN_3802_OBSERVED_PC_STATIC_MAP=COMPLETE`;
+`D97AY_AUDIT=COMPLETE`.
 
-Classification: `D97AY_V2=TOOLING_ONLY_BAD_EXPECTED_CORE_BLOB_FAIL_CLOSED`.
+Golden Metal image: `0x7FF80D343000..0x7FF80D5C5C3D`.
+Primary eight-key request-builder cluster:
+- llvmVersion +`0x2D81F`;
+- requestType +`0x2D832`;
+- sandboxTokens +`0x2D914`;
+- targetData +`0x2D939`;
+- data +`0x2D95E`;
+- pluginPath +`0x2D97F`;
+- client_name +`0x2D9FD`;
+- APISpecifiedTimeoutInSeconds +`0x2DA13`.
+Additional requestType xref +`0x1089E1`; additional data xref +`0xDB881`.
 
-## CURRENT ACTION — D97AY V3
-Run `OCLP7_D97AY_V3_GOLDEN_SHARED_CACHE_EIGHT_KEY_HARDENED_WRAPPER.command`:
-- commit `eaff09fb2b3c2d8b1005b38de380759710625119`;
-- Git blob `4dece1e36f339d57b2e4602d0586540a8b2cb5a3`.
+Exact xref counts: requestType2, sandboxTokens1, llvmVersion1, pluginPath1, targetData1, data2, client_name1, timeout1.
+Classification: `G1_GOLDEN_PRIMARY_EIGHT_KEY_REQUEST_BUILDER_CLUSTER=STATIC_MAPPED`.
 
-V3 double-pins the unchanged core with corrected Git blob + SHA256 and gates zsh syntax, exactly one embedded Python block, exact eight-key cardinality and read-only markers before running. Goal remains Golden shared-cache sender/owner/xref recovery for all eight input keys plus static 3802 PC mapping. Remain in Golden; no Root Patch/reboot.
+Golden 3802 PC `0x238E3` maps to `backendCompileExecutableRequest` immediately after `Build request: pipeline`; `0x1DFA3` maps to `serializeBackendCompilationOutput` immediately after `Compilation (pipeline) time %f ms`. Working Golden therefore has observed pipeline start plus timing/serialization-stage evidence in 3802.
+
+## CURRENT ACTION — D97AZ
+Remain in Golden. Do not start Tahoe eligibility bypass.
+Next: read-only value/dataflow backslice of the primary Metal request-builder cluster. Recover containing function, XPC setter pairing and exact source/value for `llvmVersion` and `requestType` first, then the other six where possible; keep alternate requestType/data paths separate. No debugger attach, Root Patch or reboot.
