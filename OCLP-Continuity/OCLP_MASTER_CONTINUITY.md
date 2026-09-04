@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BF_GITHUB_BUILD_QUOTA_SUSPENDED_EXTERNAL_OR_LOCAL_MAC_BUILD_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BF_USER_OCLP_PKG_GOLDEN_LINEAGE_CANDIDATE_READONLY_AUDIT_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -75,6 +75,16 @@ Before the GitHub compilation stop instruction, CI attempts repeatedly establish
 
 The failed attempts observed before the stop instruction were CI/audit-lane failures and do not constitute a proven OCLP functional build failure.
 
+## User local OpenCore-Patcher.pkg — Golden-lineage candidate
+TrueNAS Reader manifest for batch `20260904T225753Z-dv103208c1-178bdb6a` identifies the user's local/reference package as:
+- `OpenCore-Patcher.pkg`;
+- bytes `738123183`;
+- SHA256 `b4e32cbfb1f978f670ccafff7b513d352e0665366caa73faeed0dbcd428dc364`.
+
+The package is `STRONGLY_COMPATIBLE_NOT_YET_PROVEN` as Golden lineage. Exact Golden source commit `b9df76...` dates to 19 March 2026, matching the known Sequoia 2.5.0 nightly family. A public reshared 2.5.0 nightly comparator is `738128962` bytes, so byte identity to that public copy is NEGATIVE by size (`5779` byte difference). This does not disprove common source lineage because the exact Golden PyInstaller spec embeds dynamic build-date/build-host metadata and final package metadata/signatures may vary.
+
+The current tool harness received the Reader manifest but did not expose the actual 738 MB PKG bytes. Preserve the user's PKG unchanged as evidence and audit it read-only locally before any rebuild.
+
 ## Frozen historical state
 Accepted five-functional diagnostic baseline remains exactly `P1 + P2b + P3 + AIR00 + D34` as project evidence/history, not as default comparator content.
 P6/P7 are not sufficient. D50/D68/D82 remain reserve-only. D84 is retired.
@@ -87,17 +97,19 @@ Until the user explicitly lifts this restriction:
 - no new GitHub Actions compile/build/package run may be started for this project;
 - GitHub may be used for source reading, static audit, persistence, checkpointing and metadata operations that do not invoke compilation;
 - build/package execution must use a non-GitHub macOS executor;
-- local compilation remains subject to explicit user authorization before local commands are issued;
+- local compilation remains subject to explicit user authorization before local build commands are issued;
 - never auto Root Patch;
 - never auto reboot.
 
 ## Persistence contract
 Persist immediately after decisive PROVEN/NEGATIVE results, integrations/builds, Root Patch results, accelerated-boot results, or major methodology changes. Otherwise persist no later than every 10 substantive technical assistant responses. Update MASTER, HISTORY when phase/history changes, and a new incremental checkpoint; the current checkpoint overlays transient execution state onto the consolidated database.
 
-## CURRENT ACTION — D97BF alternative build lane
-**Build/package/audit exact Golden OCLP `b9df76...` with only the one-line Tahoe eligibility edit on a non-GitHub macOS executor.**
+## CURRENT ACTION — read-only package lineage audit, then D97BF alternative build
+First perform a **read-only local audit** of the user's existing `OpenCore-Patcher.pkg` to verify the Reader SHA/size and recover package/app version, signature, architecture and lineage evidence without installing or modifying it.
 
-Preferred executor order:
+Then build/package/audit exact Golden OCLP `b9df76...` with only the one-line Tahoe eligibility edit on a non-GitHub macOS executor.
+
+Preferred executor order after package audit:
 1. controlled Intel Mac build, if the user explicitly authorizes local compilation;
 2. external macOS CI independent of GitHub Actions quota, with Codemagic currently the strongest free cloud candidate;
 3. other macOS CI/trial providers only if needed.
