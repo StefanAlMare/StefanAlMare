@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BE_EXACT_GOLDEN_GATE_CHAIN_PROVEN_ONE_LINE_TAHOE_ELIGIBILITY_D97BF_BUILD_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_GITHUB_BUILD_QUOTA_SUSPENDED_EXTERNAL_OR_LOCAL_MAC_BUILD_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is the chronological high-level index. The full experiment/evidence lineage is preserved in `OCLP-Continuity/checkpoints/`; the consolidated current state is in `OCLP_PERMANENT_PROJECT_DATABASE.md`.
@@ -55,12 +55,13 @@ The historical/current Tahoe/T2 local worktree was rejected as comparator baseli
 D97BD also preserved additional Golden component invariants and identified the complete host eligibility chain requiring exact clean-ref audit.
 
 ## 2026-09-05 — permanent GitHub-first execution policy restored
-User explicitly made GitHub-first the permanent execution contract:
-- assistant executes all work technically resolvable in GitHub, including validation, integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact preparation/publication and CI audit;
+User explicitly made GitHub-first the default repository/execution contract:
+- assistant executes work technically resolvable in GitHub;
 - ASUS2 is used only for identity-pinned local/live/hardware evidence and unavoidable target-local actions, manual Root Patch after authorization, accelerated boot and VESA recovery;
-- GitHub blocker means STOP + exact blocker documentation;
 - local compilation is never implicit fallback;
 - never auto Root Patch or reboot.
+
+This general policy remains historical authority, subject to explicit later user overrides such as the current temporary GitHub compilation suspension.
 
 ## 2026-09-05 — OCLP11 Golden source lineage pinned
 User supplied the working Golden root-patch manifest from `/System/Library/CoreServices/OpenCore-Legacy-Patcher.plist`.
@@ -74,7 +75,7 @@ It pinned:
 This closed root-patch source lineage. Golden `.app` byte identity remains a separate historical `INCONCLUSIVE_TOOLING` question and is not required for the source-controlled comparator.
 
 ## 2026-09-05 — D97BE exact Golden eligibility chain CLOSED
-GitHub-first static audit of exact `b9df76...` proved:
+Exact `b9df76...` audit proved:
 - `detect.py` has `_max_os = os_data.sequoia.value`;
 - exact `os_data.py` already has `tahoe = 25`;
 - unsupported host OS propagates through `requirements[UNSUPPORTED_HOST_OS] -> _can_patch -> _cant_patch -> self.can_patch`;
@@ -83,36 +84,60 @@ GitHub-first static audit of exact `b9df76...` proved:
 - exact Haswell patch composition remains original `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell model-specific`;
 - MetallibSupportPkg lookup is dynamic and has no static Tahoe maximum.
 
-Therefore the minimal identical-OCLP Tahoe functional delta is **exactly one source-line replacement**:
+Therefore the minimal identical-OCLP Tahoe functional delta is exactly:
 ```diff
 -        _max_os = os_data.sequoia.value
 +        _max_os = os_data.tahoe.value
 ```
 
 No payload, selector, compiler, donor, request-layout, Haswell, Metal3802, sys_patch or sys_patch_helpers functional edit is authorized.
-Original OCLP state validations (SIP, FileVault, SecureBootModel, AMFI, repatch state, network/download requirements) remain intact.
-
-Classification:
-`D97BE_MINIMAL_TAHOE_DELTA=ONE_LINE_DETECT_MAX_OS_SEQUOIA_TO_TAHOE`.
 
 ## 2026-09-05 — continuity database systematized
 Created `OCLP_PERMANENT_PROJECT_DATABASE.md` as the consolidated durable state for OCLP12/OCLP13/OCLP14/OCLP15+.
 
-It centralizes target, architecture, Golden lineage/hashes, producer contract, historical accepted/reserve/retired work, rejected Tahoe worktree, D97BE result, execution lanes, diagnostic methodology, VESA rule, current frontier and anti-loss persistence protocol.
-
 Anti-loss policy: persist decisive results immediately; otherwise create a continuity checkpoint no later than every 10 substantive technical assistant responses.
 
-## CURRENT ACTION — D97BF
-GitHub-first build/package/audit of exact Golden OCLP `b9df76...` with only the one-line Tahoe eligibility edit.
+## 2026-09-05 — D97BF pre-build identity gates proven
+Before the GitHub compilation stop instruction, CI attempts established reusable pre-build evidence:
+- exact Golden commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e` checkout PASS;
+- exact Golden tree `7c3411fde7d40604164c8877a5ab5594448083ac`;
+- exactly one changed source file: `detect.py`;
+- exactly `1 insertion / 1 deletion`;
+- protected Golden files remained byte-identical with recorded Git blob identities:
+  - constants.py `bdba8738efe1be132427200e0c9a842998e21b86`;
+  - os_data.py `094ec597de4ed6b09c42d49d8aceda7888d7fde2`;
+  - intel_haswell.py `5ef1ae0f541c413974906a125ad76704680e127c`;
+  - metal_3802.py `4276b1aede0134b4d2bbd6980fb3f0e1214302ad`;
+  - sys_patch.py `d92544778cba207baa462b1650a6a9a5742d284d`;
+  - sys_patch_helpers.py `e4c153e11bd7e5f41c991af83c4c77bc8495a844`;
+  - metallib_handler.py `6530e14311fd0ff798395a363ecfc7f4eba78caa`.
 
-Required outcome before ASUS2 Root Patch:
-- exact clean checkout;
+The failed attempts observed at that stage were audit/workflow-lane failures, not a proven OCLP functional build failure.
+
+## 2026-09-05 — GitHub compilation suspended by explicit user instruction
+The user explicitly instructed that no more GitHub compilation/build jobs be used until the GitHub Actions quota resets/unblocks.
+
+Current override:
+- no new GitHub Actions compile/build/package run;
+- GitHub remains usable only for non-compiling source reads, static audit, persistence/checkpoints and metadata work;
+- D97BF must move to a non-GitHub macOS executor;
+- local compilation still requires explicit user authorization before issuing local build commands.
+
+Alternative ranking recorded in the current checkpoint:
+1. controlled Intel Mac build — technically preferred;
+2. Codemagic individual/free macOS M2 build — best current free cloud candidate, subject to strict x86_64/universal2 post-build audit;
+3. other macOS CI providers if needed.
+
+## CURRENT ACTION — D97BF alternative executor
+Build/package/audit exact Golden OCLP `b9df76...` + only the one-line Tahoe eligibility delta on a non-GitHub macOS executor.
+
+Mandatory acceptance remains:
+- exact commit/tree;
 - one-file/one-line diff proof;
-- static/compile PASS;
-- protected source identity proof;
-- GitHub CI app build/package;
-- artifact SHA/tree manifest;
-- complete workflow/run/job/artifact audit;
+- protected source identity;
+- successful OCLP 2.5.0 app build;
+- x86_64 or universal2 architecture proof;
+- SHA256 + bundle/tree manifest;
 - identity-pinned delivery;
 - STOP before manual Root Patch.
 
