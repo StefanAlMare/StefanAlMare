@@ -3,13 +3,13 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AV_V2_STATIC_MAP_PASS_BOOT_SUBSECTION_TOOLING_FAIL_P1_UPSTREAM_PRODUCER_FRONTIER_D97AW_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_GOLDEN_ORIGINAL_OCLP_IMMUTABLE_INGRESS_CONTRACT_CENSUS_STRATEGY_D97AX_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
-## Protocol / baseline
-Routine/static/log/small work stays ASUS2; GitHub only major compile/build/package. No automatic Root Patch/reboot. Historical Tahoe baseline P1 -> P2b -> P3 -> AIR00 -> D34, true-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. P6/P7 active historically with runtime sufficiency NEGATIVE. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
+## Protocol / historical baseline
+Routine/static/log/small work stays ASUS2; GitHub only major compile/build/package plus identity-pinned script persistence/delivery. No automatic Root Patch/reboot. Historical Tahoe baseline P1 -> P2b -> P3 -> AIR00 -> D34, true-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`. P6/P7 historical runtime sufficiency NEGATIVE. D50/D68/D82 reserve-only; D84 retired; Patch8 unauthorized; D97AEX/D97AEZ retired.
 
-Golden comparator override: user may manually restore original OCLP Root Patch and boot working Golden Sequoia. Assistant does not automate Golden Root Patch/reboot or install experimental Golden system-file patches without separate explicit authorization.
+Golden comparator override: user may manually restore original OCLP Root Patch and boot working Golden Sequoia repeatedly. Assistant does not automate Golden Root Patch/reboot or install experimental Golden system-file patches without separate explicit authorization.
 
 ## Tahoe natural-flow retained state
 D97AM source/build/artifact/deploy/Root Patch FULL PASS; accelerated 02:29 `NEGATIVE_NO_USABLE_GUI`, 02:32 VESA excluded.
@@ -40,35 +40,39 @@ Golden identity and static seven-patch map PASS.
 
 D97AV V2 boot subsection printed `1970-01-03 08:18:27..08:21:27`, caused by greedy `sed` matching `usec =` instead of epoch `sec =` in `kern.boottime`. Its 305-row/18-PID sequence data is RETIRED as tooling-false; D97AU absolute window remains runtime authority.
 
-### Static map changes strategy
 `0x9A9FC` is `MTLCompilerObject::upgradeAIRModule` immediately after log `MTLCompiler upgrade pass forced to use air version %d.%d`.
 
-P2b/AIR00/P7 all live in `getReadParametersFromRequest`; P3 in `backendCompileModule`; D34 callsite in `runFrameworkPasses`; P6 in `invokeLowerModule` + `runFrameworkPasses`.
+Historical site ownership: P2b/AIR00/P7 in `getReadParametersFromRequest`; P3 in `backendCompileModule`; D34 in `runFrameworkPasses`; P6 in `invokeLowerModule` + `runFrameworkPasses`.
 
-Because Golden has 88 `upgradeAIRModule` events while Tahoe has zero, P2b/AIR00/P7 is now the highest-priority internal-32023 cluster for direct-call/field-consumer reevaluation. Causality not yet proven.
+Golden original service SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5` contains selector 3802 at `0x3478`, 31001 at `0x3496`, and no 32023 immediate. Golden maps `3802 -> MTLCompiler 3802`, `31001 -> MTLCompiler 32023`. Tahoe P1 changes only `31001 -> 32023`, leaving 3802 untouched. Therefore Tahoe zero-3802 originates upstream of P1.
 
-### P1 exact Golden semantics
-Golden original service SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5` contains selector 3802 at `0x3478`, 31001 at `0x3496`, and no 32023 immediate.
-Golden maps `3802 -> MTLCompiler 3802`, `31001 -> MTLCompiler 32023`.
-Tahoe P1 changes only the `0x3496` compare `31001 -> 32023`, leaving the separate 3802 branch untouched.
+## 2026-09-04 architecture pivot — Golden original OCLP is the immutable donor target
+User explicitly reframed the project: stop treating the historical custom OCLP patches as the place to search for the final repair. Working Golden Sequoia tells us the desired result. The project must dissect what Sequoia delivers into the ORIGINAL OCLP donor and make Tahoe deliver the same contract.
 
-Therefore P1 cannot directly turn 3802 into 32023 and cannot alone explain Tahoe zero-3802. Isolated P1 ablation is not useful: current Tahoe 32023 requests would lose their donor path. P1 is now classified `KEEP_TEMPORARY_SHIM / RETIRE_ONLY_WITH_PRODUCER_NORMALIZATION`.
+Authoritative target architecture is now:
+`Tahoe native producer -> Golden-equivalent ingress contract -> ORIGINAL OCLP selector/donor -> Golden-equivalent compiler output -> Haswell driver handoff -> image`.
 
-The active earliest frontier is XPC request `llvmVersion` / request-class production upstream of P1. Internal P2b/AIR00/P7 influence on upgrade/specialized/backend remains the second high-priority question.
+Historical P1/P2b/P3/AIR00/D34/P6/P7 are adapters/hypotheses only and may retire if producer normalization makes the original donor path work. Do not modify the original donor merely to accept Tahoe-specific data.
 
-## Patch utility status after D97AV V2
-- P1: temporary shim; no isolated ablation.
-- P2b: provisional high-priority cluster.
-- AIR00: high-priority reevaluate despite D22 local semantic proof.
-- P7: high-priority reevaluate; runtime sufficiency NEGATIVE.
-- P3: provisional; backendCompileModule.
-- D34: provisional lower priority.
-- P6: provisional lower priority / insufficient.
-No patch retired solely from D97AV V2.
+Golden contract book is split into:
+- G1 Metal.framework/XPC producer -> MTLCompilerService ingress;
+- G2 original MTLCompiler request/header/payload/AIR/bitcode/module handoffs;
+- G3 compiler output -> GPUCompiler/Metal/IOGPU/AppleIntelHD5000GraphicsMTLDriver handoff.
 
-## CURRENT ACTION — D97AW Golden read-only
-Run `OCLP7_D97AW_GOLDEN_FIXED_BOOT_3802_32023_CALLGRAPH_AND_SHARED_CACHE_LLVMVERSION_PRODUCER_AUDIT.command`, commit `8187316e61bfa47ace5db0da19d3df1cc60e887d`, blob `e2d77333fb4d67efe17b1afb6ffb9168aeafc828`.
+Repeated Golden boots/workloads are authorized to establish stable runtime invariants. Static schema, observed runtime events and exact runtime values remain separate evidence classes.
 
-It uses the fixed D97AU window, maps every observed 3802/32023 PC, maps direct callgraph among read-parameters/AIR-upgrade/specialized/backend/framework functions, and discovers Golden shared-cache Metal `llvmVersion` writer value sources for comparison against Tahoe D97R `[RBX+0x1C] / [RCX+0x38]`.
+D97AW `8187316e... / e2d77333...` is RETIRED UNRUN because its narrow questions are subsumed by the broader contract census.
 
-STOP after D97AW; return TXT + JSON. No debugger, cache extraction, Root Patch, system mutation or reboot.
+## CURRENT ACTION — D97AX V2 Golden ingress census
+Core V1 `OCLP7_D97AX_GOLDEN_ORIGINAL_OCLP_INGRESS_CONTRACT_CENSUS.command`:
+- commit `9f02c5c8200d2f37a785b0e87cd3ba8906a6da97`;
+- blob `7a2cd15ca7aebdb3fe3d4a530b8aed79ecab9074`;
+- unrun because preflight found the macOS `system_profiler` path should be `/usr/sbin`, not `/usr/bin`.
+
+Hardened V2 wrapper `OCLP7_D97AX_V2_GOLDEN_ORIGINAL_OCLP_INGRESS_CONTRACT_CENSUS_HARDENED_WRAPPER.command`:
+- commit `d227fbc0b48415e3c3fda2b226fd279d786c9bfd`;
+- blob `ddd1584a697ee432ceee2813effc3537f44173f4`.
+
+V2 verifies the exact core blob, applies exactly two `system_profiler` path replacements, verifies patched zsh and exactly three embedded Python blocks, then runs a read-only census of XPC sender/receiver schema, runtime lanes, donor request-memory access sets, Haswell driver identity/load state and available non-persistent observation channels.
+
+STOP after D97AX V2; return TXT + JSON. No debugger, cache extraction, Root Patch, system mutation or reboot. After audit, choose the first repeated-Golden-boot/workload capture only from the contract fields that remain UNKNOWN.
