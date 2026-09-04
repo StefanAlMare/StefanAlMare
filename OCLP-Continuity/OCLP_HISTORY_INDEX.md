@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_GITHUB_BUILD_QUOTA_SUSPENDED_EXTERNAL_OR_LOCAL_MAC_BUILD_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_USER_OCLP_PKG_GOLDEN_LINEAGE_CANDIDATE_READONLY_AUDIT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is the chronological high-level index. The full experiment/evidence lineage is preserved in `OCLP-Continuity/checkpoints/`; the consolidated current state is in `OCLP_PERMANENT_PROJECT_DATABASE.md`.
@@ -123,13 +123,40 @@ Current override:
 - D97BF must move to a non-GitHub macOS executor;
 - local compilation still requires explicit user authorization before issuing local build commands.
 
-Alternative ranking recorded in the current checkpoint:
+Alternative ranking recorded in the then-current checkpoint:
 1. controlled Intel Mac build — technically preferred;
 2. Codemagic individual/free macOS M2 build — best current free cloud candidate, subject to strict x86_64/universal2 post-build audit;
 3. other macOS CI providers if needed.
 
-## CURRENT ACTION — D97BF alternative executor
-Build/package/audit exact Golden OCLP `b9df76...` + only the one-line Tahoe eligibility delta on a non-GitHub macOS executor.
+## 2026-09-05 — user local OpenCore-Patcher.pkg identified as strong Golden-lineage candidate
+TrueNAS Reader manifest identified:
+- batch `20260904T225753Z-dv103208c1-178bdb6a`;
+- `OpenCore-Patcher.pkg`;
+- bytes `738123183`;
+- SHA256 `b4e32cbfb1f978f670ccafff7b513d352e0665366caa73faeed0dbcd428dc364`.
+
+The user states this package is present on the current Mac and may be the version used for the working ASUS Sequoia root patch.
+
+Golden exact source commit `b9df76...` is dated 19 March 2026 and matches the known Sequoia OCLP 2.5.0 nightly family. A public reshared `OpenCore-Patcher.pkg` from that 2.5.0 nightly family has Google Drive metadata size `738128962` bytes, so it is not byte-identical to the user package: difference `5779` bytes.
+
+Classification:
+- `USER_PKG_BYTE_IDENTITY_TO_PUBLIC_RESHARED_2_5_0N=NEGATIVE_BY_SIZE`;
+- `USER_PKG_GOLDEN_LINEAGE=STRONGLY_COMPATIBLE_NOT_YET_PROVEN`;
+- `USER_PKG_ACTUAL_CONTENT_AUDIT=INCONCLUSIVE_TOOLING_PENDING_LOCAL_READONLY_AUDIT`.
+
+The difference does not disprove common source lineage because exact Golden PyInstaller packaging injects dynamic Build Date/BuildMachineOSBuild data, and package/signature metadata may also vary.
+
+The original user PKG is to remain unchanged as evidence. Next step is read-only local package audit before any build.
+
+## CURRENT ACTION — read-only package audit, then D97BF alternative executor
+First audit the user's existing `OpenCore-Patcher.pkg` read-only on the current Mac:
+- re-prove SHA256/size;
+- inspect package signature and package metadata;
+- inspect embedded app version/build metadata;
+- inspect executable architecture;
+- recover OCLP/PatcherSupportPkg/commit lineage markers where possible.
+
+Then build/package/audit exact Golden OCLP `b9df76...` + only the one-line Tahoe eligibility delta on a non-GitHub macOS executor.
 
 Mandatory acceptance remains:
 - exact commit/tree;
@@ -141,4 +168,5 @@ Mandatory acceptance remains:
 - identity-pinned delivery;
 - STOP before manual Root Patch.
 
+Local compilation still requires explicit user authorization. GitHub compilation remains suspended until explicit quota-reset confirmation.
 No Root Patch and no reboot are authorized at this point.
