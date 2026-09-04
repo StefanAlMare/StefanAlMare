@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_DESKTOP_APP_OFFICIAL_B9DF76_LINEAGE_PROVEN_PYINSTALLER_LAYOUT_AUDIT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_HISTORICAL_SECOND_TAHOE_GATE_RECONCILED_B9DF76_SCOPE_CORRECTED.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is the chronological high-level index. The full experiment/evidence lineage is preserved in `OCLP-Continuity/checkpoints/`; the consolidated current state is in `OCLP_PERMANENT_PROJECT_DATABASE.md`.
@@ -84,13 +84,13 @@ Exact `b9df76...` audit proved:
 - exact Haswell patch composition remains original `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell model-specific`;
 - MetallibSupportPkg lookup is dynamic and has no static Tahoe maximum.
 
-Therefore the minimal identical-OCLP Tahoe functional delta is exactly:
+Therefore the minimal identical-OCLP Tahoe static host-eligibility delta is exactly:
 ```diff
 -        _max_os = os_data.sequoia.value
 +        _max_os = os_data.tahoe.value
 ```
 
-No payload, selector, compiler, donor, request-layout, Haswell, Metal3802, sys_patch or sys_patch_helpers functional edit is authorized.
+No payload, selector, compiler, donor, request-layout, Haswell, Metal3802, sys_patch or sys_patch_helpers functional edit is authorized by this static result alone.
 
 ## 2026-09-05 — continuity database systematized
 Created `OCLP_PERMANENT_PROJECT_DATABASE.md` as the consolidated durable state for OCLP12/OCLP13/OCLP14/OCLP15+.
@@ -160,14 +160,29 @@ Classification:
 
 Exact byte identity to the expired official artifact cannot now be re-proved and remains separately `UNAVAILABLE_EXPIRED_ARTIFACT`.
 
-Engineering consequence: a fresh full application build is no longer the only possible path. First audit the frozen PyInstaller archive read-only to determine whether the already-authorized `sequoia -> tahoe` one-line eligibility delta can be applied deterministically to a copy of this exact Golden-lineage app.
+Engineering consequence: a fresh full application build is no longer the only possible path. First audit the frozen PyInstaller archive read-only before any direct modification.
 
-## CURRENT ACTION — read-only PyInstaller layout audit
+## 2026-09-05 — historical second Tahoe patchset blocker reconciled with exact b9df76
+User correctly recalled an earlier Tahoe-aware/custom OCLP source in which legacy graphics could be blocked after the global host-OS gate by patchset selection/native-OS logic.
+
+Re-audit of exact Golden `b9df76...` proved that specific historical blocker is absent here:
+- Haswell is unconditionally listed in `_hardware_variants`;
+- `IntelHaswell.native_os()` is only `xnu < Ventura`, therefore false on Darwin 25;
+- `IntelHaswell.patches()` continues to `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific` patches;
+- `LegacyMetal3802._os_requires_patches()` is `xnu >= Ventura`, with no Tahoe maximum.
+
+Classification:
+`HISTORICAL_TAHOE_PATCHSET_NATIVE_OS_BLOCKER_APPLIES_TO_B9DF76=NO`.
+
+Scope correction: the one-line `detect.py` edit is proven only as the required Tahoe-specific **static host-eligibility gate** before Haswell patchset generation. It is not proof that the entire Root Patch procedure will succeed on Tahoe. Full Root Patch remains `NOT_YET_PROVEN` and still depends on MetallibSupportPkg matching, ordinary validation gates, root-volume/cache/snapshot behavior, and any other Tahoe runtime incompatibility.
+
+## CURRENT ACTION — expanded read-only frozen-app eligibility audit
 On the preserved Desktop app:
 - identify the PyInstaller archive layout/viewer path;
-- locate frozen module `opencore_legacy_patcher.sys_patch.patchsets.detect`;
-- determine whether deterministic module/archive replacement can implement only the one-line Tahoe eligibility delta without a full app rebuild;
-- keep the proven Desktop app unchanged until the patch procedure itself is audited.
+- locate and verify frozen `opencore_legacy_patcher.sys_patch.patchsets.detect`;
+- locate and verify frozen `opencore_legacy_patcher.sys_patch.patchsets.hardware.graphics.intel_haswell` against exact b9df76;
+- verify packaged MetallibSupportPkg resolution and whether `26.6.2 / 25G82` has a usable local or remote match;
+- only then decide whether a one-module direct patch is sufficient for the comparator app.
 
 If direct frozen-module patching is unsafe/non-deterministic, return to exact-source build on a non-GitHub macOS executor. Local compilation still requires explicit user authorization. GitHub compilation remains suspended until explicit quota-reset confirmation.
 No Root Patch and no reboot are authorized at this point.
