@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97AY_GOLDEN_SHARED_CACHE_SENDER_XREF_AND_3802_PIPELINE_MAP_PASS_VALUE_BACKSLICE_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_SEQUOIA_15_8_UPDATE_DONOR_IDENTICAL_D97AZ_OLD_OS_FAIL_CLOSED_D97BA_REBASE_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-04 EEST
@@ -21,7 +21,7 @@ Target Tahoe `26.6.2 / 25G82`, Haswell HD4400/4600 family `8086:0412`, SMBIOS `M
 Routine/static/log/small work stays on the target Mac under user control. GitHub is only for major compile/build/package and identity-pinned script persistence/delivery. Never auto Root Patch or reboot.
 
 ## Golden comparator authority — explicit user override
-User may manually restore ORIGINAL OCLP Root Patch and boot working Golden Sequoia `15.7.9 / 24G830` as many times as useful for comparator work. This supersedes older wording that Golden must never be booted. Assistant does not automate Golden Root Patch/reboot and does not install experimental Golden system-file patches without separate explicit authorization.
+User may manually restore ORIGINAL OCLP Root Patch and boot working Golden Sequoia as many times as useful for comparator work. This supersedes older wording that Golden must never be booted. Assistant does not automate Golden Root Patch/reboot and does not install experimental Golden system-file patches without separate explicit authorization.
 
 ## AUTHORITATIVE PROJECT ARCHITECTURE — 2026-09-04
 The ORIGINAL working OCLP donor/root-patch path is the immutable semantic target.
@@ -39,87 +39,71 @@ Before Tahoe Root Patch, prove that bypass does not alter payload selection/cont
 ## Golden contract evidence labels
 `SCHEMA_STATIC_PROVEN`, `RUNTIME_OBSERVED`, `RUNTIME_VALUE_PROVEN`, `GOLDEN_INVARIANT_PROVISIONAL`, `UNKNOWN`, `INCONCLUSIVE`. Never substitute inferred/static values for unavailable runtime values.
 
-## Golden contract layers
-### G1 producer/XPC ingress
-Metal.framework/request producer -> XPC dictionary -> MTLCompilerService selector: complete key/type schema, `llvmVersion`, `requestType`, generation split 3802 vs 31001->32023, runtime lanes and repeated-boot stability.
+## Golden snapshots after Sequoia update
+### GOLDEN_A — historical producer snapshot
+Sequoia `15.7.9 / 24G830` with complete D97AX/D97AY evidence retained. This snapshot remains authoritative for the exact producer/runtime facts collected before the update.
 
-### G2 original donor ingress/internal semantics
-Request header/layout, serialized payload, bitcode type/length/pointer, optional payload, AIR/Metal versions, getReadParameters/upgradeAIR/specialized/backend/module reconstruction/metadata contracts and exact values where observable.
+### GOLDEN_B — current working Golden
+User updated Sequoia to `15.8 / 24H22`, reports no EFI changes, manually reapplied Root Patch with the same original OCLP and reports working accelerated GUI as before.
 
-### G3 compiler output -> Haswell graphics stack
-GPUCompiler/Metal/IOGPU/AppleIntelHD5000GraphicsMTLDriver identities/load state, pipeline/library/function result paths, status contracts and earliest driver-facing handoff.
+D97AZ V3 independently observed exact donor hashes on 15.8 before fail-closing on its old OS pin:
+- Golden 32023 SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`;
+- Golden 3802 SHA `85d4c285915c4d2094f3624d80fd2d0c4dd30994fc5150c22d1e6d2b58d67f40`;
+- original MTLCompilerService SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`.
 
-## Working Golden exact identities
-Golden Sequoia `15.7.9 / 24G830`, Intel HD4400 device `0x0412`, revision `0x000b`, Metal 2, display online.
-Golden 32023: `1636896 / ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269 / D5CE0008-587C-3861-971A-4BAEFB7B9C5B`.
-Golden 3802: `438560 / 85d4c285915c4d2094f3624d80fd2d0c4dd30994fc5150c22d1e6d2b58d67f40 / D5CE0007-FAD0-3468-A62E-A21995BCA9F5`.
-Golden original MTLCompilerService SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`, UUID `3716D20F-B990-3906-B3E5-44E88AE63AF8`.
+Therefore the original OCLP donor is byte-identical across 15.7.9 -> 15.8 for these three critical artifacts. G2 donor schema and selector/binary evidence survives. Producer-side Metal/shared-cache absolute addresses and current runtime G1/G3 must be rebased before further backslice.
+
+## Original OCLP donor contract retained
 Original selector: `3802 -> Versions/3802`, `31001 -> Versions/32023`; no selector immediate 32023.
-
-## Historical Tahoe comparator retained only as reference
-D97AM natural-P7 build/deploy/Root Patch FULL PASS; accelerated `2026-09-04 02:29` `NEGATIVE_NO_USABLE_GUI`. D97AN exact natural 32023 provenance 79/79, 3802=0, 65 PIDs; PCs `0x9FFEE=7`, `0xA0521=7`, `0xA5F81=65`. D97AO/AP/AQ/AR/AS remain historical custom-patch evidence only, not the final identical-OCLP comparator.
-
-## D97AU Golden runtime oracle
-Authoritative first-three-minute Golden window `2026-09-04 12:54:24..12:57:24`:
-- total 451 MTL records;
-- 32023=220; 3802=193; OTHER=38;
-- 8 exact-generation PIDs, no mixed-generation PID;
-- 32023 PCs `0x9A9FC=88`, `0x9FFEE=66`, `0xA0521=66`;
-- 3802 PCs `0x1DFA3=96`, `0x238E3=97`.
-Golden LLDB attach was denied; raw six-counter values remain `UNKNOWN_ATTACH_DENIED`.
-
-## D97AX V2 — Golden contract census FULL PASS
 G1 receiver schema SCHEMA_STATIC_PROVEN: `requestType:uint64`, `sandboxTokens:value`, `llvmVersion:uint64`, `pluginPath:string`, `targetData:value`, `data:value`, `client_name:string`, `APISpecifiedTimeoutInSeconds:uint64`.
+G2 original 32023 donor request-memory dialect includes `+0xD0/+0x88/+0x8C` in getReadParameters and `+0xC4/+0xC8/+0xCC/+0xDC/+0xE0` in invokeLowerModule. D97AX direct-callgraph remains retired tooling-inconclusive.
 
-G2 original donor dialect includes `+0xD0/+0x88/+0x8C` in getReadParameters and `+0xC4/+0xC8/+0xCC/+0xDC/+0xE0` in invokeLowerModule. D97AX direct-callgraph is retired tooling-inconclusive.
+## GOLDEN_A D97AU/D97AX/D97AY retained snapshot
+D97AU 15.7.9 first-three-minute window: total451; 32023=220; 3802=193; 8 exact-generation PIDs; 32023 PCs `0x9A9FC=88`, `0x9FFEE=66`, `0xA0521=66`; 3802 PCs `0x1DFA3=96`, `0x238E3=97`.
 
-G3 positive corridor: Azul/HD5000 load -> framebuffer events -> WindowServer opens MTLCompilerService -> shader compilation -> `Metal compositor activated` at `12:55:25.092/25.093`. Metal System Trace is available but not yet recorded.
+D97AX positive G3 corridor: Azul/HD5000 load -> WindowServer MTLCompilerService -> shader compilation -> `Metal compositor activated` at `12:55:25.092/25.093`.
 
-## D97AY V2 tooling-only fail, V3/core PASS
-D97AY V2 stopped safely at a wrong expected core blob before core execution. The unchanged core identity was corrected and V3 was used.
+D97AY 15.7.9 primary Metal eight-key request-builder offsets:
+- llvmVersion +`0x2D81F`;
+- requestType +`0x2D832`;
+- sandboxTokens +`0x2D914`;
+- targetData +`0x2D939`;
+- data +`0x2D95E`;
+- pluginPath +`0x2D97F`;
+- client_name +`0x2D9FD`;
+- APISpecifiedTimeoutInSeconds +`0x2DA13`;
+additional requestType +`0x1089E1`; additional data +`0xDB881`.
 
-Returned D97AY V3/core outputs:
-- JSON 112785392 bytes / SHA256 `2b873f21f71016b3911b2d028e01dc993a118b8f13c68260a6ec760c18c52184`;
-- TXT 69660570 bytes / SHA256 `abfe1a04d512697df6c2bb57f31935108aed2a4d1cd8d5325fadc7f903db40e5`.
+15.7.9 Golden 3802 PC `0x238E3` maps to `backendCompileExecutableRequest` immediately after `Build request: pipeline`; `0x1DFA3` maps to `serializeBackendCompilationOutput` immediately after `Compilation (pipeline) time %f ms`. Since 3802 SHA is unchanged on 15.8, this binary-internal static mapping remains valid.
 
-D97AY final classifications:
-- `G1_GOLDEN_SHARED_CACHE_EIGHT_KEY_OWNER_MAP=STATIC_CENSUS_COMPLETE`;
-- `G1_GOLDEN_METAL_KEY_RIP_XREF_MAP=STATIC_CENSUS_COMPLETE`;
-- `G1_GOLDEN_XPC_WRITER_VALUE_SOURCES=NOT_YET_CLAIMED`;
-- `GOLDEN_3802_OBSERVED_PC_STATIC_MAP=COMPLETE`;
-- `D97AY_AUDIT=COMPLETE`.
+## D97AZ V3 on current 15.8 — correct fail-closed
+Wrapper/tooling gates passed and current hashes were observed unchanged, then core printed:
+`OS_VERSION=15.8`, `OS_BUILD=24H22`, followed by `D97AZ_AUDIT=FAIL_CLOSED|REASON=GOLDEN_OS_IDENTITY` because D97AZ was pinned to GOLDEN_A `15.7.9/24G830`.
 
-### G1 primary Golden Metal request-builder cluster
-Metal image `0x7FF80D343000..0x7FF80D5C5C3D`.
-All eight service-consumed keys have exact Metal-owned RIP xrefs in one primary cluster:
-- llvmVersion `0x7FF80D37081F` (Metal +`0x2D81F`);
-- requestType `0x7FF80D370832` (+`0x2D832`);
-- sandboxTokens `0x7FF80D370914` (+`0x2D914`);
-- targetData `0x7FF80D370939` (+`0x2D939`);
-- data `0x7FF80D37095E` (+`0x2D95E`);
-- pluginPath `0x7FF80D37097F` (+`0x2D97F`);
-- client_name `0x7FF80D3709FD` (+`0x2D9FD`);
-- APISpecifiedTimeoutInSeconds `0x7FF80D370A13` (+`0x2DA13`).
-Additional xrefs: requestType +`0x1089E1`; data +`0xDB881`.
+Classification: `D97AZ_ON_SEQUOIA_15_8=TOOLING/IDENTITY_FAIL_CLOSED_NO_BACKSLICE_RESULT`.
+No system mutation, cache mmap, persistent extraction/instrumentation, debugger attach, Root Patch or reboot occurred during D97AZ.
 
-Classification: `G1_GOLDEN_PRIMARY_EIGHT_KEY_REQUEST_BUILDER_CLUSTER=STATIC_MAPPED`.
-Exact writer value sources remain UNKNOWN pending backslice.
+## CURRENT FRONTIER / NEXT ACTION — D97BA V2
+Remain in GOLDEN_B Sequoia `15.8 / 24H22`. Do NOT start Tahoe eligibility bypass and do NOT rerun D97AZ yet.
 
-### Golden 3802 runtime lane mapped
-`0x238E3` = `MTLCompilerObject::backendCompileExecutableRequest(BinaryRequestData&)` immediately after `Build request: pipeline` and at the following `mach_absolute_time` call.
-`0x1DFA3` = `MTLCompilerObject::serializeBackendCompilationOutput(...)` immediately after `Compilation (pipeline) time %f ms`.
+Run hardened wrapper:
+`OCLP7_D97BA_V2_GOLDEN_SEQUOIA_15_8_PRODUCER_REBASE_HARDENED_WRAPPER.command`
+- wrapper commit `641e3ef6ffb2ebfe5f38e8ff37d60ec2452b7427`;
+- wrapper Git blob `13cf5578123134329665322a7a016fabed8e109c`.
 
-Thus working Golden 3802 has observed pipeline start plus later timing/serialization-stage evidence.
+Core:
+`OCLP7_D97BA_GOLDEN_SEQUOIA_15_8_PRODUCER_REBASE_DYNAMIC_METAL_AND_BOOT3M.command`
+- commit `4c3c76b826b50d6b98ff400baac1b65c709508f7`;
+- Git blob `b9fd1966c7d88a98284dd5775cacb59036b26e00`.
 
-## CURRENT FRONTIER / NEXT ACTION — D97AZ
-Remain in Golden. Do NOT start Tahoe eligibility bypass yet.
+V2 applies exactly one tooling transform so runtime PID parsing prefers `processID`, then checks zsh syntax, exactly four embedded Python blocks, Python compile, 15.8/24H22 identity pins, Metal-range-only shared-cache reading and no-mutation safety tokens before execution.
 
-Next bounded collector is a read-only Golden Metal primary request-builder value/dataflow backslice around +`0x2D81F..0x2DA13`.
-Goals:
-- map containing function/range;
-- pair each key xref with its XPC setter;
-- recover exact value source for `llvmVersion` and `requestType` first, then the other six where statically resolvable;
-- keep alternate requestType/data xrefs separate;
-- classify each field as `STATIC_VALUE_SOURCE_PROVEN`, `STRUCTURAL_SOURCE_MAPPED`, or `UNKNOWN`.
+D97BA goals:
+1. prove current original-OCLP donor identity;
+2. dynamically locate and hash the 15.8 cached Metal text image;
+3. recover the eight-key Metal key/xref census from Metal only and compare xref offsets to GOLDEN_A;
+4. capture first-three-minute 32023/3802 UUID lanes and PCs for the current 15.8 boot;
+5. confirm `Metal compositor activated` in the current boot3m channel when available;
+6. no cache mmap/extraction, debugger attach, system mutation, Root Patch or reboot.
 
-No debugger attach, persistent instrumentation, system mutation, Root Patch or reboot. Only after D97AZ should repeated Golden boots or a short Metal System Trace be selected for values still UNKNOWN.
+After D97BA, adapt/rebuild D97AZ against exact GOLDEN_B addresses only if producer xrefs are revalidated.
