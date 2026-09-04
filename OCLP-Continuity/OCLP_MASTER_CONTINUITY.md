@@ -1,9 +1,9 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_D97BD_ELIGIBILITY_PREFLIGHT_PASS_DIRTY_CUSTOM_TREE_CLEAN_REF_AND_GATE_CHAIN_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_GITHUB_FIRST_PERMANENT_EXECUTION_POLICY_RESTORED_D97BE_UNCHANGED_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
-Updated: 2026-09-04 EEST
+Updated: 2026-09-05 EEST
 
 ## Mandatory startup
 Before any technical change read in full, in order:
@@ -16,12 +16,14 @@ Before any technical change read in full, in order:
 
 ## Target / execution contract
 Tahoe `26.6.2 / 25G82`, Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable accelerated GUI.
-Routine/static/log/small work stays on ASUS2 under user control. GitHub is for major compile/build/package plus identity-pinned script persistence/delivery. Never auto Root Patch or reboot.
+Permanent execution policy is GitHub-first: everything technically executable in GitHub is performed and audited by the assistant in GitHub. ASUS2/user execution is limited to identity-pinned evidence/actions that inherently require ASUS2 or its installed/live/local-only state. Local compilation is not an implicit fallback and requires explicit user authorization. Never auto Root Patch or reboot.
 
 ## Authoritative architecture
 `Tahoe native producer -> Golden-equivalent ingress contract -> ORIGINAL OCLP selector/donor -> Golden-equivalent compiler output -> Haswell driver handoff -> image`.
 
 Tahoe comparator must use SAME ORIGINAL OCLP functional content as Golden. The only permitted Tahoe-specific functional delta is a separately audited minimal eligibility/OS-support bypass. Historical P1/P2b/P3/AIR00/D34/P6/P7 are evidence/adapters only and are excluded from the identical-OCLP comparator unless later independently justified as producer normalization.
+
+The accepted historical five-functional baseline remains exactly `P1 + P2b + P3 + AIR00 + D34`; this baseline is preserved as project evidence/diagnostic history and is not silently modified. D50/D68/D82 remain reserve-only unless a later authoritative checkpoint explicitly promotes one.
 
 ## Golden snapshots and contract closure
 GOLDEN_A = Sequoia `15.7.9 / 24G830`, full D97AU/D97AX/D97AY runtime/static oracle.
@@ -45,7 +47,7 @@ Classifications: RBX/R13 `STATIC_ABI_ORIGIN_PROVEN`; llvmVersion source `STATIC_
 
 GOLDEN_A runtime dual generation remains authoritative. Combined with exhaustive unchanged selector semantics, observed 3802 donor traffic corresponds to request llvmVersion 3802 and observed 32023 donor traffic corresponds to request llvmVersion 31001. GOLDEN_B zero-record MTL query remains visibility-INCONCLUSIVE.
 
-Golden is sufficiently characterized to proceed; no extra Golden reboot is required solely for structural provenance.
+Golden is sufficiently characterized to proceed; no extra Golden reboot is required solely for structural provenance. Golden remains immutable/read-only.
 
 ## D97BD — identical-OCLP Tahoe eligibility preflight PASS
 Returned complete terminal transcript:
@@ -84,15 +86,25 @@ The exact remaining eligibility chain to resolve is:
 
 Haswell payload construction is separately located in `intel_haswell.py` and shared Metal payload in `metal_3802.py`; the latter is dirty/custom and must not be touched by an eligibility-only comparator edit.
 
+## 2026-09-05 permanent execution-policy update
+The user explicitly restored GitHub-first as the permanent project execution contract. This supersedes prospectively the 2026-09-03 ASUS2-local-default lane. Historical technical results are unchanged.
+
+GitHub-eligible work is executed by the assistant in GitHub: validations, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact publication/preparation and CI audit.
+
+ASUS2/user work is limited to identity-pinned evidence/actions inherently requiring ASUS2: cache/files/log/hardware/live-state proof; unpublished dirty-worktree/local-object evidence not remotely resolvable; target-local download/verify/backup/deploy when required; opening OCLP; manual Root Patch after explicit authorization; accelerated boot; VESA recovery and physical/manual boot actions.
+
+If GitHub is genuinely blocked for a GitHub-eligible operation, STOP and document the exact blocker. Local compilation requires explicit user authorization and is never the implicit fallback.
+
 ## CURRENT FRONTIER / NEXT ACTION — D97BE CLEAN-REF + EXACT GATE-CHAIN AUDIT
 Do NOT Root Patch/reboot or mutate source.
 
-Next bounded local audit must:
-1. prove ancestry between HEAD `4143b707...`, candidate clean parent/tag `8969550`, existing origin/main and origin/Development without fetch/checkout/reset;
-2. compare exact hashes/contents for detect.py, sys_patch.py, intel_haswell.py, metal_3802.py, sys_patch_helpers.py and datasets/os_data.py across clean refs, committed HEAD and worktree;
-3. print exact `_validation_check_unsupported_host_os`, `_can_patch`, requirements construction, can_patch assignment and sys_patch enforcement call chain for each candidate clean ref;
-4. inspect bounded Golden root-patch manifest/version markers and correctly resolved app-bundle identity if available;
-5. identify the clean ORIGINAL-OCLP source baseline and whether a single eligibility-only delta is actually needed;
-6. make no source/system mutation.
+D97BE remains read-only, but its execution is now GitHub-first:
+1. assistant performs in GitHub every clean-ref ancestry/content/gate-chain comparison that can be resolved from GitHub-accessible refs/repositories, without asking the user to compile/build locally;
+2. ASUS2 is used only for identity-pinned evidence unavailable in GitHub, including unpublished dirty-worktree state, locally available refs/objects not remotely resolvable, or bounded Golden installed-state/app-bundle evidence if genuinely needed;
+3. compare exact hashes/contents for detect.py, sys_patch.py, intel_haswell.py, metal_3802.py, sys_patch_helpers.py and datasets/os_data.py across the clean candidate refs, committed HEAD and worktree using the appropriate lane under items 1-2;
+4. print/audit exact `_validation_check_unsupported_host_os`, `_can_patch`, requirements construction, can_patch assignment and sys_patch enforcement call chain for each candidate clean ref;
+5. inspect bounded Golden root-patch manifest/version markers and correctly resolved app-bundle identity only if needed and only read-only;
+6. identify the clean ORIGINAL-OCLP source baseline and whether a single eligibility-only delta is actually needed;
+7. make no source/system mutation.
 
 Only after D97BE proves baseline+gate may a minimal eligibility-only integration be designed. Eventual integration must leave Haswell/Metal payloads, selector/compiler/donor logic, request layout and Golden component invariants untouched.
