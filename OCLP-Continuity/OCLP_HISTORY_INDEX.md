@@ -3,7 +3,7 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_GOLDEN_ORIGINAL_OCLP_IMMUTABLE_INGRESS_CONTRACT_CENSUS_STRATEGY_D97AX_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_GOLDEN_FULL_CONTRACT_BOOK_THEN_IDENTICAL_OCLP_TAHOE_ELIGIBILITY_BYPASS_D97AX_V2_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Protocol / historical baseline
@@ -25,7 +25,7 @@ Golden validator has exact same six-counter static contract as Tahoe. Working Go
 
 D97AU authoritative Golden boot window `12:54:24..12:57:24`: 32023=220, 3802=193, 8 exact-generation PIDs, no mixed-generation PID. Golden 32023 PCs: `0x9A9FC=88`, `0x9FFEE=66`, `0xA0521=66`, `0xA5F81=0`.
 
-Tahoe failing reference: 32023=79, 3802=0, exact 32023 PIDs=65, `0x9A9FC=0`, `0x9FFEE=7`, `0xA0521=7`, `0xA5F81=65`.
+Tahoe failing historical custom reference: 32023=79, 3802=0, exact 32023 PIDs=65, `0x9A9FC=0`, `0x9FFEE=7`, `0xA0521=7`, `0xA5F81=65`.
 
 Boot-aligned generation-selection divergence and internal-32023 request-lane divergence are RUNTIME-PROVEN observations; causality not yet proven.
 
@@ -44,22 +44,20 @@ D97AV V2 boot subsection printed `1970-01-03 08:18:27..08:21:27`, caused by gree
 
 Historical site ownership: P2b/AIR00/P7 in `getReadParametersFromRequest`; P3 in `backendCompileModule`; D34 in `runFrameworkPasses`; P6 in `invokeLowerModule` + `runFrameworkPasses`.
 
-Golden original service SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5` contains selector 3802 at `0x3478`, 31001 at `0x3496`, and no 32023 immediate. Golden maps `3802 -> MTLCompiler 3802`, `31001 -> MTLCompiler 32023`. Tahoe P1 changes only `31001 -> 32023`, leaving 3802 untouched. Therefore Tahoe zero-3802 originates upstream of P1.
+Golden original service SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5` contains selector 3802 at `0x3478`, 31001 at `0x3496`, and no 32023 immediate. Golden maps `3802 -> MTLCompiler 3802`, `31001 -> MTLCompiler 32023`. Historical Tahoe P1 changes only `31001 -> 32023`, leaving 3802 untouched. Therefore Tahoe zero-3802 originates upstream of P1.
 
-## 2026-09-04 architecture pivot — Golden original OCLP is the immutable donor target
-User explicitly reframed the project: stop treating the historical custom OCLP patches as the place to search for the final repair. Working Golden Sequoia tells us the desired result. The project must dissect what Sequoia delivers into the ORIGINAL OCLP donor and make Tahoe deliver the same contract.
+## 2026-09-04 final comparator methodology — Golden full contract, then identical original OCLP on Tahoe
+User explicitly fixed the comparator design:
+- first exhaustively scan working Golden Sequoia and its interaction with ORIGINAL OCLP, including repeated manual boots/workloads as needed;
+- ORIGINAL OCLP functional behavior/payloads/selector/compiler path is the immutable oracle;
+- build a contract book G1 producer/XPC ingress, G2 original donor request/payload/AIR/bitcode/module semantics, G3 compiler-output/Haswell-driver handoff;
+- only after Golden is sufficiently mapped, run Tahoe with the SAME ORIGINAL OCLP functional content;
+- the only Tahoe-specific OCLP delta permitted for that comparator is a minimal, separately audited eligibility/OS-support bypass that merely lets original OCLP apply the Golden-equivalent Root Patch on Tahoe;
+- prove that this bypass does not alter payload content/selection, selector semantics, MTLCompiler binaries/logic, AIR/bitcode handling, request layout, or graphics-driver payloads;
+- then run the SAME measurement suite on Tahoe and locate the first exact Golden-vs-Tahoe contract difference;
+- final repair belongs below the immutable OCLP donor, normalizing Tahoe producer output until it becomes Golden-equivalent.
 
-Authoritative target architecture is now:
-`Tahoe native producer -> Golden-equivalent ingress contract -> ORIGINAL OCLP selector/donor -> Golden-equivalent compiler output -> Haswell driver handoff -> image`.
-
-Historical P1/P2b/P3/AIR00/D34/P6/P7 are adapters/hypotheses only and may retire if producer normalization makes the original donor path work. Do not modify the original donor merely to accept Tahoe-specific data.
-
-Golden contract book is split into:
-- G1 Metal.framework/XPC producer -> MTLCompilerService ingress;
-- G2 original MTLCompiler request/header/payload/AIR/bitcode/module handoffs;
-- G3 compiler output -> GPUCompiler/Metal/IOGPU/AppleIntelHD5000GraphicsMTLDriver handoff.
-
-Repeated Golden boots/workloads are authorized to establish stable runtime invariants. Static schema, observed runtime events and exact runtime values remain separate evidence classes.
+Historical P1/P2b/P3/AIR00/D34/P6/P7 must not contaminate the final identical-OCLP comparator unless later explicitly justified as producer-side normalization outside donor semantics.
 
 D97AW `8187316e... / e2d77333...` is RETIRED UNRUN because its narrow questions are subsumed by the broader contract census.
 
@@ -67,7 +65,7 @@ D97AW `8187316e... / e2d77333...` is RETIRED UNRUN because its narrow questions 
 Core V1 `OCLP7_D97AX_GOLDEN_ORIGINAL_OCLP_INGRESS_CONTRACT_CENSUS.command`:
 - commit `9f02c5c8200d2f37a785b0e87cd3ba8906a6da97`;
 - blob `7a2cd15ca7aebdb3fe3d4a530b8aed79ecab9074`;
-- unrun because preflight found the macOS `system_profiler` path should be `/usr/sbin`, not `/usr/bin`.
+- unrun because preflight found macOS `system_profiler` path should be `/usr/sbin`, not `/usr/bin`.
 
 Hardened V2 wrapper `OCLP7_D97AX_V2_GOLDEN_ORIGINAL_OCLP_INGRESS_CONTRACT_CENSUS_HARDENED_WRAPPER.command`:
 - commit `d227fbc0b48415e3c3fda2b226fd279d786c9bfd`;
