@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_GOLDEN_ORIGINAL_OCLP_IMMUTABLE_INGRESS_CONTRACT_CENSUS_STRATEGY_D97AX_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260904_GOLDEN_FULL_CONTRACT_BOOK_THEN_IDENTICAL_OCLP_TAHOE_ELIGIBILITY_BYPASS_D97AX_V2_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-04 EEST
@@ -21,25 +21,38 @@ Tahoe `26.6.2 / 25G82`, Haswell HD4400/4600 family, `8086:0412`, SMBIOS `MacBook
 
 Routine/static/log/small work stays on the target Mac under user control. GitHub is only for major compile/build/package and identity-pinned script persistence/delivery. Never auto Root Patch or reboot.
 
-## Explicit Golden comparator authority
+## Golden comparator authority
 User may manually restore ORIGINAL OCLP Root Patch and boot working Golden Sequoia `15.7.9 / 24G830` as many times as useful for comparator work. Assistant does not automate Golden Root Patch/reboot and does not install experimental Golden system-file patches without separate explicit authorization.
 
-## AUTHORITATIVE ARCHITECTURE OVERRIDE — 2026-09-04
-The ORIGINAL working OCLP donor/root-patch path is now the immutable semantic target. Do not modify or relax it merely to accept Tahoe-specific data.
+## AUTHORITATIVE PROJECT ARCHITECTURE — 2026-09-04
+The ORIGINAL working OCLP donor/root-patch path is the immutable semantic target. Do not modify or relax donor/compiler logic merely to accept Tahoe-specific data.
 
-Project architecture:
+Architecture:
+`Tahoe native producer -> Golden-equivalent ingress contract -> ORIGINAL OCLP selector/donor path -> Golden-equivalent compiler output -> Haswell driver handoff -> image`.
 
-`Tahoe native producer -> Golden-equivalent ingress contract -> ORIGINAL OCLP selector/donor path -> Golden-equivalent compiler output -> Haswell driver handoff -> image`
+Historical custom interventions P1/P2b/P3/AIR00/D34/P6/P7 are hypotheses/adapters, not axioms. Any or all may retire once Tahoe producer normalization makes the original donor sufficient.
 
-The job is to discover what working Sequoia delivers into the original OCLP path, then make Tahoe deliver the same contract at the earliest non-equivalent handoff. Historical custom interventions P1/P2b/P3/AIR00/D34/P6/P7 are hypotheses/adapters, not axioms. Any or all may retire once producer normalization makes the original donor sufficient.
+Logs are observation channels only. Compare actual request/message schemas, values, payloads, object layouts and handoff semantics.
 
-Logs are observation channels, not the target. Compare actual request/message schemas, values, payloads and handoff semantics.
+## Identical-OCLP Tahoe comparator rule
+After the Golden contract book is sufficiently complete, the Tahoe comparator must use the SAME ORIGINAL OCLP functional content as Golden.
+
+The only Tahoe-specific OCLP delta permitted at that stage is a minimal eligibility/OS-support bypass that allows the otherwise-original Golden Root Patch to run on Tahoe. That bypass must be separately audited and proven not to alter:
+- payload selection/content;
+- MTLCompilerService selector semantics;
+- MTLCompiler binaries/logic;
+- request layout or serialized payload handling;
+- AIR/bitcode semantics;
+- driver payloads;
+- any other functional donor behavior beyond the eligibility gate itself.
+
+Where feasible, byte/SHA identity of Golden-vs-Tahoe donor artifacts must be proven before the Tahoe Root Patch is authorized. Then run the SAME collectors/workloads/boundaries on Tahoe and locate the earliest exact Golden-vs-Tahoe difference.
 
 ## Golden contract-book evidence labels
 - `SCHEMA_STATIC_PROVEN`: key/type/layout/source demonstrated statically.
 - `RUNTIME_OBSERVED`: exact cohort/lane/event observed.
 - `RUNTIME_VALUE_PROVEN`: exact runtime value directly recovered.
-- `GOLDEN_INVARIANT_PROVISIONAL`: repeated Golden boots/workloads agree, but architecture not yet proven.
+- `GOLDEN_INVARIANT_PROVISIONAL`: repeated Golden boots/workloads agree, architecture not yet independently proven.
 - `UNKNOWN`: exact value unavailable.
 - `INCONCLUSIVE`: observation channel insufficient.
 
@@ -86,7 +99,7 @@ D97AR six donor thresholds:
 - `[rbp-0x1ec] >=125` interpolated component inputs.
 D97AS late six-bit classifier remains reserve-only, not current frontier.
 
-## Working Golden identities and runtime oracle
+## Working Golden identities/runtime oracle
 Golden Sequoia `15.7.9 / 24G830`, HD4400 `0x0412`, Metal 2, display online.
 
 Golden 32023:
@@ -106,36 +119,29 @@ D97AU authoritative first-three-minute Golden window `2026-09-04 12:54:24..12:57
 - no PID uses both generations;
 - Golden 32023 PCs `0x9A9FC=88`, `0x9FFEE=66`, `0xA0521=66`, `0xA5F81=0`.
 
-Tahoe failing reference:
+Historical Tahoe custom-patch reference:
 - 32023=79;
 - 3802=0;
 - 65 exact 32023 PIDs;
 - `0x9A9FC=0`, `0x9FFEE=7`, `0xA0521=7`, `0xA5F81=65`.
-
-Generation-selection and internal-32023 lane divergence are RUNTIME-PROVEN observations, not yet causal proof.
+This remains useful historical evidence but is not the final identical-OCLP comparator.
 
 Golden LLDB attach was explicitly denied; raw six counter values remain `UNKNOWN_ATTACH_DENIED`. Do not retry the same debugger lane without new permission evidence.
 
 ## D97AV V2 retained static facts
-Its erroneous 1970 boot subsection is retired. D97AU fixed window remains runtime authority.
+Its erroneous 1970 boot subsection is retired; D97AU fixed window remains runtime authority.
 
 Golden `0x9A9FC` = `MTLCompilerObject::upgradeAIRModule`, after `MTLCompiler upgrade pass forced to use air version %d.%d`.
+Historical custom site ownership: P2b/AIR00/P7 -> `getReadParametersFromRequest`; P3 -> `backendCompileModule`; D34 -> `runFrameworkPasses`; P6 -> `invokeLowerModule` + `runFrameworkPasses`.
 
-Historical custom site ownership:
-- P2b `0x9A8CD`, AIR00 `0x9A933`, P7 `0x9A93B/0x9A946` -> `getReadParametersFromRequest`;
-- P3 `0xA1573` -> `backendCompileModule`;
-- D34 -> `runFrameworkPasses`;
-- P6 -> `invokeLowerModule` + `runFrameworkPasses`.
-These are historical adapter locations, not target Golden behavior.
-
-Golden original service selector:
+Golden original selector:
 - 3802 at `0x3478` -> Versions/3802;
 - 31001 at `0x3496` -> Versions/32023;
 - no selector immediate 32023.
-Tahoe P1 changes only 31001->32023 and leaves 3802 untouched. Therefore Tahoe zero-3802 originates upstream of P1. Isolated P1 ablation is not useful; eventual target is Golden producer semantics plus original selector.
+Historical P1 changes only 31001->32023 and leaves 3802 untouched; therefore Tahoe zero-3802 originates upstream of P1.
 
 ## Retired unrun D97AW
-D97AW `8187316e... / e2d77333...` is retired before execution because the user broadened the goal from a narrow lane audit to an exhaustive Golden contract census.
+D97AW `8187316e... / e2d77333...` is retired before execution because the user broadened the goal to an exhaustive Golden contract census.
 
 ## CURRENT ACTION — D97AX V2 Golden ingress census
 Core V1 is identity-pinned but unrun because preflight found `/usr/bin/system_profiler` path error:
@@ -160,4 +166,4 @@ D97AX census goals:
 8. xctrace/DTrace/ktrace observation capability inventory;
 9. no debugger attach, cache extraction, system mutation, Root Patch or reboot.
 
-Remain in Golden. Run only D97AX V2 and return complete TXT + JSON. STOP after D97AX V2. Then decide the first controlled repeated-Golden-boot/workload capture from the exact UNKNOWN fields, not by guessing.
+Remain in Golden. Run only D97AX V2 and return complete TXT + JSON. STOP after D97AX V2. Then select repeated-Golden-boot/workload captures only from the exact UNKNOWN fields.
