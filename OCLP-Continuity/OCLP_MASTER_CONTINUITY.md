@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_GITHUB_FIRST_PERMANENT_EXECUTION_POLICY_RESTORED_D97BE_UNCHANGED_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_OCLP11_RESUME_GOLDEN_ROOTPATCH_MANIFEST_LINEAGE_PINNED_D97BE_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 Updated: 2026-09-05 EEST
@@ -49,6 +49,22 @@ GOLDEN_A runtime dual generation remains authoritative. Combined with exhaustive
 
 Golden is sufficiently characterized to proceed; no extra Golden reboot is required solely for structural provenance. Golden remains immutable/read-only.
 
+### Golden root-patch manifest/source lineage pinned in OCLP 11
+User-supplied read-only report of `/System/Library/CoreServices/OpenCore-Legacy-Patcher.plist` now pins the working Golden root-patch source lineage:
+- manifest bytes `34173`;
+- manifest SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
+- `Commit URL` -> exact upstream `dortania/OpenCore-Legacy-Patcher` commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
+- `OpenCore Legacy Patcher` `v2.5.0`;
+- `PatcherSupportPkg` `v1.9.6`;
+- manifest `OS Version` `24.6 (24H22)`;
+- `Time Patched` `September 04, 2026 @ 18:04:54`;
+- `Metal Library Used` `/Library/Application Support/Dortania/MetallibSupportPkg/15.7.9-24G830`.
+
+GitHub verification confirms exact commit `b9df76...` exists in `dortania/OpenCore-Legacy-Patcher` (`detect.py: Fix missing import`, 2026-03-19).
+Classification: `GOLDEN_ROOTPATCH_ORIGINAL_OCLP_SOURCE_COMMIT=PINNED_b9df76ebdf3e768b37c1cc980e8444aa837c623e`.
+
+The manifest is also the exact working Golden root-patch inventory and records `Intel Haswell`, `Metal 3802 Common`, `Metal 3802 Common Extended`, `Metal 3802 .metallibs` and the other applied payload entries. This pins root-patch source lineage/content metadata; it does not by itself prove Golden `.app` bundle byte identity.
+
 ## D97BD — identical-OCLP Tahoe eligibility preflight PASS
 Returned complete terminal transcript:
 - bytes `401990`;
@@ -56,7 +72,7 @@ Returned complete terminal transcript:
 D97BD core/wrapper identity and compile/safety gates PASS; `D97BD_AUDIT=COMPLETE`, outer/launcher RC 0; no system/source mutation, git fetch/checkout/reset, debugger attach, Root Patch or reboot.
 
 ### App identity subsection retired
-`/Volumes/AsusLaptop -> /` caused two path aliases to the same root namespace, while app metadata/executable hashes were unresolved. D97BD's printed app non-identity is `INCONCLUSIVE_TOOLING`, not semantic evidence. Exact Golden app/source lineage remains open.
+`/Volumes/AsusLaptop -> /` caused two path aliases to the same root namespace, while app metadata/executable hashes were unresolved. D97BD's printed app non-identity is `INCONCLUSIVE_TOOLING`, not semantic evidence. Exact Golden `.app` bundle byte identity remains open; the separate root-patch source commit lineage is now pinned by the manifest above.
 
 ### Current Tahoe source is NOT comparator baseline
 Canonical observed source path `/Volumes/AsusLaptop/Users/alex/Developer/OpenCore-Legacy-Patcher-T2-Tahoe-25G82`:
@@ -78,13 +94,18 @@ Classification: `TAHOE_CURRENT_WORKTREE_IDENTICAL_OCLP_BASELINE=REJECTED_DIRTY_C
 - AppleIntelHD5000GraphicsMTLDriver binary SHA `7fa9e4d882916d7bff700cf23b4be62cfb82c1dbf92b5482b231b6c23657df42`.
 Donor hashes above remain comparator invariants.
 
-### Simple max-OS expansion is NOT the eligibility bypass
-Current `patchsets/detect.py` census shows `_min_os = big_sur`, `_max_os = tahoe`, then rejects only outside that range. Tahoe is already inside the global range. Do NOT patch `_max_os`.
+### Eligibility interpretation corrected after exact Golden source pin
+D97BD's census of the **custom Tahoe/T2 worktree** showed `_min_os = big_sur`, `_max_os = tahoe`; therefore simple max-OS widening was correctly NOT the gate in that tree.
 
-The exact remaining eligibility chain to resolve is:
+However the exact Golden ORIGINAL-OCLP source commit is now known. Read-only GitHub verification of `dortania/OpenCore-Legacy-Patcher@b9df76...` shows `_validation_check_unsupported_host_os()` with `_max_os = os_data.sequoia.value`, not Tahoe.
+
+Therefore do not generalize the old `Do NOT patch _max_os` conclusion from the custom Tahoe fork to ORIGINAL-OCLP. The exact rule now is:
+`NO_ELIGIBILITY_EDIT_IS_AUTHORIZED_UNTIL_D97BE_AUDITS_THE_COMPLETE_b9df76_GATE_CHAIN.`
+
+The exact chain to resolve remains:
 `_validation_check_unsupported_host_os()` -> requirements[`UNSUPPORTED_HOST_OS`] -> `_can_patch(requirements)` -> `_cant_patch` -> `self.can_patch` -> `sys_patch.py` enforcement `if not patchset_obj.can_patch`.
 
-Haswell payload construction is separately located in `intel_haswell.py` and shared Metal payload in `metal_3802.py`; the latter is dirty/custom and must not be touched by an eligibility-only comparator edit.
+Haswell payload construction is separately located in `intel_haswell.py` and shared Metal payload in `metal_3802.py`; the current Tahoe worktree copies are not authoritative for an identical-OCLP edit. D97BE must determine whether only the ORIGINAL-OCLP host-OS maximum needs the minimal Tahoe delta or whether another exact-clean-ref eligibility requirement also blocks patching.
 
 ## 2026-09-05 permanent execution-policy update
 The user explicitly restored GitHub-first as the permanent project execution contract. This supersedes prospectively the 2026-09-03 ASUS2-local-default lane. Historical technical results are unchanged.
@@ -95,16 +116,19 @@ ASUS2/user work is limited to identity-pinned evidence/actions inherently requir
 
 If GitHub is genuinely blocked for a GitHub-eligible operation, STOP and document the exact blocker. Local compilation requires explicit user authorization and is never the implicit fallback.
 
+## OCLP 11 continuity marker
+This conversation is `OCLP 11`. It resumes directly from D97BD and the newly supplied Golden root-patch manifest. No historical experiment is reset or discarded. Any optimization of continuity documents must preserve previous evidence and change only stale/inaccurate interpretation or indexing.
+
 ## CURRENT FRONTIER / NEXT ACTION — D97BE CLEAN-REF + EXACT GATE-CHAIN AUDIT
 Do NOT Root Patch/reboot or mutate source.
 
 D97BE remains read-only, but its execution is now GitHub-first:
-1. assistant performs in GitHub every clean-ref ancestry/content/gate-chain comparison that can be resolved from GitHub-accessible refs/repositories, without asking the user to compile/build locally;
-2. ASUS2 is used only for identity-pinned evidence unavailable in GitHub, including unpublished dirty-worktree state, locally available refs/objects not remotely resolvable, or bounded Golden installed-state/app-bundle evidence if genuinely needed;
-3. compare exact hashes/contents for detect.py, sys_patch.py, intel_haswell.py, metal_3802.py, sys_patch_helpers.py and datasets/os_data.py across the clean candidate refs, committed HEAD and worktree using the appropriate lane under items 1-2;
-4. print/audit exact `_validation_check_unsupported_host_os`, `_can_patch`, requirements construction, can_patch assignment and sys_patch enforcement call chain for each candidate clean ref;
-5. inspect bounded Golden root-patch manifest/version markers and correctly resolved app-bundle identity only if needed and only read-only;
-6. identify the clean ORIGINAL-OCLP source baseline and whether a single eligibility-only delta is actually needed;
+1. primary Golden ORIGINAL-OCLP source candidate is exact upstream commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`; assistant audits it directly in GitHub;
+2. compare exact clean-ref ancestry/content/gate-chain against relevant Tahoe/T2 refs (`8969550`, committed HEAD `4143b707...`, `origin/main`, `origin/Development`) and use ASUS2 only for dirty/unpublished worktree evidence unavailable remotely;
+3. compare exact hashes/contents for detect.py, sys_patch.py, intel_haswell.py, metal_3802.py, sys_patch_helpers.py and datasets/os_data.py across the clean Golden ref and candidate Tahoe/T2 refs using the appropriate GitHub/local-evidence lane;
+4. print/audit exact `_validation_check_unsupported_host_os`, requirements construction, `_can_patch`, can_patch assignment and sys_patch enforcement call chain for exact `b9df76...` and any comparator clean refs;
+5. identify whether a single eligibility-only Tahoe delta is sufficient for exact ORIGINAL-OCLP; do not assume either `_max_os` alone or any historical adapter before the chain is complete;
+6. prove any proposed eligibility-only delta leaves Haswell/Metal payload construction, selector/compiler/donor logic, request layout and Golden component invariants untouched;
 7. make no source/system mutation.
 
 Only after D97BE proves baseline+gate may a minimal eligibility-only integration be designed. Eventual integration must leave Haswell/Metal payloads, selector/compiler/donor logic, request layout and Golden component invariants untouched.
