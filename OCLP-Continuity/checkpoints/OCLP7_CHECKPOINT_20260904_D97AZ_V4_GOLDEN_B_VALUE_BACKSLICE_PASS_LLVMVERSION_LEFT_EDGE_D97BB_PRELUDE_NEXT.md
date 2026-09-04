@@ -1,4 +1,4 @@
-# OCLP7 CHECKPOINT — 2026-09-04 — D97AZ V4 GOLDEN_B request-builder value backslice PASS; llvmVersion source lies before aligned left edge; D97BB prelude next
+# OCLP7 CHECKPOINT — 2026-09-04 — D97AZ V4 GOLDEN_B request-builder value backslice PASS; llvmVersion source lies before aligned left edge; D97BB V2 ready
 
 ## Authoritative architecture
 `Tahoe native producer -> Golden-equivalent ingress contract -> ORIGINAL OCLP selector/donor -> Golden-equivalent compiler output -> Haswell driver handoff -> image`.
@@ -52,65 +52,64 @@ Exact chain:
 - `movq 0x18(%r13), %rdx` at `0x7FF80D370A0F`;
 - key xref at `0x7FF80D370A13`;
 - uint64-setter-family call at `0x7FF80D370A1D`.
-
 Classification: `G1_GOLDEN_TIMEOUT_SOURCE_R13_PLUS_0x18=STATIC_VALUE_SOURCE_PROVEN`.
 
 ### pluginPath — STATIC_IMMEDIATE_SETTER_SOURCE_PROVEN / ROOT ORIGIN STILL OPEN
-Setter receives `movq -0x48(%rbp), %rdx` at `0x7FF80D370989` followed by string-setter-family call at `0x7FF80D37098D`.
-Classification for immediate setter source: `STATIC_VALUE_SOURCE_PROVEN`; semantic/root origin of stack local remains upstream.
+Setter receives `movq -0x48(%rbp), %rdx` at `0x7FF80D370989` followed by string-setter-family call at `0x7FF80D37098D`. Immediate setter source is proven; semantic/root origin of the stack local remains upstream.
 
 ### sandboxTokens — STRUCTURAL_SOURCE_MAPPED
-When `byte [r13+0x70]` is nonzero, code calls local/helper target from `0x7FF80D37090F`; returned RAX is moved into RDX and passed to value-setter-family call for `sandboxTokens`.
-Exact helper semantics/value remain open.
+When `byte [r13+0x70]` is nonzero, code calls a helper; returned RAX is moved into RDX and passed to the value-setter-family call. Exact helper semantics/value remain open.
 
 ### targetData — STRUCTURAL_SOURCE_MAPPED
-A helper/stub call at `0x7FF80D370931` returns RAX; RAX is passed as RDX to the `targetData` value-setter-family call at `0x7FF80D370946`. The source object immediately before the helper is stack local `-0x50(%rbp)` in RDI. Exact helper/import semantics remain open.
+A helper/stub call at `0x7FF80D370931` returns RAX, then RAX goes to RDX for targetData. Source object immediately before the helper is stack local `-0x50(%rbp)` in RDI.
 
 ### data — STRUCTURAL_SOURCE_MAPPED
-A helper/stub call at `0x7FF80D370956` with R12 in RDI returns RAX; RAX is passed as RDX to the `data` value-setter-family call at `0x7FF80D37096B`. Exact helper/import semantics remain open.
+A helper/stub call at `0x7FF80D370956` with R12 in RDI returns RAX; RAX goes to RDX for data.
 
 ### client_name — STRUCTURAL_SOURCE_MAPPED
-Local/helper call at `0x7FF80D3709F3` returns RAX; after non-null test, RAX is passed in RDX to the string-setter-family call at `0x7FF80D370A0A`. Exact helper/root semantic source remains open.
+Helper call at `0x7FF80D3709F3` returns RAX; after non-null test, RAX goes to RDX for client_name.
 
-## llvmVersion — precise correction: UNKNOWN_RANGE_LEFT_EDGE, not semantic absence
-D97AZ V4 aligned the primary extraction range to begin exactly at the proven `llvmVersion` key xref `0x7FF80D37081F` to avoid x86 mid-instruction ambiguity.
-Observed sequence begins:
-- `0x7FF80D37081F`: LEA `llvmVersion` key -> RSI;
+## llvmVersion — precise correction: UNKNOWN_RANGE_LEFT_EDGE
+D97AZ V4 aligned the primary extraction range to begin exactly at `0x7FF80D37081F` to avoid x86 mid-instruction ambiguity. Sequence begins:
+- `0x7FF80D37081F`: llvmVersion key LEA -> RSI;
 - `0x7FF80D370826`: `movq %rax, %rdi`;
 - `0x7FF80D370829`: uint64-setter-family call.
 
-There is no write to RDX between the extraction left edge and that call. Therefore D97AZ's `NO_WRITER` result means the llvmVersion value was placed in RDX *before* `0x7FF80D37081F`, outside the captured range.
-
-Authoritative classification:
-`G1_GOLDEN_LLVMVERSION_STATIC_SOURCE=UNKNOWN_RANGE_LEFT_EDGE`.
-Do NOT describe this as evidence that no source exists or that the value is unknown at runtime globally.
+No RDX write exists inside the captured range before that call. Therefore `NO_WRITER` means the llvmVersion value was placed in RDX before the captured left edge.
+Authoritative classification: `G1_GOLDEN_LLVMVERSION_STATIC_SOURCE=UNKNOWN_RANGE_LEFT_EDGE`.
+Do not describe this as semantic absence.
 
 ## Alternate requestType path — exact immediate 9
-Alternate xref `0x7FF80D44B9E1` is followed by:
-- `movl $0x9, %edx` at `0x7FF80D44B9E8`;
-- uint64-setter-family call at `0x7FF80D44B9F4`.
+Alternate xref `0x7FF80D44B9E1` is followed by `movl $0x9,%edx` then the same uint64-setter-family target. Classification `G1_GOLDEN_ALTERNATE_REQUESTTYPE_VALUE_9=STATIC_VALUE_PROVEN`.
+Alternate data remains a separate mapped path with no paired setter claim.
 
-Classification:
-`G1_GOLDEN_ALTERNATE_REQUESTTYPE_VALUE_9=STATIC_VALUE_PROVEN`.
+## Tooling caveat
+D97AZ `NM_OWNER=(..._traceLog)` is not authoritative for cached-code function ownership and is retired from semantic use.
+D97AZ explicitly made no runtime value claim. Static source locations are not automatically runtime values.
 
-Alternate `data` xref is mapped but D97AZ could not pair it to a nearby setter before RSI clobber; keep it `UNKNOWN/SEPARATE_PATH`, not negative.
-
-## Tooling caveat — NM_OWNER not authoritative
-D97AZ printed `NM_OWNER=(30794, ... _traceLog)` around these shared-cache code addresses. This owner result is inconsistent with the actual cached Metal VM context and is not used as a containing-function proof. It is retired as a symbol-owner hint only.
-
-## Runtime values vs static source
-D97AZ explicitly made no runtime value claim. Static source locations are not automatically runtime values. GOLDEN_A's exact generation selection remains separately constrained by the original exhaustive selector (`3802 -> 3802`, `31001 -> 32023`) plus D97AU runtime lane provenance; GOLDEN_B runtime generation visibility remains inconclusive from D97BA's zero-record channel.
-
-## CURRENT FRONTIER / NEXT ACTION — D97BB
+## CURRENT FRONTIER / NEXT ACTION — D97BB V2
 Remain in GOLDEN_B `15.8 / 24H22`.
 
-Next bounded read-only collector must recover the *prelude immediately before* `0x7FF80D37081F` from a provable instruction/function boundary, then backslice RDX for the llvmVersion setter. Preferred method: parse the cached Metal Mach-O `LC_FUNCTION_STARTS` (or another explicit static boundary) and disassemble from the containing function start through the existing llvmVersion/requestType sequence. Do not use an arbitrary mid-instruction start.
+Run only hardened wrapper:
+`OCLP7_D97BB_V2_GOLDEN_15_8_LLVMVERSION_FUNCTION_START_HARDENED_WRAPPER.command`
+- wrapper commit `4e99313000e59b57b28b761571e2d56fbd96429b`;
+- wrapper Git blob `e51f547b3765688b772b43937dc0f3d762a9c801`.
 
-Goals:
-1. prove containing function/start boundary for the primary request builder;
-2. recover exact writer chain feeding RDX at the llvmVersion setter;
-3. identify the root structure field/immediate/helper source if statically resolvable;
-4. preserve existing D97AZ source map without rerunning broad shared-cache census;
-5. no debugger attach, persistent instrumentation, system mutation, Root Patch or reboot.
+Core:
+`OCLP7_D97BB_GOLDEN_15_8_LLVMVERSION_FUNCTION_START_AND_RDX_SOURCE.command`
+- commit `c05563fdeae951c5731051c73ac7e43fd7f2ffdd`;
+- core Git blob `c02a2e7c196f3260858be55f6175ba275120ac35`.
 
-After llvmVersion static source is resolved, choose only the minimum additional Golden runtime channel needed to establish exact per-request values still not logically proven from existing exhaustive selector/runtime evidence.
+Wrapper fail-closes unless core blob, zsh parse, single Python heredoc compile, current Metal SHA pin, LC_FUNCTION_STARTS markers and safety markers all pass.
+
+D97BB core:
+1. pins GOLDEN_B OS/build, donor hashes and cached Metal text SHA `f3e49d47c9c62baaa90ad483836a1a859696b61010c96664c56441a5f6c28865`;
+2. parses cached Metal Mach-O `LC_FUNCTION_STARTS`;
+3. derives a real containing-function boundary for llvmVersion xref `0x7FF80D37081F`;
+4. disassembles only from that function boundary through the existing setter;
+5. revalidates llvmVersion key target and uint64-setter-family target `0x7FF80D50FDCE`;
+6. back-slices RDX to first safely resolvable source.
+
+Goal: resolve exact static source of Golden llvmVersion without arbitrary pre-xref alignment. No debugger attach, persistent instrumentation, system mutation, Root Patch or reboot.
+
+After D97BB, choose only the minimum additional Golden runtime channel needed for exact values not already logically established by exhaustive selector/runtime evidence.
