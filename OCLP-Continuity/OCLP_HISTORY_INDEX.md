@@ -1,91 +1,119 @@
-# OCLP PROJECT HISTORY INDEX — ASUS2 / OCLP1 → future phases
+# OCLP PROJECT HISTORY INDEX — ASUS2 / OCLP1 -> future phases
 
 Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
+Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_OCLP11_RESUME_GOLDEN_ROOTPATCH_MANIFEST_LINEAGE_PINNED_D97BE_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BE_EXACT_GOLDEN_GATE_CHAIN_PROVEN_ONE_LINE_TAHOE_ELIGIBILITY_D97BF_BUILD_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
-## Final architecture
-`Tahoe native producer -> Golden-equivalent ingress -> ORIGINAL OCLP donor -> Golden-equivalent compiler output -> Haswell driver -> image`.
-Tahoe comparator must use SAME ORIGINAL OCLP functional content; only a separately audited minimal eligibility/OS-support bypass may differ.
+This file is the chronological high-level index. The full experiment/evidence lineage is preserved in `OCLP-Continuity/checkpoints/`; the consolidated current state is in `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 
-## Golden snapshots / contract closure
-GOLDEN_A = Sequoia `15.7.9 / 24G830`, D97AU/D97AX/D97AY oracle.
-GOLDEN_B = Sequoia `15.8 / 24H22`, same OCLP Root Patch reapplied manually, acceleration working, no EFI changes per user.
-Donor hashes unchanged: 32023 `ddabe975...`, 3802 `85d4c285...`, service `31a6f745...`.
+## Project end goal
+Tahoe `26.6.2 / 25G82` on ASUS2, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware-accelerated GUI.
 
-D97AZ: requestType `[R13+0x8]`; timeout `[R13+0x18]`; sandbox condition `[R13+0x70]`; alternate requestType immediate 9; helper paths mapped.
-D97BB: LC_FUNCTION_STARTS request-builder `0x7FF80D370756..0x7FF80D370C28`; llvmVersion source `movslq 0x20(%rbx),%rdx`.
-D97BC: RBX = ABI arg1/RDI, R13 = ABI arg2/RSI; no intervening writes before mapped fields. Producer layout bound to ABI objects. Golden structural contract declared sufficient to begin identical-OCLP Tahoe eligibility phase.
+## Durable architecture evolution
+Historical architecture converged from local compiler/payload adaptation toward the current controlled comparator:
+`Tahoe native producer -> Golden-equivalent ingress -> ORIGINAL OCLP selector/donor -> Golden-equivalent compiler output -> Haswell driver -> image`.
 
-## D97BD — identical-OCLP Tahoe eligibility preflight PASS
-Complete returned terminal transcript:
-- bytes `401990`;
-- SHA256 `00b6182ddda1e3b10c1427ff1e53b51d364aba8141d1e9f4d5c9c0596cb87c71`.
-Core/wrapper pins and Python/safety gates PASS; final `D97BD_AUDIT=COMPLETE`, outer/launcher RC 0; no mutation/fetch/checkout/reset/debugger/Root Patch/reboot.
+The current experiment deliberately removes historical custom Tahoe OCLP payload/compiler edits and uses the same ORIGINAL OCLP functional root-patch content as the working Golden Sequoia system, with only the smallest separately audited Tahoe host-OS eligibility delta.
 
-App identity subsection retired as `INCONCLUSIVE_TOOLING`: `/Volumes/AsusLaptop -> /` created path aliasing and app metadata/executable hashes were unresolved.
+## Historical accepted functional baseline
+The accepted diagnostic five-functional baseline remains exactly:
+`P1 + P2b + P3 + AIR00 + D34`.
 
-Canonical Tahoe source observed:
-- HEAD `4143b7077a9a4e5aa41ec7a06c0888597eda9b06`, branch `alex-tahoe-25G82-custom`;
-- prior/tag `8969550` (`4.0.0.16900` / `4.0.0.16047`);
-- `origin/main e371b71468464ea3a13b8b82c3ca5298a71df141`;
-- `origin/Development 85ea01b333c9a7e50c44f054a52614425c3058a2`.
+It remains project evidence/history and is not silently imported into the identical-OCLP comparator.
+P6/P7 were not sufficient. D50/D68/D82 remain reserve-only. D84 is retired. D36-D44 were invalidated for D34 cave overlap.
 
-Current worktree is rejected as identical-OCLP baseline because tracked `metal_3802.py`, `sys_patch.py`, `sys_patch_helpers.py` are dirty and historical D97/.before material is present.
-Classification: `TAHOE_CURRENT_WORKTREE_IDENTICAL_OCLP_BASELINE=REJECTED_DIRTY_CUSTOM`.
+## Durable causal model
+Compiler-service failure precedes XPC interruption, pipeline creation failure, SkyLight/CopyPipelineState abort, and WindowServer death. WindowServer is downstream rather than the root cause.
 
-D97BD added Golden component invariants:
-- AppleIntelFramebufferAzul SHA `3ff93ec8ce42c9d9f124c0a93e9d48e52b7e3c81ae47d4ede6948e452dd2624f`;
-- AppleIntelHD5000Graphics SHA `a7ec5021532163b3202b448d25e1035e4d4ed6e25f770bba99fe9c7df77adbee`;
-- AppleIntelHD5000GraphicsMTLDriver SHA `7fa9e4d882916d7bff700cf23b4be62cfb82c1dbf92b5482b231b6c23657df42`.
+Methodology evolved to module-boundary + semantic evidence + far-frontier, with universal/no-PID observation where request/process variability can occur.
 
-D97BD eligibility result for the **custom Tahoe/T2 worktree**: its `patchsets/detect.py` already sets `_max_os = os_data.tahoe.value`, so simple max-OS widening is not the gate in that custom tree. Exact chain requiring clean-ref audit is `_validation_check_unsupported_host_os -> requirements[UNSUPPORTED_HOST_OS] -> _can_patch -> _cant_patch -> self.can_patch -> sys_patch enforcement`.
+## 2026-09-01 to 2026-09-04 — D97 provenance/producer closure
+The D97 sequence established, among other durable results:
+- runtime llvmVersion/provenance work;
+- selector and donor generation mapping;
+- correction of false-negative/inconclusive tooling classifiers;
+- universal observer methodology;
+- Golden comparator capture;
+- Golden request-builder XPC schema and producer ABI closure.
 
-Haswell payload construction is separate in `intel_haswell.py`; shared Metal payload is `metal_3802.py` and current worktree copy is dirty/custom. An eligibility-only comparator must not modify these payload paths.
+Key Golden producer closure:
+- request builder `0x7FF80D370756..0x7FF80D370C28`;
+- RBX = ABI arg1/RDI and `[RBX+0x20] -> llvmVersion`;
+- R13 = ABI arg2/RSI and `[R13+0x08] -> requestType`, `[R13+0x18] -> timeout`, `[R13+0x70]` sandbox gate;
+- alternate requestType immediate `9`.
+
+Detailed evidence remains in the checkpoint corpus.
+
+## D97BD — identical-OCLP Tahoe eligibility preflight
+D97BD PASS established the controlled transition from Golden characterization to identical-OCLP Tahoe comparison.
+
+The historical/current Tahoe/T2 local worktree was rejected as comparator baseline because it was dirty/custom in `metal_3802.py`, `sys_patch.py`, `sys_patch_helpers.py` and contained extensive D97/.before material.
+
+D97BD also preserved additional Golden component invariants and identified the complete host eligibility chain requiring exact clean-ref audit.
 
 ## 2026-09-05 — permanent GitHub-first execution policy restored
-After a complete reread of the authoritative startup sequence and the repository text/checkpoint/script/workflow corpus, the user explicitly restored GitHub-first as the permanent execution policy.
+User explicitly made GitHub-first the permanent execution contract:
+- assistant executes all work technically resolvable in GitHub, including validation, integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact preparation/publication and CI audit;
+- ASUS2 is used only for identity-pinned local/live/hardware evidence and unavoidable target-local actions, manual Root Patch after authorization, accelerated boot and VESA recovery;
+- GitHub blocker means STOP + exact blocker documentation;
+- local compilation is never implicit fallback;
+- never auto Root Patch or reboot.
 
-Major methodology result:
-- all work technically executable in GitHub is performed/audited by the assistant in GitHub, including validations, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact publication/preparation and CI audit;
-- ASUS2/user execution is limited to identity-pinned evidence/actions inherently requiring ASUS2 or its installed/live/local-only state;
-- GitHub blocker => STOP and exact blocker documentation;
-- local compilation is never implicit fallback and requires explicit user authorization;
-- Root Patch and reboot remain manual-only and separately authorized.
+## 2026-09-05 — OCLP11 Golden source lineage pinned
+User supplied the working Golden root-patch manifest from `/System/Library/CoreServices/OpenCore-Legacy-Patcher.plist`.
 
-This supersedes prospectively the 2026-09-03 ASUS2-local-default execution-lane policy. Historical results remain technically unchanged.
-
-No technical frontier changed. Accepted historical baseline remains exactly `P1 + P2b + P3 + AIR00 + D34`; Golden remains immutable/read-only; D50/D68/D82 remain reserve-only. Final identical-OCLP comparator rules from MASTER remain unchanged.
-
-## 2026-09-05 — OCLP 11 resume / Golden root-patch source lineage pinned
-The current conversation is **OCLP 11** and resumes directly from D97BD.
-
-User supplied the complete read-only Golden root-patch manifest report for `/System/Library/CoreServices/OpenCore-Legacy-Patcher.plist`.
-Exact manifest identity:
-- bytes `34173`;
-- SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
-- `Commit URL` = exact upstream `dortania/OpenCore-Legacy-Patcher` commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
+It pinned:
+- manifest SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
 - OCLP `v2.5.0`;
 - PatcherSupportPkg `v1.9.6`;
-- manifest OS `24.6 (24H22)`;
-- root patch time `September 04, 2026 @ 18:04:54`;
-- Metal Library Used `/Library/Application Support/Dortania/MetallibSupportPkg/15.7.9-24G830`.
+- exact upstream source commit `dortania/OpenCore-Legacy-Patcher@b9df76ebdf3e768b37c1cc980e8444aa837c623e`.
 
-The manifest records the actual Golden payload inventory including Intel Haswell + Metal 3802 Common/Common Extended + Metal 3802 .metallibs. GitHub verification confirms commit `b9df76...` exists in `dortania/OpenCore-Legacy-Patcher` with message `detect.py: Fix missing import`.
+This closed root-patch source lineage. Golden `.app` byte identity remains a separate historical `INCONCLUSIVE_TOOLING` question and is not required for the source-controlled comparator.
 
-Classification: `GOLDEN_ROOTPATCH_ORIGINAL_OCLP_SOURCE_COMMIT=PINNED_b9df76ebdf3e768b37c1cc980e8444aa837c623e`.
+## 2026-09-05 — D97BE exact Golden eligibility chain CLOSED
+GitHub-first static audit of exact `b9df76...` proved:
+- `detect.py` has `_max_os = os_data.sequoia.value`;
+- exact `os_data.py` already has `tahoe = 25`;
+- unsupported host OS propagates through `requirements[UNSUPPORTED_HOST_OS] -> _can_patch -> _cant_patch -> self.can_patch`;
+- `PatchSysVolume.start_patch()` blocks when `can_patch` is false;
+- exact Haswell path remains non-native/patchable on Darwin 25;
+- exact Haswell patch composition remains original `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell model-specific`;
+- MetallibSupportPkg lookup is dynamic and has no static Tahoe maximum.
 
-This closes root-patch **source commit lineage** but does not change D97BD app-bundle identity classification: `.app` byte identity remains `INCONCLUSIVE_TOOLING` and is a separate question.
+Therefore the minimal identical-OCLP Tahoe functional delta is **exactly one source-line replacement**:
+```diff
+-        _max_os = os_data.sequoia.value
++        _max_os = os_data.tahoe.value
+```
 
-Important correction: exact `dortania/OpenCore-Legacy-Patcher@b9df76...` has `_validation_check_unsupported_host_os()` with `_max_os = os_data.sequoia.value`. Therefore D97BD's `max_os=tahoe` result belongs only to the custom Tahoe/T2 worktree and must not be generalized to ORIGINAL-OCLP.
+No payload, selector, compiler, donor, request-layout, Haswell, Metal3802, sys_patch or sys_patch_helpers functional edit is authorized.
+Original OCLP state validations (SIP, FileVault, SecureBootModel, AMFI, repatch state, network/download requirements) remain intact.
 
-No eligibility edit is yet authorized. D97BE must audit the full exact `b9df76...` gate chain and determine whether the minimal Tahoe-only delta is merely host-OS max support or whether another clean-ref requirement also blocks patching. Historical payload/compiler adapters remain excluded from the identical-OCLP comparator unless later separately justified.
+Classification:
+`D97BE_MINIMAL_TAHOE_DELTA=ONE_LINE_DETECT_MAX_OS_SEQUOIA_TO_TAHOE`.
 
-## CURRENT ACTION — D97BE clean-ref + exact gate-chain audit
-Read-only, no source mutation, Root Patch or reboot.
-Execution is GitHub-first.
-Primary Golden ORIGINAL-OCLP candidate is exact upstream commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`.
-Assistant must audit its exact eligibility chain, compare relevant clean files/refs against Tahoe/T2 refs and the rejected dirty worktree, and prove whether one eligibility-only Tahoe delta is sufficient while leaving Haswell/Metal payloads, selector/compiler/donor logic, request layout and Golden component invariants untouched.
-Only after clean baseline + exact gate are proven may an eligibility-only source integration be designed.
+## 2026-09-05 — continuity database systematized
+Created `OCLP_PERMANENT_PROJECT_DATABASE.md` as the consolidated durable state for OCLP12/OCLP13/OCLP14/OCLP15+.
+
+It centralizes target, architecture, Golden lineage/hashes, producer contract, historical accepted/reserve/retired work, rejected Tahoe worktree, D97BE result, execution lanes, diagnostic methodology, VESA rule, current frontier and anti-loss persistence protocol.
+
+Anti-loss policy: persist decisive results immediately; otherwise create a continuity checkpoint no later than every 10 substantive technical assistant responses.
+
+## CURRENT ACTION — D97BF
+GitHub-first build/package/audit of exact Golden OCLP `b9df76...` with only the one-line Tahoe eligibility edit.
+
+Required outcome before ASUS2 Root Patch:
+- exact clean checkout;
+- one-file/one-line diff proof;
+- static/compile PASS;
+- protected source identity proof;
+- GitHub CI app build/package;
+- artifact SHA/tree manifest;
+- complete workflow/run/job/artifact audit;
+- identity-pinned delivery;
+- STOP before manual Root Patch.
+
+No Root Patch and no reboot are authorized at this point.
