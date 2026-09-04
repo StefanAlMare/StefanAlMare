@@ -96,7 +96,7 @@ D97AR_SEMANTIC_CAPTURE_STATIC_DESIGN_AUDIT=PASS
 ## New design insight — six branch predicates fit one deterministic 6-bit status
 Although six arbitrary raw integers cannot fit in one process exit code, the six exact donor predicates are booleans. Their complete threshold state is exactly 6 bits and therefore can be encoded in a single deterministic 8-bit exit status for each request/PID.
 
-Proposed bit assignment, to be audited before any mutation:
+Proposed bit assignment:
 - bit0 (`1`) = buffers `>=65`;
 - bit1 (`2`) = samplers `>=17`;
 - bit2 (`4`) = textures `>=129`;
@@ -104,21 +104,19 @@ Proposed bit assignment, to be audited before any mutation:
 - bit4 (`16`) = interpolated inputs `>=32`;
 - bit5 (`32`) = interpolated component inputs `>=125`.
 
-Proposed terminal diagnostic exit status = `160 + bitmask`, yielding an exhaustive unambiguous range `160..223`. `160` means all six below donor error thresholds; `223` means all six threshold predicates true.
+Proposed terminal diagnostic exit status = `160 + bitmask`, yielding exhaustive unambiguous range `160..223`. `160` means all six below donor error thresholds; `223` means all six threshold predicates true.
 
-This would not claim raw integer equivalence. If executed universally at the correct natural boundary, it would directly prove the six donor branch-condition outcomes for each classified request/PID and whether execution reached the capture point. It is intentionally terminal and would make no pass-through claim.
+This would not claim raw integer equivalence. If executed universally at the correct natural boundary, it would directly prove the six donor branch-condition outcomes for each classified request/PID and whether execution reached the capture point. It is intentionally terminal and makes no pass-through claim.
 
-## ACTIVE FRONTIER / CURRENT NEXT ACTION — D97AS read-only classifier feasibility audit
-Before any source edit/build/Root Patch/reboot, perform one bounded static audit on exact natural P7 to determine whether an in-place universal terminal six-bit classifier is structurally safe.
+## D97AS exact prepared wrapper identity
+Public read-only feasibility auditor:
+- `OCLP7_D97AS_READONLY_SIX_PREDICATE_BITMASK_TERMINAL_CLASSIFIER_FEASIBILITY_AUDIT.command`;
+- commit `fc992c3f52b56f5e51357a7897b1afed025a2fbf`;
+- Git blob `76b6320ba0aac57b7d3357a22e0c2ee55d51de1f`.
 
-D97AS should:
-1. revalidate exact target `e7739c... / 0FC4...` and natural former-D97AD bytes;
-2. select an instruction-aligned overwrite span beginning at `0x9D6BD` large enough for a 107-byte classifier and ending on an exact instruction boundary;
-3. prove zero direct/control-flow entries from outside the chosen span into its interior, while allowing the intended entry at span start;
-4. revalidate the fully resolved natural validator CFG and zero reachable unresolved indirects;
-5. synthesize exact x86_64 terminal code which reads the six mapped dword locals, applies the exact unsigned donor thresholds, builds the six-bit mask, adds base 160, invokes direct `exit` syscall, then `ud2`;
-6. patch only a temporary copy in `/private/tmp`, disassemble it, and verify the synthesized classifier instruction sequence and 160..223 status contract;
-7. verify overwrite span does not split instructions, does not overlap D34 protected cave, and requires no continuing-state preservation because the diagnostic is explicitly terminal;
-8. print exact original span preimage bytes/SHA and exact classifier bytes/SHA for future fail-closed source integration if STATIC-PROVEN.
+The proposed overwrite span is `0x9D6BD..0x9D72D` exclusive, exactly 112 bytes. The generated terminal classifier is 107 bytes plus 5 NOP padding bytes. D97AS must prove instruction alignment, exact preimage, zero outside-to-interior CFG entries, zero reachable unresolved indirects, D34 non-overlap, exact six-predicate machine-code encoding, and synthetic temporary-copy disassembly before classifying the design feasible.
+
+## ACTIVE FRONTIER / CURRENT NEXT ACTION — D97AS
+Run D97AS once on ASUS2. It is read-only relative to source/live system and writes only a temporary synthetic copy in `/private/tmp`, removed on exit.
 
 STOP after D97AS. No source/app/system/Golden/service/Root-Patch/reboot mutation.
