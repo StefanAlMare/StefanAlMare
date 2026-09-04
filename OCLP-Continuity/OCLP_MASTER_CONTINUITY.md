@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BF_DESKTOP_APP_OFFICIAL_B9DF76_LINEAGE_PROVEN_PYINSTALLER_LAYOUT_AUDIT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BF_HISTORICAL_SECOND_TAHOE_GATE_RECONCILED_B9DF76_SCOPE_CORRECTED.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -48,15 +48,29 @@ Exact gate propagation is:
 -> `self.can_patch`
 -> `PatchSysVolume.start_patch()` enforcement.
 
-Exact Haswell/Metal patch construction already remains applicable on Darwin 25. No payload/selector/compiler/donor source edit is required or authorized for this comparator.
+Exact Haswell/Metal patch construction remains statically applicable on Darwin 25 in exact `b9df76`.
 
-Authorized minimal Tahoe functional delta is exactly one line:
+Authorized minimal **static host-eligibility** delta for exact `b9df76` is exactly one line:
 ```diff
 -        _max_os = os_data.sequoia.value
 +        _max_os = os_data.tahoe.value
 ```
 
 All other original OCLP validation gates remain intact. SIP/FileVault/SecureBootModel/AMFI/repatch/network/download failures are not to be bypassed as part of this experiment.
+
+### Scope correction — historical second Tahoe patchset gate
+The user correctly recalled an earlier Tahoe-aware/custom OCLP source in which a second patchset-level blocker existed: legacy GPU classes could be excluded/treated as native on Tahoe, causing them to be skipped or their `patches()` result to be empty.
+
+Exact re-audit of Golden `b9df76...` proves that historical blocker does **not** exist in this lineage:
+- `intel_haswell.IntelHaswell` is unconditionally present in `_hardware_variants`;
+- `IntelHaswell.native_os()` is exactly `return self._xnu_major < os_data.ventura.value`, so Darwin 25 returns `False`;
+- `IntelHaswell.patches()` therefore proceeds to `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific` content;
+- `LegacyMetal3802._os_requires_patches()` is `self._xnu_major >= os_data.ventura.value`, with no Tahoe maximum.
+
+Classification:
+`HISTORICAL_TAHOE_PATCHSET_NATIVE_OS_BLOCKER_APPLIES_TO_B9DF76=NO`.
+
+Important: the one-line result is **not** a proof that a complete Tahoe Root Patch is sufficient or guaranteed. It proves only the sole currently demonstrated Tahoe-specific static source gate before Haswell patchset generation in exact `b9df76`. Full Root Patch success remains `NOT_YET_PROVEN` and may still depend on MetallibSupportPkg matching, network/package retrieval, SIP/FileVault/SecureBootModel/AMFI/repatch state, root-volume/cache/snapshot behavior, or other Tahoe runtime incompatibility.
 
 ## D97BF pre-build evidence already proven
 Before the GitHub compilation stop instruction, CI attempts repeatedly established:
@@ -132,14 +146,15 @@ Until the user explicitly lifts this restriction:
 ## Persistence contract
 Persist immediately after decisive PROVEN/NEGATIVE results, integrations/builds, Root Patch results, accelerated-boot results, or major methodology changes. Otherwise persist no later than every 10 substantive technical assistant responses. Update MASTER, HISTORY when phase/history changes, and a new incremental checkpoint; the current checkpoint overlays transient execution state onto the consolidated database.
 
-## CURRENT ACTION — read-only PyInstaller layout audit
+## CURRENT ACTION — expanded read-only frozen-app eligibility audit
 Before deciding between direct app patching and a full build, audit the proven Desktop app read-only:
 1. identify the PyInstaller archive structure and available archive-viewer tooling;
-2. prove the frozen module location for `opencore_legacy_patcher.sys_patch.patchsets.detect`;
-3. determine whether the one-line `sequoia -> tahoe` eligibility delta can be applied by deterministic module/archive replacement rather than recompiling the application;
-4. preserve the current Desktop app unchanged as the proven reference;
-5. if direct patching is feasible, create a second working copy only after the procedure is fully audited, then re-sign/ad-hoc-sign as required and re-audit architecture/hash/bundle integrity.
+2. prove frozen module location/content for `opencore_legacy_patcher.sys_patch.patchsets.detect`;
+3. also prove frozen `opencore_legacy_patcher.sys_patch.patchsets.hardware.graphics.intel_haswell` matches exact `b9df76` selection/native/patch composition;
+4. verify packaged MetallibSupportPkg resolution and determine whether target `26.6.2 / 25G82` has a usable local or remote MetallibSupportPkg match;
+5. only then determine whether one frozen-module edit is sufficient for the comparator app;
+6. preserve the current Desktop app unchanged as the proven reference.
 
-If direct frozen-module patching proves unsafe or non-deterministic, fall back to the previously defined non-GitHub exact-source build lane; local compilation still requires explicit user authorization.
+If direct frozen-module patching proves unsafe/non-deterministic, fall back to the previously defined non-GitHub exact-source build lane; local compilation still requires explicit user authorization.
 
 No Root Patch and no reboot are authorized by this MASTER state.
