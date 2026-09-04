@@ -1,9 +1,9 @@
 # OCLP PROJECT HISTORY INDEX — ASUS2 / OCLP1 → future phases
 
-Updated: 2026-09-04 EEST
+Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97BD_ELIGIBILITY_PREFLIGHT_PASS_DIRTY_CUSTOM_TREE_CLEAN_REF_AND_GATE_CHAIN_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_GITHUB_FIRST_PERMANENT_EXECUTION_POLICY_RESTORED_D97BE_UNCHANGED_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Final architecture
@@ -45,7 +45,22 @@ Critical eligibility result: current `patchsets/detect.py` already sets `_max_os
 
 Haswell payload construction is separate in `intel_haswell.py`; shared Metal payload is `metal_3802.py` and current worktree copy is dirty/custom. An eligibility-only comparator must not modify these payload paths.
 
+## 2026-09-05 — permanent GitHub-first execution policy restored
+After a complete reread of the authoritative startup sequence and the repository text/checkpoint/script/workflow corpus, the user explicitly restored GitHub-first as the permanent execution policy.
+
+Major methodology result:
+- all work technically executable in GitHub is performed/audited by the assistant in GitHub, including validations, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact publication/preparation and CI audit;
+- ASUS2/user execution is limited to identity-pinned evidence/actions inherently requiring ASUS2 or its installed/live/local-only state;
+- GitHub blocker => STOP and exact blocker documentation;
+- local compilation is never implicit fallback and requires explicit user authorization;
+- Root Patch and reboot remain manual-only and separately authorized.
+
+This supersedes prospectively the 2026-09-03 ASUS2-local-default execution-lane policy. Historical results remain technically unchanged.
+
+No technical frontier changed. Accepted historical baseline remains exactly `P1 + P2b + P3 + AIR00 + D34`; Golden remains immutable/read-only; D50/D68/D82 remain reserve-only. Final identical-OCLP comparator rules from MASTER remain unchanged.
+
 ## CURRENT ACTION — D97BE clean-ref + exact gate-chain audit
 Read-only, no source mutation, Root Patch or reboot.
+Execution is GitHub-first: assistant performs all GitHub-resolvable clean-ref/ancestry/content/gate-chain work; ASUS2 supplies only identity-pinned dirty/local-only/installed-state evidence that cannot be obtained from GitHub.
 Compare candidate clean ref/tag `8969550`, committed HEAD `4143b707...`, existing `origin/main` and `origin/Development`, plus current worktree, with exact hashes and targeted function bodies for detect.py/sys_patch.py/intel_haswell.py/metal_3802.py/sys_patch_helpers.py/datasets/os_data.py.
-Prove ancestry; recover exact eligibility chain; inspect Golden root-patch manifest/version markers and corrected app identity if available. Only after clean baseline + exact gate are proven may an eligibility-only source integration be designed.
+Prove ancestry; recover exact eligibility chain; inspect Golden root-patch manifest/version markers and corrected app identity only if required. Only after clean baseline + exact gate are proven may an eligibility-only source integration be designed.
