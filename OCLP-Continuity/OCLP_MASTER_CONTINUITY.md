@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BF_USER_OCLP_PKG_GOLDEN_LINEAGE_CANDIDATE_READONLY_AUDIT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BF_DESKTOP_APP_OFFICIAL_B9DF76_LINEAGE_PROVEN_PYINSTALLER_LAYOUT_AUDIT_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -35,7 +35,7 @@ Working Golden root-patch manifest pins:
 - OCLP `2.5.0`;
 - PatcherSupportPkg `1.9.6`.
 
-The identical-OCLP Tahoe comparator must start from that exact clean commit. The rejected dirty Tahoe/T2 worktree is historical evidence only and is not a comparator source.
+The identical-OCLP Tahoe comparator must start from that exact clean lineage. The rejected dirty Tahoe/T2 worktree is historical evidence only and is not a comparator source.
 
 ## D97BE CLOSED — exact eligibility chain
 Exact Golden `detect.py` uses `_max_os = os_data.sequoia.value` while exact Golden `os_data.py` already defines `tahoe = 25`.
@@ -75,15 +75,43 @@ Before the GitHub compilation stop instruction, CI attempts repeatedly establish
 
 The failed attempts observed before the stop instruction were CI/audit-lane failures and do not constitute a proven OCLP functional build failure.
 
-## User local OpenCore-Patcher.pkg — Golden-lineage candidate
-TrueNAS Reader manifest for batch `20260904T225753Z-dv103208c1-178bdb6a` identifies the user's local/reference package as:
+## User Desktop OpenCore-Patcher.app — exact official Golden lineage proven
+Read-only local audit of `/Users/alex/Desktop/OpenCore-Patcher.app` established:
+- OCLP `2.5.0`;
+- bundle ID `com.dortania.opencore-legacy-patcher`;
+- embedded Build Date `2026-03-19 09:33:30`;
+- BuildMachineOSBuild `21G531`;
+- universal executable `x86_64 arm64`;
+- executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
+- Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
+- Developer ID signature `Mykola Grymalyuk (S74BDJXQMD)`;
+- strict/deep codesign verification PASS, `codesign_exit=0`;
+- signing timestamp displayed locally `19 Mar 2026 at 18:33:46`;
+- bundle created `2026-03-19 18:36:42 +0200`;
+- payloads present (`payloads.dmg` ~46M, `Universal-Binaries.dmg` ~612M), timestamped `19 Mar 18:32`.
+
+Upstream provenance correlation proves exact source lineage:
+- `b9df76...` committed at `2026-03-19T16:31:54Z`;
+- official Dortania push workflow run `23305527165` started at `2026-03-19T16:32:02Z` with exact head SHA `b9df76...`;
+- job `67778441258`, label `x86_64_monterey`, completed successfully at `16:41:53Z`;
+- official `OpenCore-Patcher.pkg` artifact `6010508330` was created at `16:41:49Z`;
+- there was no later upstream commit between `16:31:55Z` and `20:00:00Z` that day.
+
+Classification:
+`USER_DESKTOP_APP_OFFICIAL_B9DF76_SOURCE_LINEAGE=PROVEN_BY_OFFICIAL_WORKFLOW_PROVENANCE`.
+
+Byte-for-byte identity to the now-expired official artifact remains unavailable and is a separate question:
+`USER_DESKTOP_APP_BYTE_IDENTITY_TO_EXPIRED_OFFICIAL_ARTIFACT=UNAVAILABLE_EXPIRED_ARTIFACT`.
+
+Engineering consequence: the user already possesses a valid official universal2 OCLP 2.5.0 app from the exact Golden source lineage. A full fresh build is no longer the only possible route; a deterministic modification of a copy of the frozen PyInstaller module may be viable.
+
+## User local OpenCore-Patcher.pkg
+TrueNAS Reader manifest for batch `20260904T225753Z-dv103208c1-178bdb6a` identifies:
 - `OpenCore-Patcher.pkg`;
 - bytes `738123183`;
 - SHA256 `b4e32cbfb1f978f670ccafff7b513d352e0665366caa73faeed0dbcd428dc364`.
 
-The package is `STRONGLY_COMPATIBLE_NOT_YET_PROVEN` as Golden lineage. Exact Golden source commit `b9df76...` dates to 19 March 2026, matching the known Sequoia 2.5.0 nightly family. A public reshared 2.5.0 nightly comparator is `738128962` bytes, so byte identity to that public copy is NEGATIVE by size (`5779` byte difference). This does not disprove common source lineage because the exact Golden PyInstaller spec embeds dynamic build-date/build-host metadata and final package metadata/signatures may vary.
-
-The current tool harness received the Reader manifest but did not expose the actual 738 MB PKG bytes. Preserve the user's PKG unchanged as evidence and audit it read-only locally before any rebuild.
+The original PKG remains preserved as evidence. Its byte identity to a public reshared 2.5.0 nightly is NEGATIVE by size only; this does not contradict the now-proven source lineage of the Desktop `.app`.
 
 ## Frozen historical state
 Accepted five-functional diagnostic baseline remains exactly `P1 + P2b + P3 + AIR00 + D34` as project evidence/history, not as default comparator content.
@@ -104,24 +132,14 @@ Until the user explicitly lifts this restriction:
 ## Persistence contract
 Persist immediately after decisive PROVEN/NEGATIVE results, integrations/builds, Root Patch results, accelerated-boot results, or major methodology changes. Otherwise persist no later than every 10 substantive technical assistant responses. Update MASTER, HISTORY when phase/history changes, and a new incremental checkpoint; the current checkpoint overlays transient execution state onto the consolidated database.
 
-## CURRENT ACTION — read-only package lineage audit, then D97BF alternative build
-First perform a **read-only local audit** of the user's existing `OpenCore-Patcher.pkg` to verify the Reader SHA/size and recover package/app version, signature, architecture and lineage evidence without installing or modifying it.
+## CURRENT ACTION — read-only PyInstaller layout audit
+Before deciding between direct app patching and a full build, audit the proven Desktop app read-only:
+1. identify the PyInstaller archive structure and available archive-viewer tooling;
+2. prove the frozen module location for `opencore_legacy_patcher.sys_patch.patchsets.detect`;
+3. determine whether the one-line `sequoia -> tahoe` eligibility delta can be applied by deterministic module/archive replacement rather than recompiling the application;
+4. preserve the current Desktop app unchanged as the proven reference;
+5. if direct patching is feasible, create a second working copy only after the procedure is fully audited, then re-sign/ad-hoc-sign as required and re-audit architecture/hash/bundle integrity.
 
-Then build/package/audit exact Golden OCLP `b9df76...` with only the one-line Tahoe eligibility edit on a non-GitHub macOS executor.
-
-Preferred executor order after package audit:
-1. controlled Intel Mac build, if the user explicitly authorizes local compilation;
-2. external macOS CI independent of GitHub Actions quota, with Codemagic currently the strongest free cloud candidate;
-3. other macOS CI/trial providers only if needed.
-
-The mandatory D97BF source/audit gates do not change:
-- exact commit/tree;
-- OCLP 2.5.0 / PatcherSupportPkg 1.9.6 / Tahoe 25;
-- exactly one 1/1 detect.py delta;
-- protected Golden source identity;
-- successful app build;
-- verify x86_64 or universal2 architecture;
-- artifact SHA256 and bundle/tree manifest;
-- STOP before Root Patch.
+If direct frozen-module patching proves unsafe or non-deterministic, fall back to the previously defined non-GitHub exact-source build lane; local compilation still requires explicit user authorization.
 
 No Root Patch and no reboot are authorized by this MASTER state.
