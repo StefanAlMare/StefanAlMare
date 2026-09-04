@@ -3,7 +3,7 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AU_LANE_DIVERGENCE_SEVEN_PATCH_UTILITY_REEVALUATION_D97AV_V2_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AV_V2_STATIC_MAP_PASS_BOOT_SUBSECTION_TOOLING_FAIL_P1_UPSTREAM_PRODUCER_FRONTIER_D97AW_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Protocol / baseline
@@ -16,45 +16,59 @@ D97AM source/build/artifact/deploy/Root Patch FULL PASS; accelerated 02:29 `NEGA
 
 D97AN exact natural 32023 provenance 79/79, 3802 zero; PCs `0x9FFEE=7`, `0xA0521=7`, `0xA5F81=65`. D97AO natural validator all-five late xrefs STATIC-PROVEN reachable. D97AP specialized start->timing CONTROL-FLOW PROVEN. D97AQ exact termination remains UNKNOWN.
 
-D97AR maps six threshold locals. D97AS proves a terminal six-bit classifier statically feasible but it remains reserve-only because a stronger earlier producer/lane divergence has now been observed.
+D97AR maps six threshold locals. D97AS proves a terminal six-bit classifier statically feasible but it remains reserve-only because a stronger earlier producer/lane divergence is active.
 
 ## Golden D97AT / D97AU
 Working Golden Sequoia 15.7.9/24G830 confirmed HD4400 0x0412 / Metal2 / display online. Exact Golden 32023 SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`; exact Golden 3802 SHA `85d4c285915c4d2094f3624d80fd2d0c4dd30994fc5150c22d1e6d2b58d67f40`.
 
 Golden validator has exact same six-counter static contract as Tahoe. Working Golden also emits the same truncated simulator fragments, so those messages are not failure-specific.
 
-D97AU Golden first-three-minute boot window: total451; 32023=220; 3802=193; 8 exact-generation PIDs; no PID uses both generations. Golden 32023 PCs: `0x9A9FC=88`, `0x9FFEE=66`, `0xA0521=66`, `0xA5F81=0`.
+D97AU authoritative Golden boot window `12:54:24..12:57:24`: 32023=220, 3802=193, 8 exact-generation PIDs, no mixed-generation PID. Golden 32023 PCs: `0x9A9FC=88`, `0x9FFEE=66`, `0xA0521=66`, `0xA5F81=0`.
 
-Tahoe failing reference: 32023=79; 3802=0; exact 32023 PIDs=65; `0x9A9FC=0`, `0x9FFEE=7`, `0xA0521=7`, `0xA5F81=65`.
+Tahoe failing reference: 32023=79, 3802=0, exact 32023 PIDs=65, `0x9A9FC=0`, `0x9FFEE=7`, `0xA0521=7`, `0xA5F81=65`.
 
-Boot-aligned generation-selection divergence and internal-32023 request-lane divergence are RUNTIME-PROVEN as observations; causality not yet proven.
+Boot-aligned generation-selection divergence and internal-32023 request-lane divergence are RUNTIME-PROVEN observations; causality not yet proven.
 
 D97AU explicit LLDB attach denial means raw Golden six-counter values remain UNKNOWN_ATTACH_DENIED; same debugger lane closed.
 
-## Seven-patch utility reevaluation
-User explicitly requested reevaluation of whether our patches actually help versus merely push Tahoe through a different path than Sequoia. Historical acceptance is no longer automatic KEEP status.
+## D97AV V2 — static PASS, boot subsection tooling false
+User returned JSON/TXT batch and identities were independently verified:
+- JSON 12407 bytes / SHA256 `685acdd2df077908eec6cbeedff60d2bb66bbbe4b323c670fdb603dcf1385626`;
+- TXT 36248 bytes / SHA256 `2d6d6d6c06df896d251441eb00172e0b2d5d72a6a8e3bba40e4c8a1ed6dc2542`.
 
-Exactly seven conceptual functional interventions are active:
-1. P1 selector bridge `31001 -> 32023` in MTLCompilerService;
-2. P2b request-layout bridge;
-3. P3 serialized-bitcode path;
-4. AIR00;
-5. D34 semantic-equivalent reset;
-6. P6 12 request-dialect ports;
-7. P7 2 raw optional-payload ports.
-D97AM UUID stamp is provenance-only.
+Golden identity and static seven-patch map PASS.
 
-P1 is the only intervention with direct pre-dlopen generation-selection influence. D97M native service selector maps 32023->32023, 3802->3802, others NULL; D97O proves XPC `llvmVersion` is selector source. P1 remaps only 31001 to 32023 and does not rewrite 3802.
+D97AV V2 boot subsection printed `1970-01-03 08:18:27..08:21:27`, caused by greedy `sed` matching `usec =` instead of epoch `sec =` in `kern.boottime`. Its 305-row/18-PID sequence data is RETIRED as tooling-false; D97AU absolute window remains runtime authority.
 
-P2b/P3/AIR00/D34/P6/P7 execute inside already-selected 32023. They cannot directly choose 3802 vs 32023 but may affect the specialized/backend internal lane.
+### Static map changes strategy
+`0x9A9FC` is `MTLCompilerObject::upgradeAIRModule` immediately after log `MTLCompiler upgrade pass forced to use air version %d.%d`.
 
-Clean true-five combined runtime did not produce usable GUI. P6 and P7 each corrected real static dialect mismatches but each had runtime sufficiency NEGATIVE. No intervention is removed blindly or retained by inertia.
+P2b/AIR00/P7 all live in `getReadParametersFromRequest`; P3 in `backendCompileModule`; D34 callsite in `runFrameworkPasses`; P6 in `invokeLowerModule` + `runFrameworkPasses`.
 
-## CURRENT ACTION — D97AV V2 in Golden
-Old unrun D97AV V1 is retired before execution.
+Because Golden has 88 `upgradeAIRModule` events while Tahoe has zero, P2b/AIR00/P7 is now the highest-priority internal-32023 cluster for direct-call/field-consumer reevaluation. Causality not yet proven.
 
-Run read-only `OCLP7_D97AV_V2_GOLDEN_BOOT_LANE_LLVMVERSION_AND_PATCH_UTILITY_CAUSAL_AUDIT.command`, commit `56bf44d75d145a6b738468a9c3869c5291aa31be`, blob `d7b01788f8edc85c5190e481577b479e895892ea`.
+### P1 exact Golden semantics
+Golden original service SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5` contains selector 3802 at `0x3478`, 31001 at `0x3496`, and no 32023 immediate.
+Golden maps `3802 -> MTLCompiler 3802`, `31001 -> MTLCompiler 32023`.
+Tahoe P1 changes only the `0x3496` compare `31001 -> 32023`, leaving the separate 3802 branch untouched.
 
-It maps the four Golden 32023 lane PCs, exact per-PID first-three-minute sequences, Golden service selector constants/context, visible Metal `llvmVersion` context, and every exact P2b/P3/AIR00/D34/P6/P7 site as Golden preimage versus Tahoe postimage with containing function. It emits a conservative seven-patch utility/influence matrix.
+Therefore P1 cannot directly turn 3802 into 32023 and cannot alone explain Tahoe zero-3802. Isolated P1 ablation is not useful: current Tahoe 32023 requests would lose their donor path. P1 is now classified `KEEP_TEMPORARY_SHIM / RETIRE_ONLY_WITH_PRODUCER_NORMALIZATION`.
 
-STOP after D97AV V2; return report + JSON. No debugger, Root Patch, system mutation or reboot. After audit, design only a small targeted ablation matrix for plausible causal patch(es), not seven separate reboots.
+The active earliest frontier is XPC request `llvmVersion` / request-class production upstream of P1. Internal P2b/AIR00/P7 influence on upgrade/specialized/backend remains the second high-priority question.
+
+## Patch utility status after D97AV V2
+- P1: temporary shim; no isolated ablation.
+- P2b: provisional high-priority cluster.
+- AIR00: high-priority reevaluate despite D22 local semantic proof.
+- P7: high-priority reevaluate; runtime sufficiency NEGATIVE.
+- P3: provisional; backendCompileModule.
+- D34: provisional lower priority.
+- P6: provisional lower priority / insufficient.
+No patch retired solely from D97AV V2.
+
+## CURRENT ACTION — D97AW Golden read-only
+Run `OCLP7_D97AW_GOLDEN_FIXED_BOOT_3802_32023_CALLGRAPH_AND_SHARED_CACHE_LLVMVERSION_PRODUCER_AUDIT.command`, commit `8187316e61bfa47ace5db0da19d3df1cc60e887d`, blob `e2d77333fb4d67efe17b1afb6ffb9168aeafc828`.
+
+It uses the fixed D97AU window, maps every observed 3802/32023 PC, maps direct callgraph among read-parameters/AIR-upgrade/specialized/backend/framework functions, and discovers Golden shared-cache Metal `llvmVersion` writer value sources for comparison against Tahoe D97R `[RBX+0x1C] / [RCX+0x38]`.
+
+STOP after D97AW; return TXT + JSON. No debugger, cache extraction, Root Patch, system mutation or reboot.
