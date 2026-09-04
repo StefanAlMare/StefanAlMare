@@ -3,7 +3,7 @@
 Updated: 2026-09-04 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AT_GOLDEN_WORKING_COMPARATOR_STATIC_EXACT_LIVE_WAITFOR_INCONCLUSIVE_D97AU_EXISTING_PID_CAPTURE_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260904_D97AT_GOLDEN_COMPARATOR_D97AU_V2_HARDENED_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Protocol / baseline
@@ -35,9 +35,9 @@ Recent Golden logs show both 3802 and 32023 generations active; Tahoe short fail
 
 D97AT LLDB 4x20s `--waitfor` rounds produced zero hits. This is INCONCLUSIVE, not zero values. Existing persistent MTLCompilerService PID attachment was not tested.
 
-## CURRENT ACTION — D97AU
-Run `OCLP7_D97AU_GOLDEN_EXISTING_PID_RAW_COUNTER_AND_BOOT_GENERATION_COMPARATOR.command`, commit `19e61d3a85bacfed2bcab03020a2a2ad4e895a70`, blob `c10d4cd98700fe465b1d2cc659bf4cc619a42245`, while remaining in Golden.
+## CURRENT ACTION — D97AU V2
+Authoritative wrapper `OCLP7_D97AU_GOLDEN_EXISTING_PID_RAW_COUNTER_AND_BOOT_GENERATION_COMPARATOR.command`, commit `68046cbe634f11b0654a1a659b7dbaa627e01c31`, blob `7cc3efc69a3b7fd00e6f0506d15017cb7391239c`.
 
-D97AU reconstructs Golden first-three-minute boot sender generation mix and compares 3802/32023 + 32023 outer PCs against Tahoe D97AN. It then attaches temporarily to already-live MTLCompilerService PID(s), resolves exact 32023/D5CE module and captures up to 8 raw six-counter hits plus mask/backtrace. No system-file mutation/experimental Root Patch/reboot.
+The initial unrun V1 identity `19e61d3a... / c10d4cd9...` is retired before user execution due zsh multi-PID iteration hardening. V2 polls for live MTLCompilerService PID(s), iterates with native zsh forced splitting, performs the same boot-aligned first-three-minute 3802/32023 comparator, and attaches temporarily to existing PID(s) to capture up to 8 raw six-counter values/masks/backtraces from exact Golden 32023/D5CE.
 
-STOP after D97AU; return report+JSON before rebooting Tahoe.
+STOP after D97AU V2. Return report+JSON before rebooting Tahoe.
