@@ -1,7 +1,7 @@
 # OCLP PERMANENT WORKING RULES
 
 Recovered/restored: 2026-09-01 EEST
-Updated: 2026-09-03 EEST — ASUS2 local-test default; GitHub only for major compilation/build workload
+Updated: 2026-09-05 EEST — permanent GitHub-first execution policy restored by explicit user instruction
 Scope: ASUS2 Tahoe Haswell project and every continuation named OCLP6, OCLP7, OCLP8, OCLP9, OCLP10, OCLP11, OCLP12, etc.
 
 This file is the permanent procedural contract. Future checkpoints and conversations inherit it unless the user explicitly changes a rule.
@@ -129,29 +129,29 @@ D34 cave `0xEF8..0xEFE` is protected. Every diagnostic cave allocation must be a
 FASTLANE preserves this exact order regardless of where an individual step runs:
 `validations -> integration -> compile/diff -> build -> packaged-app audit -> SHA/identity -> backup/deploy -> open OCLP -> STOP`.
 
-The permanent default is short, visible, collaborative work on ASUS2. The assistant explains one bounded local action, its purpose, expected evidence and STOP condition; the user runs it and returns the complete result before the next state-changing action.
+The permanent default is GitHub-first. Everything technically executable in GitHub is executed by the assistant in GitHub rather than delegated to the user as a local ASUS2 build/compile/validation step. This includes validations, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest generation, artifact publication and CI audit.
 
-GitHub is reserved only for major/substantial compilation, build or packaging workloads. Routine tests, short validations, source inspection, small edits, diagnostic probes, diff checks, local capability checks and ordinary iteration run on ASUS2 so the user retains direct control and visibility over the work. Technical executability on GitHub is not sufficient reason to move a routine step there.
+ASUS2 is reserved for identity-pinned work that inherently depends on ASUS2 or its installed/live state: cache/files/log/hardware evidence, unpublished dirty-worktree or local-object evidence not remotely resolvable, target-local download/verification/backup/deploy when required, opening OCLP, manual Root Patch after authorization, accelerated boot, VESA recovery and physical/manual boot actions.
 
-When a major compilation/build is justified, the assistant performs and audits that GitHub compilation/build instead of shifting the large build to the user. GitHub is never a substitute for ASUS2 hardware evidence, installed-state evidence, accelerated-boot evidence or the immediately following VESA recovery.
+If a GitHub-eligible operation is genuinely blocked in GitHub, STOP and document the exact blocker. Local compilation is not an implicit fallback and requires the user's explicit authorization.
 
 Never auto-Root-Patch. Never auto-reboot. Audit the complete FASTLANE before Root Patch; audit the complete Root Patch before accelerated boot.
 
-### 12A. Permanent local/GitHub responsibility and interaction protocol
-1. Default to one short, directly useful local ASUS2 step at a time, with a plain-language explanation and explicit expected output/STOP gate.
-2. Keep routine source inspection, small edits, short validations, tests, probes, diff checks and diagnostic iteration on ASUS2.
-3. Use GitHub only for major/substantial compilation, build or packaging work. Do not move a routine test or ordinary validation to GitHub merely because it can technically run there.
-4. For every justified GitHub major build, the assistant performs the workflow, repairs workflow failures, audits the complete result and persists repository, branch, workflow, run/job, runner, head SHA, artifact ID/digest, inner artifact SHA, packaged executable SHA and packaged audit result when applicable.
-5. Existing audited artifact-delivery mechanisms may be used to bring major-build artifacts from GitHub to ASUS2; reproducing such builds locally is not required unless the user explicitly authorizes it.
-6. Live cache/file/log/hardware inspection, exact installed-state proof, privileged backup/deploy, opening OCLP, manual Root Patch, accelerated boot, VESA recovery, power cycling and manual boot selection remain ASUS2/user operations.
-7. Assistant audits every complete GitHub and target-local report; a printed PASS is not sufficient.
-8. Only after explicit assistant authorization does the user manually Root Patch and return the complete Root Patch output.
-9. Assistant audits Root Patch and only then authorizes accelerated boot.
-10. User boots accelerated, recovers via VESA if necessary, and returns requested evidence.
-11. Assistant analyzes only that immediately preceding accelerated boot, persists decisive evidence, and designs the next single local action or, only when warranted by item 3, the major GitHub compilation/build.
+### 12A. Permanent GitHub/ASUS2 responsibility and interaction protocol
+1. First classify every next action by whether it is technically executable in GitHub or inherently ASUS2/live-state dependent.
+2. The assistant performs all GitHub-eligible validations, source/workflow integrations, compile/diff, build/package, packaged-app audit, SHA/manifest work, artifact publication/preparation and CI audit in GitHub.
+3. The assistant repairs GitHub workflow failures when possible and audits the complete result; a printed PASS is not sufficient.
+4. For GitHub build/package work, persist repository, branch/ref, workflow/run/job, runner when relevant, head SHA, artifact ID/digest, inner artifact SHA, packaged executable SHA and packaged audit result when applicable.
+5. Existing audited artifact-delivery mechanisms may be used to bring GitHub artifacts to ASUS2; reproducing such builds locally is not required and local compilation requires explicit user authorization.
+6. User/ASUS2 operations are limited to identity-pinned evidence or state changes that inherently require ASUS2: cache/file/log/hardware/live-state proof; unpublished dirty-worktree/local-object proof if not remotely resolvable; target-local download/verify/backup/deploy when needed; opening OCLP; manual Root Patch; accelerated boot; VESA recovery; power cycling and manual boot selection.
+7. Only after explicit assistant authorization does the user manually Root Patch and return the complete Root Patch output.
+8. Assistant audits Root Patch and only then authorizes accelerated boot.
+9. User boots accelerated, recovers via VESA if necessary, and returns requested evidence.
+10. Assistant analyzes only that immediately preceding accelerated boot, persists decisive evidence, and chooses the next GitHub-first or inherently ASUS2-only bounded action.
+11. If GitHub is genuinely blocked for a GitHub-eligible operation, STOP and document the exact blocker; do not silently fall back to ASUS2/local compilation.
 12. If a target-local action or Root Patch fails, STOP, explain the exact failure and correct it in the shortest appropriate lane; do not continue with scattered mutations.
 
-Rhythm: `short explained ASUS2 action -> user result -> assistant audit -> next bounded action`; only a major/substantial compile/build inserts `assistant GitHub compile/build/package/audit -> identity-pinned ASUS2 artifact delivery/deploy` before the normal Root Patch/boot/VESA sequence.
+Rhythm: `assistant GitHub validate/integrate/compile/build/package/audit whenever technically possible -> identity-pinned ASUS2 delivery/live-state action only when inherently required -> assistant audit -> manual Root Patch authorization when warranted -> accelerated boot -> VESA recovery/evidence -> persistence`.
 
 ## 13. Runtime evidence discipline
 Analyze only the immediately preceding accelerated diagnostic boot, excluding the later VESA recovery boot.
@@ -192,12 +192,13 @@ At the start of every new OCLP7+ continuation, before proposing a technical modi
 
 Treat those files as the durable source of truth. Resume exactly from `CURRENT ACTION`. Do not reconstruct from memory alone and do not ask the user to repeat persisted history.
 
-## 17. 2026-09-03 execution-lane authority
-This section is the latest explicit user instruction on execution responsibility and supersedes any earlier wording that could be read as broader GitHub-first execution.
+## 17. 2026-09-05 execution-lane authority
+This section is the latest explicit user instruction on execution responsibility and supersedes prospectively the 2026-09-03 ASUS2-local-default wording and any earlier wording inconsistent with GitHub-first execution. Historical results remain historically valid and are not reclassified merely because their execution lane differed.
 
 Permanent rule:
-- routine/small tests, ordinary validations, source inspection, small source edits, local probes, diagnostic iteration and short diff/capability checks are performed on ASUS2 under user control;
-- GitHub is used only for major/substantial compilation, build or packaging workloads;
-- existing audited artifact-delivery paths are reused to bring GitHub build artifacts to ASUS2;
-- local compilation of a major build is not an implicit fallback and requires explicit user authorization;
-- Root Patch and reboot remain manual-only and separately authorized.
+- everything technically executable in GitHub is performed by the assistant in GitHub: validations, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact publication and CI audit;
+- ASUS2/user execution is limited to identity-pinned evidence/actions that inherently require ASUS2: cache/files/log/hardware/live state, unpublished local state not remotely resolvable, target-local download/verify/backup/deploy when necessary, opening OCLP, manual Root Patch after authorization, accelerated boot and VESA recovery;
+- if GitHub is genuinely blocked for a GitHub-eligible operation, STOP and document the exact blocker;
+- local compilation is not an implicit fallback and requires explicit user authorization;
+- Root Patch and reboot remain manual-only and separately authorized;
+- decisive technical and methodology results are persisted immediately in MASTER + HISTORY + a new checkpoint.
