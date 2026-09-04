@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_USER_OCLP_PKG_GOLDEN_LINEAGE_CANDIDATE_READONLY_AUDIT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_DESKTOP_APP_OFFICIAL_B9DF76_LINEAGE_PROVEN_PYINSTALLER_LAYOUT_AUDIT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is the chronological high-level index. The full experiment/evidence lineage is preserved in `OCLP-Continuity/checkpoints/`; the consolidated current state is in `OCLP_PERMANENT_PROJECT_DATABASE.md`.
@@ -72,7 +72,7 @@ It pinned:
 - PatcherSupportPkg `v1.9.6`;
 - exact upstream source commit `dortania/OpenCore-Legacy-Patcher@b9df76ebdf3e768b37c1cc980e8444aa837c623e`.
 
-This closed root-patch source lineage. Golden `.app` byte identity remains a separate historical `INCONCLUSIVE_TOOLING` question and is not required for the source-controlled comparator.
+This closed root-patch source lineage.
 
 ## 2026-09-05 — D97BE exact Golden eligibility chain CLOSED
 Exact `b9df76...` audit proved:
@@ -120,13 +120,8 @@ The user explicitly instructed that no more GitHub compilation/build jobs be use
 Current override:
 - no new GitHub Actions compile/build/package run;
 - GitHub remains usable only for non-compiling source reads, static audit, persistence/checkpoints and metadata work;
-- D97BF must move to a non-GitHub macOS executor;
+- D97BF must move to a non-GitHub macOS executor if a full build is needed;
 - local compilation still requires explicit user authorization before issuing local build commands.
-
-Alternative ranking recorded in the then-current checkpoint:
-1. controlled Intel Mac build — technically preferred;
-2. Codemagic individual/free macOS M2 build — best current free cloud candidate, subject to strict x86_64/universal2 post-build audit;
-3. other macOS CI providers if needed.
 
 ## 2026-09-05 — user local OpenCore-Patcher.pkg identified as strong Golden-lineage candidate
 TrueNAS Reader manifest identified:
@@ -135,38 +130,44 @@ TrueNAS Reader manifest identified:
 - bytes `738123183`;
 - SHA256 `b4e32cbfb1f978f670ccafff7b513d352e0665366caa73faeed0dbcd428dc364`.
 
-The user states this package is present on the current Mac and may be the version used for the working ASUS Sequoia root patch.
+A public reshared 2.5.0 nightly package had a different byte size, which did not disprove common source lineage because build/package metadata vary.
 
-Golden exact source commit `b9df76...` is dated 19 March 2026 and matches the known Sequoia OCLP 2.5.0 nightly family. A public reshared `OpenCore-Patcher.pkg` from that 2.5.0 nightly family has Google Drive metadata size `738128962` bytes, so it is not byte-identical to the user package: difference `5779` bytes.
+## 2026-09-05 — Desktop OpenCore-Patcher.app exact official b9df76 lineage PROVEN
+The user performed a read-only audit of `/Users/alex/Desktop/OpenCore-Patcher.app`.
+
+Observed app evidence:
+- OCLP `2.5.0`;
+- Build Date `2026-03-19 09:33:30`;
+- BuildMachineOSBuild `21G531`;
+- universal `x86_64 arm64` executable;
+- executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
+- Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
+- valid Developer ID signature from `Mykola Grymalyuk (S74BDJXQMD)`;
+- strict/deep codesign verification PASS (`codesign_exit=0`);
+- signing timestamp displayed locally `19 Mar 2026 at 18:33:46`;
+- bundle created `2026-03-19 18:36:42 +0200`;
+- payloads present and timestamped `19 Mar 18:32`.
+
+Upstream GitHub provenance then established:
+- exact Golden commit `b9df76...` was created at `2026-03-19T16:31:54Z`;
+- official Dortania push run `23305527165`, exact head SHA `b9df76...`, started at `16:32:02Z`;
+- successful job `67778441258` used label `x86_64_monterey` and completed `16:41:53Z`;
+- official `OpenCore-Patcher.pkg` artifact `6010508330` was created at `16:41:49Z`;
+- no later upstream commit existed from `16:31:55Z` through `20:00:00Z` that day.
 
 Classification:
-- `USER_PKG_BYTE_IDENTITY_TO_PUBLIC_RESHARED_2_5_0N=NEGATIVE_BY_SIZE`;
-- `USER_PKG_GOLDEN_LINEAGE=STRONGLY_COMPATIBLE_NOT_YET_PROVEN`;
-- `USER_PKG_ACTUAL_CONTENT_AUDIT=INCONCLUSIVE_TOOLING_PENDING_LOCAL_READONLY_AUDIT`.
+`USER_DESKTOP_APP_OFFICIAL_B9DF76_SOURCE_LINEAGE=PROVEN_BY_OFFICIAL_WORKFLOW_PROVENANCE`.
 
-The difference does not disprove common source lineage because exact Golden PyInstaller packaging injects dynamic Build Date/BuildMachineOSBuild data, and package/signature metadata may also vary.
+Exact byte identity to the expired official artifact cannot now be re-proved and remains separately `UNAVAILABLE_EXPIRED_ARTIFACT`.
 
-The original user PKG is to remain unchanged as evidence. Next step is read-only local package audit before any build.
+Engineering consequence: a fresh full application build is no longer the only possible path. First audit the frozen PyInstaller archive read-only to determine whether the already-authorized `sequoia -> tahoe` one-line eligibility delta can be applied deterministically to a copy of this exact Golden-lineage app.
 
-## CURRENT ACTION — read-only package audit, then D97BF alternative executor
-First audit the user's existing `OpenCore-Patcher.pkg` read-only on the current Mac:
-- re-prove SHA256/size;
-- inspect package signature and package metadata;
-- inspect embedded app version/build metadata;
-- inspect executable architecture;
-- recover OCLP/PatcherSupportPkg/commit lineage markers where possible.
+## CURRENT ACTION — read-only PyInstaller layout audit
+On the preserved Desktop app:
+- identify the PyInstaller archive layout/viewer path;
+- locate frozen module `opencore_legacy_patcher.sys_patch.patchsets.detect`;
+- determine whether deterministic module/archive replacement can implement only the one-line Tahoe eligibility delta without a full app rebuild;
+- keep the proven Desktop app unchanged until the patch procedure itself is audited.
 
-Then build/package/audit exact Golden OCLP `b9df76...` + only the one-line Tahoe eligibility delta on a non-GitHub macOS executor.
-
-Mandatory acceptance remains:
-- exact commit/tree;
-- one-file/one-line diff proof;
-- protected source identity;
-- successful OCLP 2.5.0 app build;
-- x86_64 or universal2 architecture proof;
-- SHA256 + bundle/tree manifest;
-- identity-pinned delivery;
-- STOP before manual Root Patch.
-
-Local compilation still requires explicit user authorization. GitHub compilation remains suspended until explicit quota-reset confirmation.
+If direct frozen-module patching is unsafe/non-deterministic, return to exact-source build on a non-GitHub macOS executor. Local compilation still requires explicit user authorization. GitHub compilation remains suspended until explicit quota-reset confirmation.
 No Root Patch and no reboot are authorized at this point.
