@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BK_ACCELERATED_BOOTS_NOT_KERNEL_PANIC_IOGPU_METAL4_SUPERCLASS_MISSING_CONTROLLED_SHUTDOWN_HYBRID_METAL_REQUIRED.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BL_TAHOE_NATIVE_METAL4_SELECTIVE_3802_HYBRID_STATIC_AUDIT_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is the chronological high-level index. Full experiment/evidence lineage remains in `OCLP-Continuity/checkpoints/`; current state is in MASTER and the permanent database.
@@ -164,29 +164,49 @@ Classification:
 
 Adding only the first missing `_MTL4RenderCommandEncoder` would be structurally incomplete because the ABI dependency is a wider class family.
 
-## Strategic closure / D97BL direction
+## D97BL — selective Tahoe-native Metal4 hybrid phase opened
 The identical-Golden full Metal.framework downgrade is closed as a final Tahoe strategy.
 
-Next architecture must preserve native Tahoe Metal.framework / Metal4 ABI and integrate legacy Haswell/3802 compiler support beneath/alongside it through audited boundary adapters.
+D97BL target architecture is:
+`native Tahoe Metal.framework / Metal4 ABI -> selective legacy 3802 compiler ingress -> audited boundary adapters -> Haswell driver -> image`.
 
-This makes the historical accepted five-functional lineage (`P1 + P2b + P3 + AIR00 + D34`) strategically relevant again. It is not automatically re-enabled; only semantically revalidated parts may be imported.
+Native Tahoe `Metal.framework/Versions/A/Metal` must remain intact.
 
-D97BJ improvements to keep:
+Historical true-five becomes the relevant design lineage again, subject to fresh audit:
+`P1 + P2b + P3 + AIR00 + D34`.
+
+Known static placement reinforces that this can live below the Metal4 surface:
+- P1 is in `MTLCompilerService` selector and leaves the 3802 selector branch intact;
+- P2b/AIR00 are in compiler `getReadParametersFromRequest`;
+- P3 is in `backendCompileModule`;
+- D34 is in `runFrameworkPasses` with protected cave `0xEF8..0xEFE`.
+
+P6/P7 remain insufficient and are not promoted.
+
+D97BJ pieces retained prospectively:
 - Tahoe host eligibility;
-- exact local `26.6.2-25G82` MetallibSupportPkg handling;
-- exact 25G82 metallib destination/source map.
+- exact local 25G82 MetallibSupportPkg preference;
+- exact 25G82 metallib map.
+
+Current public OCLP-T2 implementations still merge full legacy Metal.framework payloads, so they are not evidence that Tahoe Metal4 closure is solved.
+
+Exact b9df76 MERGE behavior uses recursive rsync; same-relative-path donor files overwrite native files. Therefore D97BL begins with exact per-file collision and dependency mapping rather than another framework merge.
+
+Prepared read-only collector:
+`OCLP7_D97BL_static_hybrid_audit.sh`.
+It compares native Tahoe Metal.framework against `12.5-3802-23` and `13.2.1-24`, maps donor-only/colliding files, maps Mach-O dependencies/selectors, enumerates native `_MTL4*` surface, inspects MTLCompiler/GPUCompiler donors, and recovers historical P1-D34 source/diffs. It performs no mutation, Root Patch or reboot.
 
 ## Mandatory pre-reboot gate
 No new Root Patch/accelerated boot until static audit proves:
 - native Tahoe Metal4 ABI survives the patch;
 - every IOGPU-referenced `_MTL4*` superclass resolves;
-- Tahoe `Metal.framework/Versions/A/Metal` is not blindly replaced by 13.2.1 donor;
+- native Tahoe `Metal.framework/Versions/A/Metal` is preserved;
 - 3802 ingress is implemented as an audited hybrid adapter;
 - exact 25G82 metallib handling remains intact.
 
 ## CURRENT ACTION
 Remain unpatched in Tahoe VESA after snapshot restore.
 
-No Root Patch and no accelerated reboot are authorized.
+Run only `OCLP7_D97BL_static_hybrid_audit.sh` and return the generated `OCLP7_D97BL_STATIC_HYBRID_AUDIT_<timestamp>.zip`.
 
-Design/audit D97BL as Tahoe-native-Metal4-preserving hybrid and pass the static Metal4 superclass-closure gate before any future boot cycle.
+No Root Patch and no accelerated reboot are authorized.
