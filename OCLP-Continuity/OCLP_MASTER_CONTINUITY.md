@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97BV_FULL_PASS_D97BW_V2_SPARSE_STANDALONE_STRUCTURAL_PASS_D97BX_LOADABILITY_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97BX_PREFLIGHT_SIGN_PASS_DLOPEN_MMAP_ALIGNMENT_NEGATIVE_REAL_DSC_EXTRACTOR_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -21,7 +21,7 @@ Before any technical modification:
 - Tahoe `26.6.2 / 25G82`;
 - Haswell HD4400/4600 `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
-- unpatched VESA, `-igfxvesa` active, no active Root Patch.
+- current state unpatched VESA, `-igfxvesa` active, no active Root Patch.
 
 End goal: stable hardware acceleration and usable GUI.
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
@@ -38,15 +38,26 @@ Golden selector: `3802 -> Versions/3802`, `31001 -> Versions/32023`.
 Golden primary request builder: `0x7FF80D370756..0x7FF80D370C28`, `[arg1+0x20] -> llvmVersion`, `[arg2+0x08] -> requestType`, `[arg2+0x18] -> timeout`, alternate requestType `9`.
 Golden runtime naturally uses both 3802 and 32023 lanes and reaches compositor success.
 
-## Durable architecture
+## Durable architecture / prohibitions
 Historical accepted functional lineage: `P1 + P2b + P3 + AIR00 + D34`; P6/P7 insufficient; D50/D68/D82 reserve-only; D84 retired; D34 cave protected.
 
-Required current architecture:
+Current required architecture:
 `native Tahoe Metal / Metal4 ABI -> selective legacy 3802 ingress -> audited upstream adapter -> legacy compiler path -> Haswell driver -> image`.
 
-Legacy `12.5-3802-23` can be bounded to `MTLCompilerService.xpc` only. Legacy `13.2.1-24/Versions/A/Metal` shadows native cache Metal and is forbidden. Historical native-Metal + legacy-XPC/private-compilers + true-five already failed; do not repeat unchanged.
+Retained prohibitions:
+- never install legacy `13.2.1-24/Versions/A/Metal` over cache-resident Tahoe Metal;
+- do not globally rewrite `32023 -> 31001`;
+- do not transplant Golden `+0x20` layout into Tahoe's two native layouts;
+- do not globally force `MTL_FORCE_MTLCOMPILER_LLVM_VERSION=3802`;
+- do not repeat historical native-Metal + legacy-XPC/private-compilers + unchanged true-five reboot.
 
-Exact target Metallib authority: local `MetallibSupportPkg-26.6.2-25G82`, package SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`, exact Tahoe map 182 entries.
+Legacy `12.5-3802-23` may be bounded to `MTLCompilerService.xpc` only. Exact target Metallib authority remains local `MetallibSupportPkg-26.6.2-25G82`, package SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`, exact Tahoe map 182 entries.
+
+## D97BJ/BK whole-Metal closure
+D97BJ Root Patch execution itself passed. Accelerated boots were not kernel panics: userspace and WindowServer were reached, then full legacy Metal.framework removed Tahoe `_MTL4*` superclass surface and launchd performed orderly shutdown.
+
+Permanent NEGATIVE:
+`D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE`.
 
 ## Native Tahoe producer closure
 Native Tahoe Metal starts at `0x7FF80F47D000`; cached `__TEXT` SHA256 `bf405828f42ba59e68273190ac19b70aa0c3d1d4b34de6dc49de206dd5b04605`. Native MTLCompilerService SHA256 `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`. Native `_MTL4*` / `IOGPUMetal4*` surface is present.
@@ -55,10 +66,11 @@ Tahoe Builder A `0x7FF80F635510..0x7FF80F635A4D`: llvmVersion `[arg1+0x1C]`, req
 Tahoe Builder B `0x7FF80F663CA9..0x7FF80F66492C`: llvmVersion `[arg1+0x38]`, same helper family via subordinate object.
 Both alternate requestType paths use immediate `9`.
 
-Native generation census: 3802 present, 31001 absent, 32023 present. Never globally rewrite `32023->31001` and never transplant Golden `+0x20` offsets.
+Native generation census: 3802 present, 31001 absent, 32023 present.
+Retained D97AA runtime fact: failing accelerated cohort delivered 12/12 requests as exact `llvmVersion=32023`, 3802=0, other=0.
 
 ## Shared accessor / suppression closure
-Shared accessor: `0x7FF80F5E16C3..0x7FF80F5E1778`.
+Shared generation accessor: `0x7FF80F5E16C3..0x7FF80F5E1778`.
 Generation selector: `0x7FF80F5EFFEB..0x7FF80F5F009C`, generation input ABI arg2/RSI. All six validated selector callers use `call accessor -> movl %eax,%esi -> call selector`.
 
 D97BT proved default-environment accessor-wide suppression of 3802:
@@ -66,21 +78,19 @@ D97BT proved default-environment accessor-wide suppression of 3802:
 - lazy fallbacks floor to 32023 or 32024;
 - sole bypass is explicit `MTL_FORCE_MTLCOMPILER_LLVM_VERSION`, current/default value zero.
 
-Classification: `D97BT_DEFAULT_ENV_ACCESSOR_WIDE_3802_SUPPRESSION=SEMANTIC_PROVEN`.
-Retained runtime D97AA: failing cohort was 12/12 `llvmVersion=32023`, 3802=0.
+Classification:
+`D97BT_DEFAULT_ENV_ACCESSOR_WIDE_3802_SUPPRESSION=SEMANTIC_PROVEN`.
 
-## D97BV selective adapter — FULL PASS
-Bundle `OCLP7_D97BV_TEXT_INTERSECTION_PADDING_CAVE_PREFLIGHT_20260906_001956.zip`, bytes `2574`, SHA256 `c39198d603664b921f57abd0d09d24ad7fc1d08c2da8f44677c86de93301cbfd`.
-
-Patch window:
+## D97BV selective adapter — static-semantic FULL PASS
+Exact accessor patch window:
 - `0x7FF80F5E1719..0x7FF80F5E1726`;
 - preimage `3d187d0000b9177d00000f4cc1`;
-- no incoming branch into window interior.
+- no incoming branch into the window interior.
 
 Safe executable inter-section cave:
 - `0x7FF80F47E560..0x7FF80F47E630`;
 - 208 zero bytes;
-- outside all Mach-O sections/header/load commands;
+- outside Mach-O sections/header/load commands;
 - zero function-start, direct branch-target and decoded RIP-target hits.
 
 Exact adapter bytes:
@@ -88,65 +98,78 @@ Exact adapter bytes:
 - cave `3d187d0000b9177d00000f4cc1e9b4311600`, SHA256 `a1b8d3b2988e622a4ea8e9545816a44abdb5c84e70b4126a3bad15c9f7539045`.
 
 Semantics: exact input 3802 is preserved; every non-3802 input executes Tahoe's original floor unchanged.
-Classification: `D97BV_SELECTIVE_3802_PRESERVE_ADAPTER_NO_NON3802_SEMANTIC_DRIFT=STATIC_SEMANTIC_PROVEN`.
+Classification:
+`D97BV_SELECTIVE_3802_PRESERVE_ADAPTER_NO_NON3802_SEMANTIC_DRIFT=STATIC_SEMANTIC_PROVEN`.
 
-## D97BW-v2 standalone sparse reconstruction — structural FULL PASS
-Bundle `OCLP7_D97BW_V2_NATIVE_METAL_SPARSE_MIRROR_20260906_003847.zip`:
-- bytes `4811`;
-- SHA256 `180cc1e9a28c6c6a763c695305e47a05798c1d2e46c65b650c4ebbe6e4a21707`;
-- TXT SHA256 `c4ccea417e412f0f1c07a9d62cf15e8ab58bf5c29dd690469be6f4b22bb54085`;
-- JSON SHA256 `d07953a0f8bac305673f5c64c71fc11ec077f6946be4470de62035aa8c718242`.
+## D97BW-v2 sparse reconstruction — structural PASS only
+Bundle `OCLP7_D97BW_V2_NATIVE_METAL_SPARSE_MIRROR_20260906_003847.zip`, SHA256 `180cc1e9a28c6c6a763c695305e47a05798c1d2e46c65b650c4ebbe6e4a21707`.
 
-Sparse mirror retained original shared-cache segment fileoffs; Mach header/load commands were cloned at offset zero only for standalone parser discovery. No load-command rebasing.
-
-Geometry:
-- apparent size `881770496` bytes / `840.921875 MiB`;
-- allocated `176193536` bytes / `168.03125 MiB`;
-- actual segment bytes written `165003186`.
-
-Original reconstructed `__TEXT` SHA is exact native cache SHA. All collected load-command referenced ranges are in bounds.
-
-External parsers on original and patched sparse mirrors:
-- `file` RC 0: Mach-O 64-bit dynamically linked shared library x86_64;
-- `otool -l` RC 0;
-- `otool -L` RC 0 with native Metal install-name/dependencies.
-
-Native Metal4 counts are identical before/after patch:
-- `_MTL4CommandQueue` 82;
-- `_MTL4CommandBuffer` 103;
-- `_MTL4CommandAllocator` 49;
-- `_MTL4RenderCommandEncoder` 79;
-- `_MTL4ComputeCommandEncoder` 97;
-- `_MTL4MachineLearningCommandEncoder` 38.
-
-D97BV patch on temp sparse copy:
-- cave fileoff `0xF47E560` / `256370016`;
-- site fileoff `0xF5E1719` / `257824537`;
-- exact original/patched bytes match design;
-- total differing bytes `23`;
-- differing bytes outside site+cave `0`.
+Sparse mirror preserves shared-cache fileoffs and clones header/load commands at offset zero. Structural parsers pass; native `__TEXT` identity and Metal4 surface are preserved. D97BV diff is exactly 23 changed bytes and 0 outside site+cave.
 
 Classifications:
-`D97BW_V2_SPARSE_STANDALONE_STRUCTURAL=PASS`.
-`D97BW_V2_PATCHED_SPARSE_STRUCTURAL=PASS`.
-`D97BW_V2_D97BV_DIFF_BOUNDED_TO_SITE_AND_CAVE=STATIC_PROVEN`.
+- `D97BW_V2_SPARSE_STANDALONE_STRUCTURAL=PASS`;
+- `D97BW_V2_PATCHED_SPARSE_STRUCTURAL=PASS`;
+- `D97BW_V2_D97BV_DIFF_BOUNDED_TO_SITE_AND_CAVE=STATIC_PROVEN`.
 
-Codesign status on both temporary mirrors: `code object is not signed at all` (RC 1). Both Apple binaries were deleted before return; ZIP contains only TXT+JSON.
+This mirror is an analysis container, not yet a deployable dylib.
 
-## Current unresolved gate
-Structural reconstruction is proven. Runtime loadability/trust is not.
-Before any installation or Root Patch plan, determine whether dyld accepts the temporary standalone mirror and whether temporary ad-hoc signing changes acceptance.
+## D97BX — loadability/trust closure
+Returned bundle:
+`OCLP7_D97BX_DYLD_LOADABILITY_AND_ADHOC_SIGN_20260906_010046.zip`
+- bytes `746802`;
+- SHA256 `f25f364bb8bb9fb89f3f289cd217620ccc32ff81631ff354669301fcdf74ca57`;
+- TXT SHA256 `3dfdc48a6051475cfa4ffeac3c2e300ffe93cd786851f84a752c692ad0d71ff3`;
+- JSON SHA256 `6f7e0146059cd3fdd26149ec54ec7e27f96510b17d9ea9467607ba9c55a95452`.
 
-## CURRENT ACTION — D97BX
+Unsigned `dlopen_preflight`:
+- original PASS;
+- D97BV-patched PASS.
+
+Temporary ad-hoc signing:
+- original PASS;
+- patched PASS;
+- strict verification PASS (`valid on disk`, `satisfies its Designated Requirement`).
+
+Signed `dlopen_preflight`:
+- original PASS;
+- patched PASS.
+
+Real child-process `dlopen`:
+- original NEGATIVE;
+- patched NEGATIVE;
+- before and after signing, both fail identically in shared-cache `__DATA_CONST` mapping with `mmap(...CD0, size=0x6F820) -> errno=22`.
+
+Interpretation:
+- signing/trust is not the current blocker;
+- D97BV patch is not the loadability regression;
+- shared-cache segment geometry is unsuitable as a true standalone dylib even though `file`/`otool`/preflight accept it;
+- `__DATA_CONST` starts at a shared-cache VM geometry ending in `0xCD0`, which standalone dyld cannot mmap as a normal page-aligned segment.
+
+Authoritative classifications:
+- `D97BX_UNSIGNED_PREFLIGHT_ORIGINAL_PATCHED=PASS`;
+- `D97BX_ADHOC_SIGN_ORIGINAL_PATCHED=PASS`;
+- `D97BX_SIGNED_PREFLIGHT_ORIGINAL_PATCHED=PASS`;
+- `D97BX_REAL_DLOPEN_ORIGINAL_PATCHED=NEGATIVE_IDENTICAL_MMAP_EINVAL`;
+- `D97BX_D97BV_PATCH_LOADABILITY_REGRESSION=NEGATIVE`;
+- `D97BX_CODE_SIGNING_IS_CURRENT_BLOCKER=NEGATIVE`;
+- `D97BX_SPARSE_MIRROR_IS_NOT_STANDALONE_LOADABLE=NEGATIVE`.
+
+Do not manually edit one segment alignment in isolation. A real dyld shared-cache extractor must coherently reconstruct standalone Mach-O segment/file/linkedit/fixup geometry.
+
+## CURRENT ACTION — real DSC single-image extraction
 Remain unpatched in Tahoe VESA.
-Next collector must:
-1. rebuild original and D97BV-patched sparse native Metal only under `/private/tmp`;
-2. run `dlopen_preflight` on each in a sacrificial child;
-3. if preflight passes, attempt actual `dlopen` only in a sacrificial child and capture exit/dlerror;
-4. create a separate temporary ad-hoc-signed patched copy only if safe, then repeat preflight/load audit;
-5. record sparse allocation before/after signing;
-6. delete every temporary Apple binary before returning;
-7. package only TXT/JSON evidence.
 
-No Root Patch and no accelerated reboot are authorized.
-GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation. GitHub reads/static audit/persistence remain allowed; local compilation is not an implicit fallback.
+Next static/transient lane:
+1. use a pinned, verified prebuilt real DSC extractor; no installation and no local compilation;
+2. preferred current candidate is `blacktop/ipsw` because `ipsw dyld extract <DSC> <DYLIB>` exports one image rather than the entire cache;
+3. exact source DSC: `/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_x86_64h`;
+4. exact target image: `/System/Library/Frameworks/Metal.framework/Versions/A/Metal`;
+5. extract only under `/private/tmp`;
+6. test the unmodified extracted original with `file`, `otool`, segment alignment, Metal4 surface, `dlopen_preflight`, then real child `dlopen` BEFORE applying D97BV;
+7. only if extracted original truly loads, re-audit the 13-byte site and safe cave in the exported layout, then patch a second temp copy and test it;
+8. delete extractor archive/binary and every Apple binary before return; package TXT+JSON only.
+
+Public-source pin currently audited: `blacktop/ipsw` release `v3.1.713` published 2026-08-30; release checksum manifest asset SHA256 `97be6afeac03aa4df0379b9224f9cbec750fb4ac56424daa7c1c66abb3d36334`.
+
+No Root Patch, no installation of extracted Metal, and no accelerated reboot are authorized.
+GitHub Actions compile/build/package remains suspended until explicit quota-unblocked confirmation.
