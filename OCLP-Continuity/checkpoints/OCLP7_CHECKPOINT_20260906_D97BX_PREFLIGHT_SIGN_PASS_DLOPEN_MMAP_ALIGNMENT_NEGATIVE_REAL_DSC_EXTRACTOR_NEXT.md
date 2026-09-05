@@ -98,34 +98,46 @@ Do not manually tweak one `__DATA_CONST` vmaddr/fileoff in isolation. A proper D
 The next action is to use a real dyld shared-cache extractor that exports one image as a standalone Mach-O.
 
 Preferred candidate after current public-source audit:
-- `blacktop/ipsw`, latest release observed `v3.1.713` published 2026-08-30;
+- `blacktop/ipsw`, release `v3.1.713` observed/pinned for this lane;
 - command family supports extracting one dylib from a DSC (`ipsw dyld extract <DSC> <DYLIB>`), avoiding whole-cache extraction;
-- release checksum manifest asset SHA256 is `97be6afeac03aa4df0379b9224f9cbec750fb4ac56424daa7c1c66abb3d36334`.
+- release checksum manifest asset SHA256 `97be6afeac03aa4df0379b9224f9cbec750fb4ac56424daa7c1c66abb3d36334`.
 
 Use only a pinned prebuilt binary downloaded transiently to `/private/tmp` and verified against the pinned release checksum manifest. Do not install it and do not compile locally.
 
-Exact source DSC remains:
+Exact source DSC:
 `/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_x86_64h`.
 
-Exact target image path:
+Exact target image:
 `/System/Library/Frameworks/Metal.framework/Versions/A/Metal`.
 
-## Required next static/transient gate
-A real extractor audit must:
-1. pin and verify extractor release/checksum before execution;
-2. extract only native Tahoe Metal to `/private/tmp`;
-3. inspect `file`, `otool -l`, `otool -L`, segment page alignment, native Metal4 surface and codesign state;
-4. test unpatched extracted original with child `dlopen_preflight` and real child `dlopen` BEFORE any D97BV patch;
-5. only if unpatched extracted original really loads, re-audit the D97BV 13-byte preimage and safe cave in the exported standalone layout rather than assuming old file offsets;
-6. if site+cave remain valid, patch a second temp copy, ad-hoc sign if needed, and test real child `dlopen`;
-7. delete extractor archive/binary and every temporary Apple binary before return;
-8. package TXT+JSON evidence only.
+## D97BY prepared and pinned
+Collector:
+`OCLP7_D97BY_real_dsc_single_image_export.sh`
+- bytes `21501`;
+- SHA256 `ff41518400a85054cf7c7205ae9154efb5ec52ba7118fb538df5f63b94ea4968`.
 
-Do not use global `MTL_FORCE_MTLCOMPILER_LLVM_VERSION=3802`, global `32023->31001`, Golden layout transplantation, or full legacy main Metal.
+Generator validation:
+- zsh syntax PASS;
+- checksum-parser Python heredoc compile PASS;
+- main audit Python heredoc compile PASS.
+
+D97BY behavior:
+1. downloads only pinned `blacktop/ipsw` v3.1.713 release assets to `/private/tmp`;
+2. first verifies exact checksum-manifest SHA above, then derives and verifies the exact macOS x86_64 (or manifest-backed universal fallback) tarball SHA;
+3. performs no Homebrew/MacPorts/install and no local compilation;
+4. exports only target Metal twice: normal and `--slide` variant;
+5. audits standalone segment page geometry, install-name/dependencies, Metal4 counts, native `__text` byte identity, unsigned and ad-hoc-signed child `dlopen_preflight` and real child `dlopen`;
+6. proceeds to D97BV only if an unmodified real export is actually child-dlopen-loadable;
+7. before patching, re-audits exact 13-byte preimage, 208-byte cave, section/header separation and exact native `__text` identity;
+8. proves bounded patch diff, tests unsigned and signed patched child dlopen;
+9. deletes extractor, archives, all Apple binaries and all temp copies before ZIP creation;
+10. packages TXT+JSON only.
 
 ## CURRENT ACTION
 Remain unpatched in Tahoe VESA.
 
-Next action: real DSC single-image extraction/loadability preflight in `/private/tmp` only. No installation, no local compilation, no Root Patch and no accelerated reboot.
+Run only `OCLP7_D97BY_real_dsc_single_image_export.sh` and return its ZIP/console result.
+
+No installation, no local compilation, no Root Patch and no accelerated reboot are authorized.
 
 GitHub Actions compile/build/package remains suspended until explicit user confirmation that quota is unblocked.
