@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BR_FULL_PASS_CLAMP_3802_TO_32023_ESCAPE_HATCHES_D97BS_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BS_FULL_PASS_TAIL_FLOOR_32023_ONLY_OVERRIDE_PRODUCER_OPEN_D97BT_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -53,9 +53,7 @@ Failing Tahoe accelerated cohort: 12/12 observed service requests `llvmVersion=3
 Native Tahoe Metal cache image starts at `0x7FF80F47D000`; cached `__TEXT` SHA256 `bf405828f42ba59e68273190ac19b70aa0c3d1d4b34de6dc49de206dd5b04605`. Native MTLCompilerService SHA256 `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`. Native `_MTL4*` / `IOGPUMetal4*` surface is present.
 
 Tahoe Builder A `0x7FF80F635510..0x7FF80F635A4D`: llvmVersion `[arg1+0x1C]`, requestType helper `+0xAC`, timeout `+0xB8`, three direct E8 callers.
-
 Tahoe Builder B `0x7FF80F663CA9..0x7FF80F66492C`: llvmVersion `[arg1+0x38]`, same requestType/timeout helper family via subordinate object, no direct E8 callers.
-
 Both alternate requestType paths use immediate 9.
 
 Native generation census: 3802 raw 11 / validated 9; 31001 zero; 32023 raw 10 / validated 10. Do not globally replace `32023 -> 31001`; do not transplant Golden `+0x20` offsets.
@@ -65,39 +63,78 @@ Native generation census: 3802 raw 11 / validated 9; 31001 zero; 32023 raw 10 / 
 
 Generation-aware constructor `0x7FF80F4A5DF8..0x7FF80F4A7A88` uses shared accessor `0x7FF80F5E16C3`, stores EAX into discriminator `-0x27C`, optionally overrides from `[arg1+0x138]`, and builds layouts containing `+0x1C/+0x20/+0x38` writes.
 
-D97BQ proved selector generation input is ABI arg2/RSI. All six validated selector callers do `call accessor -> movl %eax,%esi -> call selector`. Common boundary is therefore STATIC PROVEN:
+D97BQ proved selector generation input is ABI arg2/RSI. All six validated selector callers do `call accessor -> movl %eax,%esi -> call selector`. Common boundary is STATIC PROVEN:
 `generation-bearing object -> shared accessor -> constructor discriminator / native selector`.
 
-## D97BR FULL PASS — current frontier
-Returned bundle `OCLP7_D97BR_GENERATION_ACCESSOR_CFG_AND_CLAMP_20260905_232748.zip`:
-- bytes `4515`;
-- SHA256 `1b3d252e8824f9e531980afdd1f9ca93b06d2c83e6e2bf7bb18ded44f90d22f7`.
+## D97BR clamp closure
+Accessor `0x7FF80F5E16C3..0x7FF80F5E1778` direct-branch CFG is complete: all instructions reachable, one normal return and one external tail.
 
-Accessor `0x7FF80F5E16C3..0x7FF80F5E1778` CFG is complete for direct branches: 57 edges, all 50 instructions reachable, one normal return and one external tail.
-
-Exact clamp path:
+Primary clamp path:
 `cmp EAX,32024; ECX=32023; cmovl ECX,EAX`.
-
 Thus `3802 -> 32023` on that path is `SEMANTIC_PROVEN`.
 
 Accessor output classes:
-1. clamp path: values below 32024 are floored to exact 32023;
-2. nonzero global override `0x7FF843853E18` bypasses clamp and returns directly; current static value 0; single writer function `0x7FF80F612AF4..0x7FF80F612B0E`, store at `0x7FF80F612B06`;
-3. alternate path defaults to 32023 but may tail to `0x7FF80F5E15C6..0x7FF80F5E1624`, which returns a lazy global.
+1. primary indirect source -> minimum 32023 clamp;
+2. nonzero global override `0x7FF843853E18` bypasses clamp;
+3. alternate path defaults to 32023 and may tail to lazy function `0x7FF80F5E15C6`.
 
-Two indirect generation-source calls remain at `0x7FF80F5E1713` and `0x7FF80F5E1732`.
+## D97BS FULL PASS — current frontier
+Returned bundle `OCLP7_D97BS_ACCESSOR_ESCAPE_HATCHES_20260905_233839.zip`:
+- bytes `17024`;
+- SHA256 `a84ee8d0bf74701f7359b664902922f32a6b4182e3cfe0cf5333e96ba324df6b`.
 
-Do NOT yet claim accessor-wide suppression of 3802. Global override and lazy-tail semantics remain open.
+Inner TXT SHA256 `fb6bd8f2d22565f315d991109c7a94b5b3ff77d7d4c891f3db1d29300efb5350`; JSON SHA256 `5e2090b8b039dd69d1fe8c9da961f119ed67d1ddefddac5709faa8a06bdb5be6`.
 
-## CURRENT ACTION — D97BS
+All final markers PASS; no mutation.
+
+### Global override
+Override global `0x7FF843853E18` has static image value 0 and exactly one writer:
+- function `0x7FF80F612AF4..0x7FF80F612B0E`;
+- store at `0x7FF80F612B06` from returned EAX.
+
+Writer calls exact producer `0x7FF80F58A5F4` and stores its result. No direct E8 callers of writer found; this does not prove it never runs.
+
+Therefore exact producer `0x7FF80F58A5F4` is the remaining semantic unknown for the direct override path.
+
+### Indirect source calls
+Both accessor indirect calls share the same unresolved cached call slot. Offline pointer form could not be assigned a reliable semantic symbol.
+
+This is no longer independently blocking:
+- first indirect return is clamped to minimum 32023;
+- second indirect return is used only to select default 32023 vs lazy-tail path, not returned directly.
+
+### Lazy tail
+Tail `0x7FF80F5E15C6..0x7FF80F5E1624` returns lazy dword global `0x7FF843853CE0`.
+Exactly two writes to that global exist, both in adjacent block-invoke `0x7FF80F5E1624..0x7FF80F5E16C3`.
+
+Persisted exact context shows the writer family performs:
+`candidate -> compare 32024 -> ECX=32023 -> cmovge candidate,ECX -> store ECX`.
+Thus a positive legacy candidate such as 3802 is promoted to at least 32023 before caching.
+
+Classification:
+`D97BS_LAZY_TAIL_INPUT_3802_TO_CACHED_32023=STRUCTURAL_SEMANTIC_PROVEN`.
+
+D97BT will formalize both write sites before accessor-wide promotion.
+
+### Current suppression status
+Do NOT yet claim accessor-wide 3802 suppression.
+Two of three output classes have a 32023 floor mechanism. The direct global override remains open until producer `0x7FF80F58A5F4` is audited.
+
+## CURRENT ACTION — D97BT
 Remain unpatched in Tahoe VESA.
 
-Run only `OCLP7_D97BS_accessor_escape_hatches.sh`.
+Run only `OCLP7_D97BT_override_producer_and_lazy_floor.sh`.
 Pinned identity:
-- bytes `20670`;
-- SHA256 `4aa35c3afd3774f3385e70e4147cf80e942c96e3a3c0608fac5d2ad328300d9d`.
+- bytes `20882`;
+- SHA256 `14553b7f884fe033cbcabd033daa2740fb17da419ed843ea6b8e8ec14a611a99`.
 
-D97BS must close global override writer/callers, resolve accessor indirect call-slot targets where possible, identify tail lazy globals and every writer/source, and classify whether any escape hatch can supply 3802. Absence of a 3802 immediate alone is not proof of semantic impossibility.
+D97BT must:
+1. reconstruct exact CFG/return sources of override producer `0x7FF80F58A5F4`;
+2. resolve the RIP-relative key/object passed by writer `0x7FF80F612AF4`;
+3. determine whether the producer can semantically supply 3802;
+4. formalize both lazy-global writes and prove/reject the 32023 floor;
+5. promote accessor-wide 3802 suppression only if all escape paths are semantically closed;
+6. make no source/system/cache mutation, Root Patch or reboot.
 
 No Root Patch and no accelerated reboot are authorized.
 
