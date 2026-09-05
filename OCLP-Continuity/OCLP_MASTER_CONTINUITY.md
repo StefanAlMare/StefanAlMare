@@ -3,13 +3,14 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_OFFICIAL_HELPER_RESTORED_PASS_ACCELERATED_BOOT_AUTHORIZED.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_TWICE_SNAPSHOT_RESTORED_EVIDENCE_COLLECTION_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
+Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` and `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
 
 ## Mandatory startup
-Before proposing a technical modification in any future OCLP continuation, read the permanent database, permanent working rules, this MASTER, the VESA rule, and the current checkpoint linked above.
+Before any technical modification, read the permanent database, permanent working rules, this MASTER, permanent VESA rule, the exact current checkpoint above, and retrospective/history when strategic context is needed.
 
 ## Target
 macOS Tahoe `26.6.2 / 25G82`, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware acceleration and usable GUI.
@@ -26,7 +27,7 @@ Golden/reference remains immutable/read-only.
 Reference official Golden-lineage app:
 - executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
 - Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
-- official Team ID `S74BDJXQMD`.
+- Team ID `S74BDJXQMD`.
 
 Official privileged helper reference SHA256:
 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
@@ -35,51 +36,30 @@ Official privileged helper reference SHA256:
 Retain accepted causal chain:
 `MTLCompilerService failure -> XPC_ERROR_CONNECTION_INTERRUPTED -> pipeline creation failure -> SkyLight/CopyPipelineState abort -> WindowServer death`.
 
-Accepted historical five-functional diagnostic baseline remains:
+Accepted historical five-functional diagnostic baseline:
 `P1 + P2b + P3 + AIR00 + D34`.
 P6/P7 insufficient; D50/D68/D82 reserve; D84 retired; D36-D44 invalidated for D34 cave overlap.
 
-Golden request-builder closure remains authoritative:
-- primary builder region `0x7FF80D370756..0x7FF80D370C28`;
+Golden request-builder closure:
+- primary builder `0x7FF80D370756..0x7FF80D370C28`;
 - RBX = arg1/RDI; signed dword `[RBX+0x20] -> llvmVersion`;
 - R13 = arg2/RSI; `[R13+0x08] -> requestType`, `[R13+0x18] -> timeout`, `[R13+0x70]` sandbox gate;
 - alternate requestType immediate `9`.
 
-## Exact Tahoe eligibility findings for b9df76
-Exact b9df76 host gate originally had `_max_os = os_data.sequoia.value`; `os_data.py` already defines Tahoe = Darwin 25.
-The built-in developer marker can bypass that host gate, but D97BG runtime later proved host-gate bypass alone is insufficient for complete Tahoe 25G82 Root Patch.
+These userspace/compiler results remain durable but are not assumed reachable in the newest D97BJ accelerated boot because that boot now fails earlier with kernel panic.
 
-Historical second Haswell/native-OS blocker does NOT apply to exact b9df76:
-- Haswell is unconditionally included;
-- `IntelHaswell.native_os()` is only `xnu < Ventura`, false on Darwin 25;
-- Haswell composition remains `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific`;
-- LegacyMetal3802 has no Tahoe maximum.
+## Exact b9df76 Tahoe findings
+Exact b9df76 originally had `_max_os = os_data.sequoia.value`; Tahoe is Darwin 25. Haswell itself is still patchable on Darwin 25: its historical native-OS blocker does not apply to exact b9df76.
 
-## D97BG signed-wrapper result
-D97BG preserved the exact signed Golden inner OCLP and official helper while automatically creating the built-in developer marker.
-It proved the host-gate route, but live Tahoe Root Patch found further Tahoe-specific blockers and therefore D97BG is superseded for actual 25G82 Root Patch use.
+D97BG proved host-gate bypass alone was insufficient. D97BH proved exact local MetallibSupportPkg `26.6.2-25G82` is accepted. D97BI proved exact b9df76 requests nonexistent `13.2.1-25/Metal.framework` on Darwin 25; existing donor is `13.2.1-24`.
 
-## D97BH MetallibSupportPkg runtime PASS
-Exact target package:
+Exact target Metallib package:
 - `MetallibSupportPkg-26.6.2-25G82.pkg`;
 - bytes `116574513`;
 - SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
 
-Installed exact local tree:
-`/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`.
-
-Runtime fallback proved exact local 25G82 is accepted. D97BJ later improved this by preferring exact local host-build Metallib before API fallback.
-
-Classification:
-`D97BH_25G82_LOCAL_METALLIB_FALLBACK_RUNTIME=PASS`.
-
-## D97BI Metal.framework blocker
-Exact b9df76 constructed `13.2.1-{Darwin major}` and on Darwin 25 requested nonexistent:
-`Universal-Binaries/13.2.1-25/System/Library/Frameworks/Metal.framework`.
-Historical Tahoe work had already identified existing donor `13.2.1-24`.
-
-Classification:
-`B9DF76_TAHOE_25_METAL_FRAMEWORK_SOURCE_13_2_1_25=PROVEN_MISSING`.
+Exact Pyquick 25G82 patch dictionary SHA256:
+`c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`.
 
 ## D97BJ complete Tahoe functional delta
 D97BJ starts from exact b9df76 and changes only three functional source files:
@@ -89,50 +69,33 @@ D97BJ starts from exact b9df76 and changes only three functional source files:
 
 Functional effects:
 - host max Sequoia -> Tahoe;
-- Tahoe `Metal.framework` donor -> existing `13.2.1-24`;
-- Tahoe-only exact 25G82 metallib destination/source map generated from exact Pyquick `sys_patch_dict.py`;
-- exact local host-build MetallibSupportPkg preferred before API fallback.
+- Tahoe `Metal.framework` donor -> `13.2.1-24`;
+- Tahoe-only exact 25G82 metallib destination/source map generated from exact Pyquick dictionary (182 entries);
+- prefer exact local host-build MetallibSupportPkg before remote API.
 
-Exact Pyquick 25G82 patch dictionary SHA256:
-`c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`.
-Runtime map contained 182 metallib entries.
+Packaging-only correction for Intel ASUS2:
+`OpenCore-Patcher-GUI.spec target_arch="universal2" -> "x86_64"` because current wxPython wheel is x86_64-only.
 
-Prepackaging source validation PASS.
-
-## D97BJ packaging/helper lane
-Current wxPython 4.3.1 resolved x86_64-only while exact b9df76 spec requested universal2; local PyInstaller initially failed in COLLECT. This was tooling/packaging only, not functional source failure.
-
-Authorized packaging-only change for Intel ASUS2:
-`OpenCore-Patcher-GUI.spec: target_arch="universal2" -> target_arch="x86_64"`.
-
-D97BJ uses an intentionally built DEBUG privileged helper for the ad-hoc custom app while patching.
-Pinned DEBUG helper SHA256:
+Pinned DEBUG helper used for custom ad-hoc D97BJ app:
 `a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
 
 ## D97BJ Tahoe 25G82 Root Patch — RUNTIME PASS
-User executed the D97BJ Root Patch in Tahoe VESA.
-
-Observed runtime sequence:
+User executed D97BJ Root Patch in Tahoe VESA. Runtime proved:
 - exact local `26.6.2-25G82` metallib found and API skipped;
-- Patcher capable of patching;
-- Universal-Binaries.dmg mounted;
+- Patcher capable;
+- Universal-Binaries mounted;
 - preflight completed;
-- `Metal 3802 Common` installed;
-- `Metal 3802 Common Extended` installed with prior `13.2.1-25` blocker cleared;
-- exact Tahoe `Metal 3802 .metallibs` map executed, including `VisionKitCore.framework`;
+- Metal 3802 Common + Extended installed with prior `13.2.1-25` blocker cleared;
+- exact Tahoe 25G82 metallib map executed including `VisionKitCore.framework`;
 - Monterey GVA installed;
 - Monterey OpenCL installed;
-- Intel Haswell installed: Azul framebuffer, HD5000 graphics kext, GL/MTL/VA drivers, AppleIntelHSWVA;
+- Intel Haswell installed: AppleIntelFramebufferAzul, AppleIntelHD5000Graphics, GL/MTL/VA drivers, AppleIntelHSWVA;
 - Modern Wireless Common installed;
 - GPUCompiler libraries merged;
-- patchset metadata written;
-- RSR monitor and OCLP launchd plists installed;
-- new Auxiliary Kernel Collection built;
-- Auxiliary Kernel Collection usage forced;
+- patch metadata/RSR/OCLP launchd files installed;
+- new Auxiliary Kernel Collection built and forced;
 - root volume unmounted;
-- final `Patching complete`.
-
-No traceback or Root Patch error is present.
+- final `Patching complete` with no traceback.
 
 Classifications:
 - `D97BJ_TAHOE_25G82_ROOT_PATCH_PREFLIGHT=PASS`;
@@ -140,36 +103,49 @@ Classifications:
 - `D97BJ_TAHOE_25G82_EXACT_METALLIB_MAP_RUNTIME=PASS`;
 - `D97BJ_TAHOE_25G82_HASWELL_PATCHSET_RUNTIME=PASS`;
 - `D97BJ_TAHOE_25G82_AUXKC_BUILD=PASS`;
-- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS`;
-- `D97BJ_ACCELERATED_BOOT_RESULT=NOT_YET_TESTED`.
+- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS`.
 
-## D97BJ post-run helper cleanup and restore — PASS
-After the D97BJ inner app was closed, no `OpenCore-Patcher` process remained, but the installed system helper still had the DEBUG helper SHA256:
-`a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
+## D97BJ helper cleanup — PASS before accelerated boot
+Automatic wrapper cleanup left the DEBUG helper installed after app exit. Before reboot this was detected and corrected manually.
 
-Therefore the automatic wrapper cleanup did not restore the official helper. Reboot remained blocked while this was corrected.
+Verified official restore source:
+`/Applications/OpenCore-Patcher.app/Contents/Resources/official-privileged-helper`
 
-A verified official helper restore asset was found at:
-`/Applications/OpenCore-Patcher.app/Contents/Resources/official-privileged-helper`.
-
-Source verification PASS:
-- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
-- `codesign --verify --strict` PASS;
-- TeamIdentifier `S74BDJXQMD`.
-
-It was copied to:
-`/Library/PrivilegedHelperTools/com.dortania.opencore-legacy-patcher.privileged-helper`
-with `root:wheel` ownership and mode `4755`.
-
-Final installed helper verification:
+Final installed helper before accelerated boot:
 - SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
 - TeamIdentifier `S74BDJXQMD`;
 - `OFFICIAL_HELPER_RESTORED=PASS`.
 
-Classifications:
-- `D97BJ_POST_RUN_DEBUG_HELPER_LEFT_INSTALLED=PROVEN`;
-- `D97BJ_SYSTEM_OFFICIAL_HELPER_RESTORED=PASS`;
-- `D97BJ_PRE_ACCELERATED_BOOT_SAFETY_GATE=PASS`.
+Thus the helper state is not an unresolved pre-boot confounder.
+
+## D97BJ accelerated boot — NEW KERNEL-PANIC FRONTIER
+User manually performed the accelerated/root-patched Tahoe boot after all pre-boot gates passed.
+
+User-observed behavior:
+- did not reach the historical black-screen / later-VESA behavior;
+- hit a kernel panic and automatically restarted;
+- user reports approximately two accelerated attempts followed by VESA/recovery boots; exact boot chronology must be confirmed from `last reboot` and panic timestamps;
+- after VESA recovery, patched boot was not usable, so the user restored the saved/sealed system snapshot;
+- current state is VESA/recovery with **no Root Patch**.
+
+The snapshot restore is recovery, not evidence against the preceding accelerated panic.
+
+Current classifications:
+- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS` remains valid;
+- `D97BJ_ACCELERATED_BOOT_USABLE_GUI=NEGATIVE`;
+- `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_RESTART=USER_OBSERVED_PROVEN`;
+- `D97BJ_ACCELERATED_BOOT_PANIC_ROOT_CAUSE=UNKNOWN_PENDING_LOCAL_EVIDENCE`;
+- `D97BJ_CURRENT_ROOT_PATCH_STATE=RESTORED_TO_UNPATCHED_SNAPSHOT`.
+
+Do NOT attribute the older 03:31/03:35 crash captures to this D97BJ incident: they predate the accelerated attempts and do not contain a matching panic/kext record.
+
+## High-value current hypotheses — not yet proven
+1. Haswell kext/AuxKC load/start/match boundary (`AppleIntelFramebufferAzul` / `AppleIntelHD5000Graphics`). Historical Tahoe D26 evidence once showed transient `Info.plist digest is missing` / kernelmanager rejection for these exact staged kexts, making this a high-value comparison point. D97BJ AuxKC build success means the historical digest failure is not by itself proof of current cause.
+2. AMFI / kernel-collection validation boundary.
+3. Graphics kext initialization / IOGraphics boundary.
+4. Only if evidence proves userspace reached: historical MTLCompilerService/WindowServer path.
+
+A public current MacBookPro11,1 / Tahoe 26.6.2 boot-failure report exists, but it has no panic log and therefore is contextual only, not causal evidence for ASUS2.
 
 ## Execution contract
 GitHub Actions compilation remains suspended until user explicitly says quota reset/unblocked.
@@ -179,9 +155,18 @@ Never auto reboot.
 Golden remains immutable/read-only.
 
 ## CURRENT ACTION
-User is authorized to manually reboot into the normal accelerated/root-patched Tahoe configuration.
+Remain in current unpatched VESA/recovery state. **No new Root Patch and no accelerated reboot.**
 
-If accelerated boot produces a usable GUI, record that directly.
-If there is no usable image/GUI, hard restart/power-cycle and boot the established VESA recovery configuration. Return from VESA and analyze only the immediately preceding accelerated diagnostic boot under `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
+Run one read-only D97BJ panic-evidence collection and return its ZIP. It must collect:
+1. `last reboot` / shutdown chronology;
+2. NVRAM panic keys (`aapl,panic-info`) and current boot/OCLP args only;
+3. current-day panic/kernel DiagnosticReports around the post-05:00 accelerated attempts, including protected PanicReporter paths;
+4. filtered unified logs for panic, Previous shutdown cause, watchdog, kernel collection/AuxKC, kernelmanager, Haswell graphics kext load/start/match, AMFI and IOGraphics;
+5. current unpatched/VESA baseline and snapshot state.
 
-Do not Root Patch again before evaluating this accelerated boot.
+After evidence return:
+- identify the two accelerated boot windows exactly;
+- analyze only those accelerated windows, excluding later VESA/recovery and snapshot-restore activity;
+- if panic report names a kext/backtrace, promote that module boundary immediately;
+- do not resume MTLCompilerService/WindowServer diagnostics unless evidence proves that userspace stage was reached;
+- design any future test to maximize evidence per unavoidable Root Patch/recovery cycle, ideally with persistent/boot-visible panic capture rather than repeated single-point probes.
