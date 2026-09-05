@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_TAHOE_25G82_ROOT_PATCH_RUNTIME_PASS_ACCELERATED_BOOT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_OFFICIAL_HELPER_RESTORED_PASS_ACCELERATED_BOOT_AUTHORIZED.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -68,7 +68,7 @@ Exact target package:
 Installed exact local tree:
 `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`.
 
-b9df76 official manifest lacks Tahoe 26.x, but runtime fallback proved exact local 25G82 is accepted. D97BJ later improved this by preferring exact local host-build Metallib before API fallback.
+Runtime fallback proved exact local 25G82 is accepted. D97BJ later improved this by preferring exact local host-build Metallib before API fallback.
 
 Classification:
 `D97BH_25G82_LOCAL_METALLIB_FALLBACK_RUNTIME=PASS`.
@@ -100,17 +100,14 @@ Runtime map contained 182 metallib entries.
 Prepackaging source validation PASS.
 
 ## D97BJ packaging/helper lane
-Because current wxPython 4.3.1 resolved x86_64-only while exact b9df76 spec requested universal2, local PyInstaller initially failed in COLLECT. This was tooling/packaging only, not functional source failure.
+Current wxPython 4.3.1 resolved x86_64-only while exact b9df76 spec requested universal2; local PyInstaller initially failed in COLLECT. This was tooling/packaging only, not functional source failure.
 
 Authorized packaging-only change for Intel ASUS2:
 `OpenCore-Patcher-GUI.spec: target_arch="universal2" -> target_arch="x86_64"`.
 
-D97BJ uses an intentionally built DEBUG privileged helper for the ad-hoc custom app only while that app is running, with the exact official Dortania helper bundled as a restore asset.
-Pinned DEBUG helper SHA256 from preparation:
+D97BJ uses an intentionally built DEBUG privileged helper for the ad-hoc custom app while patching.
+Pinned DEBUG helper SHA256:
 `a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
-
-Before any reboot after custom OCLP use, fully quit inner OCLP and verify that the installed system helper has been restored to exact official SHA256:
-`9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
 
 ## D97BJ Tahoe 25G82 Root Patch — RUNTIME PASS
 User executed the D97BJ Root Patch in Tahoe VESA.
@@ -146,6 +143,34 @@ Classifications:
 - `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS`;
 - `D97BJ_ACCELERATED_BOOT_RESULT=NOT_YET_TESTED`.
 
+## D97BJ post-run helper cleanup and restore — PASS
+After the D97BJ inner app was closed, no `OpenCore-Patcher` process remained, but the installed system helper still had the DEBUG helper SHA256:
+`a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
+
+Therefore the automatic wrapper cleanup did not restore the official helper. Reboot remained blocked while this was corrected.
+
+A verified official helper restore asset was found at:
+`/Applications/OpenCore-Patcher.app/Contents/Resources/official-privileged-helper`.
+
+Source verification PASS:
+- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
+- `codesign --verify --strict` PASS;
+- TeamIdentifier `S74BDJXQMD`.
+
+It was copied to:
+`/Library/PrivilegedHelperTools/com.dortania.opencore-legacy-patcher.privileged-helper`
+with `root:wheel` ownership and mode `4755`.
+
+Final installed helper verification:
+- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
+- TeamIdentifier `S74BDJXQMD`;
+- `OFFICIAL_HELPER_RESTORED=PASS`.
+
+Classifications:
+- `D97BJ_POST_RUN_DEBUG_HELPER_LEFT_INSTALLED=PROVEN`;
+- `D97BJ_SYSTEM_OFFICIAL_HELPER_RESTORED=PASS`;
+- `D97BJ_PRE_ACCELERATED_BOOT_SAFETY_GATE=PASS`.
+
 ## Execution contract
 GitHub Actions compilation remains suspended until user explicitly says quota reset/unblocked.
 Current local Tahoe VESA build/test lane was explicitly authorized/executed by user.
@@ -154,11 +179,9 @@ Never auto reboot.
 Golden remains immutable/read-only.
 
 ## CURRENT ACTION
-1. Fully quit the D97BJ inner OCLP so the outer wrapper cleanup runs.
-2. Verify installed privileged helper SHA256 equals exact official:
-   `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
-3. Only after helper restore PASS, reboot manually into the normal accelerated/root-patched Tahoe configuration.
-4. If accelerated boot has no usable image/GUI, hard restart/power-cycle and boot the established VESA recovery configuration.
-5. Return from VESA and analyze only the immediately preceding accelerated diagnostic boot under `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
+User is authorized to manually reboot into the normal accelerated/root-patched Tahoe configuration.
 
-Root Patch is now runtime PASS. Accelerated GUI is the next unresolved boundary.
+If accelerated boot produces a usable GUI, record that directly.
+If there is no usable image/GUI, hard restart/power-cycle and boot the established VESA recovery configuration. Return from VESA and analyze only the immediately preceding accelerated diagnostic boot under `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
+
+Do not Root Patch again before evaluating this accelerated boot.
