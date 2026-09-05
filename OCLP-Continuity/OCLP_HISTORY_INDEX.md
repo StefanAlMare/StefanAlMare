@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97BV_FULL_PASS_EXECUTABLE_INTERSECTION_CAVE_SELECTIVE_3802_ADAPTER_D97BW_RECONSTRUCTION_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97BW_TOOLING_GUARD_SPARSE_MIRROR_V2_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -53,45 +53,44 @@ Strongest retained classification:
 Exact accessor patch window `0x7FF80F5E1719..0x7FF80F5E1726`, 13-byte preimage `3d187d0000b9177d00000f4cc1`, no incoming branch into window interior. Strict homogeneous safe-padding search inside `__text` found zero candidates. This rejected only `__text`-padding trampoline placement.
 
 ## D97BV — executable inter-section cave + selective adapter FULL PASS
-Bundle:
-`OCLP7_D97BV_TEXT_INTERSECTION_PADDING_CAVE_PREFLIGHT_20260906_001956.zip`
-- bytes `2574`;
-- SHA256 `c39198d603664b921f57abd0d09d24ad7fc1d08c2da8f44677c86de93301cbfd`.
+Bundle `OCLP7_D97BV_TEXT_INTERSECTION_PADDING_CAVE_PREFLIGHT_20260906_001956.zip`, SHA256 `c39198d603664b921f57abd0d09d24ad7fc1d08c2da8f44677c86de93301cbfd`.
 
-All final markers passed; no mutation/extraction/Root Patch/reboot.
-
-D97BV found exactly one safe unsectioned padding cave inside executable native `__TEXT`:
+D97BV found one safe unsectioned padding cave inside executable native `__TEXT`:
 - `0x7FF80F47E560..0x7FF80F47E630`;
 - 208 zero bytes;
-- before `__text`;
-- outside every section and load-command region;
-- zero function-start, direct branch-target and decoded RIP-relative-target hits.
-
-Classification:
-`D97BV_NATIVE_METAL_EXECUTABLE_INTERSECTION_PADDING_CAVE=STATIC_PROVEN_SAFE_BY_CURRENT_GATES`.
+- outside all Mach-O sections;
+- zero function-start, branch-target and RIP-target hits.
 
 Exact selective adapter:
-- site bytes `3dda0e00007406e93bcee9ff90`;
-- cave bytes `3d187d0000b9177d00000f4cc1e9b4311600`.
+- site `3dda0e00007406e93bcee9ff90`;
+- cave `3d187d0000b9177d00000f4cc1e9b4311600`.
 
-Semantics: preserve exactly 3802; every other input executes exact original Tahoe floor. Truth table showed no non-3802 semantic drift.
+Semantics: preserve exact 3802; every other input executes original Tahoe floor. Truth table showed no non-3802 semantic drift.
 
 Classification:
 `D97BV_SELECTIVE_3802_PRESERVE_ADAPTER_NO_NON3802_SEMANTIC_DRIFT=STATIC_SEMANTIC_PROVEN`.
 
-This is the first fully positive bounded upstream adapter preflight. It is not P1, not a global force-3802, not 32023->31001 and not Golden-layout transplantation.
+## D97BW — compact reconstruction tooling guard
+D97BW revalidated exact native service and Metal identities and recovered declared Mach-O segments:
+- `__TEXT`: fileoff `0xF47D000`, size `0x2EB15A`;
+- `__DATA_CONST`: fileoff `0x27D91CD0`, size `0x6F820`;
+- `__DATA_DIRTY`: fileoff `0x2A443510`, size `0x4938`;
+- `__DATA`: fileoff `0x2A94D0C0`, size `0xCD00`;
+- `__LINKEDIT`: fileoff `0x2AEFC000`, size `0x99F0000`.
 
-## Current frontier — native Metal standalone delivery
-Adapter logic and executable placement are statically closed. The next question is whether exact native Tahoe Metal can be reconstructed locally from the current dyld shared cache into a structurally valid temporary standalone Mach-O without redistributing Apple binaries.
+It then stopped before copying with `FAIL=RECONSTRUCT_SIZE_UNSAFE:881770496`. Highest declared file end is `0x348EC000`, 881,770,496 bytes, while actual segment payload is about 157 MiB.
 
-Apple xcrun `dyld_shared_cache_util` / `dsc_extractor` are absent. A custom segment-reconstruction audit is therefore the next read-only action.
+Classification:
+`D97BW_RESULT=PARTIAL_PASS_READONLY_TOOLING_COMPACT_BUFFER_SIZE_GUARD`.
 
-## CURRENT ACTION — D97BW
+This is not a reconstruction negative. It only rejects allocating one dense ~841 MiB bytearray in the collector.
+
+## CURRENT ACTION — D97BW v2 sparse mirror
 Remain unpatched in Tahoe VESA.
-Run only `OCLP7_D97BW_native_metal_temp_reconstruction.sh`:
-- bytes `18302`;
-- SHA256 `20e2d042447eba578b857faeb221fd615751da37514afafd56921ecd581f09c1`.
+Run only `OCLP7_D97BW_v2_native_metal_sparse_mirror.sh`:
+- bytes `21700`;
+- SHA256 `273ad9b6fcc9c7cdcc1175627e70eaabaa026c4c1ccd8ad79cf33e4e4b561ceb`.
 
-D97BW reconstructs only temporary local copies under `/private/tmp`, validates native Mach-O/load-command/Metal4 structure, applies the exact D97BV adapter to a second temporary copy, proves bounded diffs, then deletes both Apple binaries before packaging TXT+JSON only.
+V2 creates temporary sparse standalone mirrors in `/private/tmp`, clones the Mach-O header/load commands at offset zero, writes every segment at its unchanged original fileoff, performs no load-command rebasing, validates `file`/`otool`/load-command bounds/native Metal4, applies D97BV only to the second temp mirror, proves bounded diffs, deletes both Apple binaries, and packages TXT+JSON only.
 
 No Root Patch and no accelerated reboot are authorized.
