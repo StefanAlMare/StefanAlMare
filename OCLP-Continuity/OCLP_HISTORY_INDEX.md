@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BT_FULL_PASS_DEFAULT_ACCESSOR_3802_SUPPRESSION_ENV_OVERRIDE_EXCEPTION_D97BU_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BU_PARTIAL_PASS_NO___TEXT_CAVE_D97BV_INTERSECTION_PADDING_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -45,60 +45,39 @@ Generation-aware constructor `0x7FF80F4A5DF8..0x7FF80F4A7A88` builds `+0x1C/+0x2
 Shared accessor `0x7FF80F5E16C3..0x7FF80F5E1778` is used both by constructor discriminator and all six validated generation-selector call sites.
 D97BQ proved selector generation argument is ABI arg2/RSI; each caller uses `call accessor -> movl %eax,%esi -> call selector`.
 
-## D97BR — accessor CFG + clamp FULL PASS
-Accessor direct-branch CFG is complete. Primary clamp sequence:
-`cmp EAX,32024; ECX=32023; cmovl ECX,EAX`.
+## D97BR / BT — accessor-wide default suppression closure
+Primary accessor floor is `cmp 32024; floor to 32023`; a 3802 input becomes 32023.
+Lazy fallback floors to at least 32023 or 32024, so 3802 also cannot survive there.
+The only bypass is explicit key `MTL_FORCE_MTLCOMPILER_LLVM_VERSION`; current/default fallback/global value is zero.
 
-Classification:
-`D97BR_ACCESSOR_INPUT_3802_ON_CLAMP_PATH_BECOMES_32023=SEMANTIC_PROVEN`.
-
-## D97BS — escape-hatch census FULL PASS
-Direct nonzero global override and lazy fallback were isolated. Lazy fallback has two cached writes, both floor legacy candidates upward; explicit override producer remained open.
-
-## D97BT — default accessor-wide 3802 suppression FULL PASS
-Bundle:
-`OCLP7_D97BT_OVERRIDE_PRODUCER_AND_LAZY_FLOOR_20260905_235137.zip`
-- bytes `3719`;
-- SHA256 `6741153378f842849df5436ad3ea7734f7e79607aa33f3edbb7131cedaf18197`.
-
-All collector final markers passed; no mutation.
-
-### Lazy fallback fully closed
-First lazy write computes `max(candidate,32023)`.
-Second lazy write computes `max(candidate,32024)`.
-Thus 3802 cannot survive either lazy branch.
-
-Classifications:
-- `D97BT_LAZY_FIRST_WRITE_3802_TO_32023=SEMANTIC_PROVEN`;
-- `D97BT_LAZY_SECOND_WRITE_3802_TO_32024=SEMANTIC_PROVEN`;
-- `D97BT_LAZY_FALLBACK_PRESERVES_3802=NEGATIVE`.
-
-The collector's second `PROOF=False` was a checker limitation: it recognized only the first floor pair, while raw code proves the second floor separately.
-
-### Explicit override identified
-Override writer uses exact key string:
-`MTL_FORCE_MTLCOMPILER_LLVM_VERSION`.
-
-It passes key + fallback zero to producer `0x7FF80F58A5F4` and stores returned EAX into override global `0x7FF843853E18`.
-Producer returns fallback zero when lookup is absent; if a value exists it forwards the string to a numeric parser tail. Current override global is zero.
-
-Therefore the nonzero bypass is an intentional explicit environment/config override, not ordinary generation selection.
-
-Classifications:
-- override key identity = STATIC PROVEN;
-- override fallback zero = STATIC PROVEN;
-- current override disabled = STATIC PROVEN;
-- explicit override path = STRUCTURAL-SEMANTIC PROVEN nondefault exception.
-
-### Strongest current conclusion
-Under the current/default environment:
+Strongest retained classification:
 `D97BT_DEFAULT_ENV_ACCESSOR_WIDE_3802_SUPPRESSION=SEMANTIC_PROVEN`.
 
-This supplies a concrete upstream mechanism consistent with Tahoe's 12/12 runtime 32023 cohort and Golden's real 3802 lane.
-Do not claim absolute suppression when the explicit force override is deliberately set.
+## D97BU — minimal selective adapter preflight PARTIAL PASS
+User ran `OCLP7_D97BU_minimal_3802_preserve_adapter_preflight.sh`.
 
-## CURRENT ACTION — D97BU
+Exact accessor patch site is statically valid:
+- `0x7FF80F5E1719..0x7FF80F5E1726`;
+- 13-byte preimage `3d187d0000b9177d00000f4cc1`;
+- complete compare/mov/cmov instructions;
+- no incoming branch targets the middle of the window.
+
+However strict safe-padding search inside native Metal `__text` found zero candidates and fail-closed:
+`CAVE_CANDIDATE_COUNT=0`, `FAIL=NO_STATIC_SAFE_PADDING_CAVE`.
+
+Classification:
+`D97BU_NATIVE_METAL___TEXT_SAFE_PADDING_CAVE_GE_32=NEGATIVE`.
+
+No mutation occurred. This rejects only the `__text`-padding trampoline placement, not the selective-adapter semantics.
+
+Apple xcrun cache extraction tools were absent on ASUS2 (`dyld_shared_cache_util` / `dsc_extractor`, RC 72). Other audited extraction/reconstruction methods remain open.
+
+Do not respond by using a live function as a cave, globally forcing 3802, globally mapping 32023->31001, transplanting Golden offsets or lowering the Tahoe clamp threshold without a finite-domain proof.
+
+## CURRENT ACTION — D97BV
 Remain unpatched in Tahoe VESA.
-Next read-only preflight should resolve the override lookup/parser import semantics if possible and audit a minimal complete-instruction upstream adapter around the shared generation accessor, preserving native 32023/32024 behavior, explicit override semantics and Tahoe Metal4 ABI.
+Run only `OCLP7_D97BV_text_intersection_padding_cave_preflight.sh`.
+
+D97BV searches unsectioned padding inside executable native `__TEXT` and rejects any region touched by header/load commands, a Mach-O section, function starts, direct branch targets or decoded RIP-relative targets. If a safe ≥18-byte padding region exists, it assembles the exact `3802 only -> preserve; otherwise original floor` trampoline and proves no semantic drift. If none exists, it returns a clean negative result for this placement strategy.
 
 No Root Patch and no accelerated reboot are authorized.
