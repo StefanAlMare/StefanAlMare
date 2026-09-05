@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BK_ACCELERATED_BOOTS_NOT_KERNEL_PANIC_IOGPU_METAL4_SUPERCLASS_MISSING_CONTROLLED_SHUTDOWN_HYBRID_METAL_REQUIRED.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BL_TAHOE_NATIVE_METAL4_SELECTIVE_3802_HYBRID_STATIC_AUDIT_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -88,32 +88,15 @@ Authoritative chronology:
 - 12:09 — VESA/recovery excluded;
 - 12:36 — current VESA/recovery excluded.
 
-### Kernel panic classification retracted
-The two accelerated attempts did **not** kernel panic.
-
-There is no panic report/backtrace for either attempt and `DumpPanic` processed `0 files` after each failure.
+The two accelerated attempts did **not** kernel panic. There is no panic report/backtrace and `DumpPanic` processed `0 files` after each failure.
 
 Correct classifications:
 - `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_RESTART=RETRACTED_USER_VISUAL_MISCLASSIFICATION`;
 - `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC=NEGATIVE`.
 
-### Accelerated #1
-- `05:15:58.163` — WindowServer reaches `running`.
-- `05:16:00.238` — `runningboardd` exits with `OS_REASON_OBJC`: `Superclass of IOGPUMetal4RenderCommandEncoder ... in IOGPU is set to 0xbad4007, indicating it is missing from an installed root`.
-- `05:16:01.025` — `launchservicesd` exits with same reason.
-- repeated `runningboardd` deaths follow.
-- `05:16:03.758` — launchd commits to system shutdown.
-- `05:16:04.750` — shutdown `UNINITIALIZED -> COMMITTED`.
-
-### Accelerated #2
-- `05:18:30.514` — WindowServer reaches `running`.
-- `05:18:31.886` — `runningboardd` exits with same IOGPU Metal4 superclass reason.
-- `05:18:32.499` — `launchservicesd` exits with same reason.
-- repeated `runningboardd` deaths follow.
-- `05:18:35.262` — launchd commits to shutdown.
-- `05:18:35.986` — shutdown `UNINITIALIZED -> COMMITTED`.
-
-The failure is deterministic across both attempts.
+Both boots deterministically reach WindowServer `running`, then `runningboardd` and `launchservicesd` repeatedly die with `OS_REASON_OBJC`:
+`Superclass of IOGPUMetal4RenderCommandEncoder ... in IOGPU is set to 0xbad4007, indicating it is missing from an installed root`.
+Launchd then explicitly commits a controlled system shutdown.
 
 Classifications:
 - `D97BJ_ACCELERATED_BOOT_USERSPACE_REACHED=PROVEN`;
@@ -136,26 +119,40 @@ D97BJ's full legacy `Metal.framework` donor `13.2.1-24` removes that Tahoe Metal
 Therefore:
 `D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE_NEGATIVE`.
 
-The exact Golden/Sequoia full-framework downgrade is not a valid final Tahoe strategy.
+The exact Golden/Sequoia full-framework downgrade is not a valid final Tahoe strategy. Adding only one missing `_MTL4*` class is structurally incomplete.
 
-Adding only `_MTL4RenderCommandEncoder` is not sufficient because the dependency is a wider Metal4 class family.
+## D97BL architecture decision
+D97BL preserves the native Tahoe `Metal.framework` / Metal4 ABI and integrates legacy 3802 support selectively below that surface.
 
-## Current architecture decision
-Next design is D97BL: preserve native Tahoe Metal.framework / Metal4 ABI and integrate legacy 3802 support as a hybrid boundary adapter.
+Target architecture:
+`native Tahoe Metal.framework / Metal4 ABI -> selective legacy 3802 compiler ingress -> audited boundary adapters -> Haswell driver -> image`.
 
-The historical true-five (`P1 + P2b + P3 + AIR00 + D34`) becomes the relevant proven design lineage again because it adapts the legacy compiler path instead of wholesale downgrading Tahoe's outer Metal framework. It is not automatically re-enabled; every imported element remains subject to current identity/semantic audit.
+Historical true-five remains the relevant design lineage, subject to fresh current audit:
+`P1 + P2b + P3 + AIR00 + D34`.
 
-D97BJ elements to retain:
+Known static locations:
+- P1 is in `MTLCompilerService` selector; it preserves the 3802 branch and adapts the 32023 selector compare;
+- P2b and AIR00 are in `getReadParametersFromRequest`;
+- P3 is in `backendCompileModule`;
+- D34 is in `runFrameworkPasses`, with protected cave `0xEF8..0xEFE`.
+
+P6/P7 remain insufficient and are not promoted into D97BL.
+
+D97BJ elements retained prospectively:
 - Tahoe host eligibility;
-- exact local 26.6.2-25G82 MetallibSupportPkg handling;
+- exact local `26.6.2-25G82` MetallibSupportPkg handling;
 - exact 25G82 metallib destination/source map.
+
+Current public OCLP-T2 still merges whole legacy Metal.framework payloads, so it is not treated as a solved Tahoe Metal4 reference.
+
+Exact b9df76 `MERGE` uses `rsync -r -i -a`; same-relative-path donor files replace native files. D97BL therefore requires exact per-file collision analysis rather than another full framework merge.
 
 ## Mandatory pre-reboot Metal4 closure gate
 No future Root Patch/accelerated boot until the proposed patch root proves:
 1. native Tahoe Metal4 ABI surface remains present;
 2. all IOGPU-referenced `_MTL4*` superclasses resolve from the installed root;
-3. Tahoe `Metal.framework/Versions/A/Metal` is not blindly replaced with 13.2.1 donor;
-4. 3802 compiler/selector support is integrated through an audited hybrid adapter;
+3. native Tahoe `Metal.framework/Versions/A/Metal` is preserved;
+4. 3802 compiler/selector support is integrated through an audited bounded hybrid adapter;
 5. exact 25G82 metallib map/local handling remains intact.
 
 ## Current system state
@@ -170,6 +167,8 @@ Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 ## CURRENT ACTION
 Remain unpatched in VESA/recovery state.
 
-No Root Patch and no accelerated reboot are authorized.
+Run only the read-only `OCLP7_D97BL_static_hybrid_audit.sh` collector. It must map native Tahoe Metal.framework against legacy `12.5-3802-23` and `13.2.1-24` payloads, enumerate collisions/donor-only files and dependencies, enumerate native Metal4 surface, inspect legacy compiler framework donors, recover historical P1-D34 source/diffs, and capture the D97BJ source delta.
 
-Design/audit D97BL as a Tahoe-native-Metal4-preserving hybrid. First map the exact native Tahoe Metal4/IOGPU contract and the minimum legacy 3802 ingress required from the historical true-five. Before any future boot, pass the mandatory static Metal4 superclass-closure gate.
+Return the generated `OCLP7_D97BL_STATIC_HYBRID_AUDIT_<timestamp>.zip` for assistant audit.
+
+No Root Patch and no accelerated reboot are authorized.
