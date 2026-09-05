@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CBV2_MACOS_COPY2_CHFLAGS_TOOLING_FAIL_D97CBV3_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CBV3_DYLD_DELAYED_FALSE_POSITIVE_D97CBV4_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -42,7 +42,6 @@ Only one effective pre-sign byte changed at `__DATA_CONST` flags (`0x00 -> 0x10`
 Classification: `D97BZ_DYLD_SG_READ_ONLY_GATE=PASSED_BY_EXACT_METADATA_FIX`.
 
 ## D97CA — segment-order dependency audit FULL PASS
-Bundle SHA256 `90a9edb0abc2832a86db5c3d54c0429894844e56d6f258a91a7de93dfb40e1f0`.
 D97CA proved current compact RAW file/load order `__TEXT,__DATA_CONST,__DATA,__DATA_DIRTY,__LINKEDIT` conflicts with VM order `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`.
 Dependency surface for coherent reorder:
 - dyld segment-index rewrites: 0;
@@ -57,41 +56,47 @@ Classification: `D97CA_MANUAL_SEGMENT_ORDER_REPAIR_CLASSIFICATION=STATIC_REMAP_S
 ## D97CB — atomic remap structural PASS
 Target remap passed:
 - `__DATA_CONST` has `SG_READ_ONLY`;
-- `__DATA_DIRTY` payload moved to fileoff `0x35C000`;
-- `__DATA` payload moved to fileoff `0x361000`;
+- `__DATA_DIRTY` payload fileoff `0x35C000`;
+- `__DATA` payload fileoff `0x361000`;
 - `__LINKEDIT` remains `0x36E000`;
-- command order becomes `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
-- all segment/section VM addresses preserved;
-- exactly 5 file-backed section offsets rewritten;
-- exactly 3652 symtab `n_sect` values remapped;
-- pre-sign diff count `40655`, zero outside audited domains;
+- command order `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
+- all VM addresses preserved;
+- 5 section fileoff rewrites;
+- 3652 symtab `n_sect` remaps;
+- pre-sign diff `40655`, zero outside audited domains;
 - `file`, `otool -l`, `otool -L` PASS.
+Unsigned/signed preflight PASS; Python child actual `dlopen` `RC=-11` SIGSEGV, with standalone loadability still unresolved because Python already has native Metal loaded.
 
-Unsigned/signed `dlopen_preflight` PASS. Actual Python-child `dlopen` terminates `RC=-11` (SIGSEGV) rather than producing another explicit dyld validation rejection. Python already has native Metal loaded, so standalone loadability remains unresolved.
+## D97CB-v2 — macOS copy2/chflags tooling defect
+D97CB-v2 reconfirmed remap/preflight/SIGSEGV, then `shutil.copy2('/usr/bin/true', HOST)` failed in macOS Python 3.13 `copystat()->chflags` with PermissionError. Tooling-only.
 
-## D97CB-v2 — macOS Python copy2/chflags tooling defect
-Returned Terminal log:
-- bytes `13995`;
-- SHA256 `fb053fe50bf85a803bcad582f7d1e6995ca0f14c4ca468c5de75e76b22a46d7b`.
+## D97CB-v3 — cold host valid; delayed-state substring false positive
+Returned Terminal paste:
+- bytes `118929`;
+- SHA256 `c8f3d4317fa1e4ad605fffd249f6abb18301df358d36be39f3f5502ae6529e2a`.
 
-D97CB-v2 reconfirmed every D97CB structural remap marker and again observed unsigned/signed preflight PASS plus actual child `dlopen RC=-11`.
+D97CB-v3 fixed host copying with `copyfile()` and successfully removed/replaced the signature; ad-hoc sign and strict verify PASS; baseline `/usr/bin/true` exited 0.
 
-The new cold-host harness failed before cold injection because `shutil.copy2('/usr/bin/true', HOST)` invokes `copystat()`, and macOS Python 3.13 attempted to propagate BSD file flags with `chflags`, producing `PermissionError: [Errno 1] Operation not permitted` on the `/private/tmp/.../cold_true` destination.
+The baseline dyld trace initially prints both `/usr/lib/libbz2.1.0.dylib` and native Metal, but later logs:
+- `move loaded to delayed: libbz2.1.0.dylib`;
+- `move loaded to delayed: Metal`;
+with no later reverse promotion.
 
-This is a tooling-only failure and does not invalidate the remap.
+Apple dyld `DyldRuntimeState.cpp` shows `move loaded to delayed` actually removes the loader from active `loaded` and pushes it into `delayLoaded`; `move delayed to loaded` is the reverse transition. Therefore v3's raw-substring check misclassified delayed closure members as active preload.
 
 Classifications:
-- `D97CBV2_ATOMIC_REMAP_STRUCTURAL=PASS_RECONFIRMED`;
-- `D97CBV2_REMAP_UNSIGNED_SIGNED_PREFLIGHT=PASS_RECONFIRMED`;
-- `D97CBV2_REMAP_CHILD_DLOPEN=SIGSEGV_NEGATIVE_RECONFIRMED`;
-- `D97CBV2_COLD_HOST_COPY2_CHFLAGS=TOOLING_NEGATIVE`;
-- `D97CBV2_REMAP_STANDALONE_LOADABILITY=NOT_YET_PROVEN`.
+- `D97CBV3_COLD_HOST_COPY_AND_ADHOC_SIGN=PASS`;
+- `D97CBV3_BASELINE_EXIT=PASS`;
+- `D97CBV3_BASELINE_METAL_FINAL_STATE=DELAYED`;
+- `D97CBV3_BASELINE_BZ2_FINAL_STATE=DELAYED`;
+- `D97CBV3_FAIL_COLD_HOST_PRELOADS_METAL=TOOLING_FALSE_POSITIVE`;
+- standalone loadability remains not yet proven.
 
-## CURRENT ACTION — D97CB-v3
-Run only `OCLP7_D97CB_v3_macos_safe_cold_host.sh`, bytes `32508`, SHA256 `24f0b52509530700daa64eb2c9a2fcd882671acb4a4ff8b5f6570443c66918c1`.
+No positive-control injection, remapped-Metal cold injection, or D97BV application occurred after the false-positive stop.
 
-D97CB-v3 changes only the cold-host copy from `shutil.copy2()` to `shutil.copyfile()` plus explicit `chmod(0755)`, avoiding metadata/BSD-file-flag copying. It then removes the copied signature, re-signs ad-hoc, requires a Metal-free baseline, validates `DYLD_INSERT_LIBRARIES` with a visible/exit-0 libbz2 control, and only then injects signed remapped Metal.
+## CURRENT ACTION — D97CB-v4
+Run only `OCLP7_D97CB_v4_dyld_final_state_cold_host.sh`, bytes `34857`, SHA256 `fa0e6fc5825a260be3c638bdb177c63378abd3adf44b08d0683a99d1e383a0be`.
 
-If target path appears but process fails, stop at that later init/runtime frontier and do not apply D97BV. Only target-path observed + host exit 0 authorizes D97BV re-audit.
+V4 reproduces the identical remap and changes only trace classification. It computes final loader state after applying all `loaded -> delayed` / `delayed -> loaded` transitions. Baseline requires Metal/libbz2 not final-loaded. Control injection must end with libbz2 final-loaded and exit 0. Only then may signed remapped Metal be cold-injected. Explicit target path, target final state, system Metal final state and exit code are separate outputs. Only target final-loaded + exit 0 may authorize D97BV re-audit.
 
 Remain unpatched in VESA. No Root Patch or accelerated reboot authorized.
