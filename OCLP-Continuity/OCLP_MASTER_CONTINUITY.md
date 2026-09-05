@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BG_USER_REQUIRES_TAHOE_READY_APP_BUILT_IN_SEQUOIA_WRAPPER_ROUTE.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BG_TAHOE_READY_WRAPPER_BUILT_AUDIT_PASS_USER_COPY_ROOTPATCH_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -23,12 +23,15 @@ Golden/reference app remains immutable.
 - OCLP `2.5.0`;
 - PatcherSupportPkg `1.9.6`.
 
-## Proven user app
+## Proven user reference app
 `/Users/alex/Desktop/OpenCore-Patcher.app` is proven official b9df76-source-lineage OCLP 2.5.0, universal `x86_64 arm64`, valid Dortania Developer ID signature.
+
 Reference executable SHA256:
 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`.
+
 Reference Info.plist SHA256:
 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`.
+
 Preserve this app unchanged.
 
 ## Tahoe host gate and Haswell scope
@@ -45,39 +48,64 @@ For normal patch detection on ASUS2, non-present other legacy GPU classes are sk
 
 ## Why the inner signed app must remain unchanged
 OCLP 2.5.0 root commands use `/Library/PrivilegedHelperTools/com.dortania.opencore-legacy-patcher.privileged-helper`.
-The release helper validates the Team ID and signing certificates of the parent OCLP executable against Dortania (`S74BDJXQMD`).
-A locally rebuilt/ad-hoc-signed main OCLP app would therefore fail helper authorization unless a debug/custom helper were installed, which would introduce an unnecessary additional behavior/security change.
+The release helper validates Team ID and signing certificates of the calling OCLP executable against Dortania (`S74BDJXQMD`).
+A locally rebuilt/ad-hoc-signed main OCLP app would therefore fail helper authorization unless a debug/custom helper were installed, introducing an unnecessary extra behavior/security change.
 
-## User responsibility correction
-The user explicitly clarified that compatibility preparation is the assistant's job in Sequoia.
-The user must receive a Tahoe-ready app and then only:
-1. copy that final app into Tahoe;
-2. run Root Patch manually;
-3. return after Root Patch for comparison work.
+## D97BG Tahoe-ready wrapper — PASS
+On accelerated Sequoia, the user successfully produced:
+`/Users/alex/Desktop/OpenCore-Patcher-Tahoe.app`
 
-The user is not to be asked to manually apply the Tahoe compatibility patch or create the developer marker.
+Transport ZIP:
+`/Users/alex/Desktop/OpenCore-Patcher-Tahoe.zip`
 
-## Selected Tahoe-ready application architecture
-Create `~/Desktop/OpenCore-Patcher-Tahoe.app` in Sequoia as a wrapper bundle containing the exact signed `OpenCore-Patcher.app` unchanged.
-The wrapper launcher automatically:
-- verifies inner executable and Info.plist identity;
-- verifies inner Dortania signature;
-- verifies/uses the official privileged helper, with optional embedded official-helper fallback asset;
-- creates `~/.dortania_developer` immediately before inner OCLP launch;
-- launches and waits for the signed inner OCLP;
-- removes only the marker it created when OCLP exits.
+Transport identity:
+- bytes `738378441`;
+- SHA256 `3c63c2d4c90039c12f025f27aba47ab279b0e075535b37399521d6b3e016308b`.
 
-From the user's perspective this is one Tahoe-ready application: copy, launch, Root Patch. No manual compatibility action remains.
+Embedded inner Golden OCLP remained exact:
+- executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
+- Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
+- Dortania codesign PASS.
+
+Official privileged helper:
+- TeamIdentifier `S74BDJXQMD`;
+- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
+- codesign PASS.
+
+Final audit classifications:
+- `INNER_GOLDEN_IDENTITY=PASS`;
+- `INNER_DORTANIA_CODESIGN=PASS`;
+- `PRIVILEGED_HELPER_IDENTITY=PASS`;
+- `TAHOE_COMPATIBILITY_EMBEDDED=PASS`.
+
+The outer wrapper automatically creates the built-in developer marker immediately before launching the exact signed inner OCLP, waits for it to exit, and removes only the marker it created. The user performs no separate compatibility step.
+
+Classification:
+`D97BG_TAHOE_READY_WRAPPER_BUILD_AUDIT=PASS`.
+
+No Root Patch ran during construction.
+No reboot ran during construction.
 
 ## User-confirmed dependency
 MetallibSupportPkg is already present/usable in Tahoe.
 
+## Current responsibility boundary
+Assistant-side Tahoe compatibility preparation is complete.
+
+User will now only:
+1. copy `OpenCore-Patcher-Tahoe.app` (or the identity-pinned ZIP) into Tahoe;
+2. launch the Tahoe-ready wrapper;
+3. perform Root Patch manually;
+4. return the complete Root Patch result/output.
+
+The user is not to be asked to manually edit detect.py, create `.dortania_developer`, patch source, rebuild OCLP, or perform a separate compatibility step.
+
 ## Current execution contract
 GitHub compilation remains suspended until user explicitly says quota reset/unblocked.
-No OCLP rebuild is needed for the selected wrapper route.
 Never auto Root Patch. Never auto reboot.
+Golden remains immutable/read-only.
 
 ## CURRENT ACTION
-Build and audit `~/Desktop/OpenCore-Patcher-Tahoe.app` in accelerated Sequoia from the proven source app. Optionally produce `OpenCore-Patcher-Tahoe.zip` for transport. Require inner exact hashes and original Dortania codesign PASS before handoff.
+**User copy + manual Root Patch in Tahoe with the D97BG Tahoe-ready wrapper.**
 
-No Root Patch or reboot is authorized during this Sequoia preparation step.
+Persist the Root Patch result immediately when returned. Then proceed under the permanent accelerated-boot/VESA evidence rule before any comparison conclusions.
