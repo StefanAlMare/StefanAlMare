@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97BX_PREFLIGHT_SIGN_PASS_DLOPEN_MMAP_ALIGNMENT_NEGATIVE_REAL_DSC_EXTRACTOR_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97BY_REAL_EXPORT_EXACT_TEXT_DLOPEN_SG_READ_ONLY_NEGATIVE_D97BZ_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -101,75 +101,68 @@ Semantics: exact input 3802 is preserved; every non-3802 input executes Tahoe's 
 Classification:
 `D97BV_SELECTIVE_3802_PRESERVE_ADAPTER_NO_NON3802_SEMANTIC_DRIFT=STATIC_SEMANTIC_PROVEN`.
 
-## D97BW-v2 sparse reconstruction — structural PASS only
-Bundle `OCLP7_D97BW_V2_NATIVE_METAL_SPARSE_MIRROR_20260906_003847.zip`, SHA256 `180cc1e9a28c6c6a763c695305e47a05798c1d2e46c65b650c4ebbe6e4a21707`.
+## D97BW-v2 / D97BX — sparse analysis container closure
+D97BW-v2 proved sparse reconstruction can preserve exact native bytes, Metal4 surface and the exact 23-byte D97BV diff. Structural parsers pass, but this is only an analysis container.
 
-Sparse mirror preserves shared-cache fileoffs and clones header/load commands at offset zero. Structural parsers pass; native `__TEXT` identity and Metal4 surface are preserved. D97BV diff is exactly 23 changed bytes and 0 outside site+cave.
+D97BX proved:
+- unsigned and signed `dlopen_preflight` PASS for original and D97BV sparse mirrors;
+- ad-hoc signing and strict verification PASS;
+- real child `dlopen` NEGATIVE identically for original and patched due shared-cache segment mapping geometry;
+- D97BV is not the loadability regression;
+- signing is not the current blocker.
 
-Classifications:
-- `D97BW_V2_SPARSE_STANDALONE_STRUCTURAL=PASS`;
-- `D97BW_V2_PATCHED_SPARSE_STRUCTURAL=PASS`;
-- `D97BW_V2_D97BV_DIFF_BOUNDED_TO_SITE_AND_CAVE=STATIC_PROVEN`.
+Do not deploy the sparse mirror.
 
-This mirror is an analysis container, not yet a deployable dylib.
-
-## D97BX — loadability/trust closure
+## D97BY — real DSC single-image export
 Returned bundle:
-`OCLP7_D97BX_DYLD_LOADABILITY_AND_ADHOC_SIGN_20260906_010046.zip`
-- bytes `746802`;
-- SHA256 `f25f364bb8bb9fb89f3f289cd217620ccc32ff81631ff354669301fcdf74ca57`;
-- TXT SHA256 `3dfdc48a6051475cfa4ffeac3c2e300ffe93cd786851f84a752c692ad0d71ff3`;
-- JSON SHA256 `6f7e0146059cd3fdd26149ec54ec7e27f96510b17d9ea9467607ba9c55a95452`.
+`OCLP7_D97BY_REAL_DSC_SINGLE_IMAGE_EXPORT_20260906_012127.zip`
+- bytes `748714`;
+- SHA256 `c2517f1a3758fcbdabe0ab033a7bc7f07385aadf6f13f9369bb1cecb10fd2b53`;
+- TXT SHA256 `33835943e2bf117c945b064aa626dd4339db5a7d44ae9e18cf838c38df7c84c4`;
+- JSON SHA256 `3fcd4a1413b330249da185ce1ad073423e91f2b7e3cc2e77603893e9dbdb84e2`.
 
-Unsigned `dlopen_preflight`:
-- original PASS;
-- D97BV-patched PASS.
+Pinned extractor provenance:
+- `blacktop/ipsw v3.1.713`;
+- checksum manifest SHA256 `97be6afeac03aa4df0379b9224f9cbec750fb4ac56424daa7c1c66abb3d36334`;
+- selected macOS x86_64 tarball SHA256 `7f5719d0a2a53996fca4dba4826aa015a6ddecfbba822a21e92400a80da7f1ab`;
+- transient ipsw executable SHA256 `d02498ccd0a88e0afc461cbfd5f4a9df34a6194386595226b10a9a46fe078d6a`.
 
-Temporary ad-hoc signing:
-- original PASS;
-- patched PASS;
-- strict verification PASS (`valid on disk`, `satisfies its Designated Requirement`).
+RAW and `--slide` exports both returned RC 0 and produced compact 5,722,944-byte Mach-O files. Both preserve exact native `__text` (`EXACT_NATIVE=True`, SHA256 `2d58f84edd3ff6e93427f2204c0fb481204320aaf2708df784dd14039ee4dd3a`) and exact native Metal4 string counts.
 
-Signed `dlopen_preflight`:
-- original PASS;
-- patched PASS.
+Exporter geometry keeps shared-cache VM addresses while compacting fileoffs:
+- `__TEXT` VM `0x7FF80F47D000`, fileoff `0x0`;
+- `__DATA_CONST` VM `0x7FF84119DCD0`, fileoff `0x2EC000`;
+- `__DATA` VM `0x7FF843D590C0`, fileoff `0x35C000`;
+- `__DATA_DIRTY` VM `0x7FF84384F510`, fileoff `0x369000`;
+- `__LINKEDIT` VM `0x7FF880000000`, fileoff `0x36E000`.
 
-Real child-process `dlopen`:
-- original NEGATIVE;
-- patched NEGATIVE;
-- before and after signing, both fail identically in shared-cache `__DATA_CONST` mapping with `mmap(...CD0, size=0x6F820) -> errno=22`.
+For RAW and SLIDE, unsigned preflight PASS, ad-hoc signing/strict verification PASS, signed preflight PASS. Real child `dlopen` fails identically with exact first rejection:
+`__DATA_CONST segment missing SG_READ_ONLY flag`.
 
-Interpretation:
-- signing/trust is not the current blocker;
-- D97BV patch is not the loadability regression;
-- shared-cache segment geometry is unsuitable as a true standalone dylib even though `file`/`otool`/preflight accept it;
-- `__DATA_CONST` starts at a shared-cache VM geometry ending in `0xCD0`, which standalone dyld cannot mmap as a normal page-aligned segment.
+Thus:
+- `D97BY_REAL_EXPORT_RAW_AND_SLIDE=PASS`;
+- `D97BY_REAL_EXPORT_NATIVE___TEXT_AND_METAL4_PRESERVATION=STATIC_PROVEN`;
+- `D97BY_REAL_DLOPEN_RAW_SLIDE=NEGATIVE_IDENTICAL_MISSING_SG_READ_ONLY`;
+- `D97BY_SLIDE_OPTION_LOADABILITY_IMPROVEMENT=NEGATIVE`;
+- `D97BY_CODE_SIGNING_IS_FIRST_BLOCKER=NEGATIVE`.
 
-Authoritative classifications:
-- `D97BX_UNSIGNED_PREFLIGHT_ORIGINAL_PATCHED=PASS`;
-- `D97BX_ADHOC_SIGN_ORIGINAL_PATCHED=PASS`;
-- `D97BX_SIGNED_PREFLIGHT_ORIGINAL_PATCHED=PASS`;
-- `D97BX_REAL_DLOPEN_ORIGINAL_PATCHED=NEGATIVE_IDENTICAL_MMAP_EINVAL`;
-- `D97BX_D97BV_PATCH_LOADABILITY_REGRESSION=NEGATIVE`;
-- `D97BX_CODE_SIGNING_IS_CURRENT_BLOCKER=NEGATIVE`;
-- `D97BX_SPARSE_MIRROR_IS_NOT_STANDALONE_LOADABLE=NEGATIVE`.
+No D97BV patch was applied because no original extracted baseline was real-dlopen loadable.
 
-Do not manually edit one segment alignment in isolation. A real dyld shared-cache extractor must coherently reconstruct standalone Mach-O segment/file/linkedit/fixup geometry.
+Public `go-macho` exporter source confirms compact fileoff remapping while preserving segment VM addresses; the shown `optimizeLoadCommands()` path does not add `SG_READ_ONLY` to `__DATA_CONST`.
 
-## CURRENT ACTION — real DSC single-image extraction
+## CURRENT ACTION — D97BZ metadata-only SG_READ_ONLY gate
 Remain unpatched in Tahoe VESA.
 
-Next static/transient lane:
-1. use a pinned, verified prebuilt real DSC extractor; no installation and no local compilation;
-2. preferred current candidate is `blacktop/ipsw` because `ipsw dyld extract <DSC> <DYLIB>` exports one image rather than the entire cache;
-3. exact source DSC: `/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_x86_64h`;
-4. exact target image: `/System/Library/Frameworks/Metal.framework/Versions/A/Metal`;
-5. extract only under `/private/tmp`;
-6. test the unmodified extracted original with `file`, `otool`, segment alignment, Metal4 surface, `dlopen_preflight`, then real child `dlopen` BEFORE applying D97BV;
-7. only if extracted original truly loads, re-audit the 13-byte site and safe cave in the exported layout, then patch a second temp copy and test it;
-8. delete extractor archive/binary and every Apple binary before return; package TXT+JSON only.
+Next transient test must:
+1. reproduce only the RAW real export using the same pinned/verified `ipsw` release;
+2. record all `LC_SEGMENT_64` flags;
+3. create one temporary copy changing only the `__DATA_CONST` segment flags word by OR-ing `SG_READ_ONLY (0x10)`;
+4. prove pre-sign diff is confined to that 32-bit load-command field;
+5. test unsigned preflight + real child `dlopen`;
+6. ad-hoc sign/strict verify and repeat preflight + real child `dlopen`;
+7. if this yields a true loadable original baseline, then and only then re-audit/apply D97BV on a second temp copy;
+8. if dyld reveals another geometry requirement, stop there; do not auto-move segment or section VM addresses;
+9. delete extractor/archive/Apple binaries; package TXT+JSON only.
 
-Public-source pin currently audited: `blacktop/ipsw` release `v3.1.713` published 2026-08-30; release checksum manifest asset SHA256 `97be6afeac03aa4df0379b9224f9cbec750fb4ac56424daa7c1c66abb3d36334`.
-
-No Root Patch, no installation of extracted Metal, and no accelerated reboot are authorized.
-GitHub Actions compile/build/package remains suspended until explicit quota-unblocked confirmation.
+No Root Patch, installation, or accelerated reboot authorized.
+GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
