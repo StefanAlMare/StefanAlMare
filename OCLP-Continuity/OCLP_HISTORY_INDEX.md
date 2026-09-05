@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BP_FULL_PASS_SHARED_GENERATION_ACCESSOR_SELECTOR_ARG_CORRECTION_D97BQ_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BQ_FULL_PASS_SHARED_ACCESSOR_SELECTOR_RSI_CFG_CLAMP_D97BR_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This is the high-level chronological index. Detailed evidence remains in `OCLP-Continuity/checkpoints/`; current state is in MASTER and the permanent database.
@@ -13,135 +13,68 @@ This is the high-level chronological index. Detailed evidence remains in `OCLP-C
 Tahoe `26.6.2 / 25G82` on ASUS2, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware-accelerated GUI.
 
 ## Durable architecture / methodology
-Historical accepted functional baseline:
-`P1 + P2b + P3 + AIR00 + D34`.
-
-P6/P7 insufficient. D50/D68/D82 reserve-only. D84 retired. D36-D44 invalidated for D34 cave overlap.
+Historical accepted functional baseline: `P1 + P2b + P3 + AIR00 + D34`. P6/P7 insufficient; D50/D68/D82 reserve-only; D84 retired; D36-D44 invalidated.
 
 Core adapter principle:
 `Tahoe-native producer -> earliest non-equivalent handoff -> adapter/normalizer -> unchanged working legacy donor path -> image`.
 
-## 2026-09-01 to 2026-09-04 — D97 provenance / producer closure
-Golden request-builder and selector contract closed:
-- cached Metal builder `0x7FF80D370756..0x7FF80D370C28`;
-- `[ABI arg1 +0x20] -> llvmVersion`;
-- `[ABI arg2 +0x08] -> requestType`;
-- `[ABI arg2 +0x18] -> timeout`;
-- alternate requestType immediate `9`;
-- original service selector `3802 -> Versions/3802`, `31001 -> Versions/32023`.
-
-Golden dual-generation runtime and positive Haswell -> compiler -> Metal compositor corridor were established. P1 became a downstream compatibility shim masking an upstream producer dialect difference.
+## 2026-09-01 to 2026-09-04 — Golden producer/selector closure
+Golden primary Metal builder `0x7FF80D370756..0x7FF80D370C28`: `[arg1+0x20] -> llvmVersion`, `[arg2+0x08] -> requestType`, `[arg2+0x18] -> timeout`, alternate requestType 9. Golden service selector maps `3802 -> Versions/3802`, `31001 -> Versions/32023`. Golden runtime uses both compiler generations and reaches Metal compositor success.
 
 ## D97AA — failing Tahoe cohort generation proven
-Accelerated Tahoe cohort: 12/12 observed MTLCompilerService requests carried exact `llvmVersion=32023`; 3802=0; other=0.
+Accelerated Tahoe cohort: 12/12 observed MTLCompilerService requests carried `llvmVersion=32023`; 3802=0; other=0.
 
-## 2026-09-05 — exact Golden OCLP lineage
-Working Golden root patch pinned to OCLP `2.5.0`, PatcherSupportPkg `1.9.6`, upstream commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`, tree `7c3411fde7d40604164c8877a5ab5594448083ac`.
+## D97BH / BI / BJ / BK — exact Tahoe OCLP lane and whole-Metal rejection
+Exact local 25G82 MetallibSupportPkg works. D97BJ completed Root Patch/AuxKC successfully but forced full legacy `13.2.1-24/Metal.framework`. D97BK proved accelerated failures were not kernel panics: WindowServer reached running, then Tahoe IOGPU Metal4 superclasses were missing and launchd shut down cleanly.
 
-## D97BH / BI / BJ — Tahoe 25G82 Root Patch lane
-D97BH proved exact local `MetallibSupportPkg-26.6.2-25G82` works. D97BI proved exact b9df76 requests nonexistent `13.2.1-25/Metal.framework`. D97BJ forced `13.2.1-24`, added exact 25G82 metallib map/local handling, and completed Root Patch/AuxKC successfully.
+Permanent NEGATIVE:
+`D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE`.
 
-## D97BK — accelerated failure reclassified: not kernel panic
-Both accelerated boots reached WindowServer running. Essential services died because Tahoe IOGPU Metal4 classes could not resolve `_MTL4*` superclasses after full legacy Metal.framework merge; launchd committed orderly shutdown.
+## D97BL — native-Metal selective hybrid
+Required architecture became:
+`native Tahoe Metal / Metal4 ABI -> selective legacy 3802 ingress -> audited upstream adapter -> Haswell driver -> image`.
 
-Permanent classification:
-`D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE_NEGATIVE`.
+Donor audit proved legacy `12.5-3802-23` can be bounded to `MTLCompilerService.xpc`; legacy `13.2.1-24/Versions/A/Metal` shadows native cache Metal and is forbidden. Historical native-Metal + legacy-XPC/private compilers + true-five already failed, so repeating it is rejected.
 
-## D97BL — native-Metal selective hybrid phase
-Required architecture:
-`native Tahoe Metal / Metal4 ABI -> selective legacy 3802 ingress -> audited boundary adapters -> Haswell driver -> image`.
+## D97BM — exact native Tahoe cache producer PASS
+Native Metal start `0x7FF80F47D000`, `__TEXT` SHA256 `bf405828f42ba59e68273190ac19b70aa0c3d1d4b34de6dc49de206dd5b04605`. Native Metal4/IOGPU class surface present.
 
-Donor audit proved:
-- `12.5-3802-23` can be bounded to `MTLCompilerService.xpc` only;
-- `13.2.1-24/Versions/A/Metal` shadows cache-resident native Metal and is forbidden.
+## D97BN — two Tahoe builder layouts and generation census
+Builder A `0x7FF80F635510..0x7FF80F635A4D`: llvmVersion `[arg1+0x1C]`, requestType helper `+0xAC`, timeout `+0xB8`.
 
-Historical native-Metal + legacy-XPC/private-compilers + true-five was already tested and failed, so repeating it is rejected as no-new-information.
+Builder B `0x7FF80F663CA9..0x7FF80F66492C`: llvmVersion `[arg1+0x38]`, same requestType/timeout helper family via subordinate object.
 
-## D97BM — exact native Tahoe shared-cache producer PASS
-Native Metal:
-- start `0x7FF80F47D000`;
-- `__TEXT` SHA256 `bf405828f42ba59e68273190ac19b70aa0c3d1d4b34de6dc49de206dd5b04605`.
+Native Metal generation census: 3802 raw 11 / validated 9; 31001 zero; 32023 raw 10 / validated 10. Do not transplant Golden `+0x20` or globally rewrite 32023->31001.
 
-Native MTLCompilerService SHA256:
-`4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`.
+## D97BO — generation singleton architecture
+3802 initializer -> singleton global `0x7FF843D65C90`; 32023 initializer -> singleton global `0x7FF843D65CB0`. Selector `0x7FF80F5EFFEB..0x7FF80F5F009C` distinguishes 3802/3902/32023/32024.
 
-Native Metal4 `_MTL4*` and corresponding IOGPU class-name surface was present. D97BM found two complete eight-key request-builder clusters.
+Generation-aware constructor `0x7FF80F4A5DF8..0x7FF80F4A7A88` compares a generation-like local to 32023 and builds request-layout-like `+0x1C/+0x20/+0x38` fields.
 
-## D97BN — two Tahoe request layouts + generation census
-### Builder A
-`0x7FF80F635510..0x7FF80F635A4D`
-- llvmVersion `[arg1+0x1C]`;
-- requestType helper `+0xAC` from arg2 object;
-- timeout helper `+0xB8`.
+## D97BP — shared accessor frontier
+Constructor calls `0x7FF80F5E16C3`, stores EAX into discriminator `-0x27C`, and optionally overrides it from `[arg1+0x138]`. Selector caller contexts independently showed `call accessor -> movl %eax,%esi -> call selector`. D97BP RDX back-slice was retired as wrong-register tooling.
 
-### Builder B
-`0x7FF80F663CA9..0x7FF80F66492C`
-- llvmVersion `[arg1+0x38]`;
-- requestType same `+0xAC` helper family from subordinate `[arg1+0x28]`;
-- timeout same `+0xB8` family.
-
-Both alternate requestType paths use immediate `9`.
-
-D97BN-v2 generation census FULL PASS:
-- 3802 raw 11 / validated 9;
-- 31001 raw 0 / validated 0;
-- 32023 raw 10 / validated 10.
-
-Tahoe retains real 3802 + 32023 machinery but no 31001 immediate dialect. Builder A has three direct E8 callers; Builder B has no direct E8 callers.
-
-Strategic rule: do not transplant Golden `+0x20` globally and do not globally replace `32023 -> 31001`.
-
-## D97BO — field-writer / generation-origin FULL PASS
-Generation singleton architecture:
-- 3802 initializer -> global `0x7FF843D65C90`;
-- 32023 initializer -> global `0x7FF843D65CB0`;
-- selector `0x7FF80F5EFFEB..0x7FF80F5F009C` distinguishes 3802/3902/32023/32024 and returns matching singleton.
-
-Generation-aware constructor candidate `0x7FF80F4A5DF8..0x7FF80F4A7A88` contains explicit 32023 logic and request-layout-like writes to `+0x1C/+0x20/+0x38`.
-
-No direct generation-function/global -> broad writer one-hop bridge was found.
-
-## D97BP — constructor/selector dataflow FULL PASS
+## D97BQ — selector ABI + all six callers FULL PASS
 Bundle:
-`OCLP7_D97BP_CONSTRUCTOR_SELECTOR_DATAFLOW_20260905_230558.zip`
-- bytes `20273`;
-- SHA256 `22258abc2b4ce017cb77ae20f1c93baff4377428d18642b2e80f18eb6ef541d2`.
+`OCLP7_D97BQ_SHARED_GENERATION_ACCESSOR_SELECTOR_ABI_20260905_231651.zip`
+- bytes `13102`;
+- SHA256 `0d02a719c71c00770d767f319f922d43c92d2da68e5a464479d8e05839c953b8`.
 
-All D97BP final markers passed; no mutation.
+All D97BQ final markers passed; no mutation.
 
-### Constructor discriminator
-Constructor calls `0x7FF80F5E16C3` on a generation-bearing object and stores EAX into local `-0x27C`. `[constructor arg1+0x138]`, if nonzero, overrides that discriminator. Final value is compared against 32023.
+Selector `0x7FF80F5EFFEB..0x7FF80F5F009C` copies `ESI -> EDX` and compares EDX to 3802/3902/32023/32024. Thus generation input is ABI arg2 / RSI — STATIC PROVEN.
 
-### Shared generation accessor — new common frontier
-Multiple native generation-selector callers show the same pattern:
-`object -> call 0x7FF80F5E16C3 -> movl %eax,%esi -> call selector 0x7FF80F5EFFEB`.
+All six validated selector callers source RSI from the same accessor:
+`call 0x7FF80F5E16C3 -> movl %eax,%esi -> call selector`.
 
-Thus the constructor and selector paths share exact generation accessor `0x7FF80F5E16C3`.
+Constructor uses the same accessor and directly stores EAX into its generation discriminator, with optional `[arg1+0x138]` override.
 
-Classification:
-`D97BP_SHARED_GENERATION_ACCESSOR_BETWEEN_CONSTRUCTOR_AND_SELECTOR=STATIC_PROVEN`.
+Therefore common boundary is STATIC PROVEN:
+`generation-bearing object -> shared accessor 0x7FF80F5E16C3 -> constructor discriminator / native generation selector`.
 
-### Tooling correction
-D97BP scripted selector caller analysis traced RDX; this is retired for generation semantics. Raw caller contexts show accessor return copied into ESI immediately before selector call. Exact selector ABI propagation remains pending.
+Accessor body contains a path with `cmp EAX,32024; mov 32023,ECX; cmovl ECX,EAX`, so a positive 3802 entering that path becomes 32023. However accessor has other branches/global/tail exits; universal return semantics remain unproven.
 
-Classification:
-`D97BP_SELECTOR_GENERATION_RDX_BACKSLICE=TOOLING_WRONG_REGISTER_RETIRED`.
+## CURRENT ACTION — D97BR
+Remain unpatched in Tahoe VESA. Run only `OCLP7_D97BR_generation_accessor_cfg_and_clamp.sh` to reconstruct complete accessor CFG, enumerate all exits, prove path-local clamp semantics, resolve global override/xrefs, resolve indirect generation-source method references where possible, and inspect external tail semantics.
 
-### Direct call graph remains negative
-Constructor has no direct E8 caller; selector has six. No selector->constructor, selector->Builder-A or constructor->Builder-A/B E8 path within depth 8. Object/dataflow is therefore the active frontier.
-
-## CURRENT ACTION — D97BQ
-Read-only collector:
-`OCLP7_D97BQ_shared_generation_accessor_selector_abi.sh`
-- bytes `22773`;
-- SHA256 `228978fc900358958963c25acf1bf47add6fd7a05b8ba79ed8f2f25bc1746f25`.
-
-D97BQ must map:
-- accessor `0x7FF80F5E16C3` return source/object field;
-- selector entry ABI generation argument and propagation to 3802/32023 compares;
-- corrected selector-caller back-slices on the proven register;
-- all direct accessor callers and stores of accessor result;
-- constructor shared-accessor call + `arg1+0x138` override;
-- Builder-A wrapper ancestry intersection with accessor/selector callers.
-
-Remain unpatched in Tahoe VESA. No Root Patch and no accelerated reboot are authorized.
+No Root Patch and no accelerated reboot are authorized.
