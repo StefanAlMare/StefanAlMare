@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_TWICE_SNAPSHOT_RESTORED_EVIDENCE_COLLECTION_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BK_ACCELERATED_BOOTS_NOT_KERNEL_PANIC_IOGPU_METAL4_SUPERCLASS_MISSING_CONTROLLED_SHUTDOWN_HYBRID_METAL_REQUIRED.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -20,153 +20,156 @@ macOS Tahoe `26.6.2 / 25G82`, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `Mac
 - exact commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
 - exact tree `7c3411fde7d40604164c8877a5ab5594448083ac`;
 - OCLP `2.5.0`;
-- PatcherSupportPkg `1.9.6`.
+- PatcherSupportPkg `1.9.6`;
+- official Golden-lineage executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
+- official helper SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, Team ID `S74BDJXQMD`.
 
-Golden/reference remains immutable/read-only.
+Golden remains immutable/read-only.
 
-Reference official Golden-lineage app:
-- executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
-- Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
-- Team ID `S74BDJXQMD`.
+## Durable historical architecture/evidence
+Accepted five-functional diagnostic baseline remains:
+`P1 + P2b + P3 + AIR00 + D34`.
 
-Official privileged helper reference SHA256:
-`9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
+P6/P7 insufficient. D50/D68/D82 reserve-only. D84 retired. D36-D44 invalidated for D34 cave overlap.
 
-## Durable Golden causal/producer evidence
-Retain accepted causal chain:
+Durable compiler/userspace causal chain once that stage is reached:
 `MTLCompilerService failure -> XPC_ERROR_CONNECTION_INTERRUPTED -> pipeline creation failure -> SkyLight/CopyPipelineState abort -> WindowServer death`.
 
-Accepted historical five-functional diagnostic baseline:
-`P1 + P2b + P3 + AIR00 + D34`.
-P6/P7 insufficient; D50/D68/D82 reserve; D84 retired; D36-D44 invalidated for D34 cave overlap.
+Durable architecture principle from retrospective:
+`Tahoe-native producer -> earliest non-equivalent handoff -> adapter/normalizer -> unchanged working legacy donor path -> image`.
 
-Golden request-builder closure:
-- primary builder `0x7FF80D370756..0x7FF80D370C28`;
-- RBX = arg1/RDI; signed dword `[RBX+0x20] -> llvmVersion`;
-- R13 = arg2/RSI; `[R13+0x08] -> requestType`, `[R13+0x18] -> timeout`, `[R13+0x70]` sandbox gate;
-- alternate requestType immediate `9`.
+## D97BG/BH/BI closure
+D97BG proved the exact signed Golden OCLP can be launched on Tahoe by bypassing only the host-OS gate, but host-gate bypass alone is insufficient.
 
-These userspace/compiler results remain durable but are not assumed reachable in the newest D97BJ accelerated boot because that boot now fails earlier with kernel panic.
+D97BH proved exact local MetallibSupportPkg works:
+- package `MetallibSupportPkg-26.6.2-25G82.pkg`;
+- SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`;
+- local tree `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`.
 
-## Exact b9df76 Tahoe findings
-Exact b9df76 originally had `_max_os = os_data.sequoia.value`; Tahoe is Darwin 25. Haswell itself is still patchable on Darwin 25: its historical native-OS blocker does not apply to exact b9df76.
+D97BI proved exact b9df76 requests nonexistent `13.2.1-25/Metal.framework` on Darwin 25; available legacy donor is `13.2.1-24`.
 
-D97BG proved host-gate bypass alone was insufficient. D97BH proved exact local MetallibSupportPkg `26.6.2-25G82` is accepted. D97BI proved exact b9df76 requests nonexistent `13.2.1-25/Metal.framework` on Darwin 25; existing donor is `13.2.1-24`.
+## D97BJ functional delta and Root Patch
+D97BJ starts from exact b9df76 and changed three functional source files:
+1. `opencore_legacy_patcher/support/metallib_handler.py`;
+2. `opencore_legacy_patcher/sys_patch/patchsets/detect.py`;
+3. `opencore_legacy_patcher/sys_patch/patchsets/shared_patches/metal_3802.py`.
 
-Exact target Metallib package:
-- `MetallibSupportPkg-26.6.2-25G82.pkg`;
-- bytes `116574513`;
-- SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
-
-Exact Pyquick 25G82 patch dictionary SHA256:
-`c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`.
-
-## D97BJ complete Tahoe functional delta
-D97BJ starts from exact b9df76 and changes only three functional source files:
-1. `opencore_legacy_patcher/support/metallib_handler.py`
-2. `opencore_legacy_patcher/sys_patch/patchsets/detect.py`
-3. `opencore_legacy_patcher/sys_patch/patchsets/shared_patches/metal_3802.py`
-
-Functional effects:
+Effects:
 - host max Sequoia -> Tahoe;
-- Tahoe `Metal.framework` donor -> `13.2.1-24`;
-- Tahoe-only exact 25G82 metallib destination/source map generated from exact Pyquick dictionary (182 entries);
-- prefer exact local host-build MetallibSupportPkg before remote API.
+- Tahoe Metal.framework donor forced to `13.2.1-24`;
+- exact 25G82 metallib map generated from Pyquick dictionary SHA256 `c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e` (182 entries);
+- exact local host-build Metallib preferred before API.
 
-Packaging-only correction for Intel ASUS2:
-`OpenCore-Patcher-GUI.spec target_arch="universal2" -> "x86_64"` because current wxPython wheel is x86_64-only.
+Packaging-only change for Intel ASUS2: PyInstaller target `universal2 -> x86_64`.
 
-Pinned DEBUG helper used for custom ad-hoc D97BJ app:
-`a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
+D97BJ Root Patch runtime execution = PASS:
+- preflight PASS;
+- exact local Metallib found;
+- Metal 3802 Common/Extended installed;
+- exact Tahoe 25G82 metallibs installed including `VisionKitCore.framework`;
+- Monterey GVA/OpenCL installed;
+- Haswell kext/driver set installed;
+- Modern Wireless installed;
+- GPUCompiler merged;
+- AuxKC built and forced;
+- final `Patching complete`.
 
-## D97BJ Tahoe 25G82 Root Patch — RUNTIME PASS
-User executed D97BJ Root Patch in Tahoe VESA. Runtime proved:
-- exact local `26.6.2-25G82` metallib found and API skipped;
-- Patcher capable;
-- Universal-Binaries mounted;
-- preflight completed;
-- Metal 3802 Common + Extended installed with prior `13.2.1-25` blocker cleared;
-- exact Tahoe 25G82 metallib map executed including `VisionKitCore.framework`;
-- Monterey GVA installed;
-- Monterey OpenCL installed;
-- Intel Haswell installed: AppleIntelFramebufferAzul, AppleIntelHD5000Graphics, GL/MTL/VA drivers, AppleIntelHSWVA;
-- Modern Wireless Common installed;
-- GPUCompiler libraries merged;
-- patch metadata/RSR/OCLP launchd files installed;
-- new Auxiliary Kernel Collection built and forced;
-- root volume unmounted;
-- final `Patching complete` with no traceback.
+The official privileged helper was manually restored and verified before accelerated testing, so helper state is not a confounder.
+
+## D97BK accelerated evidence — major correction
+Evidence bundle:
+`OCLP7_D97BK_PANIC_EVIDENCE_20260905.zip`
+- bytes `291750`;
+- SHA256 `f8cdacb13cc2a7dcc23049ece416160259c1e9cf671c20546d1e0e90a32565f1`.
+
+Authoritative chronology:
+- 05:15 — accelerated #1;
+- 05:18 — accelerated #2;
+- 12:09 — VESA/recovery excluded;
+- 12:36 — current VESA/recovery excluded.
+
+### Kernel panic classification retracted
+The two accelerated attempts did **not** kernel panic.
+
+There is no panic report/backtrace for either attempt and `DumpPanic` processed `0 files` after each failure.
+
+Correct classifications:
+- `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_RESTART=RETRACTED_USER_VISUAL_MISCLASSIFICATION`;
+- `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC=NEGATIVE`.
+
+### Accelerated #1
+- `05:15:58.163` — WindowServer reaches `running`.
+- `05:16:00.238` — `runningboardd` exits with `OS_REASON_OBJC`: `Superclass of IOGPUMetal4RenderCommandEncoder ... in IOGPU is set to 0xbad4007, indicating it is missing from an installed root`.
+- `05:16:01.025` — `launchservicesd` exits with same reason.
+- repeated `runningboardd` deaths follow.
+- `05:16:03.758` — launchd commits to system shutdown.
+- `05:16:04.750` — shutdown `UNINITIALIZED -> COMMITTED`.
+
+### Accelerated #2
+- `05:18:30.514` — WindowServer reaches `running`.
+- `05:18:31.886` — `runningboardd` exits with same IOGPU Metal4 superclass reason.
+- `05:18:32.499` — `launchservicesd` exits with same reason.
+- repeated `runningboardd` deaths follow.
+- `05:18:35.262` — launchd commits to shutdown.
+- `05:18:35.986` — shutdown `UNINITIALIZED -> COMMITTED`.
+
+The failure is deterministic across both attempts.
 
 Classifications:
-- `D97BJ_TAHOE_25G82_ROOT_PATCH_PREFLIGHT=PASS`;
-- `D97BJ_TAHOE_25G82_EXACT_LOCAL_METALLIB_RUNTIME=PASS`;
-- `D97BJ_TAHOE_25G82_EXACT_METALLIB_MAP_RUNTIME=PASS`;
-- `D97BJ_TAHOE_25G82_HASWELL_PATCHSET_RUNTIME=PASS`;
-- `D97BJ_TAHOE_25G82_AUXKC_BUILD=PASS`;
-- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS`.
+- `D97BJ_ACCELERATED_BOOT_USERSPACE_REACHED=PROVEN`;
+- `D97BJ_WINDOWSERVER_SPAWN_AND_RUNNING=PROVEN`;
+- `D97BJ_IOGPU_METAL4_SUPERCLASS_MISSING=PROVEN`;
+- `D97BJ_LAUNCHD_CONTROLLED_SHUTDOWN_AFTER_CRITICAL_SERVICE_CRASH_LOOP=PROVEN`;
+- `D97BJ_ACCELERATED_BOOT_USABLE_GUI=NEGATIVE`.
 
-## D97BJ helper cleanup — PASS before accelerated boot
-Automatic wrapper cleanup left the DEBUG helper installed after app exit. Before reboot this was detected and corrected manually.
+## D97BK static ABI root cause
+Tahoe IOGPU uses Metal4 Objective-C classes whose superclasses come from Tahoe Metal.framework. Proven examples include:
+- `IOGPUMetal4CommandQueue : _MTL4CommandQueue`;
+- `IOGPUMetal4CommandBuffer : _MTL4CommandBuffer`;
+- `IOGPUMetal4CommandAllocator : _MTL4CommandAllocator`;
+- `IOGPUMetal4RenderCommandEncoder : _MTL4RenderCommandEncoder`;
+- `IOGPUMetal4ComputeCommandEncoder : _MTL4ComputeCommandEncoder`;
+- `IOGPUMetal4MachineLearningCommandEncoder : _MTL4MachineLearningCommandEncoder`.
 
-Verified official restore source:
-`/Applications/OpenCore-Patcher.app/Contents/Resources/official-privileged-helper`
+D97BJ's full legacy `Metal.framework` donor `13.2.1-24` removes that Tahoe Metal4 superclass surface while native Tahoe `IOGPU.framework` remains modern.
 
-Final installed helper before accelerated boot:
-- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
-- TeamIdentifier `S74BDJXQMD`;
-- `OFFICIAL_HELPER_RESTORED=PASS`.
+Therefore:
+`D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE_NEGATIVE`.
 
-Thus the helper state is not an unresolved pre-boot confounder.
+The exact Golden/Sequoia full-framework downgrade is not a valid final Tahoe strategy.
 
-## D97BJ accelerated boot — NEW KERNEL-PANIC FRONTIER
-User manually performed the accelerated/root-patched Tahoe boot after all pre-boot gates passed.
+Adding only `_MTL4RenderCommandEncoder` is not sufficient because the dependency is a wider Metal4 class family.
 
-User-observed behavior:
-- did not reach the historical black-screen / later-VESA behavior;
-- hit a kernel panic and automatically restarted;
-- user reports approximately two accelerated attempts followed by VESA/recovery boots; exact boot chronology must be confirmed from `last reboot` and panic timestamps;
-- after VESA recovery, patched boot was not usable, so the user restored the saved/sealed system snapshot;
-- current state is VESA/recovery with **no Root Patch**.
+## Current architecture decision
+Next design is D97BL: preserve native Tahoe Metal.framework / Metal4 ABI and integrate legacy 3802 support as a hybrid boundary adapter.
 
-The snapshot restore is recovery, not evidence against the preceding accelerated panic.
+The historical true-five (`P1 + P2b + P3 + AIR00 + D34`) becomes the relevant proven design lineage again because it adapts the legacy compiler path instead of wholesale downgrading Tahoe's outer Metal framework. It is not automatically re-enabled; every imported element remains subject to current identity/semantic audit.
 
-Current classifications:
-- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS` remains valid;
-- `D97BJ_ACCELERATED_BOOT_USABLE_GUI=NEGATIVE`;
-- `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_RESTART=USER_OBSERVED_PROVEN`;
-- `D97BJ_ACCELERATED_BOOT_PANIC_ROOT_CAUSE=UNKNOWN_PENDING_LOCAL_EVIDENCE`;
-- `D97BJ_CURRENT_ROOT_PATCH_STATE=RESTORED_TO_UNPATCHED_SNAPSHOT`.
+D97BJ elements to retain:
+- Tahoe host eligibility;
+- exact local 26.6.2-25G82 MetallibSupportPkg handling;
+- exact 25G82 metallib destination/source map.
 
-Do NOT attribute the older 03:31/03:35 crash captures to this D97BJ incident: they predate the accelerated attempts and do not contain a matching panic/kext record.
+## Mandatory pre-reboot Metal4 closure gate
+No future Root Patch/accelerated boot until the proposed patch root proves:
+1. native Tahoe Metal4 ABI surface remains present;
+2. all IOGPU-referenced `_MTL4*` superclasses resolve from the installed root;
+3. Tahoe `Metal.framework/Versions/A/Metal` is not blindly replaced with 13.2.1 donor;
+4. 3802 compiler/selector support is integrated through an audited hybrid adapter;
+5. exact 25G82 metallib map/local handling remains intact.
 
-## High-value current hypotheses — not yet proven
-1. Haswell kext/AuxKC load/start/match boundary (`AppleIntelFramebufferAzul` / `AppleIntelHD5000Graphics`). Historical Tahoe D26 evidence once showed transient `Info.plist digest is missing` / kernelmanager rejection for these exact staged kexts, making this a high-value comparison point. D97BJ AuxKC build success means the historical digest failure is not by itself proof of current cause.
-2. AMFI / kernel-collection validation boundary.
-3. Graphics kext initialization / IOGraphics boundary.
-4. Only if evidence proves userspace reached: historical MTLCompilerService/WindowServer path.
-
-A public current MacBookPro11,1 / Tahoe 26.6.2 boot-failure report exists, but it has no panic log and therefore is contextual only, not causal evidence for ASUS2.
+## Current system state
+User restored the sealed/saved snapshot after the failed D97BJ attempts.
+Current state is unpatched Tahoe VESA; current OCLP root-patch plist is absent.
 
 ## Execution contract
 GitHub Actions compilation remains suspended until user explicitly says quota reset/unblocked.
-Current local Tahoe VESA build/test lane was explicitly authorized/executed by user.
-Never auto Root Patch.
-Never auto reboot.
-Golden remains immutable/read-only.
+GitHub reads/static audit/persistence remain allowed.
+Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
 ## CURRENT ACTION
-Remain in current unpatched VESA/recovery state. **No new Root Patch and no accelerated reboot.**
+Remain unpatched in VESA/recovery state.
 
-Run one read-only D97BJ panic-evidence collection and return its ZIP. It must collect:
-1. `last reboot` / shutdown chronology;
-2. NVRAM panic keys (`aapl,panic-info`) and current boot/OCLP args only;
-3. current-day panic/kernel DiagnosticReports around the post-05:00 accelerated attempts, including protected PanicReporter paths;
-4. filtered unified logs for panic, Previous shutdown cause, watchdog, kernel collection/AuxKC, kernelmanager, Haswell graphics kext load/start/match, AMFI and IOGraphics;
-5. current unpatched/VESA baseline and snapshot state.
+No Root Patch and no accelerated reboot are authorized.
 
-After evidence return:
-- identify the two accelerated boot windows exactly;
-- analyze only those accelerated windows, excluding later VESA/recovery and snapshot-restore activity;
-- if panic report names a kext/backtrace, promote that module boundary immediately;
-- do not resume MTLCompilerService/WindowServer diagnostics unless evidence proves that userspace stage was reached;
-- design any future test to maximize evidence per unavoidable Root Patch/recovery cycle, ideally with persistent/boot-visible panic capture rather than repeated single-point probes.
+Design/audit D97BL as a Tahoe-native-Metal4-preserving hybrid. First map the exact native Tahoe Metal4/IOGPU contract and the minimum legacy 3802 ingress required from the historical true-five. Before any future boot, pass the mandatory static Metal4 superclass-closure gate.
