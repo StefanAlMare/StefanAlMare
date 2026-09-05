@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BH_TAHOE_25G82_METALLIB_LOCAL_PRESENT_OFFICIAL_MANIFEST_MISSES_26X_FORCE_LOCAL_FALLBACK.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BI_METALLIB_25G82_PASS_NEXT_BLOCKER_METAL_FRAMEWORK_13_2_1_25_TO_24_SHADOW_ALIAS.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -83,32 +83,41 @@ The outer wrapper automatically creates the built-in developer marker immediatel
 Classification:
 `D97BG_TAHOE_READY_WRAPPER_BUILD_AUDIT=PASS`.
 
-No Root Patch ran during construction.
-No reboot ran during construction.
-
-## D97BH Tahoe MetallibSupportPkg blocker — cause proven
-User is now booted in Tahoe 26.6.2 / 25G82 in VESA, performed Root Patch Restore, and attempted a new Root Patch with D97BG. OCLP reports MetallibSupportPkg missing and attempts network retrieval.
-
-Exact target package exists in Pyquick release tag `26.6.2-25G82`:
-- asset `MetallibSupportPkg-26.6.2-25G82.pkg`;
+## D97BH MetallibSupportPkg — runtime PASS
+Exact Pyquick package for target:
+- `MetallibSupportPkg-26.6.2-25G82.pkg`;
 - bytes `116574513`;
 - SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
 
-Exact b9df76 local root is:
+Exact b9df76 local root:
 `/Library/Application Support/Dortania/MetallibSupportPkg`.
 
-Current official Dortania manifest has no Tahoe 26.x / 25G82 entry. In b9df76, a successful remote-manifest fetch with no 26.x match prevents the useful local loose-version fallback. If the manifest fetch fails, b9df76 falls back to local `26.6` matching and accepts a folder named `26.6.2-25G82` under the Dortania root.
+Because official Dortania manifest has no Tahoe 26.x entry, `dortania.github.io` was temporarily made unreachable. Runtime Root Patcher output then proved:
+- manifest fetch failed as intended;
+- local fallback checked `26.6`;
+- exact local `26.6.2-25G82` was found;
+- `Patcher is capable of patching`.
+
+Classification:
+`D97BH_25G82_LOCAL_METALLIB_FALLBACK_RUNTIME=PASS`.
+
+## D97BI next blocker — Metal.framework donor path PROVEN
+After Metallib PASS, Root Patcher mounted `Universal-Binaries.dmg`, entered preflight, and failed because exact b9df76 requests:
+`Universal-Binaries/13.2.1-25/System/Library/Frameworks/Metal.framework`.
+
+Exact b9df76 `metal_3802.py` constructs:
+`"Metal.framework": f"13.2.1-{self._xnu_major}"`, so Darwin 25 requests `13.2.1-25`.
+
+Historical Tahoe project work already identified that `13.2.1-25` does not exist and redirected Tahoe to existing `13.2.1-24`.
+
+Exact b9df76 mounts `Universal-Binaries.dmg` using `hdiutil ... -shadow`, so the temporary mounted workspace is writable without modifying the signed app or embedded DMG.
 
 Classifications:
-- `B9DF76_25G82_METALLIB_REMOTE_MANIFEST_PATH=BLOCKED_BY_NO_26X_ENTRY`;
-- `B9DF76_25G82_METALLIB_LOCAL_FALLBACK_IF_MANIFEST_UNREACHABLE=PROVEN_BY_SOURCE`.
-
-Historical Tahoe-aware OCLP-T2 work had explicitly patched the handler to prefer the exact local host-build package before API fallback, corroborating this same ordering problem.
+- `B9DF76_TAHOE_25_METAL_FRAMEWORK_SOURCE_13_2_1_25=PROVEN_MISSING`;
+- `TAHOE_25_METAL_FRAMEWORK_DONOR_13_2_1_24=HISTORICALLY_IDENTIFIED_REQUIRED_REDIRECT`.
 
 ## Current responsibility boundary
-Assistant-side Tahoe compatibility preparation remains complete.
-User performs only inherently target-local actions and manual Root Patch.
-Never ask user to edit the signed inner OCLP or rebuild it for this blocker.
+Assistant-side application compatibility preparation remains complete. User performs only inherently target-local actions and manual Root Patch. Never modify the signed inner OCLP for this blocker.
 
 ## Current execution contract
 GitHub compilation remains suspended until user explicitly says quota reset/unblocked.
@@ -116,11 +125,12 @@ Never auto Root Patch. Never auto reboot.
 Golden remains immutable/read-only.
 
 ## CURRENT ACTION
-1. Ensure exact local tree exists at `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`.
-2. Temporarily make only `dortania.github.io` unreachable while leaving other internet access intact, forcing b9df76 into its built-in local fallback.
-3. Fully quit and relaunch `OpenCore-Patcher-Tahoe.app`.
-4. Confirm MetallibSupportPkg missing state clears / local `26.6.2-25G82` is accepted.
-5. User runs manual Root Patch and returns complete output.
-6. Remove the temporary `dortania.github.io` host override after Root Patch completes.
+While the same Tahoe OCLP session still has the writable shadow-mounted Universal-Binaries workspace:
+1. locate the temporary `payloads/Universal-Binaries` root;
+2. prove `13.2.1-24/System/Library/Frameworks/Metal.framework` exists;
+3. create workspace-only symlink `13.2.1-25 -> 13.2.1-24`;
+4. verify the exact previously missing `13.2.1-25/.../Metal.framework` resolves;
+5. rerun manual Root Patch in the same OCLP session;
+6. return complete Root Patch output.
 
-No reboot is authorized by this MASTER state.
+Do not reboot yet. Keep the temporary `dortania.github.io` override until Root Patch finishes.
