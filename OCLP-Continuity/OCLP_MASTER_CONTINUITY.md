@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BN_PARTIAL_PASS_TWO_LAYOUTS_REQUESTTYPE_AC_TIMEOUT_B8_TOOLING_SIZE_STOP_V2_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BN_V2_FULL_PASS_ZERO_31001_TWO_LAYOUTS_D97BO_FIELD_WRITER_ORIGIN_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -104,7 +104,7 @@ In the failing accelerated cohort:
 
 Golden naturally uses both 3802 and 32023 lanes. Missing Tahoe 3802 generation remains a live upstream semantic difference.
 
-## D97BM exact 25G82 producer result
+## D97BM exact native-cache result
 Native Metal cache image:
 - path `/System/Library/Frameworks/Metal.framework/Versions/A/Metal`;
 - start `0x7FF80F47D000`;
@@ -116,58 +116,69 @@ Native MTLCompilerService SHA256:
 Native IOGPU image starts at `0x7FF906A1F000`.
 Exact native `_MTL4*` and corresponding `IOGPUMetal4*` class-name surface is present.
 
-D97BM identified two complete native XPC request builders.
-
-## D97BN partial PASS — two native Tahoe request layouts
-D97BN v1 mapped both complete builders and scalar helpers, then fail-closed before generation/caller census on a collector-only size guard:
-`FUNCTION_SIZE_UNSAFE:0xDE15A`.
-
-Classification:
-`D97BN_V1_RESULT=PARTIAL_PASS_READONLY_TOOLING_SIZE_GUARD`.
+## D97BN / D97BN-v2 closure — two layouts and generation dialect
+D97BN v1 mapped two complete native Tahoe request builders:
 
 ### Builder A
-Function `0x7FF80F635510..0x7FF80F635A4D`.
-- entry RDI -> RBX, RSI -> R12;
-- llvmVersion `[ABI_ARG1 + 0x1C]`;
-- requestType helper `0x7FF80F5A59CC` = `movl 0xAC(%rdi),%eax; ret`, called on ABI arg2/R12;
-- timeout helper `0x7FF80F5A5A0C` = `movq 0xB8(%rdi),%rax; ret`, called on ABI arg2/R12.
+`0x7FF80F635510..0x7FF80F635A4D`
+- `llvmVersion = signed dword [ABI arg1 + 0x1C]`;
+- requestType helper reads `dword +0xAC` from ABI arg2 object;
+- timeout helper reads `qword +0xB8` from same object family.
 
-Thus builder A:
-- llvmVersion arg1+0x1C;
-- requestType arg2+0xAC;
-- timeout arg2+0xB8.
+Three direct E8 callers are proven. Two wrapper callers source Builder-A arg1 from `[incoming object +0x38]`.
 
 ### Builder B
-Function `0x7FF80F663CA9..0x7FF80F66492C`.
-- original RDI saved and used as request object;
-- llvmVersion `[ABI_ARG1 + 0x38]`;
-- R15 receives `[ABI_ARG1 + 0x28]` subordinate object;
-- same helper `+0xAC` supplies requestType from that subordinate object;
-- same helper `+0xB8` supplies timeout from that object family.
+`0x7FF80F663CA9..0x7FF80F66492C`
+- `llvmVersion = signed dword [ABI arg1 + 0x38]`;
+- requestType comes through the same `+0xAC` helper family from subordinate object `[arg1+0x28]`;
+- timeout uses same `+0xB8` helper family;
+- no direct E8 callers found; ingress is likely indirect/virtual/non-E8.
 
-Thus builder B has a distinct native request-object layout.
+Both mapped alternate requestType paths use exact immediate `9`.
 
-### Alternate requestType
-Two mapped alternate paths both write exact immediate `9`, matching Golden alternate semantics.
+D97BN-v2 returned bundle:
+`OCLP7_D97BN_V2_GENERATION_AND_CALLER_COMPLETION_20260905_224128.zip`
+- bytes `11417`;
+- SHA256 `06f6c90e89bd384189d8e2179ebbcc0351f3783738bc24f3268e47d24562957d`.
 
-Important consequence:
-- literal Golden offsets cannot be transplanted into Tahoe globally;
-- a one-address producer patch is forbidden;
-- any future normalization must be complete across relevant request families.
+Final markers PASS:
+- generation census;
+- builder caller census;
+- audit.
 
-## CURRENT ACTION — D97BN v2
-Run only read-only:
-`OCLP7_D97BN_v2_generation_and_caller_completion.sh`.
+Exact native Metal generation census:
+- 3802: raw 11 / instruction-validated 9;
+- 31001: raw 0 / validated 0;
+- 32023: raw 10 / validated 10.
 
-Pinned identity:
-- bytes `13626`;
-- SHA256 `0976a64b8f864a7b6895fcab742e666bda386ce6f9428aefb67de745e6877d80`.
+Classifications:
+- `TAHOE_NATIVE_METAL_31001_IMMEDIATE_CENSUS=ZERO_STATIC_PROVEN`;
+- `TAHOE_NATIVE_METAL_3802_LOGIC_PRESENT=STATIC_PROVEN`;
+- `TAHOE_NATIVE_METAL_32023_LOGIC_PRESENT=STATIC_PROVEN`;
+- `D97BN_TAHOE_TWO_DISTINCT_NATIVE_LLVMVERSION_LAYOUTS=STATIC_PROVEN`.
 
-V2 completes only the sections not reached in D97BN v1:
-1. raw + instruction-validated 3802/31001/32023 immediate census in exact native 25G82 Metal `__text`;
-2. direct caller census for builder A and builder B;
-3. bounded local contexts around matching instructions/calls;
-4. no source/system/cache mutation, Root Patch or reboot.
+Important static examples:
+- `0x7FF80F596A81..0x7FF80F596A8C` returns exact 3802;
+- `0x7FF80F614D86..0x7FF80F614D9F` initializes a 3802 generation/factory lane;
+- `0x7FF80F614DB8..0x7FF80F614DD1` analogously initializes 32023;
+- multiple functions classify 3802 vs the 32023/32024 family.
+
+Therefore Tahoe still contains real 3802 machinery; the 12/12 runtime 32023 cohort is a selection/dataflow issue, not total removal of 3802 support.
+
+Do not globally replace `32023 -> 31001` and do not transplant Golden `+0x20` offsets. Both would be structurally unjustified.
+
+## CURRENT ACTION — D97BO field-writer / generation-origin audit
+Remain unpatched in VESA.
+
+Next read-only action must:
+1. pin exact 25G82 native Metal text SHA;
+2. map all instruction-level writes to the fields consumed as `llvmVersion` (`Builder A arg1 +0x1C`, Builder B arg1 +0x38`);
+3. map Builder-A caller object provenance, including the wrapper `[+0x38] -> builder arg1` relationship;
+4. map callers/dataflow of the exact 3802-return and 3802/32023 generation initializer functions;
+5. connect generation selection to the object-field writes where statically resolvable;
+6. make no source/system/cache mutation, Root Patch or reboot.
+
+No Root Patch or accelerated boot is authorized.
 
 ## Mandatory pre-reboot gate
 No future Root Patch/accelerated boot until:
