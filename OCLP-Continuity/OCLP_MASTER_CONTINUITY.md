@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BL_TAHOE_NATIVE_METAL4_SELECTIVE_3802_HYBRID_STATIC_AUDIT_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BL_V1_DMG_PASSPHRASE_TOOLING_FAIL_V2_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -147,6 +147,22 @@ Current public OCLP-T2 still merges whole legacy Metal.framework payloads, so it
 
 Exact b9df76 `MERGE` uses `rsync -r -i -a`; same-relative-path donor files replace native files. D97BL therefore requires exact per-file collision analysis rather than another full framework merge.
 
+## D97BL v1 collector tooling correction
+The first `OCLP7_D97BL_static_hybrid_audit.sh` run verified the current unpatched VESA state and located exact `Universal-Binaries.dmg`:
+- path `/Users/alex/Developer/OpenCore-Legacy-Patcher-D97BJ-b9df76-Tahoe25G82/Universal-Binaries.dmg`;
+- bytes `641964544`;
+- SHA256 `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7`.
+
+It then failed only because the audit script mounted the encrypted DMG without the public PatcherSupportPkg passphrase.
+
+Exact b9df76 `dmg_mount.py` uses `-passphrase "password"` when mounting `Universal-Binaries.dmg`.
+
+Classifications:
+- `D97BL_V1_DMG_MOUNT_FAILURE=TOOLING_ONLY_MISSING_PUBLIC_PASSPHRASE`;
+- `B9DF76_UNIVERSAL_BINARIES_DMG_PASSPHRASE=password`.
+
+D97BL v2 changes only that audit mount command and remains read-only.
+
 ## Mandatory pre-reboot Metal4 closure gate
 No future Root Patch/accelerated boot until the proposed patch root proves:
 1. native Tahoe Metal4 ABI surface remains present;
@@ -167,7 +183,7 @@ Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 ## CURRENT ACTION
 Remain unpatched in VESA/recovery state.
 
-Run only the read-only `OCLP7_D97BL_static_hybrid_audit.sh` collector. It must map native Tahoe Metal.framework against legacy `12.5-3802-23` and `13.2.1-24` payloads, enumerate collisions/donor-only files and dependencies, enumerate native Metal4 surface, inspect legacy compiler framework donors, recover historical P1-D34 source/diffs, and capture the D97BJ source delta.
+Run only the read-only `OCLP7_D97BL_static_hybrid_audit_v2.sh` collector. It uses exact public b9df76 Universal-Binaries.dmg passphrase `password`, then performs the original D97BL collision/Metal4/compiler/historical-source audit unchanged.
 
 Return the generated `OCLP7_D97BL_STATIC_HYBRID_AUDIT_<timestamp>.zip` for assistant audit.
 
