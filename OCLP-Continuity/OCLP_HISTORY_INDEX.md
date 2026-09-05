@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CB_ATOMIC_REMAP_STRUCTURAL_PASS_DLOPEN_SIGSEGV_COLD_HOST_TOOLING_FAIL_D97CBV2_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CBV2_MACOS_COPY2_CHFLAGS_TOOLING_FAIL_D97CBV3_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -54,41 +54,44 @@ Dependency surface for coherent reorder:
 - symtab `n_sect` rewrites: 3652.
 Classification: `D97CA_MANUAL_SEGMENT_ORDER_REPAIR_CLASSIFICATION=STATIC_REMAP_SURFACE_ENUMERATED`.
 
-## D97CB — atomic remap structural PASS; cold-host harness failed closed
-D97CB packaging was not reached because the cold-host control stopped intentionally. Returned Terminal-log identity:
-- bytes `101328`;
-- SHA256 `46797ea02b54ffdc728fe3203ec4ebc5c83956e6b2c812827dbf675cc23ee8e8`.
-
-Target remap itself passed:
-- `__DATA_CONST` retains `SG_READ_ONLY`;
+## D97CB — atomic remap structural PASS
+Target remap passed:
+- `__DATA_CONST` has `SG_READ_ONLY`;
 - `__DATA_DIRTY` payload moved to fileoff `0x35C000`;
 - `__DATA` payload moved to fileoff `0x361000`;
 - `__LINKEDIT` remains `0x36E000`;
 - command order becomes `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
-- all segment and section VM addresses preserved;
+- all segment/section VM addresses preserved;
 - exactly 5 file-backed section offsets rewritten;
-- exactly 3652 symtab `n_sect` values remapped with the D97CA ordinal distribution;
+- exactly 3652 symtab `n_sect` values remapped;
 - pre-sign diff count `40655`, zero outside audited domains;
-- `file`, `otool -l`, `otool -L` pass.
+- `file`, `otool -l`, `otool -L` PASS.
 
-Markers:
-`D97CB_ATOMIC_REMAP_STRUCTURAL=PASS`, `D97CB_VM_ADDRESS_PRESERVATION=PASS`, `D97CB_SECTION_FILEOFF_REMAP=PASS`, `D97CB_SYMTAB_N_SECT_REMAP=PASS`, `D97CB_DIFF_DOMAIN=PASS`.
+Unsigned/signed `dlopen_preflight` PASS. Actual Python-child `dlopen` terminates `RC=-11` (SIGSEGV) rather than producing another explicit dyld validation rejection. Python already has native Metal loaded, so standalone loadability remains unresolved.
 
-Unsigned and signed remapped images both pass `dlopen_preflight`, but Python child `dlopen` exits `-11` (SIGSEGV) with no preceding explicit dyld validation rejection. Because Python already has native Metal loaded, standalone loadability is not yet proven.
+## D97CB-v2 — macOS Python copy2/chflags tooling defect
+Returned Terminal log:
+- bytes `13995`;
+- SHA256 `fb053fe50bf85a803bcad582f7d1e6995ca0f14c4ca468c5de75e76b22a46d7b`.
 
-The attempted cold host was a copied/ad-hoc-signed pinned `ipsw` executable. Its control run itself loads native Metal and Metal-dependent frameworks, so collector correctly stopped `FAIL=COLD_HOST_PRELOADS_METAL` before any remapped-Metal cold injection.
+D97CB-v2 reconfirmed every D97CB structural remap marker and again observed unsigned/signed preflight PASS plus actual child `dlopen RC=-11`.
+
+The new cold-host harness failed before cold injection because `shutil.copy2('/usr/bin/true', HOST)` invokes `copystat()`, and macOS Python 3.13 attempted to propagate BSD file flags with `chflags`, producing `PermissionError: [Errno 1] Operation not permitted` on the `/private/tmp/.../cold_true` destination.
+
+This is a tooling-only failure and does not invalidate the remap.
 
 Classifications:
-- `D97CB_ATOMIC_SEGMENT_ORDER_REMAP=STRUCTURAL_STATIC_PROVEN`;
-- `D97CB_REMAP_UNSIGNED_SIGNED_PREFLIGHT=PASS`;
-- `D97CB_REMAP_UNSIGNED_SIGNED_CHILD_DLOPEN=SIGSEGV_NEGATIVE`;
-- `D97CB_REMAP_STANDALONE_LOADABILITY=NOT_YET_PROVEN`;
-- `D97CB_COLD_HOST_IPSW=TOOLING_INVALID_PRELOADS_NATIVE_METAL`.
+- `D97CBV2_ATOMIC_REMAP_STRUCTURAL=PASS_RECONFIRMED`;
+- `D97CBV2_REMAP_UNSIGNED_SIGNED_PREFLIGHT=PASS_RECONFIRMED`;
+- `D97CBV2_REMAP_CHILD_DLOPEN=SIGSEGV_NEGATIVE_RECONFIRMED`;
+- `D97CBV2_COLD_HOST_COPY2_CHFLAGS=TOOLING_NEGATIVE`;
+- `D97CBV2_REMAP_STANDALONE_LOADABILITY=NOT_YET_PROVEN`.
 
-## CURRENT ACTION — D97CB-v2 cold-host correction
-Run only `OCLP7_D97CB_v2_atomic_remap_cold_host.sh`, bytes `32510`, SHA256 `811935f3b31fb863f1fdc763b70b11b6d3421e0f064c805c7e09a12dafdb3781`.
-It reproduces the identical atomic remap but replaces only the cold-host harness: copied `/usr/bin/true`, Apple signature removed, ad-hoc re-signed; baseline must be Metal-free; control injection of `/usr/lib/libbz2.1.0.dylib` must prove `DYLD_INSERT_LIBRARIES` is honored; only then is signed remapped Metal injected with library/segment/initializer tracing.
+## CURRENT ACTION — D97CB-v3
+Run only `OCLP7_D97CB_v3_macos_safe_cold_host.sh`, bytes `32508`, SHA256 `24f0b52509530700daa64eb2c9a2fcd882671acb4a4ff8b5f6570443c66918c1`.
 
-If the target path appears but host crashes, stop at the later init/runtime frontier and do not apply D97BV. Only target-path observed + host exit 0 authorizes D97BV re-audit on a second temp copy.
+D97CB-v3 changes only the cold-host copy from `shutil.copy2()` to `shutil.copyfile()` plus explicit `chmod(0755)`, avoiding metadata/BSD-file-flag copying. It then removes the copied signature, re-signs ad-hoc, requires a Metal-free baseline, validates `DYLD_INSERT_LIBRARIES` with a visible/exit-0 libbz2 control, and only then injects signed remapped Metal.
+
+If target path appears but process fails, stop at that later init/runtime frontier and do not apply D97BV. Only target-path observed + host exit 0 authorizes D97BV re-audit.
 
 Remain unpatched in VESA. No Root Patch or accelerated reboot authorized.
