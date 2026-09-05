@@ -1,4 +1,4 @@
-# OCLP7 CHECKPOINT — 2026-09-06 — D97BZ SG_READ_ONLY gate passed; next dyld rejection is __DATA_DIRTY VM order; D97CA next
+# OCLP7 CHECKPOINT — 2026-09-06 — D97BZ SG_READ_ONLY gate passed; next dyld rejection is __DATA_DIRTY VM order; D97CA dependency audit next
 
 ## Entering / safety state
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`.
@@ -79,30 +79,44 @@ VM order is instead:
 - `__DATA_DIRTY` VM `0x7FF84384F510`;
 - `__DATA` VM `0x7FF843D590C0`.
 
-Apple dyld source `mach_o/UnsafeHeader.cpp` validates that for dyld-managed non-cache images segment load-command order must match both file-content order and VM order. It first rejects decreasing file offsets, then rejects decreasing VM addresses with `segment '%s' vm address out of order` (except narrow legacy exceptions not applicable to this dylib).
+Apple dyld `UnsafeHeader::validSemanticsSegments()` validates that for dyld-managed non-cache images segment load-command order must match file-content order and VM order. It rejects decreasing file offsets and then decreasing VM addresses with `segment '%s' vm address out of order`, except narrow cases not applicable to this dylib.
 
-Therefore merely reordering load commands is insufficient: it would repair VM order but create fileoff order failure.
+Thus merely reordering the two segment commands is insufficient: it would repair VM order while making fileoff order decrease.
 
-## Next bounded repair hypothesis
-The smallest coherent next standalone-layout adapter is file-layout-only:
-1. keep every segment VM address and every section VM address unchanged;
-2. keep `__TEXT`, `__DATA_CONST`, `__LINKEDIT` file layout unchanged;
-3. physically place `__DATA_DIRTY` payload before `__DATA` payload;
-4. set `__DATA_DIRTY.fileoff = 0x35C000`;
-5. set `__DATA.fileoff = 0x361000`;
-6. remap nonzero section file offsets inside those two segments by preserving each section's relative offset within its owning segment;
-7. reorder the complete `LC_SEGMENT_64` commands so `__DATA_DIRTY` precedes `__DATA` while preserving all command bytes/sections except required fileoff/section-offset fields;
-8. `__LINKEDIT` remains at `0x36E000` because `0x5000 + 0xD000 = 0x12000`, exactly the same combined span.
+## Important correction before any file-layout swap
+A full `LC_SEGMENT_64` reorder changes more than visible segment/file geometry:
+- old segment indices `2/3` (`__DATA`/`__DATA_DIRTY`) become `3/2`;
+- section ordinals for every section in those two segments change;
+- `LC_DYLD_INFO`/`LC_DYLD_INFO_ONLY` rebase/bind bytecode can encode segment indices;
+- symtab `n_sect` entries can encode section ordinals;
+- non-external relocation records can encode section ordinals;
+- other order-sensitive metadata such as split-seg/chained-fixup structures must be censused.
 
-This preserves virtual-address semantics and therefore x86_64 RIP-relative relationships; it changes only standalone file geometry/load-command order needed by dyld.
+Public `go-macho` exporter source confirms that in-cache export rebuilds/copies dyld rebase/bind streams into the optimized `__LINKEDIT`. Therefore a blind load-command/payload swap is not semantically closed.
 
-Do not alter VM addresses or section addresses in this experiment.
+Do not perform the physical swap until this dependency surface is enumerated.
+
+## D97CA prepared — read-only dependency audit
+Artifact:
+`OCLP7_D97CA_segment_order_dependency_audit.sh`
+- bytes `24666`;
+- SHA256 `237b1f93cb1255cb0d5d56aeeb3db7442971e69c03a5a6706f6f66ba73a991ce`.
+
+D97CA is read-only with respect to the exported Mach-O. It reproduces the exact pinned RAW export and audits:
+1. complete load-command census and segment indices;
+2. section ordinal ranges and exact old->proposed new ordinal map for swapping `__DATA_DIRTY`/`__DATA`;
+3. parsed rebase/bind/weak/lazy dyld opcode segment-index references;
+4. symtab `n_sect` references requiring ordinal remap;
+5. DYSYMTAB and per-section relocation section-ordinal references;
+6. `LC_SEGMENT_SPLIT_INFO` / `LC_DYLD_CHAINED_FIXUPS` or other explicit unknown order-sensitive blockers;
+7. the exact count of required remaps before any mutating file-layout experiment.
+
+No binary mutation, signing, dlopen or D97BV patch occurs in D97CA.
 
 ## CURRENT ACTION — D97CA
 Remain unpatched in Tahoe VESA.
+Run only `OCLP7_D97CA_segment_order_dependency_audit.sh` and return its ZIP.
 
-Next transient test must reproduce the pinned RAW real export, apply `SG_READ_ONLY`, then build one file-layout-only variant that swaps `__DATA_DIRTY`/`__DATA` physical order and complete segment-load-command order while keeping all VM/section addresses unchanged. It must audit every changed byte/field, verify section-relative fileoff preservation, run `file`/`otool`, unsigned and signed preflight + true child `dlopen`, and stop at the next exact dyld condition.
-
-Only if that original layout-fixed baseline truly loads may D97BV be re-audited/applied.
+Only if D97CA proves the complete order-sensitive remap surface is bounded may a later experiment physically reorder `__DATA_DIRTY`/`__DATA` while preserving all VM/section addresses and coherently remapping every affected metadata reference.
 
 No Root Patch, installation or accelerated reboot authorized.
