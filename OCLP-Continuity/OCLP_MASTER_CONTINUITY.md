@@ -1,9 +1,9 @@
 # OCLP MASTER CONTINUITY
 
-Updated: 2026-09-05 EEST
+Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BU_PARTIAL_PASS_NO___TEXT_CAVE_D97BV_INTERSECTION_PADDING_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97BV_FULL_PASS_EXECUTABLE_INTERSECTION_CAVE_SELECTIVE_3802_ADAPTER_D97BW_RECONSTRUCTION_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -58,66 +58,80 @@ Both alternate requestType paths use immediate 9.
 
 Native generation census: 3802 raw 11 / validated 9; 31001 zero; 32023 raw 10 / validated 10. Do not globally replace `32023 -> 31001`; do not transplant Golden `+0x20` offsets.
 
-## Shared generation architecture
+## Shared generation architecture / accessor suppression
 3802 initializer -> singleton global `0x7FF843D65C90`; 32023 initializer -> singleton global `0x7FF843D65CB0`. Selector `0x7FF80F5EFFEB..0x7FF80F5F009C` distinguishes 3802/3902/32023/32024.
 
 Generation-aware constructor `0x7FF80F4A5DF8..0x7FF80F4A7A88` uses shared accessor `0x7FF80F5E16C3`, stores EAX into discriminator `-0x27C`, optionally overrides from `[arg1+0x138]`, and builds layouts containing `+0x1C/+0x20/+0x38` writes.
 
 D97BQ proved selector generation input is ABI arg2/RSI. All six validated selector callers do `call accessor -> movl %eax,%esi -> call selector`.
 
-## D97BR / D97BT accessor suppression closure
-Accessor `0x7FF80F5E16C3..0x7FF80F5E1778` has complete direct-branch CFG.
-Primary path: `cmp EAX,32024; ECX=32023; cmovl ECX,EAX`, so `3802 -> 32023` is SEMANTIC PROVEN.
+D97BT proved default-environment accessor-wide suppression of 3802:
+- primary path floors to 32023;
+- lazy fallbacks floor to 32023 or 32024;
+- only bypass is explicit `MTL_FORCE_MTLCOMPILER_LLVM_VERSION`, default/current value zero.
 
-D97BT bundle `OCLP7_D97BT_OVERRIDE_PRODUCER_AND_LAZY_FLOOR_20260905_235137.zip`, SHA256 `6741153378f842849df5436ad3ea7734f7e79607aa33f3edbb7131cedaf18197`.
-
-Lazy fallback floors are:
-- first `max(candidate,32023)`;
-- second `max(candidate,32024)`.
-Thus 3802 cannot survive either fallback.
-
-Explicit nondefault bypass key is `MTL_FORCE_MTLCOMPILER_LLVM_VERSION`; fallback/current default is zero. Under the current/default environment:
+Classification:
 `D97BT_DEFAULT_ENV_ACCESSOR_WIDE_3802_SUPPRESSION=SEMANTIC_PROVEN`.
 
-## D97BU partial PASS — exact site valid, `__text` cave NEGATIVE
-User ran `OCLP7_D97BU_minimal_3802_preserve_adapter_preflight.sh` read-only.
-
-Identity and patch-site gates passed:
-- native Metal SHA matched;
-- accessor exact window `0x7FF80F5E1719..0x7FF80F5E1726`;
+## D97BU partial PASS — exact patch window; no cave inside `__text`
+Exact accessor clamp patch window:
+- `0x7FF80F5E1719..0x7FF80F5E1726`;
 - 13-byte preimage `3d187d0000b9177d00000f4cc1`;
-- exact three complete instructions are Tahoe's compare/mov/cmov floor;
-- `PATCH_SITE_INCOMING_BRANCH_COUNT=0`.
+- complete Tahoe compare/mov/cmov instructions;
+- no incoming branch targets window interior.
+
+D97BU found zero safe homogeneous padding cave candidates inside `__text` and stopped fail-closed. This remains a valid NEGATIVE only for `__text` padding.
+
+## D97BV FULL PASS — executable unsectioned cave + selective adapter
+Returned bundle:
+`OCLP7_D97BV_TEXT_INTERSECTION_PADDING_CAVE_PREFLIGHT_20260906_001956.zip`
+- bytes `2574`;
+- SHA256 `c39198d603664b921f57abd0d09d24ad7fc1d08c2da8f44677c86de93301cbfd`.
+
+D97BV found exactly one safe padding candidate outside all Mach-O sections but inside executable native `__TEXT`:
+- `0x7FF80F47E560..0x7FF80F47E630`;
+- length 208 bytes;
+- all zero;
+- immediately before `__text`;
+- zero function-start, direct branch-target and decoded RIP-relative-target hits.
 
 Classification:
-`D97BU_ACCESSOR_CLAMP_PATCH_SITE_COMPLETE_INSTRUCTION_BOUNDARY=STATIC_PROVEN`.
+`D97BV_NATIVE_METAL_EXECUTABLE_INTERSECTION_PADDING_CAVE=STATIC_PROVEN_SAFE_BY_CURRENT_GATES`.
 
-D97BU strict search found:
-`CAVE_CANDIDATE_COUNT=0` inside native Metal `__text` and stopped fail-closed with `FAIL=NO_STATIC_SAFE_PADDING_CAVE`.
+Selective adapter static bytes:
+- site `3dda0e00007406e93bcee9ff90`, SHA256 `1123dd318a28e66be825763ccb9715b4ef2906fd9cdb6335ed2f53fada489a43`;
+- cave `3d187d0000b9177d00000f4cc1e9b4311600`, SHA256 `a1b8d3b2988e622a4ea8e9545816a44abdb5c84e70b4126a3bad15c9f7539045`.
+
+Semantics:
+- input exactly 3802 -> preserve 3802 and continue;
+- every other value -> execute exact original Tahoe floor in cave and return to original continuation.
+
+Truth-table audit showed no non-3802 semantic drift.
 
 Classification:
-`D97BU_NATIVE_METAL___TEXT_SAFE_PADDING_CAVE_GE_32=NEGATIVE`.
+`D97BV_SELECTIVE_3802_PRESERVE_ADAPTER_NO_NON3802_SEMANTIC_DRIFT=STATIC_SEMANTIC_PROVEN`.
 
-This is a preflight architecture/tooling negative only. No mutation occurred.
-Do not reuse a live function or merely unreferenced decoded code as a cave.
+## Current blocker: local native-Metal delivery
+Adapter logic and executable placement are now statically closed. A standalone exact native 25G82 Metal image is not yet proven reconstructible/load-command-valid from the dyld shared cache.
 
-Local extraction inventory also showed `xcrun -f dyld_shared_cache_util` and `xcrun -f dsc_extractor` absent (`RC=72`). This does not close other audited native-Metal reconstruction approaches.
+Apple `dyld_shared_cache_util` / `dsc_extractor` are absent via xcrun. Do not use a donor legacy Metal and do not redistribute an extracted Apple binary through GitHub.
 
-Desired adapter semantics remain unchanged:
-- exact incoming 3802 -> preserve 3802;
-- every other value -> execute original Tahoe floor exactly.
-
-Do not substitute global force-3802, global `32023->31001`, Golden offset transplantation or unproven threshold lowering.
-
-## CURRENT ACTION — D97BV
+## CURRENT ACTION — D97BW
 Remain unpatched in Tahoe VESA.
 
-Run only read-only `OCLP7_D97BV_text_intersection_padding_cave_preflight.sh`:
-- bytes `16179`;
-- SHA256 `ad279fd6e554a57c77287a86c1f3521288852095a2a60d12bdb37ebdf8723ffd`.
+Run only read-only/temporary-file collector:
+`OCLP7_D97BW_native_metal_temp_reconstruction.sh`
+- bytes `18302`;
+- SHA256 `20e2d042447eba578b857faeb221fd615751da37514afafd56921ecd581f09c1`.
 
-D97BV searches only padding outside all Mach-O sections but inside executable native `__TEXT`, excludes header/load commands, function starts, direct branch targets and decoded RIP-relative targets, and requires at least 18 homogeneous zero/NOP bytes. If found, it statically assembles the selective 3802 trampoline and proves a no-drift truth table. If none exists, it returns a clean PASS-with-negative-cave result.
+D97BW must:
+1. reconstruct a temporary standalone native Metal candidate from exact cache segments using declared Mach-O file offsets;
+2. validate segment overlap, load-command referenced data ranges, `file`, `otool -l`, `otool -L`, native `__TEXT` identity and `_MTL4*` string surface;
+3. apply the exact D97BV site+cave adapter only to a second temporary copy;
+4. prove all byte differences are confined to the two authorized windows and native Metal4 surface remains present;
+5. inspect codesign state read-only;
+6. delete both temporary Apple binaries before packaging;
+7. package only TXT+JSON, never Apple binary bytes;
+8. make no cache/system mutation, Root Patch or reboot.
 
-No Root Patch and no accelerated reboot are authorized.
-
-GitHub Actions compile/build/package remains suspended until explicit user confirmation that quota is unblocked. GitHub reads/static audit/persistence remain allowed. Local compilation is not an implicit fallback.
+No source integration/build/package is authorized yet. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
