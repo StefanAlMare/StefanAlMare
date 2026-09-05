@@ -3,14 +3,12 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BN_V2_FULL_PASS_ZERO_31001_TWO_LAYOUTS_D97BO_FIELD_WRITER_ORIGIN_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BO_FULL_PASS_NO_DIRECT_INTERSECTION_CONSTRUCTOR_SELECTOR_DATAFLOW_D97BP_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
-Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` and `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
+Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
 
-## Mandatory startup
-Before any technical modification read, in order:
+## Mandatory startup order
 1. permanent database;
 2. permanent working rules;
 3. this MASTER;
@@ -22,11 +20,11 @@ Before any technical modification read, in order:
 - Tahoe `26.6.2 / 25G82`;
 - Haswell HD4400/4600 `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
-- current state unpatched VESA after sealed/saved snapshot restore;
+- current state unpatched VESA after saved/sealed snapshot restore;
 - `-igfxvesa` active;
 - no active Root Patch.
 
-End goal: stable hardware acceleration and usable GUI.
+End goal: stable hardware acceleration + usable GUI.
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
 ## Exact Golden authority
@@ -35,9 +33,9 @@ Original working OCLP lineage:
 - commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
 - tree `7c3411fde7d40604164c8877a5ab5594448083ac`;
 - OCLP `2.5.0`, PatcherSupportPkg `1.9.6`;
-- Golden root-patch manifest SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
+- root-patch manifest SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
 - official app executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
-- official helper SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, Team ID `S74BDJXQMD`.
+- official helper SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, Team `S74BDJXQMD`.
 
 Golden compiler identities:
 - 32023 `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`;
@@ -49,19 +47,17 @@ Golden selector:
 - `31001 -> Versions/32023`.
 
 Golden primary Metal request-builder:
-- function `0x7FF80D370756..0x7FF80D370C28`;
-- RBX = ABI arg1/RDI;
-- `[RBX+0x20] -> llvmVersion`;
-- R13 = ABI arg2/RSI;
-- `[R13+0x08] -> requestType`;
-- `[R13+0x18] -> timeout`;
-- `[R13+0x70]` sandbox gate;
+- `0x7FF80D370756..0x7FF80D370C28`;
+- `[ABI arg1 +0x20] -> llvmVersion`;
+- `[ABI arg2 +0x08] -> requestType`;
+- `[ABI arg2 +0x18] -> timeout`;
+- `[ABI arg2 +0x70]` sandbox gate;
 - alternate requestType immediate `9`.
 
-Golden runtime naturally exhibits both 3802 and 32023 donor lanes and a positive Haswell -> compiler -> Metal compositor corridor.
+Golden runtime naturally uses both 3802 and 32023 donor lanes and reaches Metal compositor success.
 
-## Durable historical functional evidence
-Accepted true-five diagnostic lineage remains exactly:
+## Durable functional/methodology authority
+Accepted historical functional lineage:
 `P1 + P2b + P3 + AIR00 + D34`.
 
 True-five SHA `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`.
@@ -72,122 +68,130 @@ Architecture principle:
 
 ## Exact 25G82 Metallib authority
 - package SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`;
-- exact local tree `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`;
+- local tree `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`;
 - Pyquick dictionary SHA256 `c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`;
 - exact Tahoe map 182 entries.
 
-Keep D97BJ exact-local handling + exact map in future hybrid designs.
+Retain exact-local handling + exact map in future hybrid designs.
 
 ## D97BJ / D97BK closure
-D97BJ Root Patch execution itself passed completely, including Haswell kexts, metallibs and AuxKC.
+D97BJ Root Patch execution itself passed, including Haswell kexts, exact metallibs and AuxKC.
 
-The accelerated failures were not kernel panics. D97BK proved userspace and WindowServer were reached, then critical services died because full legacy `13.2.1-24/Metal.framework` removed Tahoe Metal4 superclass surface; launchd committed orderly shutdown.
+Accelerated boots were not kernel panics. D97BK proved userspace/WindowServer reached, then critical services died because full legacy `13.2.1-24/Metal.framework` removed Tahoe `_MTL4*` superclass surface; launchd committed orderly shutdown.
 
-Permanent classification:
-`D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE_NEGATIVE`.
+Permanent NEGATIVE:
+`D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE`.
 
-## D97BL hybrid closure
+## D97BL selective-hybrid authority
 Required architecture:
 `native Tahoe Metal / Metal4 ABI -> selective legacy 3802 ingress -> audited boundary adapters -> Haswell driver -> image`.
 
-Donor collision audit:
+Donor collision closure:
 - `12.5-3802-23/Metal.framework` can be bounded to legacy `MTLCompilerService.xpc` only;
-- `13.2.1-24/Versions/A/Metal` shadows native cache-resident Tahoe Metal and is forbidden.
+- `13.2.1-24/Versions/A/Metal` shadows cache-resident native Metal and is forbidden.
 
-Historical native-Metal + legacy-XPC/private-compilers + true-five was already tested and failed to produce usable GUI. Do not repeat it unchanged.
+Historical native-Metal + legacy-XPC/private-compilers + true-five already failed to yield usable GUI; do not repeat unchanged.
 
-## D97AA retained runtime generation fact
-In the failing accelerated cohort:
-- 12/12 observed service requests carried exact `llvmVersion=32023`;
+## D97AA runtime generation fact
+Failing Tahoe accelerated cohort:
+- 12/12 observed service requests `llvmVersion=32023`;
 - 3802=0;
 - other=0.
 
-Golden naturally uses both 3802 and 32023 lanes. Missing Tahoe 3802 generation remains a live upstream semantic difference.
+Golden naturally uses both 3802 and 32023 lanes.
 
-## D97BM exact native-cache result
-Native Metal cache image:
-- path `/System/Library/Frameworks/Metal.framework/Versions/A/Metal`;
+## D97BM / D97BN producer closure
+Native Tahoe Metal:
+- cache path `/System/Library/Frameworks/Metal.framework/Versions/A/Metal`;
 - start `0x7FF80F47D000`;
 - cached `__TEXT` SHA256 `bf405828f42ba59e68273190ac19b70aa0c3d1d4b34de6dc49de206dd5b04605`.
 
 Native MTLCompilerService SHA256:
 `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`.
 
-Native IOGPU image starts at `0x7FF906A1F000`.
-Exact native `_MTL4*` and corresponding `IOGPUMetal4*` class-name surface is present.
+Native `_MTL4*` / `IOGPUMetal4*` class-name surface is present.
 
-## D97BN / D97BN-v2 closure — two layouts and generation dialect
-D97BN v1 mapped two complete native Tahoe request builders:
-
-### Builder A
+### Tahoe Builder A
 `0x7FF80F635510..0x7FF80F635A4D`
-- `llvmVersion = signed dword [ABI arg1 + 0x1C]`;
-- requestType helper reads `dword +0xAC` from ABI arg2 object;
-- timeout helper reads `qword +0xB8` from same object family.
+- llvmVersion `[arg1+0x1C]`;
+- requestType helper reads `+0xAC` from arg2 object;
+- timeout helper reads `+0xB8` from same object family;
+- three direct E8 callers;
+- two wrapper callers source Builder-A arg1 from `[incoming object+0x38]`.
 
-Three direct E8 callers are proven. Two wrapper callers source Builder-A arg1 from `[incoming object +0x38]`.
-
-### Builder B
+### Tahoe Builder B
 `0x7FF80F663CA9..0x7FF80F66492C`
-- `llvmVersion = signed dword [ABI arg1 + 0x38]`;
-- requestType comes through the same `+0xAC` helper family from subordinate object `[arg1+0x28]`;
-- timeout uses same `+0xB8` helper family;
-- no direct E8 callers found; ingress is likely indirect/virtual/non-E8.
+- llvmVersion `[arg1+0x38]`;
+- requestType uses same `+0xAC` helper family from subordinate object `[arg1+0x28]`;
+- timeout uses same `+0xB8` family;
+- no direct E8 callers found.
 
-Both mapped alternate requestType paths use exact immediate `9`.
+Both alternate requestType paths use immediate `9`.
 
-D97BN-v2 returned bundle:
-`OCLP7_D97BN_V2_GENERATION_AND_CALLER_COMPLETION_20260905_224128.zip`
-- bytes `11417`;
-- SHA256 `06f6c90e89bd384189d8e2179ebbcc0351f3783738bc24f3268e47d24562957d`.
+Generation census in native Metal:
+- 3802 raw 11 / validated 9;
+- 31001 raw 0 / validated 0;
+- 32023 raw 10 / validated 10.
 
-Final markers PASS:
-- generation census;
-- builder caller census;
-- audit.
+Therefore native Tahoe still contains real 3802 architecture but no Golden 31001 selector dialect. Do not globally replace `32023 -> 31001` and do not transplant Golden `+0x20` offsets.
 
-Exact native Metal generation census:
-- 3802: raw 11 / instruction-validated 9;
-- 31001: raw 0 / validated 0;
-- 32023: raw 10 / validated 10.
+## D97BO FULL PASS — current frontier
+Returned bundle:
+`OCLP7_D97BO_LLVMVERSION_FIELD_WRITER_AND_GENERATION_ORIGIN_20260905_225120.zip`
+- bytes `905767`;
+- SHA256 `a83675a6f07bb330537d93d4011ae6688a0024f162cc8acd67756ecdc0ab6380`.
+
+All D97BO final markers PASS; no mutation.
+
+### Native generation singleton selector
+- 3802 init `0x7FF80F614D86..0x7FF80F614D9F` creates/stores singleton global `0x7FF843D65C90`;
+- 32023 init `0x7FF80F614DB8..0x7FF80F614DD1` creates/stores singleton global `0x7FF843D65CB0`;
+- shared selector `0x7FF80F5EFFEB..0x7FF80F5F009C` explicitly distinguishes 3802 (`0xEDA`), 3902 (`0xF3E`), 32023 (`0x7D17`) and 32024 (`0x7D18`) and returns corresponding singleton.
+
+Classification:
+`TAHOE_NATIVE_GENERATION_SINGLETON_SELECTOR_3802_32023=STATIC_PROVEN`.
+
+### High-priority generation-aware constructor candidate
+Function:
+`0x7FF80F4A5DF8..0x7FF80F4A7A88`.
+
+It combines explicit 32023 logic and request-layout-like writes:
+- `0x7FF80F4A6283`: compare local `-0x27C` with 32023;
+- `0x7FF80F4A726F`: write local `-0x3A0` -> `+0x1C(%r13)`;
+- `0x7FF80F4A727A`: separate write -> `+0x20(%r13)`;
+- `0x7FF80F4A72B1`: 16-byte write -> `+0x38(%r13)`;
+- `0x7FF80F4A79CE`: local `-0x2C4` -> `+0x38(%r8)` in another constructed layout.
+
+This is high-value STATIC-MAPPED evidence, not yet proof that the exact object reaches Builder A/B.
+
+### No simple one-hop bridge
+D97BO found no direct generation-function call or generation-global xref in the broad displacement-writer functions. Only three broad writer functions contain 32023 immediates; the constructor above is the only high-priority object-layout candidate.
 
 Classifications:
-- `TAHOE_NATIVE_METAL_31001_IMMEDIATE_CENSUS=ZERO_STATIC_PROVEN`;
-- `TAHOE_NATIVE_METAL_3802_LOGIC_PRESENT=STATIC_PROVEN`;
-- `TAHOE_NATIVE_METAL_32023_LOGIC_PRESENT=STATIC_PROVEN`;
-- `D97BN_TAHOE_TWO_DISTINCT_NATIVE_LLVMVERSION_LAYOUTS=STATIC_PROVEN`.
+- direct generation-function -> llvmVersion-writer edge = NEGATIVE;
+- generation-global -> writer direct xref = NEGATIVE;
+- simple one-hop normalization site = NOT PROVEN.
 
-Important static examples:
-- `0x7FF80F596A81..0x7FF80F596A8C` returns exact 3802;
-- `0x7FF80F614D86..0x7FF80F614D9F` initializes a 3802 generation/factory lane;
-- `0x7FF80F614DB8..0x7FF80F614DD1` analogously initializes 32023;
-- multiple functions classify 3802 vs the 32023/32024 family.
+## CURRENT ACTION — D97BP
+Remain unpatched in Tahoe VESA.
 
-Therefore Tahoe still contains real 3802 machinery; the 12/12 runtime 32023 cohort is a selection/dataflow issue, not total removal of 3802 support.
+Next read-only audit:
+1. back-slice constructor locals `-0x3A0`, `-0x2C4`, and discriminator `-0x27C` in `0x7FF80F4A5DF8..0x7FF80F4A7A88`;
+2. map direct callers/argument provenance of that constructor;
+3. map direct callers of selector `0x7FF80F5EFFEB..0x7FF80F5F009C` and EDX source at each call;
+4. compare those objects with Builder-A wrapper shape and Builder-B request-object shape;
+5. prove or reject one natural upstream adapter boundary.
 
-Do not globally replace `32023 -> 31001` and do not transplant Golden `+0x20` offsets. Both would be structurally unjustified.
-
-## CURRENT ACTION — D97BO field-writer / generation-origin audit
-Remain unpatched in VESA.
-
-Next read-only action must:
-1. pin exact 25G82 native Metal text SHA;
-2. map all instruction-level writes to the fields consumed as `llvmVersion` (`Builder A arg1 +0x1C`, Builder B arg1 +0x38`);
-3. map Builder-A caller object provenance, including the wrapper `[+0x38] -> builder arg1` relationship;
-4. map callers/dataflow of the exact 3802-return and 3802/32023 generation initializer functions;
-5. connect generation selection to the object-field writes where statically resolvable;
-6. make no source/system/cache mutation, Root Patch or reboot.
-
-No Root Patch or accelerated boot is authorized.
+No Root Patch and no accelerated reboot are authorized.
 
 ## Mandatory pre-reboot gate
-No future Root Patch/accelerated boot until:
+No Root Patch/accelerated boot until:
 1. native Tahoe Metal4 remains authoritative;
-2. no legacy main Metal shadows cache Metal;
-3. legacy service/compiler ingress is bounded;
+2. legacy main Metal is absent from proposed root;
+3. legacy service/compiler ingress remains bounded;
 4. exact 25G82 Metallib handling remains intact;
 5. producer normalization is statically complete across relevant request families;
-6. the experiment adds new causal information beyond historical true-five.
+6. test adds new causal information beyond historical true-five.
 
 ## Execution contract
 GitHub Actions compile/build/package remains suspended until explicit user confirmation that quota is unblocked. GitHub reads/static audit/persistence remain allowed. Local compilation is not an implicit fallback.
