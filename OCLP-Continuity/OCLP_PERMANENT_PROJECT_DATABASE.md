@@ -1,84 +1,61 @@
 # OCLP PERMANENT PROJECT DATABASE — ASUS2 Tahoe Haswell
 
 Updated: 2026-09-05 EEST
-Scope: **all continuations OCLP 11, OCLP 12, OCLP 13, OCLP 14, OCLP 15 and later**.
+Scope: all OCLP11/OCLP12/OCLP13/OCLP14/OCLP15+ continuations.
 Purpose: consolidated durable project state. Detailed evidence remains in MASTER, HISTORY, RETROSPECTIVE and checkpoint corpus. If current-state wording conflicts, the newest authoritative checkpoint linked by MASTER wins. Permanent safety/methodology rules remain governed by `OCLP_PERMANENT_WORKING_RULES.md` and `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
 
 ---
 
 ## 1. End goal
-Run macOS Tahoe `26.6.2 / 25G82` on ASUS2 with Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, with stable hardware acceleration and usable GUI.
+Run macOS Tahoe `26.6.2 / 25G82` on ASUS2 with Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware acceleration and usable GUI.
 
 ---
 
 ## 2. Current architecture authority
-The old pure identical-Golden strategy is no longer sufficient at the whole `Metal.framework` boundary.
+The old whole-framework identical-Golden strategy is closed as a final Tahoe solution.
 
-Current required architecture after D97BK:
+Current required architecture:
 `Tahoe-native Metal4/IOGPU outer ABI -> audited legacy-3802 ingress adapter -> Golden-equivalent legacy compiler/selector semantics -> Haswell driver handoff -> image`.
 
-Core rule:
-- preserve Tahoe-native Metal4 Objective-C ABI surface;
-- do not blindly replace Tahoe `Metal.framework/Versions/A/Metal` with the legacy 13.2.1 donor;
-- integrate only the legacy 3802 path required for Haswell through a bounded, semantically audited adapter;
-- keep exact 25G82 MetallibSupportPkg handling.
+Core rules:
+- preserve native Tahoe Metal4 Objective-C ABI surface;
+- do not install legacy `13.2.1-24/Versions/A/Metal` over the cache-resident Tahoe Metal image;
+- integrate only the legacy 3802 path needed for Haswell through a bounded adapter;
+- keep exact 25G82 MetallibSupportPkg handling;
+- do not spend a Root Patch/recovery cycle recreating a historical state that already failed without adding new causal information.
 
-This is consistent with the historical adapter principle:
+This follows the historical principle:
 `Tahoe-native producer -> earliest non-equivalent handoff -> adapter/normalizer -> unchanged working legacy donor path -> image`.
 
 ---
 
 ## 3. Golden systems / immutable rule
-### GOLDEN_A
-- Sequoia `15.7.9 / 24G830`.
-
-### GOLDEN_B
-- Sequoia `15.8 / 24H22`;
-- same EFI according to user;
-- original OCLP Root Patch manually reapplied;
-- hardware acceleration works.
-
-Golden is **immutable/read-only**. Never boot or modify Golden merely to collect evidence.
+Golden Sequoia working systems remain immutable/read-only. Never boot or modify Golden merely to collect new evidence. Use persisted evidence or read-only static inspection only when genuinely required.
 
 ---
 
 ## 4. Exact Golden ORIGINAL-OCLP source lineage
-Working Golden root-patch manifest:
-`/System/Library/CoreServices/OpenCore-Legacy-Patcher.plist`
-
 Pinned identity:
-- manifest bytes `34173`;
-- manifest SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
-- OCLP `v2.5.0`;
-- PatcherSupportPkg `v1.9.6`;
-- manifest OS `24.6 (24H22)`;
-- exact upstream commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
-- exact tree `7c3411fde7d40604164c8877a5ab5594448083ac`.
-
-Official Golden-lineage Desktop app:
-- executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
-- Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
-- Developer ID Team `S74BDJXQMD`;
-- deep/strict codesign PASS.
-
-Official privileged helper reference:
-- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
-- Team ID `S74BDJXQMD`.
+- upstream `dortania/OpenCore-Legacy-Patcher`;
+- exact commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
+- exact tree `7c3411fde7d40604164c8877a5ab5594448083ac`;
+- OCLP `2.5.0`;
+- PatcherSupportPkg `1.9.6`;
+- root-patch manifest SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
+- official app executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
+- official helper SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, Team ID `S74BDJXQMD`.
 
 ---
 
 ## 5. Golden component invariants
-Donor/compiler components:
 - 32023 SHA256 `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`;
 - 3802 SHA256 `85d4c285915c4d2094f3624d80fd2d0c4dd30994fc5150c22d1e6d2b58d67f40`;
-- MTLCompilerService SHA256 `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`.
+- MTLCompilerService SHA256 `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`;
+- AppleIntelFramebufferAzul SHA256 `3ff93ec8ce42c9d9f124c0a93e9d48e52b7e3c81ae47d4ede6948e452dd2624f`;
+- AppleIntelHD5000Graphics SHA256 `a7ec5021532163b3202b448d25e1035e4d4ed6e25f770bba99fe9c7df77adbee`;
+- AppleIntelHD5000GraphicsMTLDriver SHA256 `7fa9e4d882916d7bff700cf23b4be62cfb82c1dbf92b5482b231b6c23657df42`.
 
-Haswell components:
-- AppleIntelFramebufferAzul binary SHA256 `3ff93ec8ce42c9d9f124c0a93e9d48e52b7e3c81ae47d4ede6948e452dd2624f`;
-- AppleIntelHD5000Graphics binary SHA256 `a7ec5021532163b3202b448d25e1035e4d4ed6e25f770bba99fe9c7df77adbee`;
-- AppleIntelHD5000GraphicsMTLDriver binary SHA256 `7fa9e4d882916d7bff700cf23b4be62cfb82c1dbf92b5482b231b6c23657df42`.
-
-Original selector mapping:
+Original service selector:
 - request `3802 -> Versions/3802`;
 - request `31001 -> Versions/32023`.
 
@@ -86,31 +63,33 @@ Original selector mapping:
 
 ## 6. Golden request/producer contract closure
 Receiver XPC schema:
-- `requestType:uint64`;
-- `sandboxTokens:value`;
-- `llvmVersion:uint64`;
-- `pluginPath:string`;
-- `targetData:value`;
-- `data:value`;
-- `client_name:string`;
-- `timeout:uint64`.
+- requestType:uint64;
+- sandboxTokens:value;
+- llvmVersion:uint64;
+- pluginPath:string;
+- targetData:value;
+- data:value;
+- client_name:string;
+- APISpecifiedTimeoutInSeconds:uint64.
 
-Primary Golden request builder:
-- region `0x7FF80D370756..0x7FF80D370C28`;
-- `RBX = ABI arg1/RDI`;
-- `[RBX+0x20] -> llvmVersion`;
-- `R13 = ABI arg2/RSI`;
+Primary Golden Metal request builder:
+- function `0x7FF80D370756..0x7FF80D370C28`;
+- RBX = ABI arg1/RDI;
+- signed dword `[RBX+0x20] -> llvmVersion`;
+- R13 = ABI arg2/RSI;
 - `[R13+0x08] -> requestType`;
 - `[R13+0x18] -> timeout`;
 - `[R13+0x70]` gates sandboxTokens;
 - alternate requestType immediate `9`.
+
+Golden runtime established both 3802 and 32023 donor lanes and a positive Haswell driver -> compiler -> Metal compositor corridor.
 
 ---
 
 ## 7. Historical accepted functional baseline
 Exactly:
 1. P1 selector bridge;
-2. P2b request-layout bridge `request+0xD0 -> request+0x110`;
+2. P2b request-layout bridge `+0xD0 -> +0x110`;
 3. P3 serialized-bitcode path;
 4. AIR00 fallback producing AIR 2.6 / Metal 3.1;
 5. D34 semantic-equivalent reset.
@@ -118,42 +97,40 @@ Exactly:
 True-five historical SHA:
 `6e8969ee606b5e9321db2d4cf847a7ff6b32d46a9899b8eaa23e9c8f4f895c01`.
 
-D22 remains semantic proof for AIR 2.6 / Metal 3.1.
+D22 remains semantic proof for AIR 2.6 / Metal 3.1. D34 cave `0xEF8..0xEFE` is protected.
 
-These are historical/proven design evidence, not automatically active patches. P6/P7 sufficiency is NEGATIVE. D50/D68/D82 reserve-only. D84 retired. D36-D44 invalidated for D34 cave overlap.
+P6/P7 runtime sufficiency NEGATIVE. D50/D68/D82 reserve-only. D84 retired. D36-D44 invalidated for D34 cave overlap.
+
+These five patches are design evidence, not automatically the next active patchset.
 
 ---
 
 ## 8. Retained late-userspace causal model
-Once the legacy compiler stage is reached, retained causal chain is:
+Once legacy compilation is reached:
 `MTLCompilerService failure -> XPC_ERROR_CONNECTION_INTERRUPTED -> pipeline creation failure -> SkyLight/CopyPipelineState abort -> WindowServer death`.
 
-D97BK establishes a different, earlier userspace blocker for the D97BJ full-framework donor, so this old chain is not assumed to be reached until Metal4 ABI closure passes.
+WindowServer is downstream, not root cause.
 
 ---
 
-## 9. Rejected historical Tahoe/T2 worktree
+## 9. Rejected historical Tahoe custom worktree
 Historical path:
-`/Volumes/AsusLaptop/Users/alex/Developer/OpenCore-Legacy-Patcher-T2-Tahoe-25G82`
+`/Volumes/AsusLaptop/Users/alex/Developer/OpenCore-Legacy-Patcher-T2-Tahoe-25G82`.
 
-It is a dirty/custom historical source and is not an identical comparator. Never clean/reset it merely to manufacture a comparator.
+It remains dirty/custom evidence, not an identical comparator. Never clean/reset it merely to manufacture a comparator.
+
+The recovered historical source is now useful as design evidence because it shows a native-Metal-safe hybrid was already tested.
 
 ---
 
 ## 10. Exact b9df76 Tahoe eligibility closure
-Exact b9df76 originally has `_max_os = os_data.sequoia.value`; `os_data.py` already defines Tahoe = Darwin 25.
+Exact b9df76 originally has `_max_os = os_data.sequoia.value`; Tahoe is Darwin 25. Haswell remains non-native/patchable on Darwin 25. The historical second native-OS blocker does not apply to exact b9df76.
 
-The historical second Haswell/native-OS blocker does not apply to exact b9df76:
-- Haswell is included;
-- `IntelHaswell.native_os()` is false on Darwin 25;
-- Haswell composition remains LegacyMetal3802 + MontereyGVA + MontereyOpenCL + model-specific;
-- LegacyMetal3802 has no Tahoe maximum.
-
-Thus host-eligibility delta itself is valid, but it never proved whole Root Patch compatibility.
+Thus host eligibility itself is valid but never proved whole Root Patch compatibility.
 
 ---
 
-## 11. D97BH — exact 25G82 MetallibSupportPkg
+## 11. Exact 25G82 MetallibSupportPkg
 Exact package:
 - `MetallibSupportPkg-26.6.2-25G82.pkg`;
 - bytes `116574513`;
@@ -162,113 +139,113 @@ Exact package:
 Exact local tree:
 `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`.
 
-Runtime proved local package selection works. D97BJ improved this by preferring exact local host-build package before API fallback.
-
-Exact Pyquick 25G82 patch dictionary SHA256:
+Exact Pyquick 25G82 dictionary SHA256:
 `c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`.
 
----
-
-## 12. D97BJ — Root Patch execution PASS, boot strategy NEGATIVE
-D97BJ used exact b9df76 plus:
-- Tahoe host eligibility;
-- `Metal.framework` legacy donor forced to `13.2.1-24`;
-- exact 25G82 metallib map (182 entries);
-- exact local Metallib preference.
-
-Root Patch execution itself was successful:
-- preflight PASS;
-- Metal 3802 Common/Extended installed;
-- exact 25G82 metallibs installed including `VisionKitCore`;
-- Monterey GVA/OpenCL installed;
-- Haswell kext/driver set installed;
-- Modern Wireless installed;
-- GPUCompiler merged;
-- AuxKC built and forced;
-- final `Patching complete`.
-
-Official helper was restored before accelerated test, so helper state is not a confounder.
+Runtime local selection is proven. D97BJ exact-local-first handling and exact 182-entry Tahoe metallib map remain retained for future designs.
 
 ---
 
-## 13. D97BK — accelerated evidence correction and root cause
+## 12. D97BJ — Root Patch execution PASS, full legacy Metal boot strategy NEGATIVE
+D97BJ used exact b9df76 plus Tahoe eligibility, exact local Metallib preference, exact 25G82 metallib map and forced legacy `13.2.1-24/Metal.framework`.
+
+Root Patch runtime itself fully passed: preflight, Metal3802 Common/Extended, exact metallibs, Monterey GVA/OpenCL, Haswell driver set, Modern Wireless, GPUCompiler and AuxKC; final `Patching complete`.
+
+Official helper was restored before accelerated boot.
+
+---
+
+## 13. D97BK — accelerated evidence and Metal4 ABI root cause
 Evidence bundle:
-`OCLP7_D97BK_PANIC_EVIDENCE_20260905.zip`
-- bytes `291750`;
-- SHA256 `f8cdacb13cc2a7dcc23049ece416160259c1e9cf671c20546d1e0e90a32565f1`.
+`OCLP7_D97BK_PANIC_EVIDENCE_20260905.zip`, SHA256 `f8cdacb13cc2a7dcc23049ece416160259c1e9cf671c20546d1e0e90a32565f1`.
 
-Authoritative chronology:
-- `05:15` accelerated #1;
-- `05:18` accelerated #2;
-- `12:09` / `12:36` VESA/recovery excluded.
+The two accelerated attempts did not kernel panic. Both reached userspace and WindowServer running. Essential services then repeatedly died because Tahoe IOGPU Metal4 classes could not resolve their native Metal `_MTL4*` superclasses; launchd committed orderly shutdown.
 
-### Kernel panic retracted
-There was no kernel panic. No panic report/backtrace exists and `DumpPanic processed 0 files` after each accelerated failure.
-
-Classifications:
-- `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_RESTART=RETRACTED_USER_VISUAL_MISCLASSIFICATION`;
-- `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC=NEGATIVE`.
-
-### Deterministic userspace failure
-Both accelerated boots reach `WindowServer` running, then repeatedly kill `runningboardd` and `launchservicesd` with:
-`OS_REASON_OBJC | Superclass of IOGPUMetal4RenderCommandEncoder ... in IOGPU is set to 0xbad4007, indicating it is missing from an installed root`.
-
-After repeated essential-service crashes, `launchd` explicitly commits an orderly system shutdown.
-
-Classifications:
-- `D97BJ_ACCELERATED_BOOT_USERSPACE_REACHED=PROVEN`;
-- `D97BJ_WINDOWSERVER_SPAWN_AND_RUNNING=PROVEN`;
-- `D97BJ_IOGPU_METAL4_SUPERCLASS_MISSING=PROVEN`;
-- `D97BJ_LAUNCHD_CONTROLLED_SHUTDOWN_AFTER_CRITICAL_SERVICE_CRASH_LOOP=PROVEN`;
-- `D97BJ_ACCELERATED_BOOT_USABLE_GUI=NEGATIVE`.
-
-### Static ABI closure
-Tahoe IOGPU Metal4 classes inherit from `_MTL4*` superclasses supplied by Tahoe Metal.framework. Proven family includes:
-- `_MTL4CommandQueue`;
-- `_MTL4CommandBuffer`;
-- `_MTL4CommandAllocator`;
-- `_MTL4RenderCommandEncoder`;
-- `_MTL4ComputeCommandEncoder`;
-- `_MTL4MachineLearningCommandEncoder`.
-
-D97BJ's full legacy `Metal.framework 13.2.1-24` donor removes Tahoe's Metal4 superclass surface while native Tahoe IOGPU remains modern.
+Proven class family includes command queue, command buffer, command allocator, render, compute and machine-learning encoders.
 
 Classification:
 `D97BJ_FULL_METAL_FRAMEWORK_13_2_1_24_ON_TAHOE=ABI_INCOMPATIBLE_NEGATIVE`.
 
-A one-class shim is insufficient because the dependency is a wider Metal4 family.
+Adding one `_MTL4*` shim is structurally insufficient.
 
 ---
 
-## 14. Current D97BL design direction
-D97BL must preserve native Tahoe Metal.framework/Metal4 ABI and integrate legacy 3802 support as a hybrid boundary adapter.
+## 14. D97BL v2 — donor collision closure
+Returned bundle:
+`OCLP7_D97BL_STATIC_HYBRID_AUDIT_20260905_134001.zip`
+- bytes `143866`;
+- SHA256 `426b5bccbaf525626007e90d695466cf7afbedf90b6c075e5076b3e083bf1a23`.
 
-The historical accepted five-functional lineage becomes strategically relevant again, but each element must be revalidated against current Tahoe 25G82 and exact native Metal4 contracts before reuse.
+Collector classification:
+`D97BL_V2_COLLECTOR_RESULT=PARTIAL_PASS_WITH_READONLY_TOOLING_DEFECTS`.
 
-Keep from D97BJ:
-- Tahoe host eligibility;
-- exact local 26.6.2-25G82 MetallibSupportPkg handling;
-- exact 25G82 metallib map.
+Two reporting bugs occurred but no mutation:
+- collision-analysis Python UnboundLocalError;
+- native Metal was incorrectly probed as a root file even though Tahoe supplies it from dyld shared cache.
 
-Reject from D97BJ as final Tahoe strategy:
-- wholesale legacy Metal.framework 13.2.1-24 replacement/merge over native Tahoe Metal4 root.
+Durable collision conclusions:
+
+### Native Tahoe MTLCompilerService
+- SHA256 `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`;
+- universal x86_64 + arm64e;
+- UUID `022C1750-8735-389A-A8BA-A8A67F54235D`.
+
+### `12.5-3802-23/Metal.framework`
+Contains exactly four regular files, all inside `MTLCompilerService.xpc`. It can be bounded to service-bundle replacement without touching main Metal.
+
+Legacy service remains exact Golden identity SHA256 `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`.
+
+### `13.2.1-24/Metal.framework`
+Contains exactly:
+- `Versions/A/Metal`, SHA256 `b9b6fd7ee445b0060c8dbbdd878b5a3f6f5d172865432fa4302f72f6bdb41c2f`;
+- `Versions/A/MetalOld.dylib`, SHA256 `5ba827f9c3c5d0018222d615e7118e1e8db511ba0ea66e8b4df7f4b50a9107db`.
+
+Because Tahoe native Metal is cache-resident, installing legacy `Versions/A/Metal` at the canonical path shadows the native image.
+
+Permanent classification:
+`D97BL_13_2_1_24_METAL_AND_METALOLD_INSTALL=FORBIDDEN_TAHOE_NATIVE_CACHE_SHADOW`.
+
+The private 3802/32023 compiler payloads remain candidates for a bounded hybrid subject to later static root closure.
 
 ---
 
-## 15. Mandatory pre-reboot Metal4 closure gate
+## 15. Historical true-five non-repetition rule
+Recovered historical Tahoe source already used the native-Metal-safe structure:
+- preserved native Tahoe Metal;
+- replaced only legacy MTLCompilerService.xpc;
+- merged private 3802/32023 compiler lanes;
+- used Tahoe metallibs;
+- applied P1/P2b/P3/AIR00/D34.
+
+That architecture reached MTLCompilerService but did not yield a usable GUI.
+
+Permanent classification:
+`D97BL_PLAIN_TRUE_FIVE_HYBRID_REBOOT_REPETITION=REJECTED_NO_NEW_CAUSAL_INFORMATION`.
+
+Do not authorize a reboot whose only purpose is to recreate that historical state.
+
+---
+
+## 16. Producer-normalization frontier
+D97AV established that P1 is a downstream compatibility shim: it adapts a Tahoe request carrying 32023 to the legacy selector, but does not explain the missing Golden 3802 lane. Preferred repair is upstream producer normalization if exact current Tahoe producer comparison confirms it.
+
+Next analysis therefore targets the native Tahoe Metal request producer in exact 25G82 dyld shared cache.
+
+---
+
+## 17. Mandatory pre-reboot Metal4 / novelty gate
 No future Root Patch/accelerated boot until static audit proves:
-1. native Tahoe Metal4 ABI surface remains present after proposed patch;
-2. every IOGPU-referenced `_MTL4*` superclass resolves from installed root;
-3. Tahoe `Metal.framework/Versions/A/Metal` is not blindly replaced by legacy donor;
-4. legacy 3802 selector/compiler ingress is implemented via bounded audited adapter;
-5. exact 25G82 metallib map/local package handling remains intact.
-
-This gate exists specifically to minimize unavoidable Root Patch/recovery cycles.
+1. native Tahoe Metal4 ABI remains present;
+2. all relevant IOGPU `_MTL4*` superclasses resolve;
+3. native cache-resident Metal is not shadowed by legacy `Versions/A/Metal`;
+4. legacy 3802 ingress is bounded/audited;
+5. exact 25G82 metallib/local-package handling remains intact;
+6. the proposed experiment supplies causal information not already obtained from historical true-five testing.
 
 ---
 
-## 16. Execution responsibility / quota override
-GitHub-first is the permanent default, but GitHub compilation/build/package jobs remain suspended until explicit user confirmation that quota is reset/unblocked.
+## 18. Execution responsibility / quota override
+GitHub-first remains permanent default. GitHub compilation/build/package jobs remain suspended until explicit user confirmation that quota reset/unblocked.
 
 Allowed now:
 - GitHub source reads;
@@ -276,39 +253,45 @@ Allowed now:
 - provenance;
 - persistence/checkpoints.
 
-Not allowed without explicit new instruction:
-- new GitHub Actions compile/build/package run;
-- implicit local compilation fallback.
-
+Local compilation is not an implicit fallback and requires explicit authorization.
 Never auto Root Patch. Never auto reboot.
 
 ---
 
-## 17. Permanent diagnostic / VESA discipline
+## 19. Permanent diagnostic / VESA discipline
 - keep evidence classes distinct;
 - module-boundary methodology by default;
 - raw evidence before interpretation;
 - whole-stage/multi-threshold diagnostics preferred;
 - analyze the immediately preceding accelerated diagnostic boot, not later VESA recovery;
 - user's boot identification is authoritative;
-- D34 cave `0xEF8..0xEFE` remains protected;
 - persist decisive PROVEN/NEGATIVE results immediately.
 
 ---
 
-## 18. Current system state and CURRENT ACTION
-Current machine state after recovery:
+## 20. Current system state / CURRENT ACTION
+Current machine:
 - Tahoe `26.6.2 / 25G82`;
-- VESA/recovery;
-- saved/sealed snapshot restored;
-- no active Root Patch (`OpenCore-Legacy-Patcher.plist` absent in current root).
+- VESA/recovery with `-igfxvesa`;
+- sealed/saved snapshot restored;
+- no active Root Patch.
 
-### CURRENT ACTION
-Remain unpatched in VESA/recovery state.
+### CURRENT ACTION — D97BM read-only native shared-cache producer audit
+Run only `OCLP7_D97BM_tahoe_native_metal_producer_and_metal4_audit.sh`.
 
-No Root Patch and no accelerated reboot are authorized.
+D97BM must:
+1. pin native Tahoe MTLCompilerService SHA `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`;
+2. parse exact local 25G82 dyld shared caches read-only;
+3. locate native Metal and IOGPU images;
+4. hash native Metal `__TEXT`;
+5. recover all eight Metal-owned XPC request-key xrefs;
+6. derive the primary eight-key request-builder cluster and LC_FUNCTION_STARTS boundaries;
+7. back-slice Tahoe llvmVersion/requestType/timeout value sources;
+8. census native `_MTL4*` and `IOGPUMetal4*` class-name surface;
+9. inventory cache tooling for later bounded native-image reconstruction;
+10. make no source/system/cache mutation, no Root Patch and no reboot.
 
-Design/audit D97BL as a Tahoe-native-Metal4-preserving hybrid. First map the exact native Tahoe Metal4/IOGPU contract and the minimum legacy 3802 ingress required from the historical true-five. Before any future boot, pass the mandatory static Metal4 superclass-closure gate.
+After D97BM, compare exact Tahoe producer layout/value semantics against the already-proven Golden producer contract. Only then design a bounded producer-side adapter and a synthetic patched-root closure audit.
 
 Startup order for every continuation:
 1. read this database;
