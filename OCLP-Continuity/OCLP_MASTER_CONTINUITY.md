@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CB_ATOMIC_REMAP_STRUCTURAL_PASS_DLOPEN_SIGSEGV_COLD_HOST_TOOLING_FAIL_D97CBV2_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CBV2_MACOS_COPY2_CHFLAGS_TOOLING_FAIL_D97CBV3_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -78,55 +78,55 @@ D97CA proved a coherent reorder is bounded:
 - symtab `n_sect` rewrites: 3652.
 Classification: `D97CA_MANUAL_SEGMENT_ORDER_REPAIR_CLASSIFICATION=STATIC_REMAP_SURFACE_ENUMERATED`.
 
-## D97CB — atomic remap structural PASS; load harness unresolved
-Returned Terminal log (no ZIP because fail-closed occurred before packaging):
-- bytes `101328`;
-- SHA256 `46797ea02b54ffdc728fe3203ec4ebc5c83956e6b2c812827dbf675cc23ee8e8`.
-
+## D97CB — atomic remap structural PASS
 D97CB exact atomic temp remap PASS:
 - set `SG_READ_ONLY` on `__DATA_CONST`;
 - physical `__DATA_DIRTY` payload -> `0x35C000`, `__DATA` -> `0x361000`, `__LINKEDIT` remains `0x36E000`;
-- complete command-block order becomes `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
+- command order becomes `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
 - all segment/section VM addresses preserved;
-- exactly five section file offsets rewritten;
+- exactly 5 section file offsets rewritten;
 - exactly 3652 symtab `n_sect` values remapped with D97CA counts;
 - pre-sign diff count `40655`, outside audited domains `0`;
 - `file`, `otool -l`, `otool -L` PASS.
 
-Markers reached:
-- `D97CB_ATOMIC_REMAP_STRUCTURAL=PASS`;
-- `D97CB_VM_ADDRESS_PRESERVATION=PASS`;
-- `D97CB_SECTION_FILEOFF_REMAP=PASS`;
-- `D97CB_SYMTAB_N_SECT_REMAP=PASS`;
-- `D97CB_DIFF_DOMAIN=PASS`.
+Unsigned and signed remapped images pass `dlopen_preflight`. Actual Python child `dlopen` returns `RC=-11` (SIGSEGV) rather than an explicit dyld validation rejection. Because Python already has native Metal loaded, standalone loadability remains `NOT_YET_PROVEN`.
 
-Unsigned and ad-hoc-signed remapped images both pass `dlopen_preflight`, but Python child actual `dlopen` returns `RC=-11` (SIGSEGV) with no earlier explicit dyld validation rejection. Because Python already has native Metal loaded, standalone loadability remains `NOT_YET_PROVEN`.
+## D97CB-v2 — macOS copy2/chflags tooling failure only
+Returned Terminal log:
+- bytes `13995`;
+- SHA256 `fb053fe50bf85a803bcad582f7d1e6995ca0f14c4ca468c5de75e76b22a46d7b`.
 
-Cold-host attempt was invalid: the chosen pinned `ipsw` executable itself preloads native Metal in its control run. Collector correctly stopped at `FAIL=COLD_HOST_PRELOADS_METAL`; no remapped-Metal cold injection was executed. This is tooling-only and does not invalidate the remap.
+D97CB-v2 reconfirmed all D97CB structural PASS markers and again observed unsigned/signed `dlopen_preflight=PASS`, actual child `dlopen RC=-11`.
+
+Cold-host setup then failed before any cold Metal injection because `shutil.copy2('/usr/bin/true', HOST)` called `copystat()` and macOS Python 3.13 attempted BSD `chflags` on the temp copy, yielding:
+`PermissionError: [Errno 1] Operation not permitted: '/private/tmp/.../cold_true'`.
+
+This is tooling-only and does not invalidate the remap.
 
 Authoritative classifications:
-- `D97CB_ATOMIC_SEGMENT_ORDER_REMAP=STRUCTURAL_STATIC_PROVEN`;
-- `D97CB_REMAP_UNSIGNED_SIGNED_PREFLIGHT=PASS`;
-- `D97CB_REMAP_UNSIGNED_SIGNED_CHILD_DLOPEN=SIGSEGV_NEGATIVE`;
-- `D97CB_REMAP_STANDALONE_LOADABILITY=NOT_YET_PROVEN`;
-- `D97CB_COLD_HOST_IPSW=TOOLING_INVALID_PRELOADS_NATIVE_METAL`.
+- `D97CBV2_ATOMIC_REMAP_STRUCTURAL=PASS_RECONFIRMED`;
+- `D97CBV2_REMAP_UNSIGNED_SIGNED_PREFLIGHT=PASS_RECONFIRMED`;
+- `D97CBV2_REMAP_CHILD_DLOPEN=SIGSEGV_NEGATIVE_RECONFIRMED`;
+- `D97CBV2_COLD_HOST_COPY2_CHFLAGS=TOOLING_NEGATIVE`;
+- `D97CBV2_REMAP_STANDALONE_LOADABILITY=NOT_YET_PROVEN`.
 
-## CURRENT ACTION — D97CB-v2
+## CURRENT ACTION — D97CB-v3
 Remain unpatched in Tahoe VESA.
-Run only `OCLP7_D97CB_v2_atomic_remap_cold_host.sh`:
-- bytes `32510`;
-- SHA256 `811935f3b31fb863f1fdc763b70b11b6d3421e0f064c805c7e09a12dafdb3781`.
+Run only `OCLP7_D97CB_v3_macos_safe_cold_host.sh`:
+- bytes `32508`;
+- SHA256 `24f0b52509530700daa64eb2c9a2fcd882671acb4a4ff8b5f6570443c66918c1`.
 
-D97CB-v2 must reproduce the identical D97CB remap and alter only the cold-host harness:
-1. copy `/usr/bin/true` into `/private/tmp`;
-2. remove the copied Apple signature, then ad-hoc sign and strict-verify the copy;
-3. require baseline exit 0 with no Metal and no `libbz2` in dyld trace;
-4. positively prove `DYLD_INSERT_LIBRARIES` is honored by injecting `/usr/lib/libbz2.1.0.dylib`, requiring exit 0 and visible libbz2 path;
-5. only then inject the signed remapped Metal with `DYLD_PRINT_LIBRARIES`, `DYLD_PRINT_SEGMENTS`, `DYLD_PRINT_INITIALIZERS`;
-6. classify separately whether target path is observed/mapped and whether the host exits 0 or crashes;
-7. if target path appears but process fails, stop at that later init/runtime frontier and do not apply D97BV;
-8. only if remapped original target path appears and process exits 0 may D97BV be re-audited/applied to a second temp copy;
-9. delete all transient binaries and package TXT/JSON only.
+D97CB-v3 reproduces exactly the D97CB-v2 Metal transformation. Only the cold-host copy changes:
+- `shutil.copyfile('/usr/bin/true', HOST)` instead of `copy2()`;
+- explicit `chmod(0755)`;
+- copied embedded signature removed, then ad-hoc sign + strict verify.
+
+Cold-host gates:
+1. baseline exit 0 with no Metal and no libbz2 in dyld trace;
+2. positive-control injection of `/usr/lib/libbz2.1.0.dylib` must exit 0 and appear in trace, proving `DYLD_INSERT_LIBRARIES` is honored;
+3. only then inject signed remapped Metal with library/segment/initializer tracing;
+4. classify target-not-observed, target-mapped-then-failed, or target-mapped-and-exit-0;
+5. only target-mapped-and-exit-0 authorizes D97BV re-audit/application.
 
 No Root Patch, installation, or accelerated reboot authorized.
 GitHub Actions compile/build/package remains suspended until explicit quota-unblocked confirmation.
