@@ -4,185 +4,161 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BF_HISTORICAL_SECOND_TAHOE_GATE_RECONCILED_B9DF76_SCOPE_CORRECTED.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BJ_TAHOE_25G82_ROOT_PATCH_RUNTIME_PASS_ACCELERATED_BOOT_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
-This file is the chronological high-level index. The full experiment/evidence lineage is preserved in `OCLP-Continuity/checkpoints/`; the consolidated current state is in `OCLP_PERMANENT_PROJECT_DATABASE.md`.
+This file is the chronological high-level index. Full experiment/evidence lineage remains in `OCLP-Continuity/checkpoints/`; current consolidated state is in MASTER and the permanent database.
 
 ## Project end goal
 Tahoe `26.6.2 / 25G82` on ASUS2, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware-accelerated GUI.
 
-## Durable architecture evolution
-Historical architecture converged from local compiler/payload adaptation toward the current controlled comparator:
+## Durable architecture / methodology
+Historical architecture converged toward:
 `Tahoe native producer -> Golden-equivalent ingress -> ORIGINAL OCLP selector/donor -> Golden-equivalent compiler output -> Haswell driver -> image`.
 
-The current experiment deliberately removes historical custom Tahoe OCLP payload/compiler edits and uses the same ORIGINAL OCLP functional root-patch content as the working Golden Sequoia system, with only the smallest separately audited Tahoe host-OS eligibility delta.
-
-## Historical accepted functional baseline
-The accepted diagnostic five-functional baseline remains exactly:
+Accepted diagnostic five-functional historical baseline remains:
 `P1 + P2b + P3 + AIR00 + D34`.
+P6/P7 insufficient. D50/D68/D82 reserve-only. D84 retired. D36-D44 invalidated for D34 cave overlap.
 
-It remains project evidence/history and is not silently imported into the identical-OCLP comparator.
-P6/P7 were not sufficient. D50/D68/D82 remain reserve-only. D84 is retired. D36-D44 were invalidated for D34 cave overlap.
+Durable causal model:
+`MTLCompilerService failure -> XPC_ERROR_CONNECTION_INTERRUPTED -> pipeline creation failure -> SkyLight/CopyPipelineState abort -> WindowServer death`.
 
-## Durable causal model
-Compiler-service failure precedes XPC interruption, pipeline creation failure, SkyLight/CopyPipelineState abort, and WindowServer death. WindowServer is downstream rather than the root cause.
+Methodology: module-boundary + semantic evidence + far-frontier, universal/no-PID where request/process variability exists.
 
-Methodology evolved to module-boundary + semantic evidence + far-frontier, with universal/no-PID observation where request/process variability can occur.
-
-## 2026-09-01 to 2026-09-04 — D97 provenance/producer closure
-The D97 sequence established, among other durable results:
-- runtime llvmVersion/provenance work;
-- selector and donor generation mapping;
-- correction of false-negative/inconclusive tooling classifiers;
-- universal observer methodology;
-- Golden comparator capture;
-- Golden request-builder XPC schema and producer ABI closure.
-
-Key Golden producer closure:
-- request builder `0x7FF80D370756..0x7FF80D370C28`;
-- RBX = ABI arg1/RDI and `[RBX+0x20] -> llvmVersion`;
-- R13 = ABI arg2/RSI and `[R13+0x08] -> requestType`, `[R13+0x18] -> timeout`, `[R13+0x70]` sandbox gate;
+## 2026-09-01 to 2026-09-04 — D97 provenance / producer closure
+Durable Golden request-builder closure:
+- primary builder `0x7FF80D370756..0x7FF80D370C28`;
+- RBX = arg1/RDI; `[RBX+0x20] -> llvmVersion`;
+- R13 = arg2/RSI; `[R13+0x08] -> requestType`, `[R13+0x18] -> timeout`, `[R13+0x70]` sandbox gate;
 - alternate requestType immediate `9`.
 
-Detailed evidence remains in the checkpoint corpus.
+This phase also established selector/donor generation mapping, Golden comparator capture and universal observer discipline. Detailed evidence remains in checkpoint corpus.
 
 ## D97BD — identical-OCLP Tahoe eligibility preflight
-D97BD PASS established the controlled transition from Golden characterization to identical-OCLP Tahoe comparison.
+The historical Tahoe/T2 local worktree was rejected as comparator baseline because it was dirty/custom in `metal_3802.py`, `sys_patch.py`, `sys_patch_helpers.py` and contained D97/.before material.
 
-The historical/current Tahoe/T2 local worktree was rejected as comparator baseline because it was dirty/custom in `metal_3802.py`, `sys_patch.py`, `sys_patch_helpers.py` and contained extensive D97/.before material.
+D97BD preserved Golden component invariants and opened the exact clean-ref eligibility audit.
 
-D97BD also preserved additional Golden component invariants and identified the complete host eligibility chain requiring exact clean-ref audit.
+## 2026-09-05 — permanent GitHub-first policy restored
+User set GitHub-first as the permanent default execution contract, with ASUS2 reserved for identity-pinned local/live/hardware actions, manual Root Patch, accelerated boot and VESA recovery. GitHub Actions compilation was later explicitly suspended until quota reset; GitHub remained available for source reads, static audit and persistence.
 
-## 2026-09-05 — permanent GitHub-first execution policy restored
-User explicitly made GitHub-first the default repository/execution contract:
-- assistant executes work technically resolvable in GitHub;
-- ASUS2 is used only for identity-pinned local/live/hardware evidence and unavoidable target-local actions, manual Root Patch after authorization, accelerated boot and VESA recovery;
-- local compilation is never implicit fallback;
-- never auto Root Patch or reboot.
-
-This general policy remains historical authority, subject to explicit later user overrides such as the current temporary GitHub compilation suspension.
-
-## 2026-09-05 — OCLP11 Golden source lineage pinned
-User supplied the working Golden root-patch manifest from `/System/Library/CoreServices/OpenCore-Legacy-Patcher.plist`.
-
-It pinned:
+## 2026-09-05 — Golden source lineage pinned
+Working Golden root-patch manifest pinned:
 - manifest SHA256 `8f16dce6102e40a6a28fcb347df31d3132b5b465262b44f3b6d73f6757f73aa0`;
-- OCLP `v2.5.0`;
-- PatcherSupportPkg `v1.9.6`;
-- exact upstream source commit `dortania/OpenCore-Legacy-Patcher@b9df76ebdf3e768b37c1cc980e8444aa837c623e`.
-
-This closed root-patch source lineage.
-
-## 2026-09-05 — D97BE exact Golden eligibility chain CLOSED
-Exact `b9df76...` audit proved:
-- `detect.py` has `_max_os = os_data.sequoia.value`;
-- exact `os_data.py` already has `tahoe = 25`;
-- unsupported host OS propagates through `requirements[UNSUPPORTED_HOST_OS] -> _can_patch -> _cant_patch -> self.can_patch`;
-- `PatchSysVolume.start_patch()` blocks when `can_patch` is false;
-- exact Haswell path remains non-native/patchable on Darwin 25;
-- exact Haswell patch composition remains original `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell model-specific`;
-- MetallibSupportPkg lookup is dynamic and has no static Tahoe maximum.
-
-Therefore the minimal identical-OCLP Tahoe static host-eligibility delta is exactly:
-```diff
--        _max_os = os_data.sequoia.value
-+        _max_os = os_data.tahoe.value
-```
-
-No payload, selector, compiler, donor, request-layout, Haswell, Metal3802, sys_patch or sys_patch_helpers functional edit is authorized by this static result alone.
-
-## 2026-09-05 — continuity database systematized
-Created `OCLP_PERMANENT_PROJECT_DATABASE.md` as the consolidated durable state for OCLP12/OCLP13/OCLP14/OCLP15+.
-
-Anti-loss policy: persist decisive results immediately; otherwise create a continuity checkpoint no later than every 10 substantive technical assistant responses.
-
-## 2026-09-05 — D97BF pre-build identity gates proven
-Before the GitHub compilation stop instruction, CI attempts established reusable pre-build evidence:
-- exact Golden commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e` checkout PASS;
-- exact Golden tree `7c3411fde7d40604164c8877a5ab5594448083ac`;
-- exactly one changed source file: `detect.py`;
-- exactly `1 insertion / 1 deletion`;
-- protected Golden files remained byte-identical with recorded Git blob identities:
-  - constants.py `bdba8738efe1be132427200e0c9a842998e21b86`;
-  - os_data.py `094ec597de4ed6b09c42d49d8aceda7888d7fde2`;
-  - intel_haswell.py `5ef1ae0f541c413974906a125ad76704680e127c`;
-  - metal_3802.py `4276b1aede0134b4d2bbd6980fb3f0e1214302ad`;
-  - sys_patch.py `d92544778cba207baa462b1650a6a9a5742d284d`;
-  - sys_patch_helpers.py `e4c153e11bd7e5f41c991af83c4c77bc8495a844`;
-  - metallib_handler.py `6530e14311fd0ff798395a363ecfc7f4eba78caa`.
-
-The failed attempts observed at that stage were audit/workflow-lane failures, not a proven OCLP functional build failure.
-
-## 2026-09-05 — GitHub compilation suspended by explicit user instruction
-The user explicitly instructed that no more GitHub compilation/build jobs be used until the GitHub Actions quota resets/unblocks.
-
-Current override:
-- no new GitHub Actions compile/build/package run;
-- GitHub remains usable only for non-compiling source reads, static audit, persistence/checkpoints and metadata work;
-- D97BF must move to a non-GitHub macOS executor if a full build is needed;
-- local compilation still requires explicit user authorization before issuing local build commands.
-
-## 2026-09-05 — user local OpenCore-Patcher.pkg identified as strong Golden-lineage candidate
-TrueNAS Reader manifest identified:
-- batch `20260904T225753Z-dv103208c1-178bdb6a`;
-- `OpenCore-Patcher.pkg`;
-- bytes `738123183`;
-- SHA256 `b4e32cbfb1f978f670ccafff7b513d352e0665366caa73faeed0dbcd428dc364`.
-
-A public reshared 2.5.0 nightly package had a different byte size, which did not disprove common source lineage because build/package metadata vary.
-
-## 2026-09-05 — Desktop OpenCore-Patcher.app exact official b9df76 lineage PROVEN
-The user performed a read-only audit of `/Users/alex/Desktop/OpenCore-Patcher.app`.
-
-Observed app evidence:
 - OCLP `2.5.0`;
-- Build Date `2026-03-19 09:33:30`;
-- BuildMachineOSBuild `21G531`;
-- universal `x86_64 arm64` executable;
+- PatcherSupportPkg `1.9.6`;
+- exact upstream commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
+- exact tree `7c3411fde7d40604164c8877a5ab5594448083ac`.
+
+## D97BE — exact b9df76 Tahoe host eligibility chain
+Exact b9df76 proved:
+- `detect.py` original max host = Sequoia;
+- `os_data.py` already defines Tahoe = Darwin 25;
+- unsupported host propagates to Root Patch block;
+- Haswell remains non-native/patchable on Darwin 25;
+- exact Haswell composition remains `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific`;
+- historical second native-OS/patchset blocker does not apply to exact b9df76.
+
+The initial static conclusion was a one-line host max delta, explicitly scoped as only the demonstrated pre-patchset host gate, not proof of complete Tahoe Root Patch success.
+
+## D97BF — pre-build identity gates
+Before GitHub compilation suspension, exact b9df76 checkout/tree and a one-file static host-gate delta were validated. Protected Golden blobs for constants, os_data, Haswell, metal_3802, sys_patch, sys_patch_helpers and metallib_handler were pinned.
+
+## 2026-09-05 — official Desktop OCLP b9df76 lineage proven
+User Desktop app evidence:
+- OCLP 2.5.0;
+- universal x86_64/arm64;
 - executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
 - Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
-- valid Developer ID signature from `Mykola Grymalyuk (S74BDJXQMD)`;
-- strict/deep codesign verification PASS (`codesign_exit=0`);
-- signing timestamp displayed locally `19 Mar 2026 at 18:33:46`;
-- bundle created `2026-03-19 18:36:42 +0200`;
-- payloads present and timestamped `19 Mar 18:32`.
+- valid Developer ID `S74BDJXQMD`;
+- strict/deep codesign PASS.
 
-Upstream GitHub provenance then established:
-- exact Golden commit `b9df76...` was created at `2026-03-19T16:31:54Z`;
-- official Dortania push run `23305527165`, exact head SHA `b9df76...`, started at `16:32:02Z`;
-- successful job `67778441258` used label `x86_64_monterey` and completed `16:41:53Z`;
-- official `OpenCore-Patcher.pkg` artifact `6010508330` was created at `16:41:49Z`;
-- no later upstream commit existed from `16:31:55Z` through `20:00:00Z` that day.
+Official workflow provenance tied it to exact b9df76 source lineage. Byte identity to the expired official artifact remained unavailable.
 
-Classification:
-`USER_DESKTOP_APP_OFFICIAL_B9DF76_SOURCE_LINEAGE=PROVEN_BY_OFFICIAL_WORKFLOW_PROVENANCE`.
+## D97BG — Tahoe-ready signed wrapper
+Built a wrapper preserving the exact signed Golden inner OCLP and official helper while automatically creating/removing the built-in developer marker. Build/audit PASS proved the host-gate bypass architecture.
 
-Exact byte identity to the expired official artifact cannot now be re-proved and remains separately `UNAVAILABLE_EXPIRED_ARTIFACT`.
+Live Tahoe testing then proved D97BG was insufficient for full 25G82 Root Patch because deeper Tahoe-specific Metal3802 assumptions remained.
 
-Engineering consequence: a fresh full application build is no longer the only possible path. First audit the frozen PyInstaller archive read-only before any direct modification.
+## D97BH — exact local 25G82 MetallibSupportPkg runtime PASS
+Exact Pyquick package:
+- `MetallibSupportPkg-26.6.2-25G82.pkg`;
+- bytes `116574513`;
+- SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
 
-## 2026-09-05 — historical second Tahoe patchset blocker reconciled with exact b9df76
-User correctly recalled an earlier Tahoe-aware/custom OCLP source in which legacy graphics could be blocked after the global host-OS gate by patchset selection/native-OS logic.
+Installed tree:
+`/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`.
 
-Re-audit of exact Golden `b9df76...` proved that specific historical blocker is absent here:
-- Haswell is unconditionally listed in `_hardware_variants`;
-- `IntelHaswell.native_os()` is only `xnu < Ventura`, therefore false on Darwin 25;
-- `IntelHaswell.patches()` continues to `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific` patches;
-- `LegacyMetal3802._os_requires_patches()` is `xnu >= Ventura`, with no Tahoe maximum.
+Because official Dortania manifest lacked Tahoe 26.x, b9df76 initially attempted remote selection. Temporarily forcing manifest failure proved runtime local fallback:
+- checks loose `26.6`;
+- finds exact `26.6.2-25G82`;
+- Patcher becomes capable of patching.
 
 Classification:
-`HISTORICAL_TAHOE_PATCHSET_NATIVE_OS_BLOCKER_APPLIES_TO_B9DF76=NO`.
+`D97BH_25G82_LOCAL_METALLIB_FALLBACK_RUNTIME=PASS`.
 
-Scope correction: the one-line `detect.py` edit is proven only as the required Tahoe-specific **static host-eligibility gate** before Haswell patchset generation. It is not proof that the entire Root Patch procedure will succeed on Tahoe. Full Root Patch remains `NOT_YET_PROVEN` and still depends on MetallibSupportPkg matching, ordinary validation gates, root-volume/cache/snapshot behavior, and any other Tahoe runtime incompatibility.
+## D97BI — Tahoe Metal.framework donor blocker PROVEN
+After Metallib PASS, Root Patch preflight failed looking for:
+`Universal-Binaries/13.2.1-25/System/Library/Frameworks/Metal.framework`.
 
-## CURRENT ACTION — expanded read-only frozen-app eligibility audit
-On the preserved Desktop app:
-- identify the PyInstaller archive layout/viewer path;
-- locate and verify frozen `opencore_legacy_patcher.sys_patch.patchsets.detect`;
-- locate and verify frozen `opencore_legacy_patcher.sys_patch.patchsets.hardware.graphics.intel_haswell` against exact b9df76;
-- verify packaged MetallibSupportPkg resolution and whether `26.6.2 / 25G82` has a usable local or remote match;
-- only then decide whether a one-module direct patch is sufficient for the comparator app.
+Exact b9df76 generated `13.2.1-{Darwin major}`; historical Tahoe work had already identified existing donor `13.2.1-24`.
 
-If direct frozen-module patching is unsafe/non-deterministic, return to exact-source build on a non-GitHub macOS executor. Local compilation still requires explicit user authorization. GitHub compilation remains suspended until explicit quota-reset confirmation.
-No Root Patch and no reboot are authorized at this point.
+Classification:
+`B9DF76_TAHOE_25_METAL_FRAMEWORK_SOURCE_13_2_1_25=PROVEN_MISSING`.
+
+## D97BJ — complete Tahoe 25G82 functional source delta
+Exact b9df76 was prepared locally in Tahoe VESA with exactly three functional source files changed:
+1. `opencore_legacy_patcher/support/metallib_handler.py`
+2. `opencore_legacy_patcher/sys_patch/patchsets/detect.py`
+3. `opencore_legacy_patcher/sys_patch/patchsets/shared_patches/metal_3802.py`
+
+Functional effects:
+- host max Sequoia -> Tahoe;
+- Tahoe Metal.framework donor -> `13.2.1-24`;
+- Tahoe-only exact 25G82 metallib map generated from Pyquick `sys_patch_dict.py` SHA256 `c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`;
+- exact local host-build MetallibSupportPkg preferred before API fallback.
+
+Map size: 182 metallib entries.
+Python syntax PASS.
+DEBUG helper build PASS, SHA256 `a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
+
+## D97BJ packaging lane
+Current wxPython 4.3.1 resolved x86_64-only while exact b9df76 spec requested universal2; PyInstaller failed in COLLECT with an incompatible-arch error. This was classified as packaging/tooling only.
+
+For Intel-only ASUS2, packaging target was bounded to x86_64. Resume v1 then stopped only because its expected diff omitted the intentionally compiled DEBUG helper tracked file; resume v2 corrected the audit to exactly five expected tracked changes: three functional source files + packaging spec + intentional debug helper binary.
+
+## D97BJ — Tahoe 25G82 Root Patch runtime PASS
+User subsequently executed D97BJ Root Patch in Tahoe VESA.
+
+Runtime PASS evidence:
+- exact local `26.6.2-25G82` Metallib found immediately and API skipped;
+- Patcher capable of patching;
+- Universal-Binaries mounted;
+- preflight completed;
+- Metal 3802 Common installed;
+- Metal 3802 Common Extended installed with previous 13.2.1-25 blocker cleared;
+- exact 25G82 metallib map executed, including `VisionKitCore.framework`;
+- Monterey GVA installed;
+- Monterey OpenCL installed;
+- Intel Haswell driver set installed;
+- Modern Wireless Common installed;
+- GPUCompiler libraries merged;
+- patchset metadata and RSR monitor installed;
+- new Auxiliary Kernel Collection built and forced;
+- root volume unmounted;
+- final `Patching complete`.
+
+No traceback or Root Patch failure appeared.
+
+Classifications:
+- `D97BJ_TAHOE_25G82_ROOT_PATCH_PREFLIGHT=PASS`;
+- `D97BJ_TAHOE_25G82_EXACT_LOCAL_METALLIB_RUNTIME=PASS`;
+- `D97BJ_TAHOE_25G82_EXACT_METALLIB_MAP_RUNTIME=PASS`;
+- `D97BJ_TAHOE_25G82_HASWELL_PATCHSET_RUNTIME=PASS`;
+- `D97BJ_TAHOE_25G82_AUXKC_BUILD=PASS`;
+- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS`.
+
+Accelerated GUI result remains `NOT_YET_TESTED`.
+
+## CURRENT ACTION
+Fully quit D97BJ inner OCLP, verify installed privileged helper has returned to exact official SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, then manually reboot into accelerated/root-patched Tahoe. If no usable image appears, recover through VESA and analyze only the immediately preceding accelerated diagnostic boot under the permanent VESA rule.
