@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BS_FULL_PASS_TAIL_FLOOR_32023_ONLY_OVERRIDE_PRODUCER_OPEN_D97BT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BT_FULL_PASS_DEFAULT_ACCESSOR_3802_SUPPRESSION_ENV_OVERRIDE_EXCEPTION_D97BU_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -52,45 +52,53 @@ Accessor direct-branch CFG is complete. Primary clamp sequence:
 Classification:
 `D97BR_ACCESSOR_INPUT_3802_ON_CLAMP_PATH_BECOMES_32023=SEMANTIC_PROVEN`.
 
-Accessor still had two escape classes: nonzero direct global override and external lazy tail.
-
 ## D97BS — escape-hatch census FULL PASS
+Direct nonzero global override and lazy fallback were isolated. Lazy fallback has two cached writes, both floor legacy candidates upward; explicit override producer remained open.
+
+## D97BT — default accessor-wide 3802 suppression FULL PASS
 Bundle:
-`OCLP7_D97BS_ACCESSOR_ESCAPE_HATCHES_20260905_233839.zip`
-- bytes `17024`;
-- SHA256 `a84ee8d0bf74701f7359b664902922f32a6b4182e3cfe0cf5333e96ba324df6b`.
+`OCLP7_D97BT_OVERRIDE_PRODUCER_AND_LAZY_FLOOR_20260905_235137.zip`
+- bytes `3719`;
+- SHA256 `6741153378f842849df5436ad3ea7734f7e79607aa33f3edbb7131cedaf18197`.
 
-Inner TXT SHA256 `fb6bd8f2d22565f315d991109c7a94b5b3ff77d7d4c891f3db1d29300efb5350`; JSON SHA256 `5e2090b8b039dd69d1fe8c9da961f119ed67d1ddefddac5709faa8a06bdb5be6`.
+All collector final markers passed; no mutation.
 
-All final markers passed; no mutation.
+### Lazy fallback fully closed
+First lazy write computes `max(candidate,32023)`.
+Second lazy write computes `max(candidate,32024)`.
+Thus 3802 cannot survive either lazy branch.
 
-### Direct global override
-Global `0x7FF843853E18` has static image value 0 and exactly one writer:
-`0x7FF80F612AF4..0x7FF80F612B0E`, store at `0x7FF80F612B06`.
-Writer stores EAX returned by exact producer `0x7FF80F58A5F4`.
-No direct E8 callers of writer were found, consistent with possible init/registration use. Producer return semantics remain the sole unresolved direct-override question.
+Classifications:
+- `D97BT_LAZY_FIRST_WRITE_3802_TO_32023=SEMANTIC_PROVEN`;
+- `D97BT_LAZY_SECOND_WRITE_3802_TO_32024=SEMANTIC_PROVEN`;
+- `D97BT_LAZY_FALLBACK_PRESERVES_3802=NEGATIVE`.
 
-### Indirect generation-source calls
-Both accessor indirect calls share the same unresolved cached call slot. Reliable semantic target names were not recovered from offline pointer encoding.
+The collector's second `PROOF=False` was a checker limitation: it recognized only the first floor pair, while raw code proves the second floor separately.
 
-This is not independently blocking because first result is clamped and second result selects default 32023 vs lazy tail rather than returning directly.
+### Explicit override identified
+Override writer uses exact key string:
+`MTL_FORCE_MTLCOMPILER_LLVM_VERSION`.
 
-### Lazy tail
-Tail `0x7FF80F5E15C6..0x7FF80F5E1624` returns lazy global `0x7FF843853CE0`.
-Exactly two code writes exist, both in block-invoke `0x7FF80F5E1624..0x7FF80F5E16C3`.
-The persisted writer pattern sets ECX=32023 and keeps candidate EAX only when EAX>=32024 before storing ECX. Therefore a 3802 candidate becomes 32023 before caching.
+It passes key + fallback zero to producer `0x7FF80F58A5F4` and stores returned EAX into override global `0x7FF843853E18`.
+Producer returns fallback zero when lookup is absent; if a value exists it forwards the string to a numeric parser tail. Current override global is zero.
 
-Classification:
-`D97BS_LAZY_TAIL_INPUT_3802_TO_CACHED_32023=STRUCTURAL_SEMANTIC_PROVEN`.
+Therefore the nonzero bypass is an intentional explicit environment/config override, not ordinary generation selection.
 
-Two of the three accessor output classes now floor 3802 to 32023. Do not yet claim accessor-wide suppression because producer `0x7FF80F58A5F4` remains open.
+Classifications:
+- override key identity = STATIC PROVEN;
+- override fallback zero = STATIC PROVEN;
+- current override disabled = STATIC PROVEN;
+- explicit override path = STRUCTURAL-SEMANTIC PROVEN nondefault exception.
 
-## CURRENT ACTION — D97BT
+### Strongest current conclusion
+Under the current/default environment:
+`D97BT_DEFAULT_ENV_ACCESSOR_WIDE_3802_SUPPRESSION=SEMANTIC_PROVEN`.
+
+This supplies a concrete upstream mechanism consistent with Tahoe's 12/12 runtime 32023 cohort and Golden's real 3802 lane.
+Do not claim absolute suppression when the explicit force override is deliberately set.
+
+## CURRENT ACTION — D97BU
 Remain unpatched in Tahoe VESA.
-Run only `OCLP7_D97BT_override_producer_and_lazy_floor.sh`:
-- bytes `20882`;
-- SHA256 `14553b7f884fe033cbcabd033daa2740fb17da419ed843ea6b8e8ec14a611a99`.
-
-D97BT must reconstruct exact CFG/returns of override producer `0x7FF80F58A5F4`, resolve the key/object supplied by its writer, formalize both lazy-floor writes, and promote accessor-wide suppression only if every escape path is semantically closed.
+Next read-only preflight should resolve the override lookup/parser import semantics if possible and audit a minimal complete-instruction upstream adapter around the shared generation accessor, preserving native 32023/32024 behavior, explicit override semantics and Tahoe Metal4 ABI.
 
 No Root Patch and no accelerated reboot are authorized.
