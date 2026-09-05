@@ -4,7 +4,7 @@ Updated: 2026-09-05 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BJ_TAHOE_25G82_ROOT_PATCH_RUNTIME_PASS_ACCELERATED_BOOT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260905_D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_TWICE_SNAPSHOT_RESTORED_EVIDENCE_COLLECTION_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 This file is the chronological high-level index. Full experiment/evidence lineage remains in `OCLP-Continuity/checkpoints/`; current consolidated state is in MASTER and the permanent database.
@@ -158,7 +158,37 @@ Classifications:
 - `D97BJ_TAHOE_25G82_AUXKC_BUILD=PASS`;
 - `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS`.
 
-Accelerated GUI result remains `NOT_YET_TESTED`.
+## D97BJ — official helper restored before accelerated boot
+After D97BJ exited, its DEBUG helper unexpectedly remained installed. This was detected before reboot. The exact official helper was recovered from `/Applications/OpenCore-Patcher.app/Contents/Resources/official-privileged-helper`, verified by SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a` and Team ID `S74BDJXQMD`, then restored to `/Library/PrivilegedHelperTools/...` with final verification PASS.
+
+Thus helper state was closed before accelerated testing.
+
+## D97BJ — accelerated boot moved failure frontier to kernel panic
+User then attempted the accelerated/root-patched Tahoe boot.
+
+New observed behavior:
+- historical black-screen/userspace failure was not reached;
+- the machine kernel-panicked during boot and automatically restarted;
+- user reports approximately two accelerated attempts followed by VESA/recovery boots; exact chronology is pending read-only `last reboot` + panic timestamp correlation;
+- patched boot could not be recovered usefully, so user restored the saved/sealed system snapshot;
+- current system is VESA/recovery with no Root Patch.
+
+Classifications:
+- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS` remains valid;
+- `D97BJ_ACCELERATED_BOOT_USABLE_GUI=NEGATIVE`;
+- `D97BJ_ACCELERATED_BOOT_KERNEL_PANIC_RESTART=USER_OBSERVED_PROVEN`;
+- `D97BJ_ACCELERATED_BOOT_PANIC_ROOT_CAUSE=UNKNOWN_PENDING_LOCAL_EVIDENCE`;
+- `D97BJ_CURRENT_ROOT_PATCH_STATE=RESTORED_TO_UNPATCHED_SNAPSHOT`.
+
+Important consequence: the unresolved frontier is now kernel boot / AuxKC / kext initialization unless evidence proves userspace was reached. Do not continue MTLCompilerService/WindowServer diagnostics by inertia.
+
+Historical Tahoe D26 evidence is a high-value comparator only: kernelmanager once reported `Info.plist digest is missing` for `AppleIntelFramebufferAzul.kext` and `AppleIntelHD5000Graphics.kext`, later resolving transiently. Since D97BJ built AuxKC successfully, this is a hypothesis boundary rather than current proof.
+
+A current public MacBookPro11,1 / Tahoe 26.6.2 boot-failure report also exists but lacks a panic log; it is contextual only.
 
 ## CURRENT ACTION
-Fully quit D97BJ inner OCLP, verify installed privileged helper has returned to exact official SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, then manually reboot into accelerated/root-patched Tahoe. If no usable image appears, recover through VESA and analyze only the immediately preceding accelerated diagnostic boot under the permanent VESA rule.
+Remain unpatched in current VESA/recovery state. No new Root Patch or accelerated reboot.
+
+Collect one read-only D97BJ panic evidence bundle containing boot chronology, `aapl,panic-info`/filtered boot NVRAM, post-04:45 panic/kernel reports, filtered unified logs for panic/KC/kernelmanager/Haswell/AMFI/IOGraphics, and current recovery baseline.
+
+Then identify the accelerated boot windows exactly and promote the first proven panic/kext/module boundary. Any next forced Root Patch/recovery cycle must be designed to maximize evidence per boot and avoid repeated one-point testing.
