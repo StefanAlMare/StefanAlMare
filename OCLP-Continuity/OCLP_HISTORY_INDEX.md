@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97BZ_SGRO_GATE_PASS_D97CA_REMAP_SURFACE_ENUMERATED_D97CB_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CB_ATOMIC_REMAP_STRUCTURAL_PASS_DLOPEN_SIGSEGV_COLD_HOST_TOOLING_FAIL_D97CBV2_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -35,46 +35,60 @@ Semantics: preserve exact 3802, otherwise execute original Tahoe floor. `STATIC_
 Sparse reconstruction preserved native code/Metal4 and D97BV diff, but real dlopen failed identically original/patched due shared-cache standalone mapping geometry. Signing and D97BV were not the blocker. Sparse mirror is analysis-only.
 
 ## D97BY — real DSC single-image export
-Bundle SHA256 `c2517f1a3758fcbdabe0ab033a7bc7f07385aadf6f13f9369bb1cecb10fd2b53`.
-Pinned `blacktop/ipsw v3.1.713` RAW and `--slide` exports both RC 0, each 5,722,944 bytes, preserving exact native Tahoe `__text` SHA256 `2d58f84edd3ff6e93427f2204c0fb481204320aaf2708df784dd14039ee4dd3a` and exact Metal4 counts.
-Preflight/signing pass; real dlopen first rejects `__DATA_CONST segment missing SG_READ_ONLY flag`.
+Pinned `blacktop/ipsw v3.1.713` RAW and `--slide` exports both succeed, preserve exact native Tahoe `__text` and Metal4 counts. Preflight/signing pass; real dlopen first rejects missing `SG_READ_ONLY` on `__DATA_CONST`.
 
 ## D97BZ — metadata SG_READ_ONLY gate passed
-Bundle `OCLP7_D97BZ_SG_READ_ONLY_METADATA_GATE_20260906_013542.zip`, SHA256 `efe3bc569e6be515a6a1d7d2742589785e4329527b2a10656626169fb70952ee`.
-Only one effective pre-sign byte changed at `__DATA_CONST` flags (`0x00 -> 0x10`); zero diff outside flags field. Previous dyld gate disappeared.
-New exact real dlopen rejection: `segment '__DATA_DIRTY' vm address out of order`.
+Only one effective pre-sign byte changed at `__DATA_CONST` flags (`0x00 -> 0x10`); previous dyld gate disappeared. New exact real dlopen rejection: `segment '__DATA_DIRTY' vm address out of order`.
 Classification: `D97BZ_DYLD_SG_READ_ONLY_GATE=PASSED_BY_EXACT_METADATA_FIX`.
 
 ## D97CA — segment-order dependency audit FULL PASS
-Bundle `OCLP7_D97CA_SEGMENT_ORDER_DEPENDENCY_AUDIT_20260906_014835.zip`:
-- bytes `84192`;
-- SHA256 `90a9edb0abc2832a86db5c3d54c0429894844e56d6f258a91a7de93dfb40e1f0`.
-
-D97CA proved current compact RAW file/load order is `__TEXT, __DATA_CONST, __DATA, __DATA_DIRTY, __LINKEDIT`, while VM order is `__TEXT, __DATA_CONST, __DATA_DIRTY, __DATA, __LINKEDIT`. Apple dyld requires non-cache managed segment command order to agree with both file and VM order.
-
-Exact affected geometry:
-- `__DATA`: old index 2, fileoff `0x35C000`, size `0xD000`, sections 30..34;
-- `__DATA_DIRTY`: old index 3, fileoff `0x369000`, size `0x5000`, sections 35..38;
-- combined end remains `0x36E000`, so `__LINKEDIT` need not move.
-
-Proposed ordinal map: old `30..34 -> 34..38`; old `35..38 -> 30..33`.
-D97CA dependency census:
-- dyld segment-index rewrites needed: 0;
+Bundle SHA256 `90a9edb0abc2832a86db5c3d54c0429894844e56d6f258a91a7de93dfb40e1f0`.
+D97CA proved current compact RAW file/load order `__TEXT,__DATA_CONST,__DATA,__DATA_DIRTY,__LINKEDIT` conflicts with VM order `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`.
+Dependency surface for coherent reorder:
+- dyld segment-index rewrites: 0;
 - relocation section-ordinal rewrites: 0;
 - chained fixups absent;
 - split-seg info absent;
 - unknown order-sensitive loads: 0;
-- file-backed section offsets to rewrite: 5;
+- file-backed section offsets: 5;
 - symtab `n_sect` rewrites: 3652.
-
-Affected symtab counts: `30->34` 2236; `31->35` 404; `32->36` 305; `33->37` 127; `34->38` 9; `35->30` 440; `36->31` 25; `37->32` 101; `38->33` 5.
-
 Classification: `D97CA_MANUAL_SEGMENT_ORDER_REPAIR_CLASSIFICATION=STATIC_REMAP_SURFACE_ENUMERATED`.
 
-## CURRENT ACTION — D97CB
-Remain unpatched in Tahoe VESA.
-D97CB may perform one atomic temporary standalone-layout remap only: set SG_READ_ONLY, physically place `__DATA_DIRTY` before `__DATA`, swap their complete segment command blocks, update two segment fileoffs plus five file-backed section offsets, remap exactly 3652 symtab `n_sect` bytes, preserve every VM/section VM address, keep `__LINKEDIT` at `0x36E000`, prove diff boundaries, then test parser/order invariants and unsigned/signed real child dlopen.
+## D97CB — atomic remap structural PASS; cold-host harness failed closed
+D97CB packaging was not reached because the cold-host control stopped intentionally. Returned Terminal-log identity:
+- bytes `101328`;
+- SHA256 `46797ea02b54ffdc728fe3203ec4ebc5c83956e6b2c812827dbf675cc23ee8e8`.
 
-Only if the explicit temp path truly loads may D97BV be re-audited/applied. Stop at the next exact dyld/runtime error. Do not automatically reconstruct fixup streams or move VM addresses.
+Target remap itself passed:
+- `__DATA_CONST` retains `SG_READ_ONLY`;
+- `__DATA_DIRTY` payload moved to fileoff `0x35C000`;
+- `__DATA` payload moved to fileoff `0x361000`;
+- `__LINKEDIT` remains `0x36E000`;
+- command order becomes `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
+- all segment and section VM addresses preserved;
+- exactly 5 file-backed section offsets rewritten;
+- exactly 3652 symtab `n_sect` values remapped with the D97CA ordinal distribution;
+- pre-sign diff count `40655`, zero outside audited domains;
+- `file`, `otool -l`, `otool -L` pass.
 
-No Root Patch or accelerated reboot authorized.
+Markers:
+`D97CB_ATOMIC_REMAP_STRUCTURAL=PASS`, `D97CB_VM_ADDRESS_PRESERVATION=PASS`, `D97CB_SECTION_FILEOFF_REMAP=PASS`, `D97CB_SYMTAB_N_SECT_REMAP=PASS`, `D97CB_DIFF_DOMAIN=PASS`.
+
+Unsigned and signed remapped images both pass `dlopen_preflight`, but Python child `dlopen` exits `-11` (SIGSEGV) with no preceding explicit dyld validation rejection. Because Python already has native Metal loaded, standalone loadability is not yet proven.
+
+The attempted cold host was a copied/ad-hoc-signed pinned `ipsw` executable. Its control run itself loads native Metal and Metal-dependent frameworks, so collector correctly stopped `FAIL=COLD_HOST_PRELOADS_METAL` before any remapped-Metal cold injection.
+
+Classifications:
+- `D97CB_ATOMIC_SEGMENT_ORDER_REMAP=STRUCTURAL_STATIC_PROVEN`;
+- `D97CB_REMAP_UNSIGNED_SIGNED_PREFLIGHT=PASS`;
+- `D97CB_REMAP_UNSIGNED_SIGNED_CHILD_DLOPEN=SIGSEGV_NEGATIVE`;
+- `D97CB_REMAP_STANDALONE_LOADABILITY=NOT_YET_PROVEN`;
+- `D97CB_COLD_HOST_IPSW=TOOLING_INVALID_PRELOADS_NATIVE_METAL`.
+
+## CURRENT ACTION — D97CB-v2 cold-host correction
+Run only `OCLP7_D97CB_v2_atomic_remap_cold_host.sh`, bytes `32510`, SHA256 `811935f3b31fb863f1fdc763b70b11b6d3421e0f064c805c7e09a12dafdb3781`.
+It reproduces the identical atomic remap but replaces only the cold-host harness: copied `/usr/bin/true`, Apple signature removed, ad-hoc re-signed; baseline must be Metal-free; control injection of `/usr/lib/libbz2.1.0.dylib` must prove `DYLD_INSERT_LIBRARIES` is honored; only then is signed remapped Metal injected with library/segment/initializer tracing.
+
+If the target path appears but host crashes, stop at the later init/runtime frontier and do not apply D97BV. Only target-path observed + host exit 0 authorizes D97BV re-audit on a second temp copy.
+
+Remain unpatched in VESA. No Root Patch or accelerated reboot authorized.
