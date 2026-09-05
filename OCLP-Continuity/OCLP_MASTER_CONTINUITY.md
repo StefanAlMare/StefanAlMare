@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BS_FULL_PASS_TAIL_FLOOR_32023_ONLY_OVERRIDE_PRODUCER_OPEN_D97BT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BT_FULL_PASS_DEFAULT_ACCESSOR_3802_SUPPRESSION_ENV_OVERRIDE_EXCEPTION_D97BU_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -63,82 +63,66 @@ Native generation census: 3802 raw 11 / validated 9; 31001 zero; 32023 raw 10 / 
 
 Generation-aware constructor `0x7FF80F4A5DF8..0x7FF80F4A7A88` uses shared accessor `0x7FF80F5E16C3`, stores EAX into discriminator `-0x27C`, optionally overrides from `[arg1+0x138]`, and builds layouts containing `+0x1C/+0x20/+0x38` writes.
 
-D97BQ proved selector generation input is ABI arg2/RSI. All six validated selector callers do `call accessor -> movl %eax,%esi -> call selector`. Common boundary is STATIC PROVEN:
-`generation-bearing object -> shared accessor -> constructor discriminator / native selector`.
+D97BQ proved selector generation input is ABI arg2/RSI. All six validated selector callers do `call accessor -> movl %eax,%esi -> call selector`.
 
-## D97BR clamp closure
-Accessor `0x7FF80F5E16C3..0x7FF80F5E1778` direct-branch CFG is complete: all instructions reachable, one normal return and one external tail.
+## D97BR primary clamp closure
+Accessor `0x7FF80F5E16C3..0x7FF80F5E1778` has complete direct-branch CFG.
+Primary path: `cmp EAX,32024; ECX=32023; cmovl ECX,EAX`.
+Thus `3802 -> 32023` on the normal clamp path is `SEMANTIC_PROVEN`.
 
-Primary clamp path:
-`cmp EAX,32024; ECX=32023; cmovl ECX,EAX`.
-Thus `3802 -> 32023` on that path is `SEMANTIC_PROVEN`.
+## D97BT FULL PASS — default accessor-wide 3802 suppression
+Returned bundle `OCLP7_D97BT_OVERRIDE_PRODUCER_AND_LAZY_FLOOR_20260905_235137.zip`:
+- bytes `3719`;
+- SHA256 `6741153378f842849df5436ad3ea7734f7e79607aa33f3edbb7131cedaf18197`.
 
-Accessor output classes:
-1. primary indirect source -> minimum 32023 clamp;
-2. nonzero global override `0x7FF843853E18` bypasses clamp;
-3. alternate path defaults to 32023 and may tail to lazy function `0x7FF80F5E15C6`.
+All D97BT collector final markers passed; no mutation.
 
-## D97BS FULL PASS — current frontier
-Returned bundle `OCLP7_D97BS_ACCESSOR_ESCAPE_HATCHES_20260905_233839.zip`:
-- bytes `17024`;
-- SHA256 `a84ee8d0bf74701f7359b664902922f32a6b4182e3cfe0cf5333e96ba324df6b`.
+### Lazy fallback
+Lazy block `0x7FF80F5E1624..0x7FF80F5E16C3` has two floors:
+- first stored generation = `max(candidate,32023)`;
+- second stored generation = `max(candidate,32024)`.
 
-Inner TXT SHA256 `fb6bd8f2d22565f315d991109c7a94b5b3ff77d7d4c891f3db1d29300efb5350`; JSON SHA256 `5e2090b8b039dd69d1fe8c9da961f119ed67d1ddefddac5709faa8a06bdb5be6`.
+Therefore 3802 cannot survive the lazy fallback. The collector's second `PROOF=False` was a checker limitation: it only recognized the first 32024/32023 pattern and not the second 32025/32024 pattern.
 
-All final markers PASS; no mutation.
+Classifications:
+- `D97BT_LAZY_FIRST_WRITE_3802_TO_32023=SEMANTIC_PROVEN`;
+- `D97BT_LAZY_SECOND_WRITE_3802_TO_32024=SEMANTIC_PROVEN`;
+- `D97BT_LAZY_FALLBACK_PRESERVES_3802=NEGATIVE`.
 
-### Global override
-Override global `0x7FF843853E18` has static image value 0 and exactly one writer:
-- function `0x7FF80F612AF4..0x7FF80F612B0E`;
-- store at `0x7FF80F612B06` from returned EAX.
+### Explicit override exception
+Global override writer uses exact key string:
+`MTL_FORCE_MTLCOMPILER_LLVM_VERSION`.
 
-Writer calls exact producer `0x7FF80F58A5F4` and stores its result. No direct E8 callers of writer found; this does not prove it never runs.
+Writer passes this key plus fallback zero into producer `0x7FF80F58A5F4`, then stores EAX into global `0x7FF843853E18`.
+Producer returns fallback zero when lookup is absent; when lookup is present it forwards the returned string to a numeric parser tail. Current global value is zero, so override is disabled in the current/default environment.
 
-Therefore exact producer `0x7FF80F58A5F4` is the remaining semantic unknown for the direct override path.
+This is an explicit nondefault forcing mechanism, not ordinary generation selection.
 
-### Indirect source calls
-Both accessor indirect calls share the same unresolved cached call slot. Offline pointer form could not be assigned a reliable semantic symbol.
+Classifications:
+- `D97BT_OVERRIDE_KEY_MTL_FORCE_MTLCOMPILER_LLVM_VERSION=STATIC_PROVEN`;
+- `D97BT_OVERRIDE_DEFAULT_VALUE_ZERO=STATIC_PROVEN`;
+- `D97BT_CURRENT_OVERRIDE_GLOBAL_ZERO=STATIC_PROVEN`;
+- `D97BT_OVERRIDE_PATH_IS_EXPLICIT_NONDEFAULT_EXCEPTION=STRUCTURAL_SEMANTIC_PROVEN`.
 
-This is no longer independently blocking:
-- first indirect return is clamped to minimum 32023;
-- second indirect return is used only to select default 32023 vs lazy-tail path, not returned directly.
+### Current strongest conclusion
+Combining main clamp + both lazy floors:
+`D97BT_DEFAULT_ENV_ACCESSOR_WIDE_3802_SUPPRESSION=SEMANTIC_PROVEN`.
 
-### Lazy tail
-Tail `0x7FF80F5E15C6..0x7FF80F5E1624` returns lazy dword global `0x7FF843853CE0`.
-Exactly two writes to that global exist, both in adjacent block-invoke `0x7FF80F5E1624..0x7FF80F5E16C3`.
+Do not overstate this under a deliberate `MTL_FORCE_MTLCOMPILER_LLVM_VERSION` override.
 
-Persisted exact context shows the writer family performs:
-`candidate -> compare 32024 -> ECX=32023 -> cmovge candidate,ECX -> store ECX`.
-Thus a positive legacy candidate such as 3802 is promoted to at least 32023 before caching.
+This supplies a concrete causal mechanism consistent with Tahoe D97AA runtime 12/12 = 32023 and Golden's real 3802 lane.
 
-Classification:
-`D97BS_LAZY_TAIL_INPUT_3802_TO_CACHED_32023=STRUCTURAL_SEMANTIC_PROVEN`.
-
-D97BT will formalize both write sites before accessor-wide promotion.
-
-### Current suppression status
-Do NOT yet claim accessor-wide 3802 suppression.
-Two of three output classes have a 32023 floor mechanism. The direct global override remains open until producer `0x7FF80F58A5F4` is audited.
-
-## CURRENT ACTION — D97BT
+## CURRENT ACTION — D97BU
 Remain unpatched in Tahoe VESA.
 
-Run only `OCLP7_D97BT_override_producer_and_lazy_floor.sh`.
-Pinned identity:
-- bytes `20882`;
-- SHA256 `14553b7f884fe033cbcabd033daa2740fb17da419ed843ea6b8e8ec14a611a99`.
-
-D97BT must:
-1. reconstruct exact CFG/return sources of override producer `0x7FF80F58A5F4`;
-2. resolve the RIP-relative key/object passed by writer `0x7FF80F612AF4`;
-3. determine whether the producer can semantically supply 3802;
-4. formalize both lazy-global writes and prove/reject the 32023 floor;
-5. promote accessor-wide 3802 suppression only if all escape paths are semantically closed;
+Next read-only action must:
+1. resolve the override producer's lookup and numeric-parser tail targets to exact import/stub semantics if statically possible;
+2. audit the minimal complete-instruction adapter boundary around the shared generation accessor/floor;
+3. preserve Tahoe's native 32023/32024 behavior and explicit override semantics;
+4. define how legacy 3802 can be preserved only for the relevant Haswell/legacy request class rather than globally lowering all requests;
+5. prove proposed adapter does not shadow native Metal or disturb Metal4 ABI;
 6. make no source/system/cache mutation, Root Patch or reboot.
 
 No Root Patch and no accelerated reboot are authorized.
-
-## Mandatory pre-reboot gate
-No Root Patch/accelerated boot until native Tahoe Metal4 remains authoritative, no legacy main Metal shadows it, legacy compiler ingress remains bounded, exact 25G82 Metallib handling is intact, and producer normalization is statically complete across every relevant accessor/request path.
 
 GitHub Actions compile/build/package remains suspended until explicit user confirmation that quota is unblocked. GitHub reads/static audit/persistence remain allowed. Local compilation is not an implicit fallback.
