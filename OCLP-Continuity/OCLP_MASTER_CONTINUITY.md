@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BG_B9DF76_BUILTIN_DEVELOPER_BYPASS_ELIMINATES_APP_PATCH_HASWELL_ALREADY_VALID.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BG_DEVELOPER_MARKER_REJECTED_TOO_BROAD_LOCAL_SEQUOIA_EXACT_BUILD_AUTHORIZED.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -15,7 +15,7 @@ Before proposing a technical modification:
 3. read this MASTER in full;
 4. read `OCLP_PERMANENT_VESA_RECOVERY_RULE.md` in full;
 5. read the exact current checkpoint named above in full;
-6. consult the retrospective and history index to validate strategic/history context when needed.
+6. consult retrospective/history when needed.
 
 ## Target
 macOS Tahoe `26.6.2 / 25G82`, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable accelerated GUI.
@@ -29,48 +29,75 @@ Golden/reference app remains immutable.
 - OCLP `2.5.0`;
 - PatcherSupportPkg `1.9.6`.
 
-## Tahoe host-eligibility result
-Exact b9df76 `detect.py` has `_max_os = os_data.sequoia.value`, but the same function first checks built-in Dortania developer mode. Exact developer check is:
-```python
-return Path("~/.dortania_developer").expanduser().exists()
+## Tahoe static host-eligibility result
+Exact b9df76 `detect.py` uses `_max_os = os_data.sequoia.value` while `os_data.py` already defines `tahoe = 25`.
+
+Exact static comparator delta:
+```diff
+-        _max_os = os_data.sequoia.value
++        _max_os = os_data.tahoe.value
 ```
-If present, unsupported-host validation returns False before the Sequoia maximum test.
 
-Classification:
-`B9DF76_TAHOE_UNSUPPORTED_HOST_GATE_CAN_BE_BYPASSED_WITH_BUILTIN_DORTANIA_DEVELOPER_MARKER=PROVEN`.
+This is the sole currently demonstrated Tahoe-specific static source gate before Haswell patchset generation in exact b9df76.
 
-Engineering consequence: do not patch/repack/re-sign the proven signed app. Use the built-in marker in the Tahoe user's home instead.
-
-## Haswell second-gate result
-The historical Tahoe patchset/native_os blocker from a different custom/Tahoe-aware source does not apply to exact b9df76.
+## Historical second Tahoe blocker reconciliation
+The user correctly recalled a second patchset/native-OS blocker from an earlier Tahoe-aware/custom source.
+Exact Golden b9df76 does not contain that blocker for Haswell:
 - Haswell is included in `_hardware_variants`;
-- `native_os()` is `xnu < Ventura`, therefore False on Darwin 25;
-- Haswell patch composition proceeds to LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific patches;
-- LegacyMetal3802 has no Tahoe maximum.
+- `IntelHaswell.native_os()` is `xnu < Ventura`, therefore False on Darwin 25;
+- Haswell proceeds to `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific`;
+- `LegacyMetal3802._os_requires_patches()` is `xnu >= Ventura`, with no Tahoe maximum.
 
 Classification:
-`B9DF76_HASWELL_PATCHSET_SECOND_GATE_CHANGE_REQUIRED=NO`.
+`HISTORICAL_TAHOE_PATCHSET_NATIVE_OS_BLOCKER_APPLIES_TO_B9DF76=NO`.
 
-## User-confirmed Tahoe dependency
-User confirms MetallibSupportPkg is already present/usable in Tahoe. Treat it as not currently blocking preparation.
+## Developer marker correction
+Exact b9df76 has a built-in developer bypass via `~/.dortania_developer`, but the same developer-mode predicate is used by other patch classes to alter patch composition.
+Therefore the marker is broader than the desired one-line host-eligibility change and is rejected for the controlled comparator.
+
+Classification:
+`D97BG_DORTANIA_DEVELOPER_MARKER_AS_MINIMAL_COMPARATOR=REJECTED_OVERBROAD`.
 
 ## Proven user app
 `/Users/alex/Desktop/OpenCore-Patcher.app` is proven official b9df76-source-lineage OCLP 2.5.0, universal x86_64+arm64, valid Developer ID signature.
-Preserve it unchanged.
+Preserve it unchanged as reference.
+
+## Latest local execution result
+The D97BG preparation script verified source executable SHA, Info.plist SHA and deep/strict codesign PASS, then aborted during Tahoe-volume discovery before any mutation because the discovery Python exited nonzero under `set -e` while diagnostics were redirected.
+
+No app was copied to Tahoe.
+No developer marker was created.
+No Root Patch ran.
+No reboot ran.
+
+Classification:
+`D97BG_FIRST_PREP_ATTEMPT=SOURCE_IDENTITY_PASS_DISCOVERY_SCRIPT_TOOLING_ABORT_PRE_MUTATION`.
+
+## User-confirmed Tahoe dependency
+MetallibSupportPkg is already present/usable in Tahoe and is not currently treated as a blocker.
 
 ## Current execution contract
 GitHub compilation remains suspended until user explicitly says quota reset/unblocked.
-Local compilation is unnecessary for the current route.
-Never auto Root Patch. Never auto reboot.
+The user explicitly authorized the remaining comparator work to be performed locally in accelerated Sequoia.
 
-## CURRENT ACTION — prepare Tahoe from accelerated Sequoia without modifying app
-1. identify mounted Tahoe Data volume for build `25G82`;
-2. copy the proven signed OCLP app unchanged into Tahoe Applications, preserving any existing app;
-3. create `.dortania_developer` only in the Tahoe user home;
-4. verify copied app SHA/codesign and marker;
-5. boot Tahoe manually only after explicit authorization;
-6. open OCLP and inspect detected root-patch list/validation state;
-7. STOP before Root Patch and audit the complete output.
+Classification:
+`LOCAL_SEQUOIA_BUILD_AUTHORIZATION=GRANTED_BY_USER_2026_09_05`.
+
+This authorization covers the local build/compile steps needed for the comparator. It does not authorize Root Patch or reboot.
+
+## CURRENT ACTION — exact local Sequoia comparator build
+On accelerated Sequoia:
+1. create isolated clean build directory;
+2. checkout exact upstream `b9df76...` and verify tree `7c3411...`;
+3. apply exactly the one-line `detect.py` Sequoia->Tahoe delta;
+4. require one changed file and `1 insertion / 1 deletion`;
+5. prove protected source blobs unchanged;
+6. reuse exact reference-app `payloads.dmg` and `Universal-Binaries.dmg` where compatible;
+7. build with exact upstream PyInstaller spec;
+8. verify resulting app architecture, version, hashes and bundle integrity;
+9. preserve the proven reference app unchanged;
+10. after build audit, copy only the identity-pinned comparator app to Tahoe;
+11. STOP before Root Patch.
 
 No Root Patch is authorized by this MASTER state.
 No reboot is authorized by this MASTER state.
