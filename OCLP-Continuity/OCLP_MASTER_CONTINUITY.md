@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_RESUME_V1_EXPECTED_SET_MISSED_INTENTIONAL_DEBUG_HELPER_V2.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_TAHOE_25G82_ROOT_PATCH_RUNTIME_PASS_ACCELERATED_BOOT_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -12,7 +12,7 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Before proposing a technical modification in any future OCLP continuation, read the permanent database, permanent working rules, this MASTER, the VESA rule, and the current checkpoint linked above.
 
 ## Target
-macOS Tahoe `26.6.2 / 25G82`, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable accelerated GUI.
+macOS Tahoe `26.6.2 / 25G82`, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware acceleration and usable GUI.
 
 ## Exact Golden ORIGINAL-OCLP baseline
 - upstream `dortania/OpenCore-Legacy-Patcher`;
@@ -21,19 +21,43 @@ macOS Tahoe `26.6.2 / 25G82`, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `Mac
 - OCLP `2.5.0`;
 - PatcherSupportPkg `1.9.6`.
 
-## Proven user reference app
-Official Golden-lineage app executable SHA256:
-`0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`.
+Golden/reference remains immutable/read-only.
 
-Reference Info.plist SHA256:
-`6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`.
+Reference official Golden-lineage app:
+- executable SHA256 `0cdb415b0fdcf7e4a0f82b9e8b62db79b9450fe287de535a00d754e2c504addc`;
+- Info.plist SHA256 `6c6d1b12963e1b103baad517d64cef9d8cc778187ba1dd0bb9d38737e2519d77`;
+- official Team ID `S74BDJXQMD`.
 
-Golden remains read-only/immutable.
+Official privileged helper reference SHA256:
+`9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
 
-## D97BG wrapper result
-D97BG successfully proved a wrapper can preserve the exact signed Golden inner OCLP and official helper while bypassing the Tahoe host-OS gate via the built-in developer marker.
+## Durable Golden causal/producer evidence
+Retain accepted causal chain:
+`MTLCompilerService failure -> XPC_ERROR_CONNECTION_INTERRUPTED -> pipeline creation failure -> SkyLight/CopyPipelineState abort -> WindowServer death`.
 
-However subsequent live Tahoe Root Patch testing proved D97BG is not sufficient for complete Tahoe 25G82 patching because exact b9df76 still contains Tahoe-incompatible Metal3802 payload/path assumptions.
+Accepted historical five-functional diagnostic baseline remains:
+`P1 + P2b + P3 + AIR00 + D34`.
+P6/P7 insufficient; D50/D68/D82 reserve; D84 retired; D36-D44 invalidated for D34 cave overlap.
+
+Golden request-builder closure remains authoritative:
+- primary builder region `0x7FF80D370756..0x7FF80D370C28`;
+- RBX = arg1/RDI; signed dword `[RBX+0x20] -> llvmVersion`;
+- R13 = arg2/RSI; `[R13+0x08] -> requestType`, `[R13+0x18] -> timeout`, `[R13+0x70]` sandbox gate;
+- alternate requestType immediate `9`.
+
+## Exact Tahoe eligibility findings for b9df76
+Exact b9df76 host gate originally had `_max_os = os_data.sequoia.value`; `os_data.py` already defines Tahoe = Darwin 25.
+The built-in developer marker can bypass that host gate, but D97BG runtime later proved host-gate bypass alone is insufficient for complete Tahoe 25G82 Root Patch.
+
+Historical second Haswell/native-OS blocker does NOT apply to exact b9df76:
+- Haswell is unconditionally included;
+- `IntelHaswell.native_os()` is only `xnu < Ventura`, false on Darwin 25;
+- Haswell composition remains `LegacyMetal3802 + MontereyGVA + MontereyOpenCL + Haswell-specific`;
+- LegacyMetal3802 has no Tahoe maximum.
+
+## D97BG signed-wrapper result
+D97BG preserved the exact signed Golden inner OCLP and official helper while automatically creating the built-in developer marker.
+It proved the host-gate route, but live Tahoe Root Patch found further Tahoe-specific blockers and therefore D97BG is superseded for actual 25G82 Root Patch use.
 
 ## D97BH MetallibSupportPkg runtime PASS
 Exact target package:
@@ -41,108 +65,100 @@ Exact target package:
 - bytes `116574513`;
 - SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
 
-Exact local root required by b9df76:
-`/Library/Application Support/Dortania/MetallibSupportPkg`.
+Installed exact local tree:
+`/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82`.
 
-With the official Dortania manifest temporarily made unreachable, runtime proved:
-- local fallback checked `26.6`;
-- exact local `26.6.2-25G82` was found;
-- Root Patcher reported `Patcher is capable of patching`.
+b9df76 official manifest lacks Tahoe 26.x, but runtime fallback proved exact local 25G82 is accepted. D97BJ later improved this by preferring exact local host-build Metallib before API fallback.
 
 Classification:
 `D97BH_25G82_LOCAL_METALLIB_FALLBACK_RUNTIME=PASS`.
 
-## D97BI Metal.framework blocker PROVEN
-After Metallib PASS, exact b9df76 failed preflight looking for:
+## D97BI Metal.framework blocker
+Exact b9df76 constructed `13.2.1-{Darwin major}` and on Darwin 25 requested nonexistent:
 `Universal-Binaries/13.2.1-25/System/Library/Frameworks/Metal.framework`.
-
-Exact source constructs `13.2.1-{Darwin major}`, so Darwin 25 requests nonexistent `13.2.1-25`.
-Historical Tahoe work had already identified `13.2.1-24` as the required existing donor.
+Historical Tahoe work had already identified existing donor `13.2.1-24`.
 
 Classification:
 `B9DF76_TAHOE_25_METAL_FRAMEWORK_SOURCE_13_2_1_25=PROVEN_MISSING`.
 
-## D97BJ complete Tahoe source delta — prepackaging PASS
-User locally prepared exact b9df76 in Tahoe VESA.
-
-Proven:
-- exact b9df76 checkout PASS;
-- exact Golden payload DMGs reused;
-- exact Pyquick `sys_patch_dict.py` for 25G82 verified;
-- Tahoe metallib map contains 182 entries;
-- Python syntax PASS;
-- DEBUG helper build PASS, SHA256 `a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
-
-Functional changed files exactly:
+## D97BJ complete Tahoe functional delta
+D97BJ starts from exact b9df76 and changes only three functional source files:
 1. `opencore_legacy_patcher/support/metallib_handler.py`
 2. `opencore_legacy_patcher/sys_patch/patchsets/detect.py`
 3. `opencore_legacy_patcher/sys_patch/patchsets/shared_patches/metal_3802.py`
 
 Functional effects:
 - host max Sequoia -> Tahoe;
-- Tahoe `Metal.framework` donor -> `13.2.1-24`;
-- Tahoe-only exact 25G82 metallib destination/source map from Pyquick;
-- prefer exact local host-build MetallibSupportPkg before remote API.
+- Tahoe `Metal.framework` donor -> existing `13.2.1-24`;
+- Tahoe-only exact 25G82 metallib destination/source map generated from exact Pyquick `sys_patch_dict.py`;
+- exact local host-build MetallibSupportPkg preferred before API fallback.
 
-Classification:
-`D97BJ_TAHOE_FUNCTIONAL_SOURCE_DELTA_PREPACKAGING=PASS`.
+Exact Pyquick 25G82 patch dictionary SHA256:
+`c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`.
+Runtime map contained 182 metallib entries.
 
-## D97BJ packaging architecture blocker — resolved in design
-Current pip resolution installed wxPython `4.3.1` as x86_64-only.
-Exact b9df76 `OpenCore-Patcher-GUI.spec` requested `target_arch="universal2"`.
-PyInstaller `6.22.2` therefore failed in COLLECT with:
-`IncompatibleBinaryArchError: wx/_adv...so is not a fat binary`.
+Prepackaging source validation PASS.
 
-The build had already completed PYZ, PKG/CArchive and EXE stages before COLLECT failure.
+## D97BJ packaging/helper lane
+Because current wxPython 4.3.1 resolved x86_64-only while exact b9df76 spec requested universal2, local PyInstaller initially failed in COLLECT. This was tooling/packaging only, not functional source failure.
 
-Classification:
-`D97BJ_BUILD_FAILURE=PACKAGING_ARCH_MISMATCH_TOOLING_ONLY`.
-
-Authorized packaging-only correction for Intel ASUS2:
+Authorized packaging-only change for Intel ASUS2:
 `OpenCore-Patcher-GUI.spec: target_arch="universal2" -> target_arch="x86_64"`.
 
-## D97BJ resume v1 expected-set audit bug
-User ran `D97BJ_resume_x86_64.sh`.
-
-PASS:
-- preserved D97BJ functional source state;
-- packaging target changed to x86_64.
-
-The script then stopped because its expected changed-file list omitted the already intentionally built DEBUG helper binary.
-
-Observed changed files were exactly:
-- `OpenCore-Patcher-GUI.spec`;
-- `ci_tooling/privileged_helper_tool/com.dortania.opencore-legacy-patcher.privileged-helper`;
-- the three functional Tahoe source files above.
-
-The helper is intentional and pinned to SHA256:
+D97BJ uses an intentionally built DEBUG privileged helper for the ad-hoc custom app only while that app is running, with the exact official Dortania helper bundled as a restore asset.
+Pinned DEBUG helper SHA256 from preparation:
 `a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
 
-Classification:
-`D97BJ_RESUME_V1_FAILURE=EXPECTED_SET_AUDIT_BUG_ONLY`.
+Before any reboot after custom OCLP use, fully quit inner OCLP and verify that the installed system helper has been restored to exact official SHA256:
+`9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
 
-Correct expected working diff during resume is exactly five tracked files: three functional Tahoe source files + one packaging spec + intentional DEBUG helper binary.
+## D97BJ Tahoe 25G82 Root Patch — RUNTIME PASS
+User executed the D97BJ Root Patch in Tahoe VESA.
+
+Observed runtime sequence:
+- exact local `26.6.2-25G82` metallib found and API skipped;
+- Patcher capable of patching;
+- Universal-Binaries.dmg mounted;
+- preflight completed;
+- `Metal 3802 Common` installed;
+- `Metal 3802 Common Extended` installed with prior `13.2.1-25` blocker cleared;
+- exact Tahoe `Metal 3802 .metallibs` map executed, including `VisionKitCore.framework`;
+- Monterey GVA installed;
+- Monterey OpenCL installed;
+- Intel Haswell installed: Azul framebuffer, HD5000 graphics kext, GL/MTL/VA drivers, AppleIntelHSWVA;
+- Modern Wireless Common installed;
+- GPUCompiler libraries merged;
+- patchset metadata written;
+- RSR monitor and OCLP launchd plists installed;
+- new Auxiliary Kernel Collection built;
+- Auxiliary Kernel Collection usage forced;
+- root volume unmounted;
+- final `Patching complete`.
+
+No traceback or Root Patch error is present.
+
+Classifications:
+- `D97BJ_TAHOE_25G82_ROOT_PATCH_PREFLIGHT=PASS`;
+- `D97BJ_TAHOE_25G82_EXACT_LOCAL_METALLIB_RUNTIME=PASS`;
+- `D97BJ_TAHOE_25G82_EXACT_METALLIB_MAP_RUNTIME=PASS`;
+- `D97BJ_TAHOE_25G82_HASWELL_PATCHSET_RUNTIME=PASS`;
+- `D97BJ_TAHOE_25G82_AUXKC_BUILD=PASS`;
+- `D97BJ_TAHOE_25G82_ROOT_PATCH_EXECUTION=PASS`;
+- `D97BJ_ACCELERATED_BOOT_RESULT=NOT_YET_TESTED`.
 
 ## Execution contract
 GitHub Actions compilation remains suspended until user explicitly says quota reset/unblocked.
-The user has explicitly executed/authorized the current local Tahoe VESA build path.
+Current local Tahoe VESA build/test lane was explicitly authorized/executed by user.
 Never auto Root Patch.
 Never auto reboot.
 Golden remains immutable/read-only.
 
 ## CURRENT ACTION
-Run corrected audited resume script `D97BJ_resume_x86_64_v2.sh` against existing worktree:
-`~/Developer/OpenCore-Legacy-Patcher-D97BJ-b9df76-Tahoe25G82`.
+1. Fully quit the D97BJ inner OCLP so the outer wrapper cleanup runs.
+2. Verify installed privileged helper SHA256 equals exact official:
+   `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
+3. Only after helper restore PASS, reboot manually into the normal accelerated/root-patched Tahoe configuration.
+4. If accelerated boot has no usable image/GUI, hard restart/power-cycle and boot the established VESA recovery configuration.
+5. Return from VESA and analyze only the immediately preceding accelerated diagnostic boot under `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
 
-The V2 resume must:
-1. verify preserved D97BJ functional source state;
-2. preserve packaging-only x86_64 target;
-3. require exactly the five expected changed tracked files;
-4. verify the intentional DEBUG helper SHA256 `a1b4189d...`;
-5. rebuild application only;
-6. ad-hoc sign custom x86_64 OCLP;
-7. assemble bounded debug-helper wrapper with official helper restore asset;
-8. produce final app/ZIP/hash/audit output;
-9. run no Root Patch and no reboot.
-
-Do not open/use D97BJ for Root Patch until final V2 output is audited.
+Root Patch is now runtime PASS. Accelerated GUI is the next unresolved boundary.
