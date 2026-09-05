@@ -3,7 +3,7 @@
 Updated: 2026-09-05 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_FUNCTIONAL_DELTA_PASS_PACKAGING_UNIVERSAL2_WXPYTHON_X86_64_BLOCKER_RESUME_X86_64.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260905_D97BJ_RESUME_V1_EXPECTED_SET_MISSED_INTENTIONAL_DEBUG_HELPER_V2.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Repository recovery record: `OCLP-Continuity/OCLP_REPOSITORY_RECOVERY_20260901.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
@@ -13,8 +13,6 @@ Before proposing a technical modification in any future OCLP continuation, read 
 
 ## Target
 macOS Tahoe `26.6.2 / 25G82`, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable accelerated GUI.
-
-Golden/reference app remains immutable.
 
 ## Exact Golden ORIGINAL-OCLP baseline
 - upstream `dortania/OpenCore-Legacy-Patcher`;
@@ -89,9 +87,9 @@ Functional effects:
 Classification:
 `D97BJ_TAHOE_FUNCTIONAL_SOURCE_DELTA_PREPACKAGING=PASS`.
 
-## D97BJ current build blocker — packaging only
+## D97BJ packaging architecture blocker — resolved in design
 Current pip resolution installed wxPython `4.3.1` as x86_64-only.
-Exact b9df76 `OpenCore-Patcher-GUI.spec` requests `target_arch="universal2"`.
+Exact b9df76 `OpenCore-Patcher-GUI.spec` requested `target_arch="universal2"`.
 PyInstaller `6.22.2` therefore failed in COLLECT with:
 `IncompatibleBinaryArchError: wx/_adv...so is not a fat binary`.
 
@@ -100,17 +98,30 @@ The build had already completed PYZ, PKG/CArchive and EXE stages before COLLECT 
 Classification:
 `D97BJ_BUILD_FAILURE=PACKAGING_ARCH_MISMATCH_TOOLING_ONLY`.
 
-This is not a Tahoe functional source failure.
-
-## Authorized packaging correction
-ASUS2 is Intel Haswell/x86_64 only. The comparator does not require arm64.
-
-Packaging-only delta:
+Authorized packaging-only correction for Intel ASUS2:
 `OpenCore-Patcher-GUI.spec: target_arch="universal2" -> target_arch="x86_64"`.
 
-Expected total working diff after this packaging correction:
-- three functional Tahoe source files above;
-- one packaging-only file `OpenCore-Patcher-GUI.spec`.
+## D97BJ resume v1 expected-set audit bug
+User ran `D97BJ_resume_x86_64.sh`.
+
+PASS:
+- preserved D97BJ functional source state;
+- packaging target changed to x86_64.
+
+The script then stopped because its expected changed-file list omitted the already intentionally built DEBUG helper binary.
+
+Observed changed files were exactly:
+- `OpenCore-Patcher-GUI.spec`;
+- `ci_tooling/privileged_helper_tool/com.dortania.opencore-legacy-patcher.privileged-helper`;
+- the three functional Tahoe source files above.
+
+The helper is intentional and pinned to SHA256:
+`a1b4189d01b3107c753a290491dfbca7dc5ba64b5279f71daf901aa74c9d7f87`.
+
+Classification:
+`D97BJ_RESUME_V1_FAILURE=EXPECTED_SET_AUDIT_BUG_ONLY`.
+
+Correct expected working diff during resume is exactly five tracked files: three functional Tahoe source files + one packaging spec + intentional DEBUG helper binary.
 
 ## Execution contract
 GitHub Actions compilation remains suspended until user explicitly says quota reset/unblocked.
@@ -120,16 +131,18 @@ Never auto reboot.
 Golden remains immutable/read-only.
 
 ## CURRENT ACTION
-Run audited resume script `D97BJ_resume_x86_64.sh` against existing worktree:
+Run corrected audited resume script `D97BJ_resume_x86_64_v2.sh` against existing worktree:
 `~/Developer/OpenCore-Legacy-Patcher-D97BJ-b9df76-Tahoe25G82`.
 
-The resume must:
+The V2 resume must:
 1. verify preserved D97BJ functional source state;
-2. apply packaging-only x86_64 target;
-3. rebuild application only;
-4. ad-hoc sign custom x86_64 OCLP;
-5. assemble bounded debug-helper wrapper with official helper restore asset;
-6. produce final app/ZIP/hash/audit output;
-7. run no Root Patch and no reboot.
+2. preserve packaging-only x86_64 target;
+3. require exactly the five expected changed tracked files;
+4. verify the intentional DEBUG helper SHA256 `a1b4189d...`;
+5. rebuild application only;
+6. ad-hoc sign custom x86_64 OCLP;
+7. assemble bounded debug-helper wrapper with official helper restore asset;
+8. produce final app/ZIP/hash/audit output;
+9. run no Root Patch and no reboot.
 
-Do not open/use D97BJ for Root Patch until final resume output is audited.
+Do not open/use D97BJ for Root Patch until final V2 output is audited.
