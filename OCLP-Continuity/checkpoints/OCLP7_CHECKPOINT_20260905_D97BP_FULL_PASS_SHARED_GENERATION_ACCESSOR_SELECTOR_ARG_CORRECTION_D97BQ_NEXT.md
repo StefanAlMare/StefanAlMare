@@ -113,18 +113,20 @@ The remaining questions before any adapter design are:
 4. whether the runtime 12/12 32023 cohort results from object-field population upstream of this accessor;
 5. whether Builder-A/B request objects can be linked to the same generation-bearing object family without late value-forcing.
 
+## D97BQ read-only collector identity
+Prepared local collector:
+`OCLP7_D97BQ_shared_generation_accessor_selector_abi.sh`
+- bytes `22773`;
+- SHA256 `228978fc900358958963c25acf1bf47add6fd7a05b8ba79ed8f2f25bc1746f25`.
+
+It pins exact 25G82 native Metal, maps the shared accessor return source, proves the selector generation ABI from the selector body, reruns selector caller back-slices on the proven register, enumerates all direct accessor callers/result stores, revalidates the constructor shared-accessor call and `+0x138` override, and audits Builder-A wrapper ancestry for intersection with accessor/selector callers.
+
 ## CURRENT ACTION — D97BQ
 Remain unpatched in Tahoe VESA.
 
-D97BQ must be read-only and must:
-- pin exact 25G82 native Metal identity;
-- disassemble exact generation accessor `0x7FF80F5E16C3` and recover its return-value/object-field source;
-- enumerate its direct callers and argument-object provenance;
-- disassemble exact selector `0x7FF80F5EFFEB..0x7FF80F5F009C` from function start and prove which ABI argument carries generation to the 3802/32023 comparisons;
-- redo all selector-caller generation back-slices using the proven argument register;
-- explicitly map the constructor call to the shared accessor and the optional `[constructor arg1+0x138]` override;
-- test whether Builder-A wrapper ancestry or nearby dataflow uses the same generation accessor/object field;
-- perform no source/system/cache mutation, Root Patch or reboot.
+Run only the read-only collector above and return its ZIP.
+
+No source/system/cache mutation, Root Patch or reboot is authorized.
 
 ## Safety / execution contract
 - native Tahoe Metal4 must remain authoritative;
