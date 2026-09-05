@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CBV2_MACOS_COPY2_CHFLAGS_TOOLING_FAIL_D97CBV3_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CBV3_DYLD_DELAYED_FALSE_POSITIVE_D97CBV4_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -92,41 +92,50 @@ D97CB exact atomic temp remap PASS:
 Unsigned and signed remapped images pass `dlopen_preflight`. Actual Python child `dlopen` returns `RC=-11` (SIGSEGV) rather than an explicit dyld validation rejection. Because Python already has native Metal loaded, standalone loadability remains `NOT_YET_PROVEN`.
 
 ## D97CB-v2 — macOS copy2/chflags tooling failure only
-Returned Terminal log:
-- bytes `13995`;
-- SHA256 `fb053fe50bf85a803bcad582f7d1e6995ca0f14c4ca468c5de75e76b22a46d7b`.
+D97CB-v2 reconfirmed the remap and preflight/SIGSEGV result, then failed before cold injection because `shutil.copy2()` propagated BSD file flags and macOS Python 3.13 hit `PermissionError` in `chflags`. Tooling-only.
 
-D97CB-v2 reconfirmed all D97CB structural PASS markers and again observed unsigned/signed `dlopen_preflight=PASS`, actual child `dlopen RC=-11`.
+## D97CB-v3 — cold host construction PASS; baseline parser false positive
+Returned complete Terminal paste identity:
+- bytes `118929`;
+- SHA256 `c8f3d4317fa1e4ad605fffd249f6abb18301df358d36be39f3f5502ae6529e2a`.
 
-Cold-host setup then failed before any cold Metal injection because `shutil.copy2('/usr/bin/true', HOST)` called `copystat()` and macOS Python 3.13 attempted BSD `chflags` on the temp copy, yielding:
-`PermissionError: [Errno 1] Operation not permitted: '/private/tmp/.../cold_true'`.
+D97CB-v3 again reconfirmed the exact remap and unsigned/signed preflight PASS + Python-child `dlopen RC=-11`.
 
-This is tooling-only and does not invalidate the remap.
+Cold-host construction now passed:
+- `/usr/bin/true` copied with `copyfile()`;
+- copied signature removed;
+- ad-hoc sign PASS;
+- strict verify PASS;
+- baseline exit `0`.
 
-Authoritative classifications:
-- `D97CBV2_ATOMIC_REMAP_STRUCTURAL=PASS_RECONFIRMED`;
-- `D97CBV2_REMAP_UNSIGNED_SIGNED_PREFLIGHT=PASS_RECONFIRMED`;
-- `D97CBV2_REMAP_CHILD_DLOPEN=SIGSEGV_NEGATIVE_RECONFIRMED`;
-- `D97CBV2_COLD_HOST_COPY2_CHFLAGS=TOOLING_NEGATIVE`;
-- `D97CBV2_REMAP_STANDALONE_LOADABILITY=NOT_YET_PROVEN`.
+The baseline trace printed Metal and libbz2 as closure candidates, but later explicitly logged:
+- `move loaded to delayed: Metal`;
+- `move loaded to delayed: libbz2.1.0.dylib`;
+with no reverse promotion before exit.
+Apple dyld source confirms these are runtime-state transitions between `loaded` and `delayLoaded`.
 
-## CURRENT ACTION — D97CB-v3
+Therefore `FAIL=COLD_HOST_PRELOADS_METAL` was a tooling false positive caused by substring matching. The correct classification is final-state based:
+- `D97CBV3_BASELINE_METAL_FINAL_STATE=DELAYED`;
+- `D97CBV3_BASELINE_BZ2_FINAL_STATE=DELAYED`;
+- `D97CBV3_FAIL_COLD_HOST_PRELOADS_METAL=TOOLING_FALSE_POSITIVE`.
+
+No positive-control injection, remapped-Metal cold injection, or D97BV application occurred after this stop.
+
+## CURRENT ACTION — D97CB-v4
 Remain unpatched in Tahoe VESA.
-Run only `OCLP7_D97CB_v3_macos_safe_cold_host.sh`:
-- bytes `32508`;
-- SHA256 `24f0b52509530700daa64eb2c9a2fcd882671acb4a4ff8b5f6570443c66918c1`.
+Run only `OCLP7_D97CB_v4_dyld_final_state_cold_host.sh`:
+- bytes `34857`;
+- SHA256 `fa0e6fc5825a260be3c638bdb177c63378abd3adf44b08d0683a99d1e383a0be`.
 
-D97CB-v3 reproduces exactly the D97CB-v2 Metal transformation. Only the cold-host copy changes:
-- `shutil.copyfile('/usr/bin/true', HOST)` instead of `copy2()`;
-- explicit `chmod(0755)`;
-- copied embedded signature removed, then ad-hoc sign + strict verify.
-
-Cold-host gates:
-1. baseline exit 0 with no Metal and no libbz2 in dyld trace;
-2. positive-control injection of `/usr/lib/libbz2.1.0.dylib` must exit 0 and appear in trace, proving `DYLD_INSERT_LIBRARIES` is honored;
-3. only then inject signed remapped Metal with library/segment/initializer tracing;
-4. classify target-not-observed, target-mapped-then-failed, or target-mapped-and-exit-0;
-5. only target-mapped-and-exit-0 authorizes D97BV re-audit/application.
+D97CB-v4 reproduces the identical D97CB remap and changes only dyld trace interpretation:
+1. direct image lines provisionally mark a leaf loaded;
+2. `move loaded to delayed` / `move delayed to loaded` are applied sequentially;
+3. baseline requires final Metal and libbz2 states not loaded;
+4. positive-control injection requires final `libbz2.1.0.dylib=loaded` with exit 0;
+5. only then inject signed remapped Metal;
+6. record explicit target-path observation, target final state, system Metal final state, and host exit independently;
+7. only explicit target final-loaded + exit 0 authorizes D97BV re-audit/application;
+8. target final-loaded + process failure is a later init/runtime frontier and stops without D97BV.
 
 No Root Patch, installation, or accelerated reboot authorized.
 GitHub Actions compile/build/package remains suspended until explicit quota-unblocked confirmation.
