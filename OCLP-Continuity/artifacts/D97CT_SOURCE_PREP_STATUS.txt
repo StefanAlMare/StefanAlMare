@@ -1,0 +1,1 @@
+D97CT source preparation remains repository-side only. ASUS2 stays on the current VESA boot and requires no changes.
