@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CBV5_COLD_HARNESS_PASS_TEXT_MAP_DATA_CONST_MMAP_ALIGNMENT_FAIL_D97CC_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CC_SURFACE_CLOSED_D97CD_SCRIPT_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -27,104 +27,88 @@ D97BJ/BK: full legacy `13.2.1-24/Metal.framework` shadows/removes Tahoe Metal4 s
 D97BL: legacy `MTLCompilerService.xpc` may be bounded; legacy main Metal remains forbidden. Do not repeat unchanged native-Metal + legacy-XPC/private-compilers + true-five reboot.
 
 ## D97BV — selective 3802-preserve adapter
-Patch window `0x7FF80F5E1719..0x7FF80F5E1726`; safe unsectioned cave `0x7FF80F47E560..0x7FF80F47E630`.
+Patch window `0x7FF80F5E1719..0x7FF80F5E1726`; safe pre-sign unsectioned cave `0x7FF80F47E560..0x7FF80F47E630`.
 Site `3dda0e00007406e93bcee9ff90`; cave `3d187d0000b9177d00000f4cc1e9b4311600`.
 Semantics: preserve exact 3802, otherwise execute original Tahoe floor. `STATIC_SEMANTIC_PROVEN`.
+The cave begins at current load-command end and must be re-audited after codesign before any standalone deployment.
 
-## D97BW-v2 / D97BX — sparse analysis container closure
-Sparse reconstruction preserved native code/Metal4 and D97BV diff, but real dlopen failed identically original/patched due shared-cache standalone mapping geometry. Signing and D97BV were not the blocker. Sparse mirror is analysis-only.
+## D97BW-v2 / D97BX — sparse analysis closure
+Sparse reconstruction preserved native code/Metal4 and D97BV diff, but standalone real load failed because shared-cache mapping geometry is not directly valid. Signing and D97BV were not the blocker. Sparse mirror is analysis-only.
 
-## D97BY — real DSC single-image export
-Pinned `blacktop/ipsw v3.1.713` RAW and `--slide` exports both succeed, preserve exact native Tahoe `__text` and Metal4 counts. Preflight/signing pass; real dlopen first rejects missing `SG_READ_ONLY` on `__DATA_CONST`.
+## D97BY — real DSC export
+Pinned `blacktop/ipsw v3.1.713` RAW and `--slide` exports succeed and preserve exact native Tahoe `__text`/Metal4. First real-load rejection: `__DATA_CONST segment missing SG_READ_ONLY flag`.
 
-## D97BZ — metadata SG_READ_ONLY gate passed
-Only one effective pre-sign byte changed at `__DATA_CONST` flags (`0x00 -> 0x10`); previous dyld gate disappeared. New exact real dlopen rejection: `segment '__DATA_DIRTY' vm address out of order`.
-Classification: `D97BZ_DYLD_SG_READ_ONLY_GATE=PASSED_BY_EXACT_METADATA_FIX`.
+## D97BZ — SG_READ_ONLY gate passed
+Exact metadata-only `0x0 -> 0x10` on `__DATA_CONST` passes that gate. Next exact rejection: `segment '__DATA_DIRTY' vm address out of order`.
 
-## D97CA — segment-order dependency audit FULL PASS
-D97CA proved current compact RAW file/load order `__TEXT,__DATA_CONST,__DATA,__DATA_DIRTY,__LINKEDIT` conflicts with VM order `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`.
-Dependency surface for coherent reorder:
-- dyld segment-index rewrites: 0;
-- relocation section-ordinal rewrites: 0;
+## D97CA — segment-order surface enumerated
+RAW file/load order `__TEXT,__DATA_CONST,__DATA,__DATA_DIRTY,__LINKEDIT` conflicts with VM order `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`.
+Coherent repair surface:
+- dyld segment-index rewrites 0;
+- relocation section-ordinal rewrites 0;
 - chained fixups absent;
 - split-seg info absent;
-- unknown order-sensitive loads: 0;
-- file-backed section offsets: 5;
-- symtab `n_sect` rewrites: 3652.
-Classification: `D97CA_MANUAL_SEGMENT_ORDER_REPAIR_CLASSIFICATION=STATIC_REMAP_SURFACE_ENUMERATED`.
+- unknown order-sensitive loads 0;
+- 5 file-backed section offsets;
+- 3652 symtab `n_sect` rewrites.
+Classification: `STATIC_REMAP_SURFACE_ENUMERATED`.
 
-## D97CB — atomic remap structural PASS
-Target remap passed:
-- `__DATA_CONST` has `SG_READ_ONLY`;
-- `__DATA_DIRTY` payload fileoff `0x35C000`;
-- `__DATA` payload fileoff `0x361000`;
-- `__LINKEDIT` remains `0x36E000`;
-- command order `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
-- all VM addresses preserved;
-- 5 section fileoff rewrites;
+## D97CB — atomic order remap structural PASS
+Exact remap:
+- `SG_READ_ONLY` on `__DATA_CONST`;
+- physical/load order `__DATA_DIRTY` before `__DATA`;
+- all segment/section VM addresses preserved;
+- 5 section fileoffs rewritten;
 - 3652 symtab `n_sect` remaps;
-- pre-sign diff `40655`, zero outside audited domains;
-- `file`, `otool -l`, `otool -L` PASS.
-Unsigned/signed preflight PASS; Python child actual `dlopen` `RC=-11` SIGSEGV, but that process already has native Metal loaded.
+- diff outside audited domains 0;
+- `file`, `otool -l`, `otool -L` PASS;
+- unsigned/signed preflight PASS.
 
-## D97CB-v2/v3/v4 — harness corrections
-D97CB-v2: macOS Python `copy2()->copystat()->chflags` failed on copied `/usr/bin/true`; tooling-only, fixed with `copyfile`.
-D97CB-v3: copied/re-signed `/usr/bin/true` baseline exited 0. Raw substring matching falsely treated delayed closure entries as loaded. Dyld source proved `move loaded to delayed`/reverse transitions.
-D97CB-v4: final-state parser implementation was correct but embedded Python omitted `import re`; tooling-only stop.
+## D97CB-v2/v3/v4 — harness tooling corrections
+v2: `copy2()->chflags` PermissionError on copied `/usr/bin/true`; fixed with `copyfile`.
+v3: delayed closure entries were misclassified by substring matching; dyld source proved loaded/delayed transitions.
+v4: final-state parser omitted `import re`; tooling-only stop.
 
-## D97CB-v5 — cold harness proven, true mapping reaches __DATA_CONST mmap alignment failure
-Returned bundle:
-`OCLP7_D97CB_V5_ATOMIC_REMAP_COLD_HOST_20260906_030103.zip`
-- bytes `134957`;
-- SHA256 `2d1a47c49bb6724b4ad5c65e878fa2872ee72880842ed1301aa1b94bf52bf17e`;
-- TXT SHA256 `ffd4cad23e1c224803096ac649dfae548dacb849eeab5a4612f9b7b66abf60ab`;
-- JSON SHA256 `13c4969165ff9f28d70f20de2ce928630830fa94c0a2e91245f9fccf0c094e73`.
+## D97CB-v5 — cold harness proven, true mapping frontier
+Bundle `OCLP7_D97CB_V5_ATOMIC_REMAP_COLD_HOST_20260906_030103.zip`, SHA256 `2d1a47c49bb6724b4ad5c65e878fa2872ee72880842ed1301aa1b94bf52bf17e`.
+Cold baseline `/usr/bin/true`: exit 0, native Metal delayed, libbz2 delayed.
+Positive control `DYLD_INSERT_LIBRARIES=/usr/lib/libbz2.1.0.dylib`: exit 0, final libbz2 loaded. Cold harness therefore PROVEN VALID.
 
-Cold baseline:
-- `/usr/bin/true` copied, Apple signature removed, ad-hoc sign/verify PASS;
-- exit 0;
-- final native Metal state delayed;
-- final libbz2 state delayed.
+Signed remapped Metal target is explicitly observed; dyld maps `__TEXT` successfully. Next exact failure:
+`__DATA_CONST mmap(addr=...5CD0, size=0x70000) failed with errno=22`.
+Thus SG_READ_ONLY and segment-order gates are passed; current blocker is sub-page shared-cache VM mapping geometry.
 
-Positive control:
-- `DYLD_INSERT_LIBRARIES=/usr/lib/libbz2.1.0.dylib`;
-- exit 0;
-- path observed;
-- final libbz2 state loaded.
-Thus the cold-load harness is proven valid.
+## D97CC — page-prefix / LINKEDIT feasibility FULL STATIC CLOSURE
+Bundle `OCLP7_D97CC_PAGE_PREFIX_LINKEDIT_FEASIBILITY_20260906_031505.zip`:
+- bytes `5713`;
+- SHA256 `8edf16651be320d3ace7dadc706e243c35ed68b92192fc2a7fa50a5ebbff19a3`;
+- TXT SHA256 `39a76f7ba9a6b14b7247b37ac384951e2b0e6fd07bc602c5e42cbf77ef30fd71`;
+- JSON SHA256 `18ed61878d5a775ffd925b465e8a10cf76e4e7d1b339fafc0bd1cfd58e518038`.
 
-Signed remapped Metal injection:
-- target temp path explicitly observed;
-- dyld logs `Mapping ...Metal.SGRO.ORDER.adhoc`;
-- `__TEXT` maps successfully;
-- next mapping fails at `__DATA_CONST`:
-  `mmap(addr=0x13BE35CD0, size=0x00070000) failed with errno=22`.
+4K page-prefix plan preserving all original section/content VM addresses:
+- `__DATA_CONST`: floor VM `...D000`, prefix `0xCD0`, fileoff `0x2EC000`, content `0x2ECCD0`, filesize `0x70CD0`, vmsize `0x71000`;
+- `__DATA_DIRTY`: floor VM `...F000`, prefix `0x510`, fileoff `0x35D000`, content `0x35D510`, filesize `0x5510`, vmsize `0x6000`;
+- `__DATA`: floor VM `...59000`, prefix `0xC0`, fileoff `0x363000`, content `0x3630C0`, filesize `0xD0C0`, vmsize `0xE000`;
+- `__LINKEDIT`: fileoff `0x371000`, exact shift `+0x3000`.
 
-The original preserved `__DATA_CONST` segment VM start is `0x7FF84119DCD0`; its low page residue `0xCD0` is carried into the requested standalone mapping address. Previous SG_READ_ONLY and segment-order validation failures are gone.
+All planned map VM starts and fileoffs are page aligned and VM/file ranges do not overlap.
+Exactly 20 file-backed section offsets change.
+LINKEDIT shift requires 7 metadata updates total: `__LINKEDIT.fileoff` itself plus 6 payload fields (`LC_DYLD_EXPORTS_TRIE.dataoff`, `LC_SYMTAB.symoff`, `LC_SYMTAB.stroff`, `LC_DYSYMTAB.indirectsymoff`, `LC_FUNCTION_STARTS.dataoff`, `LC_DATA_IN_CODE.dataoff`).
+Section relocation remaps 0; symtab `n_value` rewrites 0; no new ordinal remap beyond D97CB.
 
-Classifications:
-- `D97CBV5_COLD_LOAD_HARNESS=PROVEN_VALID`;
-- `D97CBV5_REMAPPED_METAL_TARGET_PATH_OBSERVED=PROVEN`;
-- `D97CBV5_REMAPPED_METAL___TEXT_MAPPED=PROVEN`;
-- `D97CBV5_DATA_CONST_MMAP_ADDR_NON_PAGE_ALIGNED_FAILURE=PROVEN`;
-- `D97CBV5_PREVIOUS_SGRO_AND_SEGMENT_ORDER_GATES=PASSED`;
-- `D97CBV5_CURRENT_REMAPPED_STANDALONE_LOADABLE=NEGATIVE`.
+D97CC printed one unknown load-field hit at `0xD48`; this was statically identified as the standard `__LINKEDIT segment_command_64.fileoff` field (`LC_SEGMENT_64` at `0xD20` + `0x28`). It is not an unknown blocker.
+Corrected classification:
+`D97CC_PAGE_PREFIX_REPAIR_CLASSIFICATION=STATIC_REMAP_SURFACE_ENUMERATED`.
 
-D97BV was correctly skipped because the original standalone baseline is not yet loadable.
+## CURRENT ACTION — D97CD
+Run only `OCLP7_D97CD_page_aligned_transform_cold_load.sh`:
+- bytes `28199`;
+- SHA256 `67ec2f791de401e1e2007e9b2af898cd40059131bd2ac8d158cf8a139c61309a`;
+- shell syntax PASS;
+- embedded Python compile PASS.
 
-## CURRENT ACTION — D97CC read-only page-prefix feasibility audit
-Remain unpatched in VESA.
+D97CD materializes the exact page-prefix plan only in `/private/tmp`, integrates D97CB order/SG_READ_ONLY/n_sect repair, validates payload identities and all shifted LINKEDIT fields, runs external parsers and unsigned/signed preflight, audits codesign load-command/header-padding growth, reuses the proven `/usr/bin/true` + libbz2 cold harness, and cold-injects only the signed unpatched page-aligned Metal.
 
-D97CC must audit a mapping-only repair before any new binary mutation:
-- page-floor each non-aligned segment mapping start;
-- add synthetic leading file prefix so original section/content bytes still land at original section VM addresses relative to slide;
-- plan page-aligned standalone fileoffs;
-- prove expanded VM ranges remain ordered/non-overlapping;
-- enumerate every changed section fileoff;
-- derive the resulting `__LINKEDIT` fileoff shift and every load-command field into LINKEDIT requiring remap;
-- prove code/section VM addresses, symtab n_value, D97BV site/cave positions and section ordinals can remain unchanged;
-- identify any unhandled file-offset-bearing/order-sensitive structure.
+D97BV remains explicitly NOT applied in D97CD, even if the baseline becomes loadable. Any cave relocation/signing work is a later separate gate.
 
-Only after this surface is fully bounded may a later D97CD construct a temporary page-prefix-aligned Metal and repeat the already-proven cold-load harness.
-
-No Root Patch, installation, or accelerated reboot authorized.
+Remain unpatched in VESA. No Root Patch, installation, local/source build, accelerated boot or reboot authorized.
