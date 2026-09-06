@@ -7,10 +7,9 @@ Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DT_D97DL_FULL_VESA_PAIR_PASS.md`
-Current build checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DW_SOURCE_POLICY_AND_ASSETS_PASS_DEBUG_HELPER_SDK_TOOLING_FAIL_D97DX_RESUME.md`
+Current build checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_BUILD_REPORT_PASS_LOCAL_ARTIFACT_AUDIT_NEXT.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
-Current resume authority: `OCLP-Continuity/artifacts/OCLP7_D97DX_IMAC_RESUME_BUILD.sh`
-Current pinned bootstrap: `OCLP-Continuity/artifacts/OCLP7_D97DX_IMAC_RESUME_BOOTSTRAP.sh`
+Current local artifact audit: `OCLP-Continuity/artifacts/OCLP7_D97DY_D97DX_LOCAL_ARTIFACT_AUDIT.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
@@ -45,7 +44,7 @@ D97DT remains FULL VESA PAIR PASS on exact Tahoe 25G82:
 
 Therefore the selective-3802 adapter delivery mechanism is CLOSED PASS under VESA.
 
-## D97DU — native-Metal-safe Root Patch baseline
+## D97DU / D97DX native-Metal-safe Root Patch baseline
 Exact source baseline:
 - OCLP commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
 - tree `7c3411fde7d40604164c8877a5ab5594448083ac`.
@@ -67,60 +66,61 @@ Forbidden in synthesized Tahoe patch dictionary:
 - donor main `Versions/A/Metal`;
 - true-five reapplication.
 
-## D97DW returned build run — functional policy and assets PASS
-Returned iMac output proved:
-- authority/base Git identities PASS;
+## D97DX returned build report — PASS
+Returned iMac report proves:
+- tracked source delta bounded to exactly four files;
 - Python `3.13.15` x86_64 PASS;
-- exact b9df76 checkout PASS;
-- exact Pyquick 25G82 patchdict PASS;
-- source delta bounded to 3 functional files + x86_64 packaging spec;
-- Python syntax PASS;
+- patchdict/assets exact identities PASS;
 - synthesized Tahoe patch dictionary PASS;
 - whole Metal donor count 0;
 - `MetalOld.dylib` count 0;
-- main legacy Metal install count 0;
+- main legacy Metal binary install count 0;
 - XPC-only legacy ingress PASS;
 - private compiler lanes PASS;
 - exact 25G82 metallib entry count 182;
-- exact Universal-Binaries SHA256 `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7` PASS;
-- generated payloads.dmg SHA256 `e7323a6c39d330163924438813746f873e0e8801a2f8776362d9538a2abdcb1b` PASS.
+- explicit macOS SDK/header gates PASS;
+- DEBUG helper x86_64 PASS, SHA256 `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`;
+- inner app x86_64 PASS, executable SHA256 `986402e0d3a8d56f726b6fca41284fd1bb51631f9e675cd4631a11d29edb7b11`;
+- source diff SHA256 `c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4`;
+- ZIP bytes `722858206`;
+- ZIP SHA256 `2f84fcaf39eb6c5a917ebb7b878bf2bef495050981b52fbe41e971fa1fe5cf1a`;
+- target official-helper save/restore policy PASS;
+- official helper not bundled;
+- `D97DX_BUILD_STATUS=PASS`.
 
-D97DW then stopped only while compiling the DEBUG privileged helper because exact b9df76 Makefile invokes plain `clang -framework Foundation -framework Security ...` without explicit macOS SDK/sysroot and the build host no longer exposes Foundation headers through `/System/Library/Frameworks`.
+No Root Patch, EFI mutation, system-root mutation, or reboot occurred.
 
-Classification:
-`D97DW_ROOTPATCH_POLICY=PASS`
-`D97DW_PATCHER_SUPPORT_ASSETS=PASS`
-`D97DW_DEBUG_HELPER_FAILURE=BUILD_TOOLING_SDK_DISCOVERY_ONLY`
+D97DX build report checkpoint commit: `114b08ab92f9cdf712d81ad585e7de65e67711e8`.
 
-No Root Patch, EFI mutation, system root mutation, or reboot occurred.
+## Oversized ZIP handling / D97DY
+The final D97DX ZIP is ~723 MB and is too large to require upload through chat.
+Do NOT ask the user to upload the full ZIP.
 
-## D97DX — current resume authority
-Checkpoint commit: `ab7f0b074745f776cb18c6039da55eb1041277c3`.
-Resume authority commit: `b476b755c95eaf9e6cc2bed967b9650e72fbc907`.
-Resume authority Git blob: `b9a2f673bcd382df6d4f2282ad4d6a588fde0b51`.
-Pinned bootstrap commit: `c14e230cafe6deaf0f00acacba4b19dfd4250286`.
+D97DY performs an independent LOCAL iMac audit and emits only a small TXT:
+- verify exact ZIP SHA/size;
+- full ZIP CRC integrity test without full extraction;
+- selected ZIP member hashes;
+- on-disk app binary/helper architectures and hashes;
+- codesign gates;
+- embedded audit and source patch identity;
+- exact changed-file set;
+- re-synthesized Tahoe Metal3802 dictionary;
+- whole Metal/main Metal/MetalOld exclusion gates;
+- exact 182-entry metallib map;
+- target launcher fail-closed official-helper save/restore policy;
+- verify official helper is not bundled.
 
-D97DX does NOT reclone and does NOT reinstall requirements. It reuses:
-`~/Developer/OpenCore-Legacy-Patcher-D97DU-b9df76-Tahoe25G82`
-
-D97DX must re-pin all already-proven identities and then:
-- resolve macOS SDK with `xcrun --sdk macosx --show-sdk-path`;
-- verify exact Foundation/Security SDK headers;
-- compile DEBUG helper x86_64-only with explicit `-isysroot`;
-- ad-hoc sign and verify helper;
-- continue x86_64 application build;
-- assemble target wrapper with target-side exact official-helper backup/restore policy;
-- bundle no official helper from the iMac.
+D97DY authority commit: `5deee1e3adf5eb02b2fef449040069e6a7f6a4cd`.
 
 ## NEXT ACTION
-Run only the pinned D97DX resume bootstrap on the authorized Intel iMac build host.
-If it stops, return exact output and do not repair manually.
-If it completes, return:
-- `OpenCore-Patcher-Tahoe-D97DX.zip`;
-- `OCLP7_D97DX_IMAC_RESUME_REPORT.txt`;
+On the Intel iMac, run `OCLP7_D97DY_D97DX_LOCAL_ARTIFACT_AUDIT.sh` against the existing D97DX app/ZIP/worktree.
+Return only:
+- the small `OCLP7_D97DY_D97DX_LOCAL_ARTIFACT_AUDIT_<timestamp>.txt`;
 - `OCLP7_D97DX_b9df76_NATIVE_METAL_SAFE.patch`.
 
-After independent audit of returned D97DX artifacts, manual Root Patch on ASUS2 may be separately authorized.
+The large D97DX ZIP does not need to be uploaded.
+
+After independent audit of those small artifacts, manual Root Patch on ASUS2 may be separately authorized.
 
 Still NOT authorized:
 - Root Patch now;
