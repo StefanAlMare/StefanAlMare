@@ -7,9 +7,8 @@ Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DT_D97DL_FULL_VESA_PAIR_PASS.md`
-Current build checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_BUILD_REPORT_PASS_LOCAL_ARTIFACT_AUDIT_NEXT.md`
+Current Root Patch authorization checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DY_D97DX_ARTIFACT_AUDIT_PASS_ROOTPATCH_AUTHORIZED.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
-Current local artifact audit: `OCLP-Continuity/artifacts/OCLP7_D97DY_D97DX_LOCAL_ARTIFACT_AUDIT.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
@@ -18,7 +17,7 @@ Current local artifact audit: `OCLP-Continuity/artifacts/OCLP7_D97DY_D97DX_LOCAL
 - full D97BV arg `-ocmcd97bv` present;
 - active `OCLPMetalCompat.kext` = D97DL 0.0.7;
 - D97DL UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
-- no active Root Patch.
+- no active Root Patch yet.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -30,7 +29,8 @@ Permanent prohibitions:
 - no global 32023 rewrite;
 - no global forced-3802 production path;
 - no standalone Objective-C rehabilitation mainline;
-- no fake canonical Metal file for BinaryModInfo.
+- no fake canonical Metal file for BinaryModInfo;
+- no true-five reapplication.
 
 ## D97BV / D97DT runtime closure
 D97DT remains FULL VESA PAIR PASS on exact Tahoe 25G82:
@@ -44,86 +44,88 @@ D97DT remains FULL VESA PAIR PASS on exact Tahoe 25G82:
 
 Therefore the selective-3802 adapter delivery mechanism is CLOSED PASS under VESA.
 
-## D97DU / D97DX native-Metal-safe Root Patch baseline
+## D97DX native-Metal-safe Root Patch build — PASS
 Exact source baseline:
 - OCLP commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
 - tree `7c3411fde7d40604164c8877a5ab5594448083ac`.
 
-Tahoe-only functional policy:
-- `detect.py`: host max Sequoia -> Tahoe;
-- `metallib_handler.py`: exact local host-build MetallibSupportPkg before API;
-- `metal_3802.py`:
-  - Common installs only legacy `MTLCompilerService.xpc` into native Metal.framework plus private compiler lanes;
-  - Extended retains CoreImage/RenderBox/private compiler compatibility but NO whole `Metal.framework` donor;
-  - exact 25G82 Pyquick metallib map, 182 entries;
-  - upstream behavior preserved off Tahoe;
-- packaging-only `OpenCore-Patcher-GUI.spec`: x86_64.
+Exact tracked delta is four files only:
+1. `OpenCore-Patcher-GUI.spec` — x86_64 packaging only;
+2. `opencore_legacy_patcher/support/metallib_handler.py` — exact local host-build MetallibSupportPkg before API;
+3. `opencore_legacy_patcher/sys_patch/patchsets/detect.py` — host max Sequoia -> Tahoe;
+4. `opencore_legacy_patcher/sys_patch/patchsets/shared_patches/metal_3802.py` — Tahoe-native-Metal-safe 3802 policy.
 
-Forbidden in synthesized Tahoe patch dictionary:
-- whole `/System/Library/Frameworks/Metal.framework` donor;
-- donor `13.2.1-24/Metal.framework`;
-- `MetalOld.dylib`;
-- donor main `Versions/A/Metal`;
-- true-five reapplication.
+Tahoe policy:
+- Common: inject only `MTLCompilerService.xpc` under native Metal.framework plus private MTLCompiler/GPUCompiler lanes;
+- Extended: CoreImage/RenderBox/private compiler compatibility only; NO whole `Metal.framework` donor;
+- exact Pyquick 25G82 metallib map, 182 entries;
+- upstream behavior preserved off Tahoe;
+- no `MetalOld.dylib`;
+- no main legacy `Versions/A/Metal` donor;
+- no true-five.
 
-## D97DX returned build report — PASS
-Returned iMac report proves:
-- tracked source delta bounded to exactly four files;
-- Python `3.13.15` x86_64 PASS;
-- patchdict/assets exact identities PASS;
-- synthesized Tahoe patch dictionary PASS;
-- whole Metal donor count 0;
-- `MetalOld.dylib` count 0;
-- main legacy Metal binary install count 0;
-- XPC-only legacy ingress PASS;
-- private compiler lanes PASS;
-- exact 25G82 metallib entry count 182;
-- explicit macOS SDK/header gates PASS;
-- DEBUG helper x86_64 PASS, SHA256 `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`;
-- inner app x86_64 PASS, executable SHA256 `986402e0d3a8d56f726b6fca41284fd1bb51631f9e675cd4631a11d29edb7b11`;
+D97DX build identities:
+- patchdict SHA256 `c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`;
+- Universal-Binaries SHA256 `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7`;
+- payloads.dmg SHA256 `e7323a6c39d330163924438813746f873e0e8801a2f8776362d9538a2abdcb1b`;
+- DEBUG helper x86_64 SHA256 `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`;
+- inner OCLP x86_64 executable SHA256 `986402e0d3a8d56f726b6fca41284fd1bb51631f9e675cd4631a11d29edb7b11`;
 - source diff SHA256 `c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4`;
 - ZIP bytes `722858206`;
 - ZIP SHA256 `2f84fcaf39eb6c5a917ebb7b878bf2bef495050981b52fbe41e971fa1fe5cf1a`;
-- target official-helper save/restore policy PASS;
-- official helper not bundled;
 - `D97DX_BUILD_STATUS=PASS`.
 
-No Root Patch, EFI mutation, system-root mutation, or reboot occurred.
+## D97DY local artifact audit — PASS with collector false-negative after decisive gates
+Returned D97DY report proved before its optional re-synthesis step:
+- ZIP SHA/size PASS;
+- local inner executable SHA/arch PASS;
+- local DEBUG helper SHA/arch PASS;
+- desktop source diff == embedded patch byte-for-byte;
+- codesign gates PASS;
+- official helper not bundled PASS;
+- launcher exact official helper SHA/team pin PASS;
+- launcher pre-swap verification, backup, temporary DEBUG install, explicit restore and post-restore verification PASS;
+- launcher has no NVRAM, bless, reboot, shutdown, or Root Patch automation path;
+- embedded audit contract PASS.
 
-D97DX build report checkpoint commit: `114b08ab92f9cdf712d81ad585e7de65e67711e8`.
+The collector then stopped with `ModuleNotFoundError: No module named 'opencore_legacy_patcher'` because the optional re-synthesis invocation lacked worktree cwd/PYTHONPATH. This is classified `TOOLING_FALSE_NEGATIVE`, not build failure.
 
-## Oversized ZIP handling / D97DY
-The final D97DX ZIP is ~723 MB and is too large to require upload through chat.
-Do NOT ask the user to upload the full ZIP.
+Independent direct source-diff audit closed the same remaining gate without another user run:
+- uploaded diff SHA exact match `c8b45d7f...`;
+- exact four-file changed set;
+- metallib map = 139 parent destinations / 182 file entries;
+- no duplicate map keys;
+- 180 DynamicPatchset entries + 2 donor `14.6.1` entries;
+- zero `MetalOld.dylib`;
+- zero `13.2.1-24/Metal.framework`;
+- only bounded Metal.framework additions are XPCServices path and Resources metallib path.
 
-D97DY performs an independent LOCAL iMac audit and emits only a small TXT:
-- verify exact ZIP SHA/size;
-- full ZIP CRC integrity test without full extraction;
-- selected ZIP member hashes;
-- on-disk app binary/helper architectures and hashes;
-- codesign gates;
-- embedded audit and source patch identity;
-- exact changed-file set;
-- re-synthesized Tahoe Metal3802 dictionary;
-- whole Metal/main Metal/MetalOld exclusion gates;
-- exact 182-entry metallib map;
-- target launcher fail-closed official-helper save/restore policy;
-- verify official helper is not bundled.
+Pyquick release `26.6.2-25G82` independently confirms:
+- `sys_patch_dict.py` digest `c05a083e5614f07cf4befaa466b64a69d7d1b6518a3c36d18884a17e003d890e`;
+- MetallibSupportPkg digest `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
 
-D97DY authority commit: `5deee1e3adf5eb02b2fef449040069e6a7f6a4cd`.
+D97DY/D97DX Root Patch authorization checkpoint commit: `abc1f2dfa062c5b87d7d2b330b8f0b6fd315f75c`.
 
-## NEXT ACTION
-On the Intel iMac, run `OCLP7_D97DY_D97DX_LOCAL_ARTIFACT_AUDIT.sh` against the existing D97DX app/ZIP/worktree.
-Return only:
-- the small `OCLP7_D97DY_D97DX_LOCAL_ARTIFACT_AUDIT_<timestamp>.txt`;
-- `OCLP7_D97DX_b9df76_NATIVE_METAL_SAFE.patch`.
+## CURRENT ACTION — MANUAL ROOT PATCH AUTHORIZED
+Manual Root Patch on ASUS2 is now authorized using ONLY the exact D97DX outer app/wrapper.
 
-The large D97DX ZIP does not need to be uploaded.
+Execution contract:
+1. transfer `OpenCore-Patcher-Tahoe-D97DX.zip` locally from iMac to ASUS2 (network/USB/NAS is fine; chat upload is not required);
+2. unzip on ASUS2 and launch the OUTER `OpenCore-Patcher-Tahoe-D97DX.app`, never the inner app directly;
+3. outer launcher must pass exact current official helper identity before any swap;
+4. exact local `MetallibSupportPkg/26.6.2-25G82` must be available to inner OCLP; if OCLP reports it missing or resolves an unexpected donor, STOP and return output;
+5. user may run manual Root Patch;
+6. retain `-igfxvesa -ocmcdiag -ocmcd97bv` throughout this Root Patch cycle;
+7. after patch completes, CLOSE inner OCLP so outer wrapper restores and verifies the official helper;
+8. DO NOT reboot yet; return complete Root Patch output/status for audit.
 
-After independent audit of those small artifacts, manual Root Patch on ASUS2 may be separately authorized.
+Authorized now:
+`D97DX_MANUAL_ROOT_PATCH_ON_ASUS2=YES`.
 
 Still NOT authorized:
-- Root Patch now;
 - removal of `-igfxvesa`;
-- accelerated boot;
-- any reboot into a new root-patched/accelerated configuration.
+- accelerated/non-VESA boot;
+- reboot after Root Patch before post-patch audit;
+- Golden mutation;
+- any legacy main Metal shadow;
+- true-five reapplication.
