@@ -6,17 +6,19 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DZ_POST_ROOTPATCH_VESA_SHARED_CACHE_IDENTITY_PASS_ACCELERATED_BOOT_AUTHORIZED.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EA_ACCELERATED_BOOT_FAIL_CHRONOLOGY_FIXED.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
+Current accelerated-failure collector: `OCLP-Continuity/artifacts/OCLP7_D97EB_ACCELERATED_BOOT_EVIDENCE_COLLECTOR.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
-- D97DX native-Metal-safe Root Patch is installed and first root-patched reboot has completed successfully under VESA;
-- current boot args include active `-igfxvesa -ocmcdiag -ocmcd97bv`;
-- `#-ocmcd97bvcave` remains inert;
+- D97DX native-Metal-safe Root Patch is installed;
+- first root-patched VESA validation completed PASS;
+- first accelerated boot attempt failed at GUI transition and user recovered into established VESA mode;
+- current running session is VESA recovery boot at `2026-09-07 02:25 EEST`;
 - active EFI compatibility kext remains D97DL `OCLPMetalCompat.kext` 0.0.7, UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
-- exact official Dortania privileged helper was restored before reboot.
+- current recovery policy must remain unchanged while evidence is collected.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -68,31 +70,50 @@ Root-patched VESA boot proved:
 - Lilu 1.7.3, OCLPMetalCompat 0.0.7, WhateverGreen 1.7.1 loaded;
 - patched AppleIntelFramebufferAzul and AppleIntelHD5000Graphics loaded;
 - D97BV functional mode ACTIVE/requested=1;
-- display remained VESA, HD4400 4 MB, 1366x768.
+- display remained VESA, HD4400 4 MB, 1366x768;
+- shared-cache SITE/CAVE topology remained byte-identical and exact native preimages remained present.
 
-Exact shared-cache topology remained byte-identical after Root Patch:
-- SITE page SHA256 `cc710a65a4dfbc674819bb024eade213b90821ab2a12b9a3e1df3d07fb013c43` PASS;
-- SITE13 preimage `3d187d0000b9177d00000f4cc1` PASS;
-- CAVE page SHA256 `466792ab709cc54b58d42f1c6ef4ce73e0906071ed5b6160af2722d52cf35140` PASS;
-- CAVE 18-byte zero window PASS;
-- CAVE 208-byte zero region PASS.
+D97DZ checkpoint commit: `d99fe62b65e8633611368241c8dabb2cfb273492`.
 
-Checkpoint commit: `d99fe62b65e8633611368241c8dabb2cfb273492`.
+## D97EA — first accelerated boot failed; chronology fixed
+User observation:
+- accelerated/root-patched boot progressed through verbose to the black-screen GUI transition point where the progress bar would normally appear;
+- verbose text then reappeared;
+- user powered off with the physical button and recovered via VESA.
 
-## CURRENT ACTION — FIRST ACCELERATED BOOT AUTHORIZED
-Manual EFI edit only:
-- change only active `-igfxvesa` to inert/commented `#-igfxvesa`;
-- retain `-ocmcdiag` active;
-- retain `-ocmcd97bv` active;
-- retain `#-ocmcd97bvcave` inert;
-- do not modify any other boot arg, kext, config item, Root Patch or snapshot;
-- reboot once.
+Exact `last reboot` chronology:
+- `02:23` accelerated diagnostic boot;
+- same-minute `shutdown time 02:23` lifecycle event;
+- `02:25` current VESA recovery boot.
 
-If usable accelerated GUI appears, do not Root Patch again; collect runtime state before any further change.
-If no usable GUI appears or userspace fails, hard restart/power-cycle and return to the established VESA recovery configuration, then analyze only that immediately preceding accelerated attempt per permanent VESA recovery rule.
+Authoritative accelerated evidence window:
+`2026-09-07 02:22:30` through `2026-09-07 02:24:59 EEST`.
 
-Still forbidden:
-- any EFI change besides this single `-igfxvesa` deactivation;
+The current VESA session is excluded from failure analysis. Same-minute shutdown evidence makes an orderly userspace shutdown/restart plausible; kernel panic/compiler failure/userspace failure remain unclassified until logs are audited.
+
+D97EA chronology checkpoint commit: `7a27384f3855d780b02bbf3519934b98f8c92e88`.
+
+## CURRENT ACTION — D97EB READ-ONLY FAILURE EVIDENCE COLLECTION
+Do NOT repeat accelerated boot.
+Do NOT alter current VESA recovery policy.
+Do NOT Root Patch again.
+
+Run only the exact D97EB collector on ASUS2 while in current VESA recovery. It collects:
+- exact accelerated-window unified lifecycle logs;
+- exact accelerated-window Metal/GPU/kernel evidence;
+- pmset chronology;
+- relevant WindowServer/MTLCompilerService/GPU/panic/watchdog crash reports;
+- current D97 runtime and Root Patch metadata for orientation;
+- packaged ZIP + manifest.
+
+Collector source Git blob: `8ffebb8cc42f31b3704b43bd6de440a4f3b84c57`.
+Collector GitHub commit: `128db71e1f992e0b037ae22b27a2f602a11d882c`.
+
+Return the D97EB ZIP for analysis. No EFI/root/snapshot mutations and no reboot are part of collection.
+
+Still forbidden until D97EB analysis:
+- another accelerated boot;
+- any EFI change;
 - global 3802 forcing;
 - legacy main Metal shadow;
 - true-five reapplication;
