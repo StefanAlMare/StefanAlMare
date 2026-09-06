@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CY_COMPILE_AUDIT_PASS_DEPLOY_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97DA_EFI_REAUDIT_PASS_D97DB_REPINNED.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -27,10 +27,13 @@ Before any technical modification:
 - no active Root Patch;
 - `-igfxvesa` retained;
 - `-ocmcdiag` retained;
-- active EFI config SHA256 `cc2ac81ad11e82f8c7928d70aa6ff659efcf7d2d19ab3243869552e6da24f88f`;
+- active EFI config SHA256 `b5f9fd91c3a09a4b60709a38692b1143b3699292d5b873b347fb936333015a48`;
 - active EFI currently contains D97CT `OCLPMetalCompat.kext` 0.0.2, executable SHA256 `a1a6f32f4a951fd786222a317386135f0938494aca6b1eff39553299a512961b`;
 - Lilu `1.7.3` is Kernel/Add index 0;
-- OCLPMetalCompat is unique Kernel/Add index 2.
+- AMFIPass `1.4.1` is index 4;
+- OCLPMetalCompat is unique Kernel/Add index 5;
+- WhateverGreen `1.7.1` is index 30;
+- KDKlessWorkaround `1.0.0` is index 31.
 
 End goal: stable hardware acceleration and usable GUI.
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
@@ -123,13 +126,13 @@ Returned build `OCLP7_D97CT_IMAC_BUILD_20260906_190411.zip` SHA256 `1e32326568f2
 Compiled D97CT executable SHA256 `a1a6f32f4a951fd786222a317386135f0938494aca6b1eff39553299a512961b`, UUID `CD3FA6F8-E0AA-3FBD-AE66-B73C089385C0`.
 Audited deploy package SHA256 `d033c3195fa9bd098e4e1d080c59d09609269c7691d5ac6399c74fecc9cdee1e`.
 
-D97CV re-audited current EFI after OpenCore/OCLP update:
+D97CV re-audited an earlier current EFI state after OpenCore/OCLP update:
 - config SHA256 `cc2ac81ad11e82f8c7928d70aa6ff659efcf7d2d19ab3243869552e6da24f88f`;
 - `BOOTx64.efi` SHA256 `19fa90b921fef5d29f2ce1f2cb8fd38aded259d7f4a1fa1615c27f7e970f6474`;
 - `OpenCore.efi` SHA256 `59ef0baced497b17ad2e43ee3626ba03ff9f59fb2d4f41188eb9d1737640db6a`;
-- Kernel/Add count 37; Lilu index 0; OCLPMetalCompat unique index 2; boot args preserve `-igfxvesa -ocmcdiag`.
+- Kernel/Add count 37; Lilu index 0; OCLPMetalCompat then at index 2; boot args preserve `-igfxvesa -ocmcdiag`.
 
-D97CW replaced only D97CO with D97CT in EFI and preserved config byte-identically. Old D97CO backup: `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext.D97CO-20260906_192422.bak`.
+D97CW replaced only D97CO with D97CT in EFI and preserved that config byte-identically. Old D97CO backup: `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext.D97CO-20260906_192422.bak`.
 
 D97CX runtime proved:
 - D97CT 0.0.2 loaded;
@@ -181,12 +184,6 @@ Audited deploy package:
 - SHA256 `405c9f53986bd8efac9f905cc25bc24bdea0ac44860cf1a6e6a0feb55a4c4402`;
 - manifest SHA256 `5a6c0f1c8546ecf32efff8b6b814a184aefe63e1838df0a747cc01d57c575768`.
 
-Prepared controlled replace:
-- `OCLP7_D97CZ_D97CY_EFI_REPLACE.sh`;
-- SHA256 `fc58e52ff5a7859d42a0b1cccbf581ef2d545d398298ac075e0d29aae7e95214`;
-- `bash -n` PASS;
-- modifies only `EFI/OC/Kexts/OCLPMetalCompat.kext` and preserves config.
-
 Classifications:
 - `D97CY_LOCAL_COMPILE=PASS`;
 - `D97CY_MANIFEST_AUDIT=PASS`;
@@ -195,12 +192,54 @@ Classifications:
 - `D97CY_CS_VALIDATE_PAGE_ROUTE_RUNTIME=UNTESTED`;
 - `D97BV_FUNCTIONAL_PAGE_WRITE=STILL_UNAUTHORIZED`.
 
+## D97DA — latest full EFI re-audit PASS
+D97DA is the current active-EFI authority before D97CY deployment.
+Returned report: `OCLP7_D97DA_CURRENT_EFI_FULL_REAUDIT_20260906_200508.txt`.
+
+Current config:
+- SHA256 `b5f9fd91c3a09a4b60709a38692b1143b3699292d5b873b347fb936333015a48`;
+- plist validation PASS.
+
+OpenCore core files remain unchanged:
+- `BOOTx64.efi` SHA256 `19fa90b921fef5d29f2ce1f2cb8fd38aded259d7f4a1fa1615c27f7e970f6474`;
+- `OpenCore.efi` SHA256 `59ef0baced497b17ad2e43ee3626ba03ff9f59fb2d4f41188eb9d1737640db6a`.
+
+Kernel/Add current ordering:
+- count 37;
+- Lilu index 0, version 1.7.3;
+- AMFIPass index 4, version 1.4.1;
+- OCLPMetalCompat unique index 5, enabled, Darwin 25 only;
+- WhateverGreen index 30, version 1.7.1;
+- KDKlessWorkaround index 31, version 1.0.0.
+
+Current OCLPMetalCompat remains exact D97CT 0.0.2:
+- executable SHA256 `a1a6f32f4a951fd786222a317386135f0938494aca6b1eff39553299a512961b`;
+- Info.plist SHA256 `b386aded0a0d2a4490916f32236e22c2c38056638546c546153a5d7371ea4d8d`.
+
+Boot args still contain `-igfxvesa -ocmcdiag`; Lilu disable/slow/user-off bootargs are absent.
+All enumerated UEFI Driver and ACPI Add files are present.
+
+D97DA collector note: reported `UUID=24` fields are a formatting bug in the collector's `otool` parsing and are not treated as UUID evidence. Executable SHA256 values are authoritative.
+
+Classification:
+`D97DA_CURRENT_EFI_FULL_REAUDIT=PASS_READ_ONLY`.
+
+## D97DB — D97CY deploy repinned to D97DA
+Prior D97CZ is superseded and must not be used.
+Prepared replacement:
+- `OCLP7_D97DB_D97CY_EFI_REPLACE_REPINNED.sh`;
+- SHA256 `39c4819608d7a5c05cedcdd9de0a06839a123b6d131bfc4e91230fe79e71b839`;
+- `bash -n` PASS.
+
+D97DB is pinned to current config SHA `b5f9fd91c3a09a4b60709a38692b1143b3699292d5b873b347fb936333015a48`, OCLPMetalCompat index 5, exact current D97CT executable, exact audited D97CY executable/package, Lilu 1.7.3 at index 0, and required VESA diagnostic bootargs.
+It modifies only `EFI/OC/Kexts/OCLPMetalCompat.kext`, backs up D97CT, leaves config unchanged, does not Root Patch and does not reboot.
+
 ## CURRENT ACTION
 On ASUS2 only:
-1. mount the active EFI;
-2. download `OCLP7_D97CY_AUDITED_DEPLOY_20260906.zip` and `OCLP7_D97CZ_D97CY_EFI_REPLACE.sh` into `~/Downloads`;
-3. run D97CZ once;
-4. return the generated Desktop D97CZ report to ChatGPT;
-5. do **not** reboot until that report is audited.
+1. keep active EFI mounted at `/Volumes/EFI`;
+2. place `OCLP7_D97CY_AUDITED_DEPLOY_20260906.zip` and `OCLP7_D97DB_D97CY_EFI_REPLACE_REPINNED.sh` in `~/Downloads`;
+3. run D97DB once;
+4. return the generated Desktop D97DB report to ChatGPT;
+5. do not reboot until that report is audited.
 
 No Root Patch, accelerated boot or functional shared-cache mutation is authorized.
