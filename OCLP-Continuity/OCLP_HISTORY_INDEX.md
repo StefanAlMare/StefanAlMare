@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CY_COMPILE_AUDIT_PASS_DEPLOY_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97DA_EFI_REAUDIT_PASS_D97DB_REPINNED.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -92,14 +92,14 @@ Compiled UUID `CD3FA6F8-E0AA-3FBD-AE66-B73C089385C0`, executable SHA256 `a1a6f32
 Audited deploy package SHA256 `d033c3195fa9bd098e4e1d080c59d09609269c7691d5ac6399c74fecc9cdee1e`.
 Classification: `D97CT_COMPILED_PERSISTENT_IOREG_OBSERVE_ONLY=PASS`.
 
-## D97CV / D97CW — current EFI re-audit and D97CT deploy
-After user updated OpenCore/OCLP, D97CV re-audited the active EFI read-only:
+## D97CV / D97CW — earlier current EFI re-audit and D97CT deploy
+After user updated OpenCore/OCLP, D97CV re-audited the then-active EFI read-only:
 - config SHA256 `cc2ac81ad11e82f8c7928d70aa6ff659efcf7d2d19ab3243869552e6da24f88f`;
 - `BOOTx64.efi` SHA256 `19fa90b921fef5d29f2ce1f2cb8fd38aded259d7f4a1fa1615c27f7e970f6474`;
 - `OpenCore.efi` SHA256 `59ef0baced497b17ad2e43ee3626ba03ff9f59fb2d4f41188eb9d1737640db6a`;
 - Kernel/Add count 37;
 - Lilu index 0 / version 1.7.3;
-- OCLPMetalCompat unique index 2;
+- OCLPMetalCompat then at unique index 2;
 - boot args `-igfxvesa -ocmcdiag` retained.
 
 D97CW replaced only D97CO 0.0.1 with D97CT 0.0.2; config remained byte-identical. Old D97CO backup is preserved at `OCLPMetalCompat.kext.D97CO-20260906_192422.bak`.
@@ -153,8 +153,6 @@ Audited deploy package:
 - SHA256 `405c9f53986bd8efac9f905cc25bc24bdea0ac44860cf1a6e6a0feb55a4c4402`;
 - manifest SHA256 `5a6c0f1c8546ecf32efff8b6b814a184aefe63e1838df0a747cc01d57c575768`.
 
-Prepared D97CZ controlled replacement script SHA256 `fc58e52ff5a7859d42a0b1cccbf581ef2d545d398298ac075e0d29aae7e95214`; `bash -n` PASS.
-
 Classifications:
 - `D97CY_LOCAL_COMPILE=PASS`;
 - `D97CY_MANIFEST_AUDIT=PASS`;
@@ -163,7 +161,37 @@ Classifications:
 - `D97CY_CS_VALIDATE_PAGE_ROUTE_RUNTIME=UNTESTED`;
 - `D97BV_FUNCTIONAL_PAGE_WRITE=STILL_UNAUTHORIZED`.
 
+## D97DA — latest active-EFI full re-audit
+Returned report `OCLP7_D97DA_CURRENT_EFI_FULL_REAUDIT_20260906_200508.txt`.
+Classification: `D97DA_CURRENT_EFI_FULL_REAUDIT=PASS_READ_ONLY`.
+
+Current config SHA256 is now `b5f9fd91c3a09a4b60709a38692b1143b3699292d5b873b347fb936333015a48`; plist validation PASS.
+OpenCore core-file hashes are unchanged from D97CV:
+- `BOOTx64.efi` `19fa90b921fef5d29f2ce1f2cb8fd38aded259d7f4a1fa1615c27f7e970f6474`;
+- `OpenCore.efi` `59ef0baced497b17ad2e43ee3626ba03ff9f59fb2d4f41188eb9d1737640db6a`.
+
+Kernel/Add count remains 37 but ordering changed:
+- Lilu index 0 / version 1.7.3;
+- AMFIPass index 4 / version 1.4.1;
+- OCLPMetalCompat unique index 5 / current D97CT 0.0.2;
+- WhateverGreen index 30 / version 1.7.1;
+- KDKlessWorkaround index 31 / version 1.0.0.
+
+Current D97CT executable SHA256 remains exact `a1a6f32f4a951fd786222a317386135f0938494aca6b1eff39553299a512961b`; Info.plist SHA256 `b386aded0a0d2a4490916f32236e22c2c38056638546c546153a5d7371ea4d8d`.
+Boot args preserve `-igfxvesa -ocmcdiag`; relevant Lilu disabling/slow bootargs are absent.
+All enumerated UEFI Driver and ACPI Add files were present.
+
+Tooling note: D97DA printed `UUID=24` because its `otool` awk extraction was wrong; those fields are ignored and do not affect SHA-based identity proof.
+
+## D97DB — D97CY deployment repinned to D97DA
+Old D97CZ is superseded and must not be run.
+Prepared `OCLP7_D97DB_D97CY_EFI_REPLACE_REPINNED.sh`:
+- SHA256 `39c4819608d7a5c05cedcdd9de0a06839a123b6d131bfc4e91230fe79e71b839`;
+- `bash -n` PASS.
+
+D97DB pins the new active config SHA, OCLPMetalCompat index 5, exact current D97CT executable, exact audited D97CY executable/package, Lilu 1.7.3 at index 0, and required VESA diagnostic bootargs. It modifies only `EFI/OC/Kexts/OCLPMetalCompat.kext`, backs up D97CT, preserves `config.plist`, performs no Root Patch and no reboot.
+
 ## CURRENT ACTION
 Remain unpatched Tahoe VESA.
-On ASUS2: deploy audited D97CY 0.0.3 with D97CZ, return the D97CZ report, and do not reboot until that report is audited.
+On ASUS2: deploy audited D97CY 0.0.3 with D97DB, return the D97DB report, and do not reboot until that report is audited.
 No Root Patch, accelerated boot or functional shared-cache mutation is authorized.
