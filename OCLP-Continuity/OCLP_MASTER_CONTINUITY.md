@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CBV3_DYLD_DELAYED_FALSE_POSITIVE_D97CBV4_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CBV5_COLD_HARNESS_PASS_TEXT_MAP_DATA_CONST_MMAP_ALIGNMENT_FAIL_D97CC_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -79,63 +79,78 @@ D97CA proved a coherent reorder is bounded:
 Classification: `D97CA_MANUAL_SEGMENT_ORDER_REPAIR_CLASSIFICATION=STATIC_REMAP_SURFACE_ENUMERATED`.
 
 ## D97CB — atomic remap structural PASS
-D97CB exact atomic temp remap PASS:
-- set `SG_READ_ONLY` on `__DATA_CONST`;
-- physical `__DATA_DIRTY` payload -> `0x35C000`, `__DATA` -> `0x361000`, `__LINKEDIT` remains `0x36E000`;
-- command order becomes `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
+Exact atomic temporary remap is now durable/proven:
+- `SG_READ_ONLY` on `__DATA_CONST`;
+- `__DATA_DIRTY` payload fileoff `0x35C000`;
+- `__DATA` payload fileoff `0x361000`;
+- `__LINKEDIT` remains `0x36E000`;
+- command order `__TEXT,__DATA_CONST,__DATA_DIRTY,__DATA,__LINKEDIT`;
 - all segment/section VM addresses preserved;
 - exactly 5 section file offsets rewritten;
 - exactly 3652 symtab `n_sect` values remapped with D97CA counts;
 - pre-sign diff count `40655`, outside audited domains `0`;
 - `file`, `otool -l`, `otool -L` PASS.
 
-Unsigned and signed remapped images pass `dlopen_preflight`. Actual Python child `dlopen` returns `RC=-11` (SIGSEGV) rather than an explicit dyld validation rejection. Because Python already has native Metal loaded, standalone loadability remains `NOT_YET_PROVEN`.
+Unsigned and signed remapped images pass `dlopen_preflight`; Python-child actual `dlopen` returns `RC=-11` SIGSEGV. That Python lane is not standalone proof because native Metal is already present there.
 
-## D97CB-v2 — macOS copy2/chflags tooling failure only
-D97CB-v2 reconfirmed the remap and preflight/SIGSEGV result, then failed before cold injection because `shutil.copy2()` propagated BSD file flags and macOS Python 3.13 hit `PermissionError` in `chflags`. Tooling-only.
+## D97CB-v2/v3/v4 tooling corrections
+D97CB-v2: `shutil.copy2('/usr/bin/true')` failed only because macOS Python tried to propagate BSD flags via `chflags`; fixed with `copyfile`.
+D97CB-v3: cold host construction/signing/baseline exit passed; raw substring parser falsely treated delayed closure members as active loads. Dyld source proved `move loaded to delayed` and reverse `move delayed to loaded` are real state transitions.
+D97CB-v4: final-state parser design was correct but embedded Python omitted `import re`; tooling-only stop.
 
-## D97CB-v3 — cold host construction PASS; baseline parser false positive
-Returned complete Terminal paste identity:
-- bytes `118929`;
-- SHA256 `c8f3d4317fa1e4ad605fffd249f6abb18301df358d36be39f3f5502ae6529e2a`.
+## D97CB-v5 — validated cold harness; true mapping frontier reached
+Returned bundle `OCLP7_D97CB_V5_ATOMIC_REMAP_COLD_HOST_20260906_030103.zip`:
+- bytes `134957`;
+- SHA256 `2d1a47c49bb6724b4ad5c65e878fa2872ee72880842ed1301aa1b94bf52bf17e`;
+- TXT SHA256 `ffd4cad23e1c224803096ac649dfae548dacb849eeab5a4612f9b7b66abf60ab`;
+- JSON SHA256 `13c4969165ff9f28d70f20de2ce928630830fa94c0a2e91245f9fccf0c094e73`.
 
-D97CB-v3 again reconfirmed the exact remap and unsigned/signed preflight PASS + Python-child `dlopen RC=-11`.
+Cold-host baseline is now valid:
+- `/usr/bin/true` copy, signature removal, ad-hoc sign, strict verify PASS;
+- baseline exit 0;
+- final `Metal=delayed`;
+- final `libbz2.1.0.dylib=delayed`.
 
-Cold-host construction now passed:
-- `/usr/bin/true` copied with `copyfile()`;
-- copied signature removed;
-- ad-hoc sign PASS;
-- strict verify PASS;
-- baseline exit `0`.
+Positive insertion control is proven:
+- `DYLD_INSERT_LIBRARIES=/usr/lib/libbz2.1.0.dylib`;
+- exit 0;
+- path observed;
+- final libbz2 state `loaded`.
 
-The baseline trace printed Metal and libbz2 as closure candidates, but later explicitly logged:
-- `move loaded to delayed: Metal`;
-- `move loaded to delayed: libbz2.1.0.dylib`;
-with no reverse promotion before exit.
-Apple dyld source confirms these are runtime-state transitions between `loaded` and `delayLoaded`.
+Classification: `D97CBV5_COLD_LOAD_HARNESS=PROVEN_VALID`.
 
-Therefore `FAIL=COLD_HOST_PRELOADS_METAL` was a tooling false positive caused by substring matching. The correct classification is final-state based:
-- `D97CBV3_BASELINE_METAL_FINAL_STATE=DELAYED`;
-- `D97CBV3_BASELINE_BZ2_FINAL_STATE=DELAYED`;
-- `D97CBV3_FAIL_COLD_HOST_PRELOADS_METAL=TOOLING_FALSE_POSITIVE`.
+Signed remapped Metal cold insertion then reaches real mapping:
+- explicit temp target path observed;
+- dyld logs `Mapping .../Metal.SGRO.ORDER.adhoc`;
+- remapped `__TEXT` is mapped successfully;
+- dyld then terminates on `__DATA_CONST` with exact failure:
+  `mmap(addr=0x13BE35CD0, size=0x00070000) failed with errno=22`.
 
-No positive-control injection, remapped-Metal cold injection, or D97BV application occurred after this stop.
+The preserved shared-cache `__DATA_CONST` VM start is `0x7FF84119DCD0` while standalone fileoff is `0x2EC000`. Previous SG_READ_ONLY and VM-order validation failures are absent. The current blocker is therefore actual mmap geometry/alignment, not semantic validation/order.
 
-## CURRENT ACTION — D97CB-v4
+Authoritative classifications:
+- `D97CBV5_REMAPPED_METAL_TARGET_PATH_OBSERVED=PROVEN`;
+- `D97CBV5_REMAPPED_METAL___TEXT_MAPPED=PROVEN`;
+- `D97CBV5_DATA_CONST_MMAP_ADDR_NON_PAGE_ALIGNED_FAILURE=PROVEN`;
+- `D97CBV5_PREVIOUS_SGRO_AND_SEGMENT_ORDER_GATES=PASSED`;
+- `D97CBV5_CURRENT_REMAPPED_STANDALONE_LOADABLE=NEGATIVE`.
+
+D97BV remains intentionally skipped because original standalone baseline is not yet loadable.
+
+## CURRENT ACTION — D97CC read-only page-prefix / LINKEDIT remap feasibility audit
 Remain unpatched in Tahoe VESA.
-Run only `OCLP7_D97CB_v4_dyld_final_state_cold_host.sh`:
-- bytes `34857`;
-- SHA256 `fa0e6fc5825a260be3c638bdb177c63378abd3adf44b08d0683a99d1e383a0be`.
 
-D97CB-v4 reproduces the identical D97CB remap and changes only dyld trace interpretation:
-1. direct image lines provisionally mark a leaf loaded;
-2. `move loaded to delayed` / `move delayed to loaded` are applied sequentially;
-3. baseline requires final Metal and libbz2 states not loaded;
-4. positive-control injection requires final `libbz2.1.0.dylib=loaded` with exit 0;
-5. only then inject signed remapped Metal;
-6. record explicit target-path observation, target final state, system Metal final state, and host exit independently;
-7. only explicit target final-loaded + exit 0 authorizes D97BV re-audit/application;
-8. target final-loaded + process failure is a later init/runtime frontier and stops without D97BV.
+D97CC must reproduce the exact pinned RAW export and the D97CB order transform for analysis, but perform no output-binary mutation and no load test. It must enumerate:
+1. page size and each segment VM residue;
+2. page-floored mapping start and synthetic leading-prefix bytes required per non-aligned segment;
+3. a page-aligned standalone fileoff plan that keeps original section/content VM addresses unchanged;
+4. expanded segment mapping ranges and prove they stay ordered/non-overlapping;
+5. every file-backed section offset that would change;
+6. exact `__LINKEDIT` fileoff shift;
+7. every load-command file-offset field into `__LINKEDIT` requiring remap;
+8. proof that code VM addresses, section VM addresses, symtab `n_value`, D97BV site/cave VM positions and section ordinals need not change;
+9. unknown/order-sensitive structures that would block a bounded repair.
 
-No Root Patch, installation, or accelerated reboot authorized.
-GitHub Actions compile/build/package remains suspended until explicit quota-unblocked confirmation.
+Only if D97CC closes the surface may a later D97CD build a temporary page-prefix-aligned image and repeat the validated cold-load harness.
+
+No Root Patch, installation, local/source build, or accelerated reboot authorized. GitHub Actions compile/build/package remains suspended until explicit quota-unblocked confirmation.
