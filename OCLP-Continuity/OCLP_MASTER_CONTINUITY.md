@@ -6,7 +6,7 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DQ_D97DO_LATENT_RUNTIME_PASS_CAVE_ONLY_ARM_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DR_CAVE_ONLY_WRITE_CROSS_PROCESS_PROPAGATION_PROVEN.md`
 D97DO build audit: `OCLP-Continuity/artifacts/OCLP7_D97DO_BUILD_BINARY_AUDIT_20260907.md`
 D97DO static audit: `OCLP-Continuity/artifacts/OCLP7_D97DO_STATIC_AUDIT.md`
 
@@ -21,13 +21,11 @@ D97DO static audit: `OCLP-Continuity/artifacts/OCLP7_D97DO_STATIC_AUDIT.md`
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
 - VESA only; no active Root Patch;
-- config SHA256 `b5f9fd91c3a09a38692b1143b3699292d5b873b347fb936333015a48`;
-- boot args contain `-igfxvesa -ocmcdiag`;
-- boot args currently contain neither `-ocmcd97bvcave` nor `-ocmcd97bv`;
 - active EFI contains D97DO `OCLPMetalCompat.kext` 0.0.8;
 - D97DO executable SHA256 `45cc67efcc656e1085d7c34f707d4e00b71406d45d74edfa4e01823d2e89bfe4`;
 - D97DO UUID `5CE5E9F9-9D18-33C0-8A03-18237D949A6A`;
-- D97DL backup exists at `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext.D97DL-20260907_001401.bak`;
+- boot args contain `-igfxvesa -ocmcdiag -ocmcd97bvcave` and do not contain `-ocmcd97bv`;
+- D97DL exact backup remains at `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext.D97DL-20260907_001401.bak`;
 - D97DI and D97DD backups remain available.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
@@ -42,13 +40,6 @@ Permanent prohibitions remain:
 - no standalone Objective-C rehabilitation mainline;
 - no fake canonical Metal file for BinaryModInfo.
 
-## Proven runtime substrate
-D97DF/D97DG proved `_cs_validate_page` route/callback/exact-build `25G82`, SITE exact original preimage, CAVE zero invariants and Apple validation `0xF/0/0`.
-
-D97DJ/D97DK proved D97DI 0.0.6 LATENT deploy/runtime.
-D97DM/D97DN proved D97DL 0.0.7 LATENT deploy/runtime with route/build PASS and zero functional writes.
-D97DP deployed D97DO 0.0.8 LATENT over D97DL with config byte-identical and both functional boot args absent.
-
 ## D97BV exact adapter semantics
 Static semantics remain PROVEN:
 - exact `3802` bypasses Tahoe floor;
@@ -56,105 +47,85 @@ Static semantics remain PROVEN:
 - SITE replacement `3dda0e00007406e93bcee9ff90`;
 - CAVE replacement `3d187d0000b9177d00000f4cc1e9b4311600`.
 
-## D97DL ordering limitation
-D97DL added CAVE-before-SITE release/acquire ordering, but its CAVE-ready state is global to the kext. Before allowing SITE -> CAVE cross-page control flow, page-modification propagation between userspace processes/address spaces must be measured directly.
+## Proven runtime substrate through D97DN
+D97DF/D97DG proved `_cs_validate_page` route/callback/exact-build 25G82, SITE exact original preimage, CAVE zero invariants and Apple validation 0xF/0/0.
+D97DJ/D97DK proved D97DI 0.0.6 LATENT deploy/runtime.
+D97DM/D97DN proved D97DL 0.0.7 LATENT deploy/runtime and cave-first property channel.
 
-Therefore full D97DL functional activation remains blocked pending D97DO propagation evidence.
-
-## D97DO 0.0.8 — CAVE-only one-shot propagation probe
-Purpose: make the first actual runtime write an inert CAVE-only probe while SITE remains native and unmodifiable.
-
-Safety design:
-- Apple original `_cs_validate_page` first;
-- exact 25G82 / Haswell / main x86_64h / page / Apple-validation / zero-preimage gates;
-- only `-ocmcd97bvcave` can request mutation;
-- full `-ocmcd97bv` is explicitly blocked;
-- SITE replacement bytes absent from source and binary;
+## D97DO 0.0.8
+D97DO is the CAVE-only one-shot propagation probe:
+- full SITE replacement absent from binary;
 - SITE write target absent;
-- exact CAVE replacement compiled once;
-- CAVE write one-shot per boot via atomic CAS;
-- writer must be userspace PID and writer PID is recorded;
-- later callbacks never rewrite CAVE;
-- propagation PASS/NEGATIVE classified only on a callback from a different userspace PID.
+- exact CAVE payload compiled once;
+- only `-ocmcd97bvcave` requests mutation;
+- full `-ocmcd97bv` is blocked;
+- CAVE write is one-shot per boot;
+- writer PID is recorded;
+- later callbacks never rewrite CAVE.
 
-Correct source authority is exact concatenation of Git blobs:
-1. `5308074eb75d76531eef19481ded76b641c3f301`;
-2. `fac28701be3acae370866483b94d04d620d41916`;
-3. `54861bd997619551e64c264f9e02b1d4e66c13b2`.
-
-Reconstructed source:
-- bytes `25693`;
-- SHA256 `4607658c5a7d1967d7b0ae1b507f0e160ba2201aed6fe5b4a9a936a263cb520a`.
-
-Returned D97DO build `OCLP7_D97DO_IMAC_BUILD_20260907_000350.zip`:
-- SHA256 `01900232f6c77fe72cad6759d2a1a1c851e772ced0d4e036f66fa3f0fba96d36`;
-- manifest mismatches 0;
-- Lilu build PASS;
-- D97DO build PASS;
-- errors 0.
-
-Compiled D97DO:
-- version `0.0.8`;
+Identity:
+- reconstructed source SHA256 `4607658c5a7d1967d7b0ae1b507f0e160ba2201aed6fe5b4a9a936a263cb520a`;
+- version 0.0.8;
 - UUID `5CE5E9F9-9D18-33C0-8A03-18237D949A6A`;
-- executable SHA256 `45cc67efcc656e1085d7c34f707d4e00b71406d45d74edfa4e01823d2e89bfe4`;
-- Lilu dependency `1.7.3`;
-- CAVE replacement count 1;
-- SITE replacement count 0.
+- executable SHA256 `45cc67efcc656e1085d7c34f707d4e00b71406d45d74edfa4e01823d2e89bfe4`.
 
-## D97DP — LATENT deployment PASS
-D97DO replaced D97DL in active EFI with exact identity, config byte-identical and both functional boot args absent. D97DL backup was created. No Root Patch, reboot or functional mutation occurred during deployment.
-
-## D97DQ — LATENT runtime PASS
-Returned ZIP `OCLP7_D97DQ_D97DO_LATENT_RUNTIME_20260907_002344.zip`:
-- bytes `2257`;
-- SHA256 `63cbc17c27aec9970cc9c2c8f2c04b19fc639ffc26dcc16d05ec4f78b4af64b1`.
+## D97DR — first real write + propagation proof
+Returned ZIP `OCLP7_D97DR_D97DO_CAVE_ONLY_PROPAGATION_20260907_003453.zip`:
+- bytes 2104;
+- SHA256 `51161f0f58b1dee18e409f556df3200a4b69ea655010b9de22eefbece62d1076`.
 
 Inner TXT:
-- bytes `6929`;
-- SHA256 `646f89c7a20925b97d840ef471f729fa54764b4e11fffd22b4877f201e025087`.
+- bytes 6501;
+- SHA256 `9686af4773433a4133e91fbdc9d9ac13a0f836957209b1369646b32f3ee248d5`.
 
-Runtime proof:
-- exact D97DO 0.0.8 UUID loaded;
-- `VersionInfo=DBG-008-2026-09-07`;
-- `D97DOFunctionalMode=LATENT`;
-- `D97DOCaveOnlyRequested=0`;
-- `D97DOFullFunctionalArgPresent=0`;
+Boot authority:
+- boot time 2026-09-07 00:30:12 EEST;
+- exact D97DO loaded;
+- `-ocmcd97bvcave` present;
+- full `-ocmcd97bv` absent.
+
+Before collector active faults, IORegistry already proved the first actual runtime write had occurred naturally:
+- `D97DOFunctionalMode=CAVE_ONLY`;
+- `D97DOCaveOnlyRequested=1`;
 - `D97DOSiteWriteBlocked=PASS`;
-- `D97DOCaveWritePhase=0`;
-- CAVE write count 0;
-- SITE write count 0;
-- route PASS;
-- callback exact-build 25G82 PASS;
-- CAVE naturally seen once with window18/full208 PASS, Apple validated 15/0xF, tainted 0, NX 0;
-- SITE not naturally seen, not negative.
+- `D97DOCaveWritePhase=2`;
+- `D97DICaveWriteCount=1`;
+- `D97DICaveMutation=PASS`;
+- `D97DICavePostimage=PASS`;
+- `D97DICaveTailZeroAfter=PASS`;
+- writer PID 2;
+- SITE write count 0 and SITE unseen;
+- route/build PASS.
+
+Direct cross-process visibility:
+- PID 899 mapped CAVE and saw exact replacement + zero tail, page SHA `aa0100e1a73637835627eabaa5698c5b03af35a33357b3cd9879cf5c0ba572e0`;
+- PID 901 independently mapped CAVE and saw the same exact replacement + zero tail and the exact same page SHA.
+
+Thus cross-process CAVE postimage visibility is `RUNTIME_PROVEN`.
+
+The internal callback-based `D97DOCavePropagation` remained PENDING because the page was already validated/cached and the later mappings did not trigger fresh `_cs_validate_page` callbacks. Classification: `INCONCLUSIVE_NO_REVALIDATION`, not negative.
 
 Authoritative classifications:
-- `D97DQ_D97DO_RUNTIME_IDENTITY=PASS`;
-- `D97DQ_D97DO_LATENT_MODE=RUNTIME_PROVEN`;
-- `D97DQ_D97DO_SITE_WRITE_BLOCKED=RUNTIME_PROVEN`;
-- `D97DQ_D97DO_CAVE_WRITE_PHASE_ZERO=RUNTIME_PROVEN`;
-- `D97DQ_D97DO_CAVE_WRITE_COUNT_ZERO=RUNTIME_PROVEN`;
-- `D97DQ_D97DO_SITE_WRITE_COUNT_ZERO=RUNTIME_PROVEN`;
-- `D97DQ_D97DO_ROUTE=PASS`;
-- `D97DQ_D97DO_CALLBACK_BUILD_GATE_25G82=PASS`;
-- `D97DQ_LATENT_RUNTIME_GATE=PASS`.
+- `D97DR_CAVE_ONE_SHOT_WRITE=RUNTIME_PROVEN`;
+- `D97DR_CAVE_POSTIMAGE=RUNTIME_PROVEN`;
+- `D97DR_CAVE_TAIL_ZERO=RUNTIME_PROVEN`;
+- `D97DR_SITE_WRITE_COUNT=0`;
+- `D97DR_SITE_MUTATION_CAPABILITY=ABSENT_BINARY_PROVEN`;
+- `D97DR_CROSS_PROCESS_CAVE_VISIBILITY=RUNTIME_PROVEN`;
+- `D97DR_CALLBACK_PROPAGATION_CLASSIFIER=INCONCLUSIVE_NO_REVALIDATION`;
+- `D97DR_ROUTE=PASS`;
+- `D97DR_CALLBACK_BUILD_GATE_25G82=PASS`.
 
-## CURRENT ACTION — D97DR CAVE-only arm
-User explicitly authorized the first functional VESA mutation and D97DQ closed the latent prerequisites.
+## Consequence
+The global CAVE-ready state used by D97DL is now backed by direct runtime evidence that the modified CAVE shared-cache page is visible across distinct userspace process mappings.
+The cross-page ordering concern is CLOSED for a bounded full D97BV VESA test.
 
-D97DR is authorized to change only active `config.plist` boot-args by appending `-ocmcd97bvcave` while retaining `-igfxvesa -ocmcdiag` and keeping full `-ocmcd97bv` absent.
+## CURRENT ACTION
+Prepare full VESA-only D97BV test using exact previously audited D97DL 0.0.7:
+1. restore exact D97DL backup over D97DO;
+2. replace `-ocmcd97bvcave` with `-ocmcd97bv` while retaining `-igfxvesa -ocmcdiag`;
+3. no Root Patch;
+4. reboot VESA;
+5. collector maps CAVE first, then SITE, and verifies both exact postimages, write counts, and cave prerequisite PASS.
 
-D97DR requirements:
-- exact pre-config SHA and D97DO/Lilu identities;
-- backup config before edit;
-- construct an expected config copy using the same single PlistBuddy edit;
-- active post-edit config must be byte-identical to that expected copy;
-- no kext/system/root-patch mutation;
-- no reboot until D97DR report is returned and audited.
-
-Still NOT authorized until D97DR report audit:
-- reboot with CAVE-only armed;
-- full `-ocmcd97bv`;
-- SITE mutation;
-- Root Patch;
-- accelerated boot.
+Root Patch and accelerated boot remain unauthorized.
