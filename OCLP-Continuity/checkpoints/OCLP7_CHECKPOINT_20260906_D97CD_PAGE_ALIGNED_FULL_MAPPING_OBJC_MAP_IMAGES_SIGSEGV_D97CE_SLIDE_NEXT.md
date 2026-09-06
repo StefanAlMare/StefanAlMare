@@ -112,19 +112,21 @@ Pinned `blacktop/ipsw v3.1.713` source explicitly states that ordinary RAW extra
 
 This is directly aligned with the new D97CD frontier: RAW page-aligned Metal maps completely and then dies at Objective-C registration/fixup time.
 
+## D97CE script identity
+Authorized transient discriminator:
+`OCLP7_D97CE_slide_page_aligned_objc_discriminator.sh`
+- bytes `33001`;
+- SHA256 `197415b197d2eb32ccbb29ea0f0493b1de8e6d98d2dbf3c6c06c407289dba813`;
+- shell syntax PASS;
+- embedded Python compile PASS.
+
+D97CE reproduces RAW and `--slide` extraction, inventories every slide-induced byte/8-byte-word change by segment/section and pointer target class, then materializes the exact D97CD page-aligned transform from the SLIDE payload. It preserves all already-proven layout/metadata repairs and runs external parsers, unsigned/signed preflight, codesign/header audit, proven cold harness, and one signed SLIDE-page cold injection. It explicitly classifies whether execution advances beyond D97CD's final `makeSegmentsReadWrite -> SIGSEGV` marker.
+
 ## CURRENT ACTION — D97CE
-Remain unpatched in VESA.
+Remain unpatched in VESA. Run only the exact D97CE script identity above and return its ZIP/output.
 
-Next target-local transient test must discriminate raw cache slide-info as the immediate ObjC failure source:
-1. reproduce exact pinned `ipsw v3.1.713` extraction twice: RAW and `--slide`;
-2. pin RAW identity and record exact SLIDE identity;
-3. prove RAW vs SLIDE `__text`, Mach-O geometry, load-command surface and Metal4 surface remain equivalent where expected;
-4. enumerate all bytes/words changed by `--slide`, grouped by segment/section and classify changed pointer targets as in-image vs external-cache where safely possible;
-5. materialize the exact already-proven D97CD page-aligned/order/SG_READ_ONLY/LINKEDIT/n_sect transform from the SLIDE export, not from RAW;
-6. validate payload identity against the SLIDE source, parser/preflight/signing/header growth and the already-proven cold harness;
-7. cold-inject only signed page-aligned SLIDE Metal and capture whether Objective-C registration advances beyond the D97CD `makeSegmentsReadWrite -> SIGSEGV` frontier;
-8. do not apply D97BV in D97CE;
-9. if SLIDE advances, classify raw cache slide-info as causal at this boundary; if it fails identically, retain slide-info as insufficient and inspect duplicate/native-Metal ObjC or another runtime ABI/fixup dependency;
-10. delete all transient binaries and package TXT/JSON only.
+Interpretation gate:
+- if SLIDE advances beyond the D97CD read-write marker or exits 0, raw cache slide-info is causal at this boundary;
+- if SLIDE reproduces the identical read-write marker then SIGSEGV, slide-info resolution is insufficient and the next audit moves to duplicate/native-Metal Objective-C interaction or another runtime ABI/fixup dependency.
 
-No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized.
+D97BV remains NOT applied. No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized.
