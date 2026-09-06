@@ -6,14 +6,16 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DT_D97DL_FULL_VESA_PAIR_PASS.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DT_D97DL_FULL_VESA_PAIR_PASS.md`
+Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
+Current build authority helper: `OCLP-Continuity/artifacts/OCLP7_D97DU_IMAC_NATIVE_METAL_SAFE_BUILD.sh`
+Current build bootstrap: `OCLP-Continuity/artifacts/OCLP7_D97DU_IMAC_BUILD_AUTHORITY_BOOTSTRAP.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
 - current boot mode: VESA (`-igfxvesa` retained);
 - diagnostic route `-ocmcdiag` present;
 - full D97BV boot arg `-ocmcd97bv` present;
-- cave-only arg appears only as commented `#-ocmcd97bvcave`, therefore not active;
 - active kext D97DL `OCLPMetalCompat.kext` 0.0.7;
 - D97DL UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
 - no active Root Patch yet.
@@ -37,81 +39,64 @@ Static semantics remain PROVEN:
 - SITE replacement `3dda0e00007406e93bcee9ff90`;
 - CAVE replacement `3d187d0000b9177d00000f4cc1e9b4311600`.
 
-## Proven delivery substrate before D97DT
-D97DF/D97DG proved `_cs_validate_page` route/callback/exact-build `25G82`, SITE exact original preimage, CAVE zero invariants and Apple validation `0xF/0/0`.
-D97DJ/D97DK proved D97DI 0.0.6 LATENT deploy/runtime.
-D97DM/D97DN proved D97DL 0.0.7 LATENT deploy/runtime and cave-first property channel.
-D97DO/D97DR then proved first real CAVE write and direct cross-process visibility of the exact CAVE postimage.
-
 ## D97DT — FULL VESA PAIR PASS
 Returned ZIP `OCLP7_D97DT_D97DL_FULL_VESA_PAIR_20260907_005133.zip`:
-- bytes `1774`;
 - SHA256 `48f1e5940cb0e6806e4231b50380210193d9bab8b09c7d0b1b0d16044c64cc0b`.
 
-Inner TXT:
-- bytes `4869`;
-- SHA256 `a206c0449135b90245154f39eeaebaf1544bd9fcaaa30864dace3c539c8c0316`.
-
-Runtime identity:
+Runtime closure:
 - exact D97DL 0.0.7 loaded;
-- UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
 - `D97DIFunctionalMode=ACTIVE`;
-- `D97DIFunctionalRequested=1`;
-- route PASS;
-- callback exact-build `25G82` PASS.
-
-Same userspace PID `870` mapped exact main Cryptex cache CAVE first and SITE second.
-
-CAVE:
-- exact 18-byte replacement `3d187d0000b9177d00000f4cc1e9b4311600` PASS;
-- retained 190-byte tail zero PASS;
-- page SHA256 `aa0100e1a73637835627eabaa5698c5b03af35a33357b3cd9879cf5c0ba572e0`;
-- mutation PASS;
-- postimage PASS;
-- write count 1;
-- Apple validated `0xF`, tainted 0, NX 0.
-
-SITE:
-- exact 13-byte replacement `3dda0e00007406e93bcee9ff90` PASS;
-- page SHA256 `1267dff997a989d4ac5691df8c79f6a3f7f189411376a862de38faa416e2975b`;
-- `D97DLSiteCavePrereq=PASS`;
-- safety PASS;
-- mutation PASS;
-- postimage PASS;
-- write count 1;
-- Apple validated `0xF`, tainted 0, NX 0.
-
-Collector classifications:
-- `D97DT_FULL_VESA_PAIR_GATE=PASS`;
-- `D97DT_STATUS=PASS`.
-
-Authoritative closure:
-- `D97DT_D97BV_CAVE_POSTIMAGE=RUNTIME_PROVEN`;
-- `D97DT_D97BV_CAVE_TAIL_ZERO=RUNTIME_PROVEN`;
-- `D97DT_D97BV_SITE_CAVE_PREREQ=RUNTIME_PROVEN`;
-- `D97DT_D97BV_SITE_POSTIMAGE=RUNTIME_PROVEN`;
-- `D97DT_D97BV_CAVE_WRITE_COUNT_ONE=RUNTIME_PROVEN`;
-- `D97DT_D97BV_SITE_WRITE_COUNT_ONE=RUNTIME_PROVEN`;
-- `D97DT_D97BV_APPLE_VALIDATION_SAFE=RUNTIME_PROVEN`;
-- `D97DT_D97BV_SAME_PROCESS_CAVE_THEN_SITE=RUNTIME_PROVEN`;
+- route/build 25G82 PASS;
+- same PID mapped CAVE then SITE;
+- CAVE exact replacement, tail zero, mutation/postimage PASS, write count 1, Apple validation `0xF/0/0`;
+- SITE cave-prereq PASS, exact replacement, mutation/postimage PASS, write count 1, Apple validation `0xF/0/0`;
+- D97DR had already proved direct cross-process visibility of the CAVE postimage;
 - `D97DT_FULL_VESA_PAIR_GATE=PASS`.
 
-## Meaning
-The complete runtime delivery mechanism for the exact D97BV selective-3802 adapter is now CLOSED PASS under VESA on exact Tahoe 25G82.
+Therefore the exact D97BV selective-3802 runtime delivery mechanism is CLOSED PASS under VESA on exact Tahoe 25G82.
 
-This closes:
-- runtime route/timing;
-- exact CAVE delivery and integrity;
-- cross-process CAVE visibility;
-- cave-first ordering;
-- exact SITE delivery;
-- Apple validation safety;
-- same-process CAVE -> SITE visibility.
+## D97DU — ROOT PATCH BASELINE
+D97DU replaces the unsafe D97BJ Root Patch policy with a Tahoe-native-Metal-safe patcher.
+
+Exact source baseline:
+- OCLP commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
+- tree `7c3411fde7d40604164c8877a5ab5594448083ac`.
+
+Tahoe-only functional policy:
+- `detect.py`: host max Sequoia -> Tahoe;
+- `metallib_handler.py`: exact local host-build MetallibSupportPkg before API;
+- `metal_3802.py`:
+  - Common installs only legacy `MTLCompilerService.xpc` into native Metal.framework plus private 3802 compilers;
+  - Extended retains CoreImage/RenderBox/private compiler compatibility but has NO whole `Metal.framework` donor;
+  - exact 25G82 Pyquick metallib map, 182 entries;
+  - upstream behavior preserved off Tahoe.
+- packaging-only `OpenCore-Patcher-GUI.spec`: x86_64.
+
+Forbidden in synthesized Tahoe patch dictionary:
+- whole `/System/Library/Frameworks/Metal.framework` donor;
+- donor `13.2.1-24/Metal.framework`;
+- `MetalOld.dylib`;
+- donor main `Versions/A/Metal`;
+- true-five reapplication.
+
+D97DU design commit: `a9521b0985bf74e9020d35c271d78f5259c62cb8`.
+D97DU build helper commit: `d8faeb3b108e57f35ee9576a8cbf1f7149c7bc9b`.
+D97DU build helper Git blob: `ceed3890b5d35efbefc38ebf1a40f358884e58b9`.
+D97DU bootstrap commit: `0348797800de74c51a0bf647969b0738e2aa1f94`.
+
+The bootstrap verifies the exact helper Git blob and runs `bash -n` before executing it.
+The authority helper performs BUILD ONLY: no Root Patch, no EFI mutation, no system Root Patch mutation and no reboot.
 
 ## NEXT ACTION
-Perform final FASTLANE/root-patch baseline audit, then separately authorize manual Root Patch if that audit remains clean.
+Run D97DU build bootstrap on the authorized Intel iMac build host and return:
+- `OpenCore-Patcher-Tahoe-D97DU.zip`;
+- `OCLP7_D97DU_IMAC_BUILD_REPORT.txt`;
+- `OCLP7_D97DU_b9df76_NATIVE_METAL_SAFE.patch`.
 
-Still not authorized automatically:
-- Root Patch;
+After independent audit of returned build artifacts, manual Root Patch on ASUS2 may be separately authorized.
+
+Still NOT authorized:
+- Root Patch now;
+- removal of `-igfxvesa`;
 - accelerated boot;
-- reboot into an accelerated/root-patched configuration.
+- any reboot into a new root-patched/accelerated configuration.
