@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CN_PAGE_TOPOLOGY_PASS_D97CO_OBSERVE_ONLY_SOURCE_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CO_LOCAL_COMPILE_AUDIT_PASS_DEPLOY_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -134,7 +134,7 @@ FeatureUnlock's `_cs_validate_page` route becomes the preferred architectural pr
 Returned `OCLP7_D97CN_DSC_CODEVALIDATION_PAGE_TOPOLOGY_PREFLIGHT_20260906_153134.zip`:
 - ZIP SHA256 `a468b57ed1bb0917790c803848e084f67aecabf2ad18ccc8893d7f325bef24ea`;
 - TXT SHA256 `fe0b48280d08a6b77dae03acd67a720770663e1cdb3c95c1fae2b1b46bed0b6e`;
-- embedded report SHA256 `c17b8ac6598e86688b19c3a22ccdcbc28bd12204a0ae7cbc376195a5b791303e`, verified.
+- embedded report SHA256 `c17b8ac6598e86688b19c3a22ccdcbc376195a5b791303e`, verified.
 
 Both targets resolve uniquely into the main `dyld_shared_cache_x86_64h`, UUID `5235B75A-6BDF-39F7-BAB8-A0AAD80EBFFA`, mapping 0 r-x.
 
@@ -155,34 +155,51 @@ Same vnode YES; same 4K page NO; both replacement windows fit within one page.
 
 This directly reopens the original native-cache cave for page-hook delivery; the standalone carrier's code-signature cave collision is not relevant to the native cache representation.
 
-## D97CO — observe-only OCLPMetalCompat source
+## D97CO — observe-only OCLPMetalCompat compile/audit PASS
 Experimental branch `oclpmc-d97co-observe-only`.
-Branch head `8c4904870b8512fe356fcb48e82fb32a9e980634`.
-Source `OCLPMetalCompat/OCLPMetalCompat/kern_start.cpp`, Git blob `532643ed9d041db2b1af8a865a6949396b77980d`.
+Exact source head `8c4904870b8512fe356fcb48e82fb32a9e980634`.
+Source Git blob `532643ed9d041db2b1af8a865a6949396b77980d`.
 
 D97CO requires explicit `-ocmcdiag`, exact Tahoe build `25G82`, Haswell CPU, calls original `_cs_validate_page` first, observes only D97CN page offsets and exact main x86_64h cache path, logs site/cave preimage state and Apple's validated/tainted/nx outputs.
 
-Static no-mutation audit:
-- data buffer stays const;
-- no `const_cast`;
-- no `findAndReplace`;
-- no `vm_map_write_user`;
-- no Root Patch or reboot logic.
+Local compilation on the iMac 9900K was explicitly user-authorized.
+Returned `OCLP7_D97CO_IMAC_BUILD_20260906_164754.zip`:
+- bytes `52559`;
+- SHA256 `937332463f94bc32898432e9ad66775adb97292d57e65f238cc11e97fb184ad8`.
 
-Classification:
-`D97CO_OBSERVE_ONLY_LOGIC=STATIC_AUDITED_NO_PAGE_MUTATION`.
+Compiled kext identity:
+- bundle ID `com.oclpmetalcompat.OCLPMetalCompat`;
+- version `0.0.1`;
+- thin x86_64;
+- UUID `319A3777-1BB1-3395-9E7A-6A0426C58723`;
+- executable SHA256 `6b3534cb524a3e222fbfc70f87d4ad614c1b80091b9bcb105e831b00d00b219b`;
+- Info.plist SHA256 `c28a4ce392d889b85dc49d16087fecc01b4e199311b741be4188eec52c82f4b3`;
+- CodeResources SHA256 `6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b`;
+- Lilu dependency `1.7.3`;
+- ad-hoc signature.
 
-Not yet compile-proven or runtime-proven; no kext binary exists.
+Independent binary audit found no D97BV replacement bytes and no write/injection path. Required D97CO route/site/cave marker strings are present. The original build manifest had one tooling-only stale hash for the report because final report lines were appended after manifest creation; all kext/source/plist hashes matched.
+
+Corrected audited deploy package:
+- `OCLP7_D97CO_AUDITED_DEPLOY_20260906.zip`;
+- SHA256 `e062ef672c003d2d6ff11508d1f4cd5e43b94c45ec7de1c9919358cbd0a9fad7`;
+- executable remains exact SHA256 `6b3534cb524a3e222fbfc70f87d4ad614c1b80091b9bcb105e831b00d00b219b`.
+
+Classifications:
+- `D97CO_OBSERVE_ONLY_LOGIC=STATIC_AUDITED_NO_PAGE_MUTATION`;
+- `D97CO_LOCAL_COMPILE_AND_BINARY_IDENTITY_AUDIT=PASS`;
+- `D97CO_COMPILED_OBSERVE_ONLY_NO_FUNCTIONAL_PAGE_MUTATION=PASS`.
+
+Runtime timing remains unproven.
 
 ## CURRENT ACTION
 Remain unpatched Tahoe VESA.
 
-When GitHub build execution is available:
-1. finish/pin OCLPMetalCompat project infrastructure against current Lilu/MacKernelSDK;
-2. compile/package D97CO observe-only in GitHub;
-3. audit artifact identity/dependencies/Info.plist;
-4. only then deploy the identity-pinned diagnostic kext in EFI with `-ocmcdiag` for a VESA boot;
-5. collect only D97CO route/site/cave markers;
-6. functional D97BV page writes remain unauthorized until D97CO runtime timing proof passes.
+Next bounded experiment:
+1. deploy the identity-pinned D97CO observe-only kext in active OpenCore EFI after Lilu;
+2. retain `-igfxvesa` and add `-ocmcdiag`;
+3. perform one VESA diagnostic boot;
+4. collect D97CO route/site/cave markers and Apple's validated/tainted/nx results;
+5. functional D97BV page writes remain unauthorized until runtime timing proof passes.
 
-GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation. Local compilation is not an implicit fallback. No Root Patch, accelerated boot or functional shared-cache mutation is authorized.
+No Root Patch, accelerated boot or functional shared-cache mutation is authorized.
