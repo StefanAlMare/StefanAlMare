@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CD_PAGE_ALIGNED_FULL_MAPPING_OBJC_MAP_IMAGES_SIGSEGV_D97CE_SLIDE_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CE_SLIDE_IDENTICAL_OBJC_SIGSEGV_DUPLICATE_METAL_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -64,57 +64,73 @@ D97CB-v5: cold harness proven; remapped RAW Metal maps `__TEXT`, then fails `__D
 D97CC: exact 4K page-prefix/LINKEDIT plan statically closed; 20 section fileoffs, `__LINKEDIT +0x3000`, 7 total LINKEDIT metadata updates, section/content VM addresses preserved.
 
 ## D97CD — page-aligned mapping FULL PASS; Objective-C frontier
-Bundle `OCLP7_D97CD_PAGE_ALIGNED_TRANSFORM_COLD_LOAD_20260906_033115.zip`:
-- bytes `122681`;
-- SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
+Bundle `OCLP7_D97CD_PAGE_ALIGNED_TRANSFORM_COLD_LOAD_20260906_033115.zip`, SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
+Transient unsigned transformed Metal: bytes `5735232`, SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
 
-Transient unsigned transformed Metal:
-- bytes `5735232`;
-- SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
-
-D97CD proves:
-- exact page-aligned transform structural PASS;
-- all section/content VM addresses preserved;
-- 20 section-fileoff rewrites, LINKEDIT shift/fields and 3652 n_sect remaps PASS;
-- payload identity PASS;
-- file/otool PASS;
-- unsigned preflight PASS;
-- ad-hoc signing and strict verify PASS;
-- signed preflight PASS;
-- cold baseline + libbz2 control PASS.
-
-Signed page-aligned target is explicitly observed and all five segments map successfully. Prior `mmap errno=22` alignment blocker is therefore CLOSED.
-
-Runtime then reaches:
-`mprotect ... to read-write (Metal.PAGE.adhoc)`
-and the cold process exits `RC=-11` SIGSEGV. Target final state is `loaded`; native system Metal also becomes `loaded` through the dependency graph.
-Apple dyld source places this read-write transition immediately before Objective-C `map_images` registration/fixups for images with read-only ObjC metadata.
+D97CD proves full page-aligned transform, section-VM preservation, LINKEDIT shift/fields, 3652 n_sect remaps, parser/preflight/signing and cold harness PASS.
+All five standalone Metal segments map successfully; prior sub-page `mmap errno=22` blocker is CLOSED.
+Runtime then reaches `mprotect ... to read-write (Metal.PAGE.adhoc)` and exits `RC=-11` SIGSEGV. Target final state is loaded and native system Metal also becomes loaded through dependencies.
+Apple dyld places this transition immediately before Objective-C `map_images` registration/fixups.
 
 Classifications:
 - `D97CD_STANDALONE_PAGE_ALIGNED_MAPPING=RUNTIME_PROVEN`;
 - `D97CD_ALL_SEGMENTS_MAPPED=RUNTIME_PROVEN`;
-- `D97CD_PREVIOUS_MMAP_ALIGNMENT_GATE=CLOSED`;
 - `D97CD_OBJECTIVE_C_MAP_IMAGES_FRONTIER=REACHED`;
-- `D97CD_COLD_TARGET_FINAL_LOADED_THEN_SIGSEGV=NEGATIVE_RUNTIME`;
-- usable standalone load remains NEGATIVE.
+- `D97CD_COLD_TARGET_FINAL_LOADED_THEN_SIGSEGV=NEGATIVE_RUNTIME`.
 
-## Exact extractor semantic relevant to current frontier
-Pinned `blacktop/ipsw v3.1.713` source explicitly says ordinary extraction leaves `raw cache slide-info pointers` in the extracted dylib. `--slide` executes `rebaseMachO()` and writes the resolved cache-rebase targets. `--objc` implies `--slide` for the same reason.
+## D97CE — full --slide rebase does NOT advance ObjC frontier
+Returned complete Terminal paste `Text lipit(5).txt`:
+- bytes `369222`;
+- SHA256 `f236a0d5112fc8f58a3538ea22436f9e85d37319f882370f58eb1682ecbb6f41`.
+No ZIP exists because a late JSON-packaging bug occurred after decisive runtime markers.
 
-This is the next causal discriminator because D97CD maps the RAW image completely and then dies exactly at Objective-C registration/fixup time.
+RAW extraction remains SHA256 `89032654dd427ffed1c5b3722fbddabd2ed333b429c15db25ca15af13b2f5210`.
+SLIDE extraction:
+- bytes `5722944`;
+- SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
 
-## CURRENT ACTION — D97CE
+`--slide` changes `88012` bytes / `43909` 8-byte chunks, heavily concentrated in Objective-C/data metadata (`__objc_const`, `__cfstring`, `__objc_data`, GOT, selectors, class/protocol/super refs), while load commands, native `__text` and Metal4 counts remain identical.
+
+Transient SLIDE-page transform:
+- bytes `5735232`;
+- SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2`.
+Structural transform, parser/preflight/signing and proven cold harness all PASS.
+
+Cold result is identical to D97CD:
+- RC `-11` SIGSEGV;
+- target path observed;
+- target final state `loaded`;
+- native system Metal final state `loaded`;
+- mapping seen;
+- target `makeSegmentsReadWrite` marker seen;
+- zero dyld lines after that marker.
+
+Printed classifications before tooling failure:
+- `D97CE_SLIDE_COLD_LOAD_CLASSIFICATION=TARGET_FINAL_LOADED_THEN_PROCESS_FAILED`;
+- `D97CE_VS_D97CD_FRONTIER=IDENTICAL_D97CD_RW_MARKER_THEN_SIGSEGV`;
+- `D97CE_D97BV_APPLIED=NO`.
+
+Therefore:
+- `D97CE_SLIDE_ADVANCES_BEYOND_D97CD=NEGATIVE`;
+- `D97CE_RAW_CACHE_SLIDE_INFO_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`;
+- full `ipsw --slide` resolution is insufficient at this exact frontier.
+
+Late collector `TypeError: list indices must be integers or slices, not str` is tooling-only: variable `post` was reused as a list after the runtime marker and then indexed as the earlier parsed Mach-O dictionary during JSON serialization. Do not rerun D97CE merely for packaging.
+
+## CURRENT ACTION — duplicate native+standalone Metal discriminator
 Remain unpatched in Tahoe VESA.
 
-Next transient target-local test must:
-1. extract exact RAW and `--slide` Metal using pinned `ipsw v3.1.713`;
-2. pin RAW identity and record exact SLIDE identity;
-3. prove `__text`, load-command geometry and Metal4 remain equivalent where expected;
-4. enumerate/classify RAW-vs-SLIDE rebase changes by segment/section and target class;
-5. materialize the exact already-proven D97CD page-aligned/order/SG_READ_ONLY/LINKEDIT/n_sect transform from the SLIDE export;
-6. validate payload identity against SLIDE, external parsers, preflight, signing/header growth and cold harness;
-7. cold-inject only signed page-aligned SLIDE Metal and test whether Objective-C registration advances beyond the D97CD `makeSegmentsReadWrite -> SIGSEGV` frontier;
-8. do not apply D97BV;
-9. stop at the next exact runtime frontier and delete all transient binaries.
+Both D97CD and D97CE end with two Metal images loaded simultaneously:
+1. transient standalone native-derived Metal;
+2. native Tahoe Metal from the dyld shared cache.
+They carry the same native Metal UUID and Objective-C class universe.
+
+Next bounded transient test should use a temporary `DYLD_FRAMEWORK_PATH` override so that canonical `/System/Library/Frameworks/Metal.framework/Versions/A/Metal` resolves to the page-aligned SLIDE Metal itself. The test must:
+1. prove from dyld trace whether the framework override is actually honored;
+2. fail closed if shared-cache override is disallowed;
+3. if honored, prove whether native cache Metal remains absent or is still loaded;
+4. only if a true single-Metal process exists, compare Objective-C `map_images` progress against D97CE;
+5. keep D97BV absent;
+6. use only temporary files and make no system/root/cache mutation.
 
 No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
