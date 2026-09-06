@@ -1,0 +1,25 @@
+D97CS OCLPMetalCompat IOKit runtime proof
+Date: 2026-09-06 EEST
+
+Command:
+ioreg -r -c OCLPMetalCompat -l -w0
+
+Observed service:
++-o OCLPMetalCompat <class OCLPMetalCompat, id 0x1000002a1, !registered, !matched, active, busy 0, retain 4>
+
+Properties:
+IOProbeScore=0
+CFBundleIdentifier=com.oclpmetalcompat.OCLPMetalCompat
+IOMatchCategory=OCLPMetalCompat
+IOClass=OCLPMetalCompat
+IOProviderClass=IOResources
+CFBundleIdentifierKernel=com.oclpmetalcompat.OCLPMetalCompat
+IOMatchedAtBoot=Yes
+VersionInfo=DBG-001-2026-09-06
+IOResourceMatch=IOKit
+
+Classification:
+D97CS_OCLPMETALCOMPAT_IOKIT_LIFECYCLE=RUNTIME_PROVEN
+D97CR_UNIFIED_LOG_MARKER_CHANNEL=INCONCLUSIVE_TOOLING_CHANNEL
+D97CO_RUNTIME_TIMING=STILL_UNPROVEN
+D97BV_FUNCTIONAL_PAGE_WRITE=STILL_UNAUTHORIZED
