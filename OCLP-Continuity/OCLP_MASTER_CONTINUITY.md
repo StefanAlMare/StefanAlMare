@@ -6,18 +6,17 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DT_D97DL_FULL_VESA_PAIR_PASS.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DZ_POST_ROOTPATCH_VESA_SHARED_CACHE_IDENTITY_PASS_ACCELERATED_BOOT_AUTHORIZED.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
-- current running boot is still VESA; `-igfxvesa` retained;
-- `-ocmcdiag` present;
-- full D97BV arg `-ocmcd97bv` present;
-- active EFI compatibility kext remains D97DL `OCLPMetalCompat.kext` 0.0.7;
-- D97DL UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
-- D97DX Root Patch has now completed successfully but the new snapshot has not yet been rebooted.
+- D97DX native-Metal-safe Root Patch is installed and first root-patched reboot has completed successfully under VESA;
+- current boot args include active `-igfxvesa -ocmcdiag -ocmcd97bv`;
+- `#-ocmcd97bvcave` remains inert;
+- active EFI compatibility kext remains D97DL `OCLPMetalCompat.kext` 0.0.7, UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
+- exact official Dortania privileged helper was restored before reboot.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -37,84 +36,64 @@ D97DT remains FULL VESA PAIR PASS on exact Tahoe 25G82:
 - exact D97DL 0.0.7 loaded;
 - functional mode ACTIVE;
 - route/build 25G82 PASS;
-- same PID mapped CAVE then SITE;
-- CAVE exact replacement, tail zero, mutation/postimage PASS, write count 1, Apple validation `0xF/0/0`;
-- SITE cave-prereq PASS, exact replacement, mutation/postimage PASS, write count 1, Apple validation `0xF/0/0`;
+- CAVE and SITE exact D97BV runtime delivery proven with write count 1 each and Apple validation safe;
 - D97DR separately proved cross-process CAVE visibility.
 
 Therefore the selective-3802 adapter delivery mechanism is CLOSED PASS under VESA.
 
-## D97DX native-Metal-safe Root Patch artifact — PASS
-Exact source baseline:
-- OCLP commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`;
-- tree `7c3411fde7d40604164c8877a5ab5594448083ac`.
-
-Exact tracked delta is four files only:
-1. `OpenCore-Patcher-GUI.spec` — x86_64 packaging only;
-2. `opencore_legacy_patcher/support/metallib_handler.py` — exact local host-build MetallibSupportPkg before API;
-3. `opencore_legacy_patcher/sys_patch/patchsets/detect.py` — host max Sequoia -> Tahoe;
-4. `opencore_legacy_patcher/sys_patch/patchsets/shared_patches/metal_3802.py` — Tahoe-native-Metal-safe 3802 policy.
-
+## D97DX native-Metal-safe Root Patch — PASS
+Exact source baseline b9df76; exact tracked delta four files only.
 Tahoe policy:
-- Common: inject only `MTLCompilerService.xpc` under native Metal.framework plus private MTLCompiler/GPUCompiler lanes;
-- Extended: CoreImage/RenderBox/private compiler compatibility only; NO whole `Metal.framework` donor;
+- Common: only legacy `MTLCompilerService.xpc` under native Metal.framework plus private MTLCompiler/GPUCompiler lanes;
+- Extended: CoreImage/RenderBox/private compiler compatibility only; NO whole Metal.framework donor;
 - exact Pyquick 25G82 metallib map, 182 entries;
 - no `MetalOld.dylib`;
 - no main legacy `Versions/A/Metal` donor;
 - no true-five.
 
-Artifact/source audit closed PASS before Root Patch.
-
-## D97DX manual Root Patch execution — PASS
-Returned complete ASUS2 patcher output proves:
-- Darwin 25 detection;
-- exact local `MetallibSupportPkg/26.6.2-25G82` found and used;
-- patcher capable / sanity / preflight PASS;
-- Universal-Binaries.dmg mounted;
-- `Metal 3802 Common` installed only sandbox profile + legacy `MTLCompilerService.xpc` under native Metal.framework + private MTLCompiler/GPUCompiler lanes;
-- `Metal 3802 Common Extended` installed CoreImage + RenderBox + private compiler lanes with NO whole Metal.framework donor;
-- exact Tahoe 25G82 metallib patchset executed;
-- Monterey GVA executed;
-- Monterey OpenCL executed;
-- Intel Haswell patchset executed, including `AppleIntelFramebufferAzul.kext`, `AppleIntelHD5000Graphics.kext`, GL/MTL/VA bundles and shared graphics bundle;
-- Modern Wireless Common also executed, orthogonal to the Metal route;
-- GPUCompiler libraries merged;
-- patchset metadata written;
-- RSR monitor installed/updated as required;
+Manual Root Patch execution PASS:
+- exact 25G82 MetallibSupportPkg used;
+- Metal 3802 Common/Extended/metallibs executed;
+- Monterey GVA/OpenCL executed;
+- Intel Haswell patchset executed;
 - Auxiliary Kernel Collection rebuilt and forced;
-- root volume unmounted;
 - final `Patching complete` reached.
 
-Classifications:
-- `D97DX_ROOT_PATCH_PREFLIGHT=PASS`;
-- `D97DX_EXACT_25G82_METALLIB_RUNTIME=PASS`;
-- `D97DX_NATIVE_METAL_SAFE_3802_EXECUTION=PASS`;
-- `D97DX_LEGACY_MAIN_METAL_SHADOW=ABSENT_RUNTIME_LOG_PROVEN`;
-- `D97DX_HASWELL_PATCHSET_EXECUTION=PASS`;
-- `D97DX_AUXKC_REBUILD=PASS`;
-- `D97DX_ROOT_PATCH_EXECUTION=PASS`.
+## D97DZ — post-Root-Patch VESA validation PASS
+Root-patched VESA boot proved:
+- Root Patch metadata present;
+- legacy main on-disk `Metal.framework/Versions/A/Metal` ABSENT;
+- `MetalOld.dylib` ABSENT;
+- legacy `MTLCompilerService` SHA256 exact `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`;
+- Lilu 1.7.3, OCLPMetalCompat 0.0.7, WhateverGreen 1.7.1 loaded;
+- patched AppleIntelFramebufferAzul and AppleIntelHD5000Graphics loaded;
+- D97BV functional mode ACTIVE/requested=1;
+- display remained VESA, HD4400 4 MB, 1366x768.
 
-Root Patch execution checkpoint commit: `7c1c0d9b4bafd9ad778f1a73809d26ab331f165c`.
+Exact shared-cache topology remained byte-identical after Root Patch:
+- SITE page SHA256 `cc710a65a4dfbc674819bb024eade213b90821ab2a12b9a3e1df3d07fb013c43` PASS;
+- SITE13 preimage `3d187d0000b9177d00000f4cc1` PASS;
+- CAVE page SHA256 `466792ab709cc54b58d42f1c6ef4ce73e0906071ed5b6160af2722d52cf35140` PASS;
+- CAVE 18-byte zero window PASS;
+- CAVE 208-byte zero region PASS.
 
-## CURRENT ACTION — PRE-VESA REBOOT SAFETY GATE
-Do NOT remove `-igfxvesa`.
-Do NOT attempt accelerated/non-VESA boot yet.
+Checkpoint commit: `d99fe62b65e8633611368241c8dabb2cfb273492`.
 
-First close the inner D97DX OCLP application completely so the outer wrapper can finish and restore the exact official privileged helper.
+## CURRENT ACTION — FIRST ACCELERATED BOOT AUTHORIZED
+Manual EFI edit only:
+- change only active `-igfxvesa` to inert/commented `#-igfxvesa`;
+- retain `-ocmcdiag` active;
+- retain `-ocmcd97bv` active;
+- retain `#-ocmcd97bvcave` inert;
+- do not modify any other boot arg, kext, config item, Root Patch or snapshot;
+- reboot once.
 
-Then verify installed helper:
-- expected SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
-- expected TeamIdentifier `S74BDJXQMD`.
+If usable accelerated GUI appears, do not Root Patch again; collect runtime state before any further change.
+If no usable GUI appears or userspace fails, hard restart/power-cycle and return to the established VESA recovery configuration, then analyze only that immediately preceding accelerated attempt per permanent VESA recovery rule.
 
-If helper identity PASS, authorize one manual reboot while retaining exact VESA/D97BV boot policy:
-`-igfxvesa -ocmcdiag -ocmcd97bv`
-
-Purpose of the next boot: validate the newly root-patched snapshot safely under VESA only.
-
-Still NOT authorized:
-- removal of `-igfxvesa`;
-- accelerated/non-VESA boot;
-- another Root Patch before evaluating the first root-patched VESA boot;
-- Golden mutation;
+Still forbidden:
+- any EFI change besides this single `-igfxvesa` deactivation;
+- global 3802 forcing;
 - legacy main Metal shadow;
-- true-five reapplication.
+- true-five reapplication;
+- Golden mutation.
