@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CW_D97CT_DEPLOY_PASS_IOREG_RUNTIME_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CX_BUILD_GATE_NEGATIVE_D97CY_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -27,12 +27,13 @@ Before any technical modification:
 - no active Root Patch;
 - `-igfxvesa` retained;
 - `-ocmcdiag` retained;
-- active EFI now contains D97CT `OCLPMetalCompat.kext` 0.0.2, persistent-IORegistry observe-only build.
+- active EFI contains D97CT `OCLPMetalCompat.kext` 0.0.2, persistent-IORegistry observe-only build;
+- D97CX runtime proved D97CT load/IORegistry channel but the exact-build gate implementation failed before CPU/route evaluation.
 
 End goal: stable hardware acceleration and usable GUI.
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
-Local compilation remains explicit-authorization-only; user authorized the iMac 9900K build host for this D97CO/D97CT development sequence.
+Local compilation remains explicit-authorization-only; user authorized the iMac 9900K build host for this D97CO/D97CT/D97CY development sequence.
 
 ## Durable architecture
 Pinned Golden OCLP:
@@ -110,7 +111,7 @@ Cave page `0xF47E000`, in-page `0x560`, 208-byte zero cave PASS, 18-byte future 
 Classification:
 `D97CN_CS_VALIDATE_PAGE_D97BV_STATIC_TOPOLOGY=PASS`.
 
-## D97CO runtime observations
+## D97CO / D97CR / D97CS observation-channel closure
 D97CO 0.0.1 compile/binary audit PASS and observe-only proof remain authoritative.
 Executable SHA256 `6b3534cb524a3e222fbfc70f87d4ad614c1b80091b9bcb105e831b00d00b219b`.
 
@@ -120,7 +121,7 @@ Classifications:
 - `D97CR_UNIFIED_LOG_MARKER_CHANNEL=INCONCLUSIVE`;
 - `D97CR_D97CO_RUNTIME_TIMING=UNPROVEN`.
 
-D97CS then proved the plugin's IOKit lifecycle in the same runtime family:
+D97CS proved the plugin IOKit lifecycle:
 - `OCLPMetalCompat` service active;
 - `IOMatchedAtBoot=Yes`;
 - `VersionInfo=DBG-001-2026-09-06`.
@@ -128,11 +129,11 @@ D97CS then proved the plugin's IOKit lifecycle in the same runtime family:
 Classification:
 `D97CS_OCLPMETALCOMPAT_IOKIT_LIFECYCLE=RUNTIME_PROVEN`.
 
-Therefore logging, not plugin startup, was the unresolved observation channel.
+Therefore persistent IORegistry became the preferred runtime evidence channel.
 
 ## D97CT persistent IORegistry observe-only build
 D97CT moves evidence from early logging into persistent IORegistry properties.
-The `_cs_validate_page` wrapper still calls Apple first and never modifies validation-page bytes. Callback state is atomic; asynchronous publisher exposes it through the proven `OCLPMetalCompat` IORegistry service.
+The `_cs_validate_page` wrapper calls Apple first and never modifies validation-page bytes. Callback state is atomic; asynchronous publisher exposes it through the proven `OCLPMetalCompat` IORegistry service.
 
 Authorized D97CT v2 source SHA256:
 `74a0ba83e7da9875ed150b9413f2716fda1e81fd47d74a8d2911eae7fae0a561`.
@@ -162,8 +163,7 @@ Audited deploy package:
 Classification:
 `D97CT_COMPILED_PERSISTENT_IOREG_OBSERVE_ONLY=PASS`.
 
-## Current EFI after OpenCore/OCLP update — D97CV
-User updated OpenCore/OCLP before D97CT deployment, invalidating the previous config hash by design.
+## Current EFI after OpenCore/OCLP update — D97CV / D97CW
 Read-only D97CV re-audit established current active EFI:
 - config SHA256 `cc2ac81ad11e82f8c7928d70aa6ff659efcf7d2d19ab3243869552e6da24f88f`;
 - `BOOTx64.efi` SHA256 `19fa90b921fef5d29f2ce1f2cb8fd38aded259d7f4a1fa1615c27f7e970f6474`;
@@ -171,46 +171,76 @@ Read-only D97CV re-audit established current active EFI:
 - Kernel/Add count `37`;
 - Lilu index `0`, version `1.7.3`;
 - OCLPMetalCompat unique index `2`;
-- boot args preserve `-igfxvesa -ocmcdiag`;
-- D97CO 0.0.1 binary identity unchanged before replacement.
+- boot args preserve `-igfxvesa -ocmcdiag`.
 
-Classification:
-`D97CV_CURRENT_EFI_REAUDIT=PASS_READ_ONLY`.
-
-## D97CW — D97CT deployed into current EFI
-Returned report `OCLP7_D97CW_D97CT_EFI_REPLACE_20260906_192422.txt`.
-
-All identity/config/ordering gates passed.
+D97CW then replaced only D97CO 0.0.1 with D97CT 0.0.2 in EFI; config remained byte-identical.
 Old D97CO backup:
 `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext.D97CO-20260906_192422.bak`.
 
-Active kext is now D97CT 0.0.2:
-- executable SHA256 `a1a6f32f4a951fd786222a317386135f0938494aca6b1eff39553299a512961b`;
-- Bundle ID `com.oclpmetalcompat.OCLPMetalCompat`;
-- Lilu dependency `1.7.3`.
-
-Config was not modified and remains SHA256:
-`cc2ac81ad11e82f8c7928d70aa6ff659efcf7d2d19ab3243869552e6da24f88f`.
-
 Classification:
+`D97CV_CURRENT_EFI_REAUDIT=PASS_READ_ONLY`.
 `D97CW_D97CT_IDENTITY_PINNED_EFI_REPLACE=PASS`.
 
+## D97CX — persistent runtime channel PASS; early build-gate implementation NEGATIVE
+Returned ZIP `OCLP7_D97CX_D97CT_IOREG_RUNTIME_20260906_193502.zip`:
+- bytes `1508`;
+- SHA256 `926e3ed1dd5ed2df8e129c4ff78cfa1ae7c8513d5b3eb83b6063881d83374bdb`.
+
+Inner TXT:
+- bytes `2946`;
+- SHA256 `2e622de31dfe1f7cd7abfcc5483cb09af57c6130b56134ff672e99938cadc0c7`.
+
+Runtime identity:
+- boot time `2026-09-06 19:30:34 EEST`;
+- D97CT 0.0.2 loaded with UUID `CD3FA6F8-E0AA-3FBD-AE66-B73C089385C0`;
+- Lilu 1.7.3 and WhateverGreen 1.7.1 loaded;
+- active IORegistry service exposes `VersionInfo=DBG-002-2026-09-06` and `D97CTChannel=IORegistry-AtomicAsync-v1`.
+
+Persistent gate state:
+- `D97CTBootArgGate=1` PASS;
+- `D97CTKernelGate=1` PASS;
+- `D97CTBuildGate=2` NEGATIVE;
+- `D97CTCpuGate=0` NOT REACHED;
+- `D97CTRouteStatus=PENDING` NOT ATTEMPTED;
+- `D97CTSiteSeenCount=0`;
+- `D97CTCaveSeenCount=0`;
+- publisher reached at least tick 274.
+
+D97CT implemented exact-build matching via early `sysctlbyname("kern.osversion", ...)`; this runtime proves that implementation returned false during plugin startup even though the booted OS is independently exact `25G82`.
+
+Authoritative classifications:
+- `D97CX_D97CT_KEXT_RUNTIME_LOAD=PROVEN`;
+- `D97CX_D97CT_IOREG_PERSISTENT_CHANNEL=PROVEN`;
+- `D97CX_BOOTARG_GATE=PASS`;
+- `D97CX_KERNEL_GATE=PASS`;
+- `D97CX_EARLY_SYSCTL_BUILD_GATE_IMPLEMENTATION=NEGATIVE`;
+- `D97CX_CPU_GATE=NOT_REACHED`;
+- `D97CX_CS_VALIDATE_PAGE_ROUTE=NOT_ATTEMPTED`;
+- `D97CX_SITE_CAVE_RUNTIME_TIMING=UNTESTED`;
+- `D97BV_FUNCTIONAL_PAGE_WRITE=STILL_UNAUTHORIZED`.
+
+## D97CY — exact-build gate repair direction
+XNU exports kernel-global `osversion[]`; pinned MacKernelSDK declares the same symbol in `libkern/version.h`.
+D97CY therefore:
+- removes early `sysctlbyname("kern.osversion", ...)`;
+- compares kernel-global `osversion` directly to `25G82`;
+- performs that exact-build check inside the existing Lilu patcher-load callback immediately before route installation;
+- publishes `D97CYBuildGateMethod=kernel-global-osversion-v1` and `D97CYObservedBuild=osversion`;
+- preserves D97CT's read-only `_cs_validate_page` wrapper, atomic state and persistent IORegistry channel;
+- preserves fail-closed behavior;
+- contains no functional D97BV page write.
+
+Prepared D97CY source SHA256:
+`9009f5f77058a7769ddaa8f3b282f62a7c64a856009e89309bae461130a35e06`.
+Prepared iMac build script SHA256:
+`50380f823be84d27c531711f603920208dee7c856a602427545e449e0ef00aee`.
+
 ## CURRENT ACTION
-One manual **VESA-only D97CT diagnostic reboot** is authorized.
+Do not modify ASUS2 EFI further yet.
 
-Before reboot:
-1. no further EFI/config/kext changes;
-2. retain `-igfxvesa` and `-ocmcdiag`;
-3. no Root Patch.
-
-After the VESA desktop returns, collect D97CT persistent IORegistry state.
-Success criteria:
-- exact D97CT 0.0.2 loaded;
-- `D97CTRouteStatus=PASS`;
-- `D97CTSiteSeenCount > 0` and `D97CTSitePreimage=PASS`;
-- `D97CTCaveSeenCount > 0`, `D97CTCaveWindow18=PASS`, `D97CTCaveFull208=PASS`;
-- record Apple's site/cave `validated/tainted/nx` values.
-
-Only if this runtime timing/preimage proof passes may a separately designed and separately authorized functional D97BV page-write build be considered.
+On the already-authorized iMac 9900K build host:
+1. build D97CY `OCLPMetalCompat.kext` version `0.0.3` from the exact prepared source;
+2. return the resulting `OCLP7_D97CY_IMAC_BUILD_<timestamp>.zip` for independent audit;
+3. only after audit may D97CY replace D97CT on ASUS2 for another VESA-only diagnostic boot.
 
 No Root Patch, accelerated boot, or functional shared-cache mutation is authorized by this MASTER.
