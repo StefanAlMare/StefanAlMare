@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CD_PAGE_ALIGNED_FULL_MAPPING_OBJC_MAP_IMAGES_SIGSEGV_D97CE_SLIDE_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CE_SLIDE_IDENTICAL_OBJC_SIGSEGV_DUPLICATE_METAL_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -52,42 +52,60 @@ Signed remapped RAW Metal target observed; `__TEXT` maps; next failure `__DATA_C
 4K page-prefix plan preserves all original section/content VM addresses while page-aligning segment mapping starts/fileoffs. Exactly 20 section offsets change; `__LINKEDIT +0x3000`; 7 total LINKEDIT metadata updates; no unknown blocker after identifying the printed `0xD48` hit as `__LINKEDIT.fileoff` itself.
 
 ## D97CD — page-aligned standalone mapping succeeds; Objective-C frontier
-Bundle:
-`OCLP7_D97CD_PAGE_ALIGNED_TRANSFORM_COLD_LOAD_20260906_033115.zip`
-- bytes `122681`;
-- SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`;
-- TXT SHA256 `b973b761f57e783d67ab55f5e77b78977fc5b0f96e13056ca8590c7d5eb75d22`;
-- JSON SHA256 `2907be66e4943262209bc282dc5db6bfd111ac378f574033f3e878877cb3e1c2`.
+Bundle `OCLP7_D97CD_PAGE_ALIGNED_TRANSFORM_COLD_LOAD_20260906_033115.zip`, SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
+Transient unsigned page-aligned Metal: bytes `5735232`, SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
 
-Transient unsigned page-aligned Metal:
-- bytes `5735232`;
-- SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
+D97CD proves full page-aligned transform, section-VM preservation, LINKEDIT shift/fields, 3652 n_sect remaps, file/otool, unsigned/signed preflight, signing and cold harness all pass.
+Codesign inserts `LC_CODE_SIGNATURE` at `0x1560`, increasing load-command end to `0x1570`; old D97BV cave start is consumed by 16 bytes.
 
-D97CD proves the full page-aligned transform, section-VM preservation, LINKEDIT shift/fields, payload identity, 3652 n_sect remaps, file/otool, unsigned/signed preflight, ad-hoc signing and cold harness all pass.
-
-Codesign inserts one new `LC_CODE_SIGNATURE` at load-command offset `0x1560`, increasing load-command end to `0x1570`; old D97BV cave start is therefore consumed by 16 bytes.
-
-Cold injection maps all five standalone Metal segments successfully:
-- `__TEXT`;
-- `__DATA_CONST`;
-- `__DATA_DIRTY`;
-- `__DATA`;
-- `__LINKEDIT`.
-The previous sub-page mmap blocker is CLOSED.
-
-Runtime then reaches `mprotect ... to read-write (Metal.PAGE.adhoc)` and the process exits `RC=-11` SIGSEGV. Target final state is loaded; native system Metal also reaches loaded through dependencies.
+Cold injection maps all five standalone Metal segments successfully. The previous sub-page mmap blocker is CLOSED.
+Runtime then reaches `mprotect ... to read-write (Metal.PAGE.adhoc)` and exits `RC=-11` SIGSEGV. Target final state is loaded; native system Metal also becomes loaded.
 Apple dyld places this transition immediately before Objective-C `map_images` registration/fixups.
 
 Classifications:
 - `D97CD_STANDALONE_PAGE_ALIGNED_MAPPING=RUNTIME_PROVEN`;
 - `D97CD_ALL_SEGMENTS_MAPPED=RUNTIME_PROVEN`;
 - `D97CD_OBJECTIVE_C_MAP_IMAGES_FRONTIER=REACHED`;
-- `D97CD_COLD_TARGET_FINAL_LOADED_THEN_SIGSEGV=NEGATIVE_RUNTIME`;
-- usable standalone load remains NEGATIVE.
+- `D97CD_COLD_TARGET_FINAL_LOADED_THEN_SIGSEGV=NEGATIVE_RUNTIME`.
 
-Pinned `ipsw` source states ordinary extraction leaves raw cache slide-info pointers while `--slide` runs `rebaseMachO()` and writes resolved rebase targets. This becomes the next causal discriminator.
+## D97CE — `--slide` makes massive ObjC/data pointer changes but runtime frontier is identical
+Returned Terminal paste `Text lipit(5).txt`:
+- bytes `369222`;
+- SHA256 `f236a0d5112fc8f58a3538ea22436f9e85d37319f882370f58eb1682ecbb6f41`.
 
-## CURRENT ACTION — D97CE
-Run only the next transient RAW-vs-`--slide` discriminator. It must page-align the SLIDE export with the exact D97CD transform, preserve all proven geometry/metadata repairs, cold-inject only that signed image, and determine whether Objective-C registration advances beyond D97CD. D97BV remains not applied.
+RAW Metal remains SHA256 `89032654dd427ffed1c5b3722fbddabd2ed333b429c15db25ca15af13b2f5210`.
+SLIDE Metal:
+- bytes `5722944`;
+- SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
 
-Remain unpatched in VESA. No Root Patch, installation, local/source build, accelerated boot or reboot authorized.
+RAW/SLIDE load commands and native `__text` are identical; Metal4 counts are unchanged.
+`--slide` changes `88012` bytes across `43909` 8-byte chunks, with `39479` changed chunks in `__DATA_CONST`, concentrated heavily in Objective-C metadata (`__objc_const=25320`, `__cfstring=4906`, `__objc_selrefs=4674`, class/protocol/super refs), plus `__objc_data`, GOT and other data.
+
+SLIDE-page transform:
+- bytes `5735232`;
+- SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2`.
+Structural transform, parsers, preflight, ad-hoc sign/verify and proven cold harness pass.
+
+Cold result exactly reproduces D97CD:
+- target final loaded;
+- native system Metal final loaded;
+- target mapped;
+- `makeSegmentsReadWrite` marker seen;
+- zero dyld lines after marker;
+- process `RC=-11` SIGSEGV.
+
+Printed:
+- `D97CE_SLIDE_COLD_LOAD_CLASSIFICATION=TARGET_FINAL_LOADED_THEN_PROCESS_FAILED`;
+- `D97CE_VS_D97CD_FRONTIER=IDENTICAL_D97CD_RW_MARKER_THEN_SIGSEGV`;
+- `D97CE_D97BV_APPLIED=NO`.
+
+Therefore full `ipsw --slide` resolution does not advance the Objective-C frontier. It is insufficient as the current repair.
+
+Late JSON packaging failed with `TypeError: list indices must be integers or slices, not str` because the collector reused variable `post` as a line-list after previously using it as the post-codesign Mach-O dictionary. This occurred after decisive runtime markers; do not repeat D97CE just for packaging.
+
+## CURRENT ACTION — duplicate native+standalone Metal discriminator
+Both D97CD and D97CE load two Metal images simultaneously: temporary standalone native-derived Metal and native Tahoe shared-cache Metal, with the same native UUID and Objective-C class universe.
+
+Next bounded transient test should attempt `DYLD_FRAMEWORK_PATH` override of canonical Metal with the temporary signed page-aligned SLIDE image, prove from dyld trace whether shared-cache override is honored, fail closed if not, and only if a true single-Metal process is obtained compare Objective-C progress against D97CE.
+
+D97BV remains not applied. Remain unpatched in VESA. No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized.
