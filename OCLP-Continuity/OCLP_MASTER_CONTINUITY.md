@@ -7,9 +7,10 @@ Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DT_D97DL_FULL_VESA_PAIR_PASS.md`
+Current build checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DU_IMAC_PREFLIGHT_FALSE_BLOCKER_D97DV_READY.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 Current build authority helper: `OCLP-Continuity/artifacts/OCLP7_D97DU_IMAC_NATIVE_METAL_SAFE_BUILD.sh`
-Current build bootstrap: `OCLP-Continuity/artifacts/OCLP7_D97DU_IMAC_BUILD_AUTHORITY_BOOTSTRAP.sh`
+Current corrected build launcher: `OCLP-Continuity/artifacts/OCLP7_D97DV_IMAC_BUILD_AUTHORITY_V2.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
@@ -82,13 +83,31 @@ Forbidden in synthesized Tahoe patch dictionary:
 D97DU design commit: `a9521b0985bf74e9020d35c271d78f5259c62cb8`.
 D97DU build helper commit: `d8faeb3b108e57f35ee9576a8cbf1f7149c7bc9b`.
 D97DU build helper Git blob: `ceed3890b5d35efbefc38ebf1a40f358884e58b9`.
-D97DU bootstrap commit: `0348797800de74c51a0bf647969b0738e2aa1f94`.
 
-The bootstrap verifies the exact helper Git blob and runs `bash -n` before executing it.
-The authority helper performs BUILD ONLY: no Root Patch, no EFI mutation, no system Root Patch mutation and no reboot.
+## D97DU first iMac build attempt — fail-closed preflight only
+The first bootstrap verified exact helper identity and `bash -n`, then stopped before clone/build because the helper incorrectly required exact 25G82 MetallibSupportPkg on the iMac build host.
+The same output showed `/usr/local/bin/python3` = Python 3.14.7 was selected, although proven D97BJ packaging lineage used Python 3.13.x.
+
+No Root Patch, EFI mutation, system patch mutation or reboot occurred.
+
+## D97DV corrected build-host launcher
+Persisted:
+`OCLP-Continuity/artifacts/OCLP7_D97DV_IMAC_BUILD_AUTHORITY_V2.sh`
+
+Identity:
+- commit `551a97d09c3f5e1ea02ae2e695e81764e388d43a`;
+- Git blob `e7a69e0b8e2c637f4d04ab209bc8eaf5a5dc8357`.
+
+D97DV applies only two local build-host corrections to the exact D97DU authority helper:
+1. exact 25G82 MetallibSupportPkg is recorded as target-ASUS2 Root Patch input and is no longer required on the iMac build host;
+2. build interpreter is constrained to exact x86_64 Python 3.13.x, searching the preserved D97BJ worktree/venv first; Python 3.14 is rejected.
+
+D97DU native-Metal-safe Root Patch policy is otherwise unchanged.
 
 ## NEXT ACTION
-Run D97DU build bootstrap on the authorized Intel iMac build host and return:
+Run D97DV on the authorized Intel iMac build host.
+If exact x86_64 Python 3.13.x is absent, stop and return output; do not install/change Python manually.
+If build completes, return:
 - `OpenCore-Patcher-Tahoe-D97DU.zip`;
 - `OCLP7_D97DU_IMAC_BUILD_REPORT.txt`;
 - `OCLP7_D97DU_b9df76_NATIVE_METAL_SAFE.patch`.
