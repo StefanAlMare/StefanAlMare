@@ -1,6 +1,6 @@
 # OCLP7 D97DO — one-shot CAVE-only propagation probe static audit
 
-Date: 2026-09-06 EEST
+Date: 2026-09-07 EEST
 
 ## Purpose
 D97DO is a diagnostic successor to D97DL. It is designed for the first actual runtime write while keeping the D97BV SITE entirely native/unmodified.
@@ -54,16 +54,17 @@ Properties:
 - `D97DOCaveWritePhase`
 - `D97DOSiteWriteBlocked=PASS`
 
-## Static source audit
-Reconstructed source SHA256:
-`7da66e31f9967601c39fef0e4630b4a194fd0c4f00f35b16f08675e0789bb6f7`
+## Static source authority
+The byte-exact source is the concatenation, in this exact order, of these GitHub blobs:
+1. `OCLP7_D97DO_kern_start.part1.cpp` — blob `5308074eb75d76531eef19481ded76b641c3f301`;
+2. `OCLP7_D97DO_kern_start.part2.cpp` — blob `fac28701be3acae370866483b94d04d620d41916`;
+3. `OCLP7_D97DO_kern_start.part3.cpp` — blob `54861bd997619551e64c264f9e02b1d4e66c13b2`.
 
-GitHub source authority is split byte-exactly into:
-- `OCLP7_D97DO_kern_start.part1.cpp`
-- `OCLP7_D97DO_kern_start.part2.cpp`
-- `OCLP7_D97DO_kern_start.part3.cpp`
+Correct reconstructed source identity, independently measured from the returned build:
+- bytes `25693`;
+- SHA256 `4607658c5a7d1967d7b0ae1b507f0e160ba2201aed6fe5b4a9a936a263cb520a`.
 
-The authoritative build helper must concatenate those three files in that exact order and refuse compilation unless the reconstructed SHA matches the value above.
+The earlier documented reconstructed SHA256 `7da66e31f9967601c39fef0e4630b4a194fd0c4f00f35b16f08675e0789bb6f7` was incorrect and is superseded. The build helper did not enforce that stale reconstructed SHA; it did enforce all three exact Git blob identities and concatenation order. The returned package source was independently hashed and matches the source produced from those pinned fragments in the build.
 
 Required static facts:
 - SITE replacement array absent: PASS
@@ -75,11 +76,8 @@ Required static facts:
 - `proc_selfpid()` gate present: PASS
 - writer PID and propagation PID properties present: PASS
 - one-shot atomic compare-exchange present: PASS
-- exact CAVE payload retained:
-  `3d187d0000b9177d00000f4cc1e9b4311600`
-- broad patching APIs absent:
-  `findAndReplace`, `findAndReplaceWithMask`, `vm_map_write_user`,
-  `orgVmMapWriteUser`, `vmProtect`, `injectPayload`, `injectSegment`.
+- exact CAVE payload retained: `3d187d0000b9177d00000f4cc1e9b4311600`
+- broad patching APIs absent: `findAndReplace`, `findAndReplaceWithMask`, `vm_map_write_user`, `orgVmMapWriteUser`, `vmProtect`, `injectPayload`, `injectSegment`.
 
 ## Classification
 `D97DO_SITE_MUTATION_CAPABILITY=ABSENT_STATIC_PROVEN`
@@ -88,7 +86,6 @@ Required static facts:
 `D97DO_CROSS_PID_PROPAGATION_CLASSIFIER=STATIC_PROVEN`
 `D97DO_FULL_FUNCTIONAL_ARG_BLOCKED=STATIC_PROVEN`
 `D97DO_SOURCE_STATIC_AUDIT=PASS`
-`D97DO_BUILD=UNTESTED`
 
 ## Authorization boundary
 This design does not authorize Root Patch or accelerated boot.
