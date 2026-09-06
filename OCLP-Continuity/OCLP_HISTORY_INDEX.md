@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CJ_OBJC_RELOCATION_TOPOLOGY_AUDIT_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CL_LILU_DSC_PREFLIGHT_PASS_D97CM_MAP_PARSER_PARITY_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -85,7 +85,7 @@ Returned bundle `OCLP7_D97CI_V2_OBJC_OPTIMIZEDBYDYLD_FLAG_ADAPTER_20260906_13295
 - TXT SHA256 `03dea8ee432944ed227ec3b42a42dbba9d20b8bb55f90178e6b81a126fdfbd34`;
 - JSON SHA256 `66a42d9253784f9835159fde5dd085c95ac0a57b7e8b60cd01ce59d56db50b70`.
 
-Exact pre-adapter carrier SHA `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2` had exactly one `__objc_imageinfo` at address `0x7FF8411BBDD0`, fileoff `0x30ADD0`, version `0`, flags `0x49`; `OptimizedByDyld (0x8)` was set.
+Exact pre-adapter carrier SHA `068ec08cff3d279ce1a700695162d0eda19ab8f5b956edb8a91e60c9009d155de2` had exactly one `__objc_imageinfo` at address `0x7FF8411BBDD0`, fileoff `0x30ADD0`, version `0`, flags `0x49`; `OptimizedByDyld (0x8)` was set.
 
 D97CI-v2 changed exactly one byte:
 - offset `0x30ADD4`;
@@ -115,24 +115,39 @@ Classifications:
 
 Do not repair the individual pointer ad hoc.
 
-## D97CJ — ObjC relocation-topology audit ready
-Script:
-`OCLP7_D97CJ_objc_relocation_topology_audit.sh`
-- bytes `48877`;
-- SHA256 `7921c9923afaa7ca499d8c00a146ab215d5c4a0f0e33c5d244f68ac153cc056e`;
-- shell syntax PASS;
-- main embedded Python compile PASS;
-- LLDB-helper Python compile PASS;
-- safety/cleanup scan PASS.
+## D97CJ — returned ObjC relocation-topology closure
+Returned `OCLP7_D97CJ_OBJC_RELOCATION_TOPOLOGY_20260906_135939.zip`.
 
-D97CJ introduces no new functional Metal repair. It retains the proven one-bit D97CI prerequisite, inventories the pointer topology of all relevant Objective-C sections, then, on the same true-single-Metal readClass fault, attempts to prove that the fault RBX is a static classlist entry left unrebased. It computes the actual standalone slide, expected runtime class, class bits/class_ro/name and fails closed on any mismatch.
+Raw LLDB ties `RBX=RDI=0x7FF843D60620` exactly to static `__objc_classlist[0]`. The pointer is preferred `__DATA +0x7620`; standalone runtime `__DATA` requires `0x134FB0620`, so the pointer is unrebased at the exact `readClass` fault.
 
-Decision gate after D97CJ:
-- finite/small standalone relocation surface -> consider constructing proper standalone Mach-O fixup metadata;
-- broad cache-optimized surface -> prefer preserving native shared-cache Metal and audit a selective 3802 runtime patch through Lilu/WhateverGreen-style userland/shared-cache process patching.
-The Lilu direction is a candidate, not yet final.
+The relocation surface is broad: 422/422 classlist, 2/2 catlist, 144/144 protolist and 385/385 superrefs are in-image preferred, with further cache/preferred surfaces in GOT/CFString/selector/protocol references.
+
+The final helper's `SBFileSpec.GetPath()` failure is tooling-only after decisive evidence.
+
+Classifications:
+- `D97CJ_UNREBASED_OBJC_CLASSLIST_POINTER_CURRENT_READCLASS_CAUSE=RUNTIME_STRUCTURAL_PROVEN`;
+- `D97CJ_BROAD_STANDALONE_OBJC_CACHE_RELOCATION_STATE=PROVEN`;
+- `D97CJ_STANDALONE_METAL_CARRIER_PRODUCTION_MAINLINE=CLOSED`.
+
+Production evaluation shifts to native shared-cache Metal plus a bounded OCLP-specific runtime compatibility plugin rather than standalone pointer rehydration.
+
+## D97CL — Lilu / DSC runtime preflight PASS
+Returned `OCLP7_D97CL_LILU_DSC_RUNTIME_PREFLIGHT_20260906_150640.zip`:
+- ZIP SHA256 `3f97d2b82765d5e1a847b8c0a0ad1982fcced6c5c1978ff282f177ea39dd1f4e`;
+- TXT final SHA256 `ee9762f22ad15ed7185c184b5246298e091bdf9a97d44b07a56d402bb6c56774`;
+- embedded report SHA256 `5443d54ea576d0739723eb0d501e86fc9f050abb64f2b8bacf12072cd2c28f58`, verified as the report before its final self-hash line.
+
+ASUS2 has AVX2, loaded Lilu `1.7.3` and WhateverGreen `1.7.1`, no `-liluuseroff`, no `-liluslow`, and the exact Ventura+/Tahoe Cryptex `dyld_shared_cache_x86_64h` plus `.map`. The exact native Metal path is present in that expected map. No x86_64 fallback map is present.
+
+Classifications:
+- `D97CL_FAST_SHARED_CACHE_MAPPING_PRECONDITION=PASS`;
+- `D97CL_EXPECTED_CACHE_BINARY_PRECONDITION=PASS`;
+- `D97CL_USERPATCHER_BOOTARG_PRECONDITION=PASS`;
+- `D97CL_NO_SYSTEM_MUTATION=PASS`.
+
+D97CL proves path/variant/existence prerequisites only. D97CM must parity-test Lilu `UserPatcher::mapAddresses()` against the exact Tahoe 25G82 Metal map block before any plugin build.
 
 ## CURRENT ACTION
-Remain unpatched VESA. Run exact `OCLP7_D97CJ_objc_relocation_topology_audit.sh` and return ZIP/output.
+Remain unpatched VESA. Run D97CM read-only map-parser parity audit when provided and return its ZIP/output.
 
 No D97BV, Root Patch, installation, local compilation, accelerated boot or reboot is authorized.
