@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CF_TRUE_SINGLE_METAL_IDENTICAL_OBJC_SIGSEGV.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CG_SINGLE_METAL_LLDB_LOCALIZER_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -54,7 +54,6 @@ Signed remapped RAW Metal target observed; `__TEXT` maps; next failure `__DATA_C
 ## D97CD — page-aligned standalone mapping succeeds; Objective-C frontier
 Bundle SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
 Transient unsigned page-aligned Metal: bytes `5735232`, SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
-D97CD proves full page-aligned transform, section-VM preservation, LINKEDIT shift/fields, 3652 n_sect remaps, parser/preflight/signing and cold harness PASS.
 All five standalone Metal segments map successfully. Runtime then reaches target `makeSegmentsReadWrite` and exits `RC=-11` SIGSEGV.
 
 ## D97CE — `--slide` does not advance Objective-C frontier
@@ -63,33 +62,24 @@ SLIDE Metal SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf7
 Classification: `D97CE_SLIDE_ADVANCES_BEYOND_D97CD=NEGATIVE`.
 
 ## D97CF — true single Metal still identical Objective-C SIGSEGV
-Returned bundle `OCLP7_D97CF_SINGLE_METAL_FRAMEWORK_OVERRIDE_20260906_041903.zip`:
-- bytes `118754`;
-- SHA256 `0a8d8c80521ccfefaa0419b4c5261e2b280488f9f74187954b29d1f2bd3cd7fc`;
-- TXT SHA256 `2ea845e8d0826dbfd850c9c6293565963f46a772d9c190cf542730a85e07b338`;
-- JSON SHA256 `e8718f1822ba2494574984763bb3c3df8e5a221b1a112eb34b26bf35248bfb07`.
+Returned bundle SHA256 `0a8d8c80521ccfefaa0419b4c5261e2b280488f9f74187954b29d1f2bd3cd7fc`.
+Framework override is runtime-proven honored: temporary page-aligned SLIDE Metal loaded, native shared-cache Metal absent, no native-cache mapping, exactly one Metal path/UUID, `D97CF_TRUE_SINGLE_METAL=PASS`.
+Yet runtime remains identical: target final loaded, final dyld marker `mprotect ... to read-write (Metal)`, zero lines after marker, RC `-11` SIGSEGV.
+Authoritative classification: `D97CF_DUPLICATE_METAL_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
 
-Framework override is runtime-proven honored:
-- temporary page-aligned SLIDE Metal loaded;
-- native shared-cache Metal absent;
-- no native-cache Metal mapping;
-- exactly one Metal path/UUID;
-- `D97CF_TRUE_SINGLE_METAL=PASS`.
+## D97CG — exact SIGSEGV PC/backtrace localizer ready
+Script `OCLP7_D97CG_single_metal_lldb_sigsegv_localizer.sh`:
+- bytes `31544`;
+- SHA256 `5bc0cc317be9336bd1af30190eb4e91a20224b2b48c99173cfda11ca2bd0203c`;
+- shell syntax PASS;
+- embedded Python compile PASS.
 
-Yet runtime remains identical:
-- target final loaded;
-- final dyld marker `mprotect ... to read-write (Metal)`;
-- zero dyld lines after marker;
-- process RC `-11` SIGSEGV.
+D97CG preserves and hard-verifies exact D97CF SLIDE-page transform SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2`.
+It first reconfirms ordinary D97CF true-single-Metal `RW marker -> RC -11`. Only then it uses an already-installed LLDB, if available, in official batch mode with `-K/--source-on-crash` to capture process status, all-thread backtrace, registers, PC symbol lookup, memory region, disassembly and image slides.
+No LLDB/tool installation is attempted. Debugger-run causality is accepted only if true-single-Metal is preserved and the crash hook captures the same Objective-C frontier.
 
-Authoritative classifications:
-- `D97CF_FRAMEWORK_OVERRIDE_CLASSIFICATION=SINGLE_METAL_IDENTICAL_RW_MARKER_THEN_SIGSEGV`;
-- `D97CF_DUPLICATE_METAL_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
-
-Therefore mapping, page alignment, full `--slide` cache-pointer resolution and duplicate Metal coexistence are all insufficient causes at this frontier.
-
-## CURRENT ACTION — localize exact crash instruction/stack
+## CURRENT ACTION
 Remain unpatched VESA.
-Next bounded ASUS2-only diagnostic should preserve exact D97CF true-single-Metal setup and obtain the actual SIGSEGV PC, crashing-thread backtrace and fault/register state, preferably through LLDB launch/catch-SIGSEGV if available. Do not change Metal semantics or apply D97BV merely to obtain this evidence.
+Run only exact D97CG and return its ZIP/output.
 
-No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized.
+No D97BV, Root Patch, installation, source/local compilation, accelerated boot or reboot is authorized.
