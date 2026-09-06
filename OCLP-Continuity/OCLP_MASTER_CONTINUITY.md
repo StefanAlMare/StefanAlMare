@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CG_SINGLE_METAL_LLDB_LOCALIZER_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CG_LLDB_HOOK_NEGATIVE_D97CH_EXPLICIT_SIGNAL_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -95,19 +95,39 @@ Authoritative classifications:
 
 Thus dyld metadata validation, page mapping, cache-slide resolution and duplicate Metal coexistence are all insufficient explanations for the current crash. The active frontier is inside Objective-C image registration/fixup processing reached immediately after `makeSegmentsReadWrite`.
 
-## D97CG — exact crash PC/backtrace localizer ready
-Run only `OCLP7_D97CG_single_metal_lldb_sigsegv_localizer.sh`:
-- bytes `31544`;
-- SHA256 `5bc0cc317be9336bd1af30190eb4e91a20224b2b48c99173cfda11ca2bd0203c`;
+## D97CG — LLDB crash-hook attempt preserves frontier but does not capture PC
+Returned bundle `OCLP7_D97CG_SINGLE_METAL_FRAMEWORK_OVERRIDE_20260906_051636.zip`:
+- bytes `229595`;
+- SHA256 `ec920f5a04e7f03a8ef274659350f1bfe087725c76e44e8e5530b32616582555`.
+Packaged TXT: bytes `672235`, SHA256 `0614cad86446e8a5afc21e15ce1f200d97ac5206dc2e2e154028fc042e097525`.
+Packaged JSON: bytes `721501`, SHA256 `8735fd2245b2653acc88acb6df3151dd6f0ebc5f124b3547077820e28240bd72`.
+
+Ordinary D97CF frontier reconfirmed exactly: true single Metal, RC `-11`, final target marker `mprotect ... to read-write (Metal)`, zero post-marker dyld lines.
+Installed LLDB `/Library/Developer/CommandLineTools/usr/bin/lldb`, version `lldb-2100.0.17.203`, also preserves true-single-Metal and reaches the same RW marker.
+However `-K/--source-on-crash` is not entered:
+- `D97CG_LLDB_CRASH_HOOK_BEGIN=False`;
+- `D97CG_LLDB_BAD_ACCESS_CAPTURED=False`;
+- `D97CG_LLDB_RIP=UNRESOLVED`;
+- `D97CG_LLDB_FRAME0=UNRESOLVED`;
+- `D97CG_LLDB_CLASSIFICATION=DEBUGGER_DID_NOT_ENTER_ON_CRASH_HOOK`.
+
+Classification: debugger harness limitation only; no new Metal causal conclusion. Do not rerun D97CG unchanged.
+
+## D97CH — explicit-signal LLDB localizer ready
+Run only `OCLP7_D97CH_single_metal_lldb_explicit_signal_localizer.sh`:
+- bytes `32797`;
+- SHA256 `a04f36e64fda0c070da083d1bbf15d4c84a478bfb1daa355f07f841032a62a61`;
 - shell syntax PASS;
 - embedded Python compile PASS.
 
-D97CG preserves the exact D97CF page-aligned SLIDE transform and hard-requires SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2`.
-It first reconfirms the ordinary D97CF true-single-Metal `RW marker -> RC -11` frontier. Only then, if an already-installed LLDB is available, it launches the same cold host under official batch mode with `-K/--source-on-crash` and captures process status, all-thread backtrace, registers, PC symbol lookup, PC memory region, disassembly and image slides.
-No debugger installation is attempted. If LLDB is absent or the debugger run is not true-single-Metal, classification fails closed.
+D97CH preserves the exact D97CF/D97CG page-aligned SLIDE carrier and true-single-Metal framework override. It changes only debugger control:
+- forces LLDB `SIGSEGV` and `SIGBUS` handling to stop+notify+do-not-pass before launch;
+- executes crash-state capture commands directly after synchronous `run`, rather than relying on `-K`;
+- captures process status, all-thread backtrace, x86_64 registers, PC lookup, PC region, disassembly and image slides;
+- fails closed if LLDB does not stop the inferior or if true-single-Metal is not preserved.
 
 ## CURRENT ACTION
 Remain unpatched in Tahoe VESA.
-Run only the exact D97CG script above and return its ZIP/output.
+Run only the exact D97CH script above and return its ZIP/output.
 
 D97BV remains absent. No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
