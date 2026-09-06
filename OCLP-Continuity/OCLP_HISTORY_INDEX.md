@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CI_V2_OBJC_OPT_FLAG_ADAPTER_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CJ_OBJC_RELOCATION_TOPOLOGY_AUDIT_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -13,7 +13,7 @@ Tahoe `26.6.2 / 25G82` on ASUS2, Intel Haswell HD4400/4600 `8086:0412`, SMBIOS `
 ## Durable architecture
 Historical accepted functional baseline: `P1 + P2b + P3 + AIR00 + D34`.
 Core principle: `Tahoe-native producer -> earliest non-equivalent handoff -> adapter/normalizer -> unchanged working legacy donor path -> image`.
-Current target: `native Tahoe Metal / Metal4 ABI -> selective legacy 3802 ingress -> audited upstream adapter -> legacy compiler path -> Haswell driver -> image`.
+Current target: one native Tahoe Metal/Metal4 image with a selective 3802 ingress lane plus the otherwise unchanged Tahoe 32023/32024 lane, feeding an audited legacy compiler path and Haswell driver.
 
 ## Golden / generation closure
 Golden selector maps `3802 -> Versions/3802`, `31001 -> Versions/32023`; Golden runtime naturally uses both lanes.
@@ -26,7 +26,7 @@ D97BL: legacy MTLCompilerService/private compilers may be bounded; legacy main M
 
 ## D97BV — selective 3802-preserve adapter
 Static-semantic proven: preserve exact 3802, otherwise execute original Tahoe floor.
-Pre-sign cave was `0x1560..0x1630`. D97CD later proved codesign consumes `0x1560..0x1570`; standalone D97BV requires a new cave audit.
+Pre-sign cave was `0x1560..0x1630`. D97CD later proved codesign consumes `0x1560..0x1570`; standalone D97BV requires a new cave audit. D97BV remains unapplied.
 
 ## D97BW-v2 / D97BX — sparse closure
 Sparse reconstruction preserves native code/Metal4 but is not standalone-loadable. Signing and D97BV were not the blocker.
@@ -49,7 +49,7 @@ Baseline `/usr/bin/true` exit 0 with Metal/libbz2 delayed. Positive control libb
 Signed remapped RAW Metal maps `__TEXT`; next failure `__DATA_CONST mmap(...CD0) errno=22`.
 
 ## D97CC — page-prefix/LINKEDIT static closure
-4K page-prefix plan preserves original section/content VM addresses while page-aligning segment mapping starts/fileoffs. Exactly 20 section offsets; `__LINKEDIT +0x3000`; 7 total LINKEDIT metadata updates; no unknown blocker.
+4K page-prefix plan preserves original section/content VM addresses while page-aligning segment mapping starts/fileoffs. Exactly 20 section offsets; `__LINKEDIT +0x3000`; 7 total LINKEDIT metadata updates.
 
 ## D97CD — page-aligned standalone mapping succeeds; Objective-C frontier
 Bundle SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
@@ -58,68 +58,81 @@ All five segments map; runtime reaches `makeSegmentsReadWrite`, then `RC=-11`.
 
 ## D97CE — --slide does not advance Objective-C frontier
 SLIDE SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
-`--slide` changes `88012` bytes / `43909` qword chunks, heavily in ObjC/data metadata, but page-aligned SLIDE Metal reproduces exactly the D97CD boundary. `D97CE_SLIDE_ADVANCES_BEYOND_D97CD=NEGATIVE`.
+`--slide` changes `88012` bytes / `43909` qword chunks, heavily in ObjC/data metadata, but page-aligned SLIDE Metal reproduces exactly D97CD. `D97CE_SLIDE_ADVANCES_BEYOND_D97CD=NEGATIVE`.
 
 ## D97CF — true single Metal still identical Objective-C SIGSEGV
 Bundle SHA256 `0a8d8c80521ccfefaa0419b4c5261e2b280488f9f74187954b29d1f2bd3cd7fc`.
-Framework override is honored: temporary page-aligned SLIDE Metal loaded, native shared-cache Metal absent, no native-cache mapping, exactly one Metal path/UUID, `D97CF_TRUE_SINGLE_METAL=PASS`.
+Framework override honored: temp Metal loaded, native shared-cache Metal absent, no native-cache mapping, exactly one Metal path/UUID, `D97CF_TRUE_SINGLE_METAL=PASS`.
 Runtime remains RW marker -> zero post-marker dyld lines -> `RC=-11`.
-Classification: duplicate Metal is insufficient as current cause.
+Duplicate Metal is insufficient as current cause.
 
 ## D97CG — LLDB hook attempt tooling-negative
 Bundle SHA256 `ec920f5a04e7f03a8ef274659350f1bfe087725c76e44e8e5530b32616582555`.
 Ordinary frontier reconfirmed. LLDB `-K/--source-on-crash` not entered; RIP/frame0 unresolved. No Metal causal conclusion.
 
-## D97CH — exact libobjc crash-site runtime proof and reproducibility
-Original persisted bundle `OCLP7_D97CH_SINGLE_METAL_LLDB_EXPLICIT_SIGNAL_20260906_052600.zip`:
-- bytes `246375`;
-- SHA256 `d94d604f5675b72ac6e412e8d0bf593ed18ac6ff4f2e89dedfec59fe80c2433e`.
-
-Newest rerun `OCLP7_D97CH_SINGLE_METAL_LLDB_EXPLICIT_SIGNAL_20260906_113939.zip`:
-- bytes `246350`;
-- SHA256 `ba05d9b299d52ce2f12ab817d9d88e4f1ee7da8e013fb9d9a18d05cbd314263d`;
-- JSON SHA256 `20119a85eee200a790d57c494de9eaeb6ff1990e7c81f09e07b9fa9df0096544`;
-- TXT SHA256 `a364ee7a980da9aa24e70087d5e0aa363445718d4cc1acbd8b2e6cc8ad47ac6e`.
-
-Both explicit-signal LLDB runs preserve true-single-Metal and stop at:
+## D97CH — exact libobjc crash-site proof and reproducibility
+Two independent explicit-signal LLDB runs preserve true-single-Metal and stop at:
 - RIP `0x00007ff804ad9bba`;
 - frame0 `libobjc.A.dylib\`map_images_nolock + 676`;
-- instruction `orb $0x1,(%rcx)`;
-- fault destination in RCX/RAX;
-- same backtrace through Objective-C dyld notifier registration.
-Fault destination differs only by ASLR (`0x7ff58e927008` vs `0x7ff58f8cf008`).
+- instruction `orb $0x1,(%rcx)`.
 
-Apple objc4 source correlates the sequence with `header_info::setLoaded(true)` in `addHeader()`, immediately followed by `header_info::classlist`.
-`setLoaded` writes through `getHeaderInfoRW()`. `getPreoptimizedHeaderRW(hdr)` uses shared-cache RW bookkeeping only when `hdr->info()->optimizedByDyld()` is true, then indexes `headerInfoROs` by `hdr`.
-`objc_image_info::OptimizedByDyld = 1<<3 = 0x8`.
+Apple objc4 source correlates this with `header_info::setLoaded(true)`. `getPreoptimizedHeaderRW()` uses shared-cache bookkeeping when `objc_image_info::OptimizedByDyld (0x8)` is set. This generated D97CI-v2's bounded one-bit test.
 
-The standalone Metal uses a runtime-allocated header_info, making a retained cache-origin OptimizedByDyld bit the active bounded causal hypothesis.
+## D97CI-v2 — OptimizedByDyld bit causal at D97CH frontier; later ObjC fault reached
+Returned bundle `OCLP7_D97CI_V2_OBJC_OPTIMIZEDBYDYLD_FLAG_ADAPTER_20260906_132958.zip`:
+- bytes `247079`;
+- SHA256 `1dff54d95dbff8725d11e59e62506c4bca8367fcc2d5312474e72a4bd8662eb4`;
+- TXT SHA256 `03dea8ee432944ed227ec3b42a42dbba9d20b8bb55f90178e6b81a126fdfbd34`;
+- JSON SHA256 `66a42d9253784f9835159fde5dd085c95ac0a57b7e8b60cd01ce59d56db50b70`.
+
+Exact pre-adapter carrier SHA `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2` had exactly one `__objc_imageinfo` at address `0x7FF8411BBDD0`, fileoff `0x30ADD0`, version `0`, flags `0x49`; `OptimizedByDyld (0x8)` was set.
+
+D97CI-v2 changed exactly one byte:
+- offset `0x30ADD4`;
+- `0x49 -> 0x41`;
+- XOR `0x08`;
+- adapted SHA256 `c58780541c8079cbf9c095b01a906ed64ff998787918f13cfd600005acd848b7`.
+Native `__text`, Metal4, geometry, signing and true-single-Metal remained valid.
+
+The D97CH `map_images_nolock + 676 / setLoaded` fault disappeared. New exact fault:
+- `EXC_BAD_ACCESS address=0x20`;
+- RIP `0x00007ff804aeaa05`;
+- frame0 `libobjc.A.dylib\`readClass(objc_class*, bool, bool) + 69`;
+- instruction `movq 0x18(%rax), %r15`;
+- `RAX=0x8`;
+- `RBX=RDI=0x00007ff843d60620`;
+- frame1 `map_images_nolock + 4170`.
+
+Pinned objc4 source maps this path to `cls->nonlazyMangledName() -> bits.safe_ro()->getName()`, making RAX=0x8 invalid class-ro state.
+
+Metal preferred `__DATA` VM is `0x7FF843D59000`. Fault `RBX=0x7FF843D60620` is exactly `+0x7620` inside the preferred Metal `__DATA`, while LLDB reports standalone Metal slide `0xffff8008f1250000`; therefore the corresponding runtime class should be `0x0000000134FB0620`. At least one internal ObjC class pointer remains in preferred shared-cache VM form rather than standalone-runtime-slid form.
+
 Classifications:
-- exact ObjC crash site runtime proven;
-- same RIP/frame/instruction reproducible across independent runs;
-- setLoaded source correlation established;
-- OptimizedByDyld causality still requires exact flag audit + one-bit test.
+- `D97CI_V2_D97CH_SETLOADED_FAULT_CLEARED=RUNTIME_PROVEN`;
+- `D97CI_V2_NEW_READCLASS_FAULT=RUNTIME_PROVEN`;
+- `D97CI_V2_CLASSLIST_OR_EQUIVALENT_INTERNAL_CLASS_POINTER_UNREBASED=RUNTIME_STRUCTURAL_PROVEN`;
+- `D97CI_V2_STANDALONE_CARRIER_HAS_REMAINING_SHARED_CACHE_RELOCATION_STATE=PROVEN_AT_LEAST_ONE_POINTER`.
 
-## D97CI-v2 — one-bit ObjC cache-origin adapter runnable authority
-The prior D97CI checkpoint recorded `OCLP7_D97CI_objc_optimizedbydyld_flag_adapter.sh`, bytes `37479`, SHA256 `10b0bdfb3deb5f7c3f0e7e73b766f7f14abe5e592d163fd2a80b62be03ee1360`. That exact script is not recoverable bit-identically from the active sandbox/repository and remains historical only.
+Do not repair the individual pointer ad hoc.
 
-Current runnable script:
-`OCLP7_D97CI_v2_objc_optimizedbydyld_flag_adapter.sh`
-- bytes `37177`;
-- SHA256 `a8618edcf9143d0e8c99beafa695bdb7dbef98a1773f0d77ed3f2987f4c37dc5`;
+## D97CJ — ObjC relocation-topology audit ready
+Script:
+`OCLP7_D97CJ_objc_relocation_topology_audit.sh`
+- bytes `48877`;
+- SHA256 `7921c9923afaa7ca499d8c00a146ab215d5c4a0f0e33c5d244f68ac153cc056e`;
 - shell syntax PASS;
-- embedded Python compile PASS;
-- transient cleanup audit PASS.
+- main embedded Python compile PASS;
+- LLDB-helper Python compile PASS;
+- safety/cleanup scan PASS.
 
-D97CI-v2 reproduces exact SLIDE/page carrier, then locates one `__objc_imageinfo` and requires version 0 + flag `0x8` set. Only then it clears bit `0x8` in a transient copy, requires exactly one changed byte/XOR `0x08`, preserves section geometry/`__text`/Metal4, signs and verifies the bit remains clear, then reruns true-single-Metal. If nonzero, explicit-signal LLDB localizes the next fault and automatically compares frame0 to D97CH.
+D97CJ introduces no new functional Metal repair. It retains the proven one-bit D97CI prerequisite, inventories the pointer topology of all relevant Objective-C sections, then, on the same true-single-Metal readClass fault, attempts to prove that the fault RBX is a static classlist entry left unrebased. It computes the actual standalone slide, expected runtime class, class bits/class_ro/name and fails closed on any mismatch.
 
-Automatic result semantics:
-- exit 0 => flag clear strongly supported;
-- exact D97CH frame persists => hypothesis NEGATIVE;
-- different resolved frame0 => D97CH setLoaded fault cleared, later frontier reached;
-- harness/debugger failure => INCONCLUSIVE.
+Decision gate after D97CJ:
+- finite/small standalone relocation surface -> consider constructing proper standalone Mach-O fixup metadata;
+- broad cache-optimized surface -> prefer preserving native shared-cache Metal and audit a selective 3802 runtime patch through Lilu/WhateverGreen-style userland/shared-cache process patching.
+The Lilu direction is a candidate, not yet final.
 
 ## CURRENT ACTION
-Remain unpatched VESA. Run exact `OCLP7_D97CI_v2_objc_optimizedbydyld_flag_adapter.sh` and return ZIP/output.
+Remain unpatched VESA. Run exact `OCLP7_D97CJ_objc_relocation_topology_audit.sh` and return ZIP/output.
 
 No D97BV, Root Patch, installation, local compilation, accelerated boot or reboot is authorized.
