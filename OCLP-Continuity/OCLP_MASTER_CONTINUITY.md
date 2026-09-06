@@ -7,11 +7,10 @@ Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DT_D97DL_FULL_VESA_PAIR_PASS.md`
-Current build checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DV_HELPER_FALSE_BLOCKER_D97DW_READY.md`
+Current build checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DW_SOURCE_POLICY_AND_ASSETS_PASS_DEBUG_HELPER_SDK_TOOLING_FAIL_D97DX_RESUME.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
-Current base build authority helper: `OCLP-Continuity/artifacts/OCLP7_D97DU_IMAC_NATIVE_METAL_SAFE_BUILD.sh`
-Current corrected build authority: `OCLP-Continuity/artifacts/OCLP7_D97DW_IMAC_BUILD_AUTHORITY_V3.sh`
-Current pinned bootstrap: `OCLP-Continuity/artifacts/OCLP7_D97DW_IMAC_BUILD_AUTHORITY_BOOTSTRAP.sh`
+Current resume authority: `OCLP-Continuity/artifacts/OCLP7_D97DX_IMAC_RESUME_BUILD.sh`
+Current pinned bootstrap: `OCLP-Continuity/artifacts/OCLP7_D97DX_IMAC_RESUME_BOOTSTRAP.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
@@ -68,46 +67,60 @@ Forbidden in synthesized Tahoe patch dictionary:
 - donor main `Versions/A/Metal`;
 - true-five reapplication.
 
-## Build-host corrections
-D97DU first attempt failed closed before build because it incorrectly required exact 25G82 MetallibSupportPkg on the iMac.
-D97DV removed that false requirement and pinned Python 3.13 x86_64. Returned D97DV output proved Python `3.13.15` at `/usr/local/bin/python3.13`, then failed closed because it still incorrectly required the exact official privileged-helper restore asset on the iMac.
+## D97DW returned build run — functional policy and assets PASS
+Returned iMac output proved:
+- authority/base Git identities PASS;
+- Python `3.13.15` x86_64 PASS;
+- exact b9df76 checkout PASS;
+- exact Pyquick 25G82 patchdict PASS;
+- source delta bounded to 3 functional files + x86_64 packaging spec;
+- Python syntax PASS;
+- synthesized Tahoe patch dictionary PASS;
+- whole Metal donor count 0;
+- `MetalOld.dylib` count 0;
+- main legacy Metal install count 0;
+- XPC-only legacy ingress PASS;
+- private compiler lanes PASS;
+- exact 25G82 metallib entry count 182;
+- exact Universal-Binaries SHA256 `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7` PASS;
+- generated payloads.dmg SHA256 `e7323a6c39d330163924438813746f873e0e8801a2f8776362d9538a2abdcb1b` PASS.
 
-Historical D97BJ evidence proves that official helper restoration is post-run cleanup, not Root Patch functionality: D97BJ Root Patch had already completed successfully when the DEBUG helper remained installed; reboot was blocked only until official helper restoration.
+D97DW then stopped only while compiling the DEBUG privileged helper because exact b9df76 Makefile invokes plain `clang -framework Foundation -framework Security ...` without explicit macOS SDK/sysroot and the build host no longer exposes Foundation headers through `/System/Library/Frameworks`.
 
-## D97DW — current build authority
-D97DW changes helper logistics only; D97DU Root Patch semantics remain unchanged.
+Classification:
+`D97DW_ROOTPATCH_POLICY=PASS`
+`D97DW_PATCHER_SUPPORT_ASSETS=PASS`
+`D97DW_DEBUG_HELPER_FAILURE=BUILD_TOOLING_SDK_DISCOVERY_ONLY`
 
-D97DW authority:
-- path `OCLP-Continuity/artifacts/OCLP7_D97DW_IMAC_BUILD_AUTHORITY_V3.sh`;
-- commit `738390d5a7dedec8b2d67f43baf6a9ef34c3a084`;
-- Git blob `9d8c8ddc25a1359af0192e657fddd6765015f984`;
-- syntax check `bash -n=PASS`.
+No Root Patch, EFI mutation, system root mutation, or reboot occurred.
 
-Pinned bootstrap:
-- path `OCLP-Continuity/artifacts/OCLP7_D97DW_IMAC_BUILD_AUTHORITY_BOOTSTRAP.sh`;
-- commit `9ac756f949f2843ddfd32d013d7a02550d9ba7c0`.
+## D97DX — current resume authority
+Checkpoint commit: `ab7f0b074745f776cb18c6039da55eb1041277c3`.
+Resume authority commit: `b476b755c95eaf9e6cc2bed967b9650e72fbc907`.
+Resume authority Git blob: `b9a2f673bcd382df6d4f2282ad4d6a588fde0b51`.
+Pinned bootstrap commit: `c14e230cafe6deaf0f00acacba4b19dfd4250286`.
 
-D97DW build-host policy:
-- exact Python 3.13.x x86_64 required;
-- no local 25G82 MetallibSupportPkg required on iMac;
-- no official helper required or bundled from iMac.
+D97DX does NOT reclone and does NOT reinstall requirements. It reuses:
+`~/Developer/OpenCore-Legacy-Patcher-D97DU-b9df76-Tahoe25G82`
 
-Generated target wrapper policy:
-- before any helper swap on ASUS2, require installed helper SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a` and TeamIdentifier `S74BDJXQMD`;
-- save and verify that exact helper locally on ASUS2;
-- install DEBUG helper temporarily;
-- after custom OCLP exits, explicitly restore and verify the saved official helper;
-- trap is secondary restore fallback only.
+D97DX must re-pin all already-proven identities and then:
+- resolve macOS SDK with `xcrun --sdk macosx --show-sdk-path`;
+- verify exact Foundation/Security SDK headers;
+- compile DEBUG helper x86_64-only with explicit `-isysroot`;
+- ad-hoc sign and verify helper;
+- continue x86_64 application build;
+- assemble target wrapper with target-side exact official-helper backup/restore policy;
+- bundle no official helper from the iMac.
 
 ## NEXT ACTION
-Run only the pinned D97DW bootstrap on the authorized Intel iMac build host.
+Run only the pinned D97DX resume bootstrap on the authorized Intel iMac build host.
 If it stops, return exact output and do not repair manually.
-If build completes, return:
-- `OpenCore-Patcher-Tahoe-D97DU.zip`;
-- `OCLP7_D97DU_IMAC_BUILD_REPORT.txt`;
-- `OCLP7_D97DU_b9df76_NATIVE_METAL_SAFE.patch`.
+If it completes, return:
+- `OpenCore-Patcher-Tahoe-D97DX.zip`;
+- `OCLP7_D97DX_IMAC_RESUME_REPORT.txt`;
+- `OCLP7_D97DX_b9df76_NATIVE_METAL_SAFE.patch`.
 
-After independent audit of returned build artifacts, manual Root Patch on ASUS2 may be separately authorized.
+After independent audit of returned D97DX artifacts, manual Root Patch on ASUS2 may be separately authorized.
 
 Still NOT authorized:
 - Root Patch now;
