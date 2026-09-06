@@ -95,7 +95,7 @@ D97DI is materially narrower than FeatureUnlock's search-based page patching: it
 
 ## Static audit
 - source SHA256 `932f979ae8a04112b6ee68309d3b14885a20acf7676eb7cc6e49d06976d9b86b`;
-- iMac build script SHA256 `c016f4dd21de9e7debf72fe772109e50b31c7098953eb8de3856f4b2675f1fa8`;
+- iMac build script SHA256 `bbd360dd870e6e0395693cf1fd2caf777ab2cb9c5ddcab02fad8428e8955714e`;
 - build script `bash -n` PASS;
 - D97BV site bytes exact PASS;
 - D97BV cave bytes exact PASS;
