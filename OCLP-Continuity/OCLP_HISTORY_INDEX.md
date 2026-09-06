@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CE_SLIDE_IDENTICAL_OBJC_SIGSEGV_DUPLICATE_METAL_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CF_TRUE_SINGLE_METAL_IDENTICAL_OBJC_SIGSEGV.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -52,60 +52,44 @@ Signed remapped RAW Metal target observed; `__TEXT` maps; next failure `__DATA_C
 4K page-prefix plan preserves all original section/content VM addresses while page-aligning segment mapping starts/fileoffs. Exactly 20 section offsets change; `__LINKEDIT +0x3000`; 7 total LINKEDIT metadata updates; no unknown blocker after identifying the printed `0xD48` hit as `__LINKEDIT.fileoff` itself.
 
 ## D97CD — page-aligned standalone mapping succeeds; Objective-C frontier
-Bundle `OCLP7_D97CD_PAGE_ALIGNED_TRANSFORM_COLD_LOAD_20260906_033115.zip`, SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
+Bundle SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
 Transient unsigned page-aligned Metal: bytes `5735232`, SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
+D97CD proves full page-aligned transform, section-VM preservation, LINKEDIT shift/fields, 3652 n_sect remaps, parser/preflight/signing and cold harness PASS.
+All five standalone Metal segments map successfully. Runtime then reaches target `makeSegmentsReadWrite` and exits `RC=-11` SIGSEGV.
 
-D97CD proves full page-aligned transform, section-VM preservation, LINKEDIT shift/fields, 3652 n_sect remaps, file/otool, unsigned/signed preflight, signing and cold harness all pass.
-Codesign inserts `LC_CODE_SIGNATURE` at `0x1560`, increasing load-command end to `0x1570`; old D97BV cave start is consumed by 16 bytes.
+## D97CE — `--slide` does not advance Objective-C frontier
+SLIDE Metal SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
+`--slide` changes `88012` bytes / `43909` qword chunks, heavily in Objective-C/data metadata, but page-aligned SLIDE Metal reproduces exactly the D97CD boundary: target final loaded, `makeSegmentsReadWrite`, zero dyld lines after marker, RC `-11` SIGSEGV.
+Classification: `D97CE_SLIDE_ADVANCES_BEYOND_D97CD=NEGATIVE`.
 
-Cold injection maps all five standalone Metal segments successfully. The previous sub-page mmap blocker is CLOSED.
-Runtime then reaches `mprotect ... to read-write (Metal.PAGE.adhoc)` and exits `RC=-11` SIGSEGV. Target final state is loaded; native system Metal also becomes loaded.
-Apple dyld places this transition immediately before Objective-C `map_images` registration/fixups.
+## D97CF — true single Metal still identical Objective-C SIGSEGV
+Returned bundle `OCLP7_D97CF_SINGLE_METAL_FRAMEWORK_OVERRIDE_20260906_041903.zip`:
+- bytes `118754`;
+- SHA256 `0a8d8c80521ccfefaa0419b4c5261e2b280488f9f74187954b29d1f2bd3cd7fc`;
+- TXT SHA256 `2ea845e8d0826dbfd850c9c6293565963f46a772d9c190cf542730a85e07b338`;
+- JSON SHA256 `e8718f1822ba2494574984763bb3c3df8e5a221b1a112eb34b26bf35248bfb07`.
 
-Classifications:
-- `D97CD_STANDALONE_PAGE_ALIGNED_MAPPING=RUNTIME_PROVEN`;
-- `D97CD_ALL_SEGMENTS_MAPPED=RUNTIME_PROVEN`;
-- `D97CD_OBJECTIVE_C_MAP_IMAGES_FRONTIER=REACHED`;
-- `D97CD_COLD_TARGET_FINAL_LOADED_THEN_SIGSEGV=NEGATIVE_RUNTIME`.
+Framework override is runtime-proven honored:
+- temporary page-aligned SLIDE Metal loaded;
+- native shared-cache Metal absent;
+- no native-cache Metal mapping;
+- exactly one Metal path/UUID;
+- `D97CF_TRUE_SINGLE_METAL=PASS`.
 
-## D97CE — `--slide` makes massive ObjC/data pointer changes but runtime frontier is identical
-Returned Terminal paste `Text lipit(5).txt`:
-- bytes `369222`;
-- SHA256 `f236a0d5112fc8f58a3538ea22436f9e85d37319f882370f58eb1682ecbb6f41`.
-
-RAW Metal remains SHA256 `89032654dd427ffed1c5b3722fbddabd2ed333b429c15db25ca15af13b2f5210`.
-SLIDE Metal:
-- bytes `5722944`;
-- SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
-
-RAW/SLIDE load commands and native `__text` are identical; Metal4 counts are unchanged.
-`--slide` changes `88012` bytes across `43909` 8-byte chunks, with `39479` changed chunks in `__DATA_CONST`, concentrated heavily in Objective-C metadata (`__objc_const=25320`, `__cfstring=4906`, `__objc_selrefs=4674`, class/protocol/super refs), plus `__objc_data`, GOT and other data.
-
-SLIDE-page transform:
-- bytes `5735232`;
-- SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2`.
-Structural transform, parsers, preflight, ad-hoc sign/verify and proven cold harness pass.
-
-Cold result exactly reproduces D97CD:
+Yet runtime remains identical:
 - target final loaded;
-- native system Metal final loaded;
-- target mapped;
-- `makeSegmentsReadWrite` marker seen;
+- final dyld marker `mprotect ... to read-write (Metal)`;
 - zero dyld lines after marker;
-- process `RC=-11` SIGSEGV.
+- process RC `-11` SIGSEGV.
 
-Printed:
-- `D97CE_SLIDE_COLD_LOAD_CLASSIFICATION=TARGET_FINAL_LOADED_THEN_PROCESS_FAILED`;
-- `D97CE_VS_D97CD_FRONTIER=IDENTICAL_D97CD_RW_MARKER_THEN_SIGSEGV`;
-- `D97CE_D97BV_APPLIED=NO`.
+Authoritative classifications:
+- `D97CF_FRAMEWORK_OVERRIDE_CLASSIFICATION=SINGLE_METAL_IDENTICAL_RW_MARKER_THEN_SIGSEGV`;
+- `D97CF_DUPLICATE_METAL_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
 
-Therefore full `ipsw --slide` resolution does not advance the Objective-C frontier. It is insufficient as the current repair.
+Therefore mapping, page alignment, full `--slide` cache-pointer resolution and duplicate Metal coexistence are all insufficient causes at this frontier.
 
-Late JSON packaging failed with `TypeError: list indices must be integers or slices, not str` because the collector reused variable `post` as a line-list after previously using it as the post-codesign Mach-O dictionary. This occurred after decisive runtime markers; do not repeat D97CE just for packaging.
+## CURRENT ACTION — localize exact crash instruction/stack
+Remain unpatched VESA.
+Next bounded ASUS2-only diagnostic should preserve exact D97CF true-single-Metal setup and obtain the actual SIGSEGV PC, crashing-thread backtrace and fault/register state, preferably through LLDB launch/catch-SIGSEGV if available. Do not change Metal semantics or apply D97BV merely to obtain this evidence.
 
-## CURRENT ACTION — duplicate native+standalone Metal discriminator
-Both D97CD and D97CE load two Metal images simultaneously: temporary standalone native-derived Metal and native Tahoe shared-cache Metal, with the same native UUID and Objective-C class universe.
-
-Next bounded transient test should attempt `DYLD_FRAMEWORK_PATH` override of canonical Metal with the temporary signed page-aligned SLIDE image, prove from dyld trace whether shared-cache override is honored, fail closed if not, and only if a true single-Metal process is obtained compare Objective-C progress against D97CE.
-
-D97BV remains not applied. Remain unpatched in VESA. No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized.
+No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized.
