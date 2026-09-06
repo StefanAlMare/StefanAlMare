@@ -95,7 +95,10 @@ D97DI is materially narrower than FeatureUnlock's search-based page patching: it
 
 ## Static audit
 - source SHA256 `932f979ae8a04112b6ee68309d3b14885a20acf7676eb7cc6e49d06976d9b86b`;
-- iMac build script SHA256 `bbd360dd870e6e0395693cf1fd2caf777ab2cb9c5ddcab02fad8428e8955714e`;
+- historical iMac build helper commit `9d867d14c9be80e74ec9cefb50a30597de017959`;
+- historical iMac build helper Git blob `8cc7f350f6fee51d17a6fbe1bbdfced4554a9ccf`;
+- actual iMac build helper SHA256 `faea187c1e1f4b43dabcc231b62f4110c903cf3543f2711324bcbedf7854f49c`;
+- prior documented helper SHA256 `bbd360dd870e6e0395693cf1fd2caf777ab2cb9c5ddcab02fad8428e8955714e` is retired as stale documentation only;
 - build script `bash -n` PASS;
 - D97BV site bytes exact PASS;
 - D97BV cave bytes exact PASS;
@@ -121,6 +124,7 @@ D97DI is materially narrower than FeatureUnlock's search-based page patching: it
 `D97DI_POSTIMAGE_VERIFICATION=STATIC_PROVEN`
 `D97DI_LATENT_DEFAULT=STATIC_PROVEN`
 `D97DI_SOURCE_STATIC_AUDIT=PASS`
+`D97DI_HELPER_HASH_DOCUMENTATION_CORRECTED=PASS`
 `D97DI_BUILD=UNTESTED`
 
 ## Authorization boundary
