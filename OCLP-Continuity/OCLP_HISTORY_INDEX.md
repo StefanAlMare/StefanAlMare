@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97DF_ROUTE_CALLBACK_CAVE_RUNTIME_PROVEN_SITE_ACTIVE_FAULT_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97DG_PUBLISHER_WINDOW_TOOLING_NEGATIVE_D97DH_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -87,13 +87,44 @@ Site page:
 - SiteSeenCount=0 during 300-second VESA publisher window;
 - no site preimage/validated/tainted/nx runtime evidence yet.
 
-This is `NOT_OBSERVED_WITHIN_300S_VESA`, not NEGATIVE. Deep native Metal site code need not fault during VESA.
+This is `NOT_OBSERVED_WITHIN_300S_VESA`, not NEGATIVE.
 
-## CURRENT ACTION — D97DG
-No new kext or EFI change.
-Download a read-only active page-fault collector before reboot. Perform one unchanged VESA reboot, then run the collector immediately while publisher ticks <300.
-The collector maps exact main Cryptex x86_64h shared-cache site/cave pages read-only+execute, touches bytes to force validation faults, then polls IORegistry.
+## D97DG — publisher-window tooling negative
+Second active-fault attempt returned `OCLP7_D97DG_D97DD_ACTIVE_PAGEFAULT_20260906_212953.txt`:
+- bytes `2437`;
+- SHA256 `6622a56e51b73343fe1a77b2d7fe0202115fa17033e9b5881e446fee782fc5c8`.
 
-Success: route/build remain PASS, SiteSeenCount>0, SitePreimage=PASS, site validated/tainted/nx captured, cave remains PASS.
+Boot time `21:25:09`; collector started around `21:29:53`, roughly 284 seconds later. Initial IORegistry showed:
+- D97DD 0.0.4 exact UUID loaded;
+- RouteStatus=PASS;
+- BuildGate=1;
+- callback count `251445`;
+- cave still PASS;
+- site count still 0;
+- PublisherTicks=`288`.
+
+The collector deliberately stopped before mmap because the remaining 12 seconds were insufficient for an active-fault + asynchronous publication cycle.
+
+This is the second independent demonstration that the 300-second publisher window is operationally too short for post-desktop active site faulting on ASUS2.
+
+Classifications:
+- `D97DG_ACTIVE_SITE_MMAP_TRIGGER=NOT_EXECUTED`;
+- `D97DG_SITE_RUNTIME_PREIMAGE=UNTESTED`;
+- `D97DG_PUBLISHER_300S_WINDOW=TOOLING_NEGATIVE_FOR_POST_DESKTOP_ACTIVE_FAULT`;
+- no site-negative conclusion;
+- all D97DF route/build/callback/cave proofs remain authoritative.
+
+## D97DH current action
+D97DH 0.0.5 is a tooling-only successor to D97DD. It preserves route/callback/build/site/cave logic and changes only the asynchronous publisher lifetime:
+- cutoff `300 -> 900` seconds;
+- early stop still occurs when site+cave have both been observed;
+- exposes `D97DHPublisherPolicy=extended-until-site-cave-or-900-v1` and `D97DHPublisherLimitTicks=900`;
+- no page mutation and no D97BV replacement bytes.
+
+Prepared source SHA256 `63541e7135388ee73ca3b8a408a45578e742734a79f6d313f8aef919405251f1`.
+Prepared iMac build script SHA256 `d269baf9b841216ced0d202595c228772823b49a248962e6466575d99084e71a`, `bash -n` PASS.
+Intended plugin version `0.0.5`.
+
+CURRENT ACTION: build D97DH 0.0.5 on the already-authorized iMac 9900K host and return the build ZIP for independent audit. ASUS2 EFI remains on D97DD 0.0.4 until that audit passes.
 
 Functional D97BV page writes remain separately unauthorized. No Root Patch or accelerated boot is authorized.
