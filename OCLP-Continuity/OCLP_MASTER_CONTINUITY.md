@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CF_SINGLE_METAL_OVERRIDE_SCRIPT_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CF_TRUE_SINGLE_METAL_IDENTICAL_OBJC_SIGSEGV.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -69,13 +69,7 @@ Runtime then reaches `mprotect ... to read-write (Metal.PAGE.adhoc)` and exits `
 Apple dyld places this transition immediately before Objective-C `map_images` registration/fixups.
 
 ## D97CE — full --slide rebase does NOT advance ObjC frontier
-Returned Terminal paste `Text lipit(5).txt`:
-- bytes `369222`;
-- SHA256 `f236a0d5112fc8f58a3538ea22436f9e85d37319f882370f58eb1682ecbb6f41`.
-
-SLIDE extraction:
-- bytes `5722944`;
-- SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
+SLIDE Metal SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
 `--slide` changes `88012` bytes / `43909` 8-byte chunks, heavily in Objective-C/data metadata, while load commands, native `__text` and Metal4 remain identical.
 
 Transient SLIDE-page transform:
@@ -97,23 +91,40 @@ Authoritative classifications:
 
 Late JSON packaging `TypeError` was tooling-only after decisive runtime markers; do not rerun D97CE merely for packaging.
 
-## CURRENT ACTION — D97CF single-Metal framework override discriminator
+## D97CF — true single Metal proven; duplicate-Metal cause CLOSED NEGATIVE
+Returned bundle:
+- bytes `118754`;
+- SHA256 `0a8d8c80521ccfefaa0419b4c5261e2b280488f9f74187954b29d1f2bd3cd7fc`.
+Packaged TXT SHA256 `2ea845e8d0826dbfd850c9c6293565963f46a772d9c190cf542730a85e07b338`; JSON SHA256 `e8718f1822ba2494574984763bb3c3df8e5a221b1a112eb34b26bf35248bfb07`.
+
+D97CF framework override was honored:
+- temp framework Metal loaded;
+- native shared-cache Metal not loaded;
+- no native-cache Metal mapping;
+- exactly one loaded Metal path/UUID;
+- `D97CF_TRUE_SINGLE_METAL=PASS`.
+
+Despite true single-Metal state, runtime remains identical:
+- RC `-11` SIGSEGV;
+- target all segments mapped and final loaded;
+- final dyld marker `mprotect ... to read-write (Metal)`;
+- zero dyld lines after marker.
+
+Authoritative classifications:
+- `D97CF_FRAMEWORK_OVERRIDE_CLASSIFICATION=SINGLE_METAL_IDENTICAL_RW_MARKER_THEN_SIGSEGV`;
+- `D97CF_DUPLICATE_METAL_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
+
+Therefore dyld metadata validation, page mapping, raw cache slide-info, and duplicate Metal coexistence are all insufficient explanations for the current crash. The active frontier is inside the Objective-C image registration/fixup phase reached immediately after `makeSegmentsReadWrite`.
+
+## CURRENT ACTION — exact crash PC/backtrace localization
 Remain unpatched in Tahoe VESA.
 
-Both D97CD and D97CE load temporary standalone Metal and native Tahoe shared-cache Metal simultaneously, with the same native UUID and Objective-C class universe. Duplicate registration/coalescing is the active next hypothesis, not yet proven.
-
-Run only `OCLP7_D97CF_single_metal_framework_override.sh`:
-- bytes `24782`;
-- SHA256 `83d473e2ec5f872e85268b305bb138059ea2fad87f4f1e1360858b90aa54c62e`;
-- shell syntax PASS;
-- embedded Python compile PASS.
-
-D97CF reconstructs the exact proven page-aligned SLIDE image under temporary `Frameworks/Metal.framework/Versions/A/Metal`, signs that exact path, and launches the proven cold host with canonical Metal insertion plus `DYLD_FRAMEWORK_PATH` override.
-
-Interpretation is fail-closed:
-- if shared-cache override is not honored, report it and make no ObjC causal inference;
-- `TRUE_SINGLE_METAL=PASS` only if temp Metal is loaded and native cache Metal is absent from loaded path/trace evidence;
-- if true single-Metal still ends at identical `makeSegmentsReadWrite -> SIGSEGV`, duplicate Metal is insufficient as current cause;
-- advancement beyond the marker supports duplicate/native+standalone interaction as causal at this frontier.
+Next bounded diagnostic must preserve the exact D97CF true-single-Metal framework override and localize the actual SIGSEGV rather than make another speculative Metal mutation.
+Preferred evidence:
+- exact fault PC;
+- crashing-thread stack/backtrace;
+- fault address / register state when safely available;
+- image+slide mapping sufficient to symbolize frames;
+- fail closed if debugger launch is unavailable.
 
 D97BV remains absent. No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
