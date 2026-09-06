@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CO_LOCAL_COMPILE_AUDIT_PASS_DEPLOY_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CQ_EFI_DEPLOY_PASS_VESA_RUNTIME_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -21,7 +21,8 @@ Before any technical modification:
 - Tahoe `26.6.2 / 25G82`;
 - Haswell HD4400/4600 `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
-- current state unpatched VESA, `-igfxvesa` active, no active Root Patch.
+- current running state unpatched VESA, no active Root Patch;
+- active OpenCore EFI now contains audited D97CO `OCLPMetalCompat.kext` with `-igfxvesa -ocmcdiag` prepared for the next VESA diagnostic boot.
 
 End goal: stable hardware acceleration and usable GUI.
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
@@ -194,14 +195,52 @@ Classifications:
 
 D97CO is compile-proven and static/binary-audited; runtime timing remains unproven.
 
+## D97CQ — identity-pinned EFI deployment PASS
+Returned report `OCLP7_D97CQ_EFI_DEPLOY_20260906_173443.txt`.
+
+Pre-deploy active config:
+- path `/Volumes/EFI/EFI/OC/config.plist`;
+- expected/actual SHA256 `2f9330d17dfc702c2201b86612fc701fabf1e3a13c38d2f90e1507c2eef93a7f` PASS;
+- plist validation PASS;
+- EFI Lilu `1.7.3`;
+- boot args contained `-igfxvesa` and did not yet contain `-ocmcdiag`.
+
+Audited package gates:
+- ZIP expected/actual SHA256 `e062ef672c003d2d6ff11508d1f4cd5e43b94c45ec7de1c9919358cbd0a9fad7` PASS;
+- executable expected/actual SHA256 `6b3534cb524a3e222fbfc70f87d4ad614c1b80091b9bcb105e831b00d00b219b` PASS;
+- bundle ID `com.oclpmetalcompat.OCLPMetalCompat`;
+- Lilu dependency `1.7.3`;
+- audited package gate PASS.
+
+EFI modification:
+- prior Kernel/Add count `36`;
+- new entry index `36`;
+- `BundlePath=OCLPMetalCompat.kext`;
+- `Enabled=true`;
+- boot args preserve `-igfxvesa` and append `-ocmcdiag`;
+- config backup `/Volumes/EFI/EFI/OC/config.plist.D97CQ-20260906_173443.bak` SHA256 `2f9330d17dfc702c2201b86612fc701fabf1e3a13c38d2f90e1507c2eef93a7f`.
+
+Post-deploy audit:
+- active plist validation PASS;
+- final executable SHA256 exact `6b3534cb524a3e222fbfc70f87d4ad614c1b80091b9bcb105e831b00d00b219b`;
+- final config SHA256 `52233a7815ef0accee2a44d06b44c75e9fcfd4aada831c4b343e7579e8fdc13b`;
+- final entry index `36`, BundlePath `OCLPMetalCompat.kext`, Enabled `true`;
+- final boot args contain both `-igfxvesa` and `-ocmcdiag`.
+
+Classification:
+`D97CQ_D97CO_IDENTITY_PINNED_EFI_DEPLOY=PASS`.
+
+No Root Patch, reboot, system mutation, dyld cache mutation, or functional D97BV mutation occurred during deployment.
+
 ## CURRENT ACTION
-Remain unpatched Tahoe VESA. No Root Patch and no accelerated boot.
+One **manual VESA diagnostic reboot** is now authorized using the already-deployed D97CO observe-only plugin.
 
-Next bounded experiment:
-1. deploy only the identity-pinned audited `OCLPMetalCompat.kext` into the active OpenCore EFI after Lilu;
-2. retain `-igfxvesa` and add explicit `-ocmcdiag`;
-3. perform one VESA diagnostic boot;
-4. collect `D97CO_ROUTE_CS_VALIDATE_PAGE`, `D97CO_SITE_SEEN`, and `D97CO_CAVE_SEEN` markers plus Apple's `validated/tainted/nx` results;
-5. only if runtime timing/preimage proof passes may a separately authorized functional D97BV page-write build be designed.
+For this boot:
+1. make no further EFI changes;
+2. do not Root Patch;
+3. retain `-igfxvesa` and `-ocmcdiag` exactly as deployed;
+4. reboot normally through the same active OpenCore EFI;
+5. after the VESA desktop returns, collect runtime markers `D97CO_ROUTE_CS_VALIDATE_PAGE`, `D97CO_SITE_SEEN`, and `D97CO_CAVE_SEEN`, including Apple's `validated/tainted/nx` results.
 
-No Root Patch, accelerated boot or functional shared-cache mutation is authorized.
+This is not an accelerated boot and contains no functional D97BV byte write.
+Only if the runtime timing/preimage proof passes may a separately authorized functional D97BV page-write build be designed.
