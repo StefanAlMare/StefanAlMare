@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CBV3_DYLD_DELAYED_FALSE_POSITIVE_D97CBV4_NEXT.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CBV5_COLD_HARNESS_PASS_TEXT_MAP_DATA_CONST_MMAP_ALIGNMENT_FAIL_D97CC_NEXT.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -65,38 +65,66 @@ Target remap passed:
 - 3652 symtab `n_sect` remaps;
 - pre-sign diff `40655`, zero outside audited domains;
 - `file`, `otool -l`, `otool -L` PASS.
-Unsigned/signed preflight PASS; Python child actual `dlopen` `RC=-11` SIGSEGV, with standalone loadability still unresolved because Python already has native Metal loaded.
+Unsigned/signed preflight PASS; Python child actual `dlopen` `RC=-11` SIGSEGV, but that process already has native Metal loaded.
 
-## D97CB-v2 — macOS copy2/chflags tooling defect
-D97CB-v2 reconfirmed remap/preflight/SIGSEGV, then `shutil.copy2('/usr/bin/true', HOST)` failed in macOS Python 3.13 `copystat()->chflags` with PermissionError. Tooling-only.
+## D97CB-v2/v3/v4 — harness corrections
+D97CB-v2: macOS Python `copy2()->copystat()->chflags` failed on copied `/usr/bin/true`; tooling-only, fixed with `copyfile`.
+D97CB-v3: copied/re-signed `/usr/bin/true` baseline exited 0. Raw substring matching falsely treated delayed closure entries as loaded. Dyld source proved `move loaded to delayed`/reverse transitions.
+D97CB-v4: final-state parser implementation was correct but embedded Python omitted `import re`; tooling-only stop.
 
-## D97CB-v3 — cold host valid; delayed-state substring false positive
-Returned Terminal paste:
-- bytes `118929`;
-- SHA256 `c8f3d4317fa1e4ad605fffd249f6abb18301df358d36be39f3f5502ae6529e2a`.
+## D97CB-v5 — cold harness proven, true mapping reaches __DATA_CONST mmap alignment failure
+Returned bundle:
+`OCLP7_D97CB_V5_ATOMIC_REMAP_COLD_HOST_20260906_030103.zip`
+- bytes `134957`;
+- SHA256 `2d1a47c49bb6724b4ad5c65e878fa2872ee72880842ed1301aa1b94bf52bf17e`;
+- TXT SHA256 `ffd4cad23e1c224803096ac649dfae548dacb849eeab5a4612f9b7b66abf60ab`;
+- JSON SHA256 `13c4969165ff9f28d70f20de2ce928630830fa94c0a2e91245f9fccf0c094e73`.
 
-D97CB-v3 fixed host copying with `copyfile()` and successfully removed/replaced the signature; ad-hoc sign and strict verify PASS; baseline `/usr/bin/true` exited 0.
+Cold baseline:
+- `/usr/bin/true` copied, Apple signature removed, ad-hoc sign/verify PASS;
+- exit 0;
+- final native Metal state delayed;
+- final libbz2 state delayed.
 
-The baseline dyld trace initially prints both `/usr/lib/libbz2.1.0.dylib` and native Metal, but later logs:
-- `move loaded to delayed: libbz2.1.0.dylib`;
-- `move loaded to delayed: Metal`;
-with no later reverse promotion.
+Positive control:
+- `DYLD_INSERT_LIBRARIES=/usr/lib/libbz2.1.0.dylib`;
+- exit 0;
+- path observed;
+- final libbz2 state loaded.
+Thus the cold-load harness is proven valid.
 
-Apple dyld `DyldRuntimeState.cpp` shows `move loaded to delayed` actually removes the loader from active `loaded` and pushes it into `delayLoaded`; `move delayed to loaded` is the reverse transition. Therefore v3's raw-substring check misclassified delayed closure members as active preload.
+Signed remapped Metal injection:
+- target temp path explicitly observed;
+- dyld logs `Mapping ...Metal.SGRO.ORDER.adhoc`;
+- `__TEXT` maps successfully;
+- next mapping fails at `__DATA_CONST`:
+  `mmap(addr=0x13BE35CD0, size=0x00070000) failed with errno=22`.
+
+The original preserved `__DATA_CONST` segment VM start is `0x7FF84119DCD0`; its low page residue `0xCD0` is carried into the requested standalone mapping address. Previous SG_READ_ONLY and segment-order validation failures are gone.
 
 Classifications:
-- `D97CBV3_COLD_HOST_COPY_AND_ADHOC_SIGN=PASS`;
-- `D97CBV3_BASELINE_EXIT=PASS`;
-- `D97CBV3_BASELINE_METAL_FINAL_STATE=DELAYED`;
-- `D97CBV3_BASELINE_BZ2_FINAL_STATE=DELAYED`;
-- `D97CBV3_FAIL_COLD_HOST_PRELOADS_METAL=TOOLING_FALSE_POSITIVE`;
-- standalone loadability remains not yet proven.
+- `D97CBV5_COLD_LOAD_HARNESS=PROVEN_VALID`;
+- `D97CBV5_REMAPPED_METAL_TARGET_PATH_OBSERVED=PROVEN`;
+- `D97CBV5_REMAPPED_METAL___TEXT_MAPPED=PROVEN`;
+- `D97CBV5_DATA_CONST_MMAP_ADDR_NON_PAGE_ALIGNED_FAILURE=PROVEN`;
+- `D97CBV5_PREVIOUS_SGRO_AND_SEGMENT_ORDER_GATES=PASSED`;
+- `D97CBV5_CURRENT_REMAPPED_STANDALONE_LOADABLE=NEGATIVE`.
 
-No positive-control injection, remapped-Metal cold injection, or D97BV application occurred after the false-positive stop.
+D97BV was correctly skipped because the original standalone baseline is not yet loadable.
 
-## CURRENT ACTION — D97CB-v4
-Run only `OCLP7_D97CB_v4_dyld_final_state_cold_host.sh`, bytes `34857`, SHA256 `fa0e6fc5825a260be3c638bdb177c63378abd3adf44b08d0683a99d1e383a0be`.
+## CURRENT ACTION — D97CC read-only page-prefix feasibility audit
+Remain unpatched in VESA.
 
-V4 reproduces the identical remap and changes only trace classification. It computes final loader state after applying all `loaded -> delayed` / `delayed -> loaded` transitions. Baseline requires Metal/libbz2 not final-loaded. Control injection must end with libbz2 final-loaded and exit 0. Only then may signed remapped Metal be cold-injected. Explicit target path, target final state, system Metal final state and exit code are separate outputs. Only target final-loaded + exit 0 may authorize D97BV re-audit.
+D97CC must audit a mapping-only repair before any new binary mutation:
+- page-floor each non-aligned segment mapping start;
+- add synthetic leading file prefix so original section/content bytes still land at original section VM addresses relative to slide;
+- plan page-aligned standalone fileoffs;
+- prove expanded VM ranges remain ordered/non-overlapping;
+- enumerate every changed section fileoff;
+- derive the resulting `__LINKEDIT` fileoff shift and every load-command field into LINKEDIT requiring remap;
+- prove code/section VM addresses, symtab n_value, D97BV site/cave positions and section ordinals can remain unchanged;
+- identify any unhandled file-offset-bearing/order-sensitive structure.
 
-Remain unpatched in VESA. No Root Patch or accelerated reboot authorized.
+Only after this surface is fully bounded may a later D97CD construct a temporary page-prefix-aligned Metal and repeat the already-proven cold-load harness.
+
+No Root Patch, installation, or accelerated reboot authorized.
