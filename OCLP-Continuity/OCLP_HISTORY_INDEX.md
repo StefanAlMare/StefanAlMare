@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CI_OBJC_OPT_FLAG_ADAPTER_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CI_V2_OBJC_OPT_FLAG_ADAPTER_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -26,7 +26,7 @@ D97BL: legacy MTLCompilerService/private compilers may be bounded; legacy main M
 
 ## D97BV — selective 3802-preserve adapter
 Static-semantic proven: preserve exact 3802, otherwise execute original Tahoe floor.
-Pre-sign cave was `0x1560..0x1630`. D97CD later proved ad-hoc codesign consumes `0x1560..0x1570`; standalone D97BV requires a new cave audit.
+Pre-sign cave was `0x1560..0x1630`. D97CD later proved codesign consumes `0x1560..0x1570`; standalone D97BV requires a new cave audit.
 
 ## D97BW-v2 / D97BX — sparse closure
 Sparse reconstruction preserves native code/Metal4 but is not standalone-loadable. Signing and D97BV were not the blocker.
@@ -70,46 +70,56 @@ Classification: duplicate Metal is insufficient as current cause.
 Bundle SHA256 `ec920f5a04e7f03a8ef274659350f1bfe087725c76e44e8e5530b32616582555`.
 Ordinary frontier reconfirmed. LLDB `-K/--source-on-crash` not entered; RIP/frame0 unresolved. No Metal causal conclusion.
 
-## D97CH — exact libobjc crash-site runtime proof
-Bundle `OCLP7_D97CH_SINGLE_METAL_LLDB_EXPLICIT_SIGNAL_20260906_052600.zip`:
+## D97CH — exact libobjc crash-site runtime proof and reproducibility
+Original persisted bundle `OCLP7_D97CH_SINGLE_METAL_LLDB_EXPLICIT_SIGNAL_20260906_052600.zip`:
 - bytes `246375`;
 - SHA256 `d94d604f5675b72ac6e412e8d0bf593ed18ac6ff4f2e89dedfec59fe80c2433e`.
-TXT SHA256 `001679e65ef84fa4106a695d4707b735b2c6d89f15a8eabe4db2e48fa18d45c4`; JSON SHA256 `33c50f5a39b5aaf540102ab9285b26aef24996a914f7d4465bb55868ef9d9a71`.
 
-Explicit-signal LLDB succeeds while preserving true-single-Metal:
-- `EXC_BAD_ACCESS (code=1, address=0x7ff58e927008)`;
+Newest rerun `OCLP7_D97CH_SINGLE_METAL_LLDB_EXPLICIT_SIGNAL_20260906_113939.zip`:
+- bytes `246350`;
+- SHA256 `ba05d9b299d52ce2f12ab817d9d88e4f1ee7da8e013fb9d9a18d05cbd314263d`;
+- JSON SHA256 `20119a85eee200a790d57c494de9eaeb6ff1990e7c81f09e07b9fa9df0096544`;
+- TXT SHA256 `a364ee7a980da9aa24e70087d5e0aa363445718d4cc1acbd8b2e6cc8ad47ac6e`.
+
+Both explicit-signal LLDB runs preserve true-single-Metal and stop at:
 - RIP `0x00007ff804ad9bba`;
 - frame0 `libobjc.A.dylib\`map_images_nolock + 676`;
 - instruction `orb $0x1,(%rcx)`;
-- `RCX=RAX=0x7ff58e927008`.
-Backtrace: `map_images_nolock -> map_images -> dyld ObjC notifier -> setObjCNotifiers -> _dyld_objc_register_callbacks -> _objc_init`.
+- fault destination in RCX/RAX;
+- same backtrace through Objective-C dyld notifier registration.
+Fault destination differs only by ASLR (`0x7ff58e927008` vs `0x7ff58f8cf008`).
 
-Apple objc4 source correlates this exact instruction with `header_info::setLoaded(true)` in `addHeader()`, immediately before `header_info::classlist`.
-`setLoaded` writes through `getHeaderInfoRW()`. `getPreoptimizedHeaderRW(hdr)` takes shared-cache RW bookkeeping only when `hdr->info()->optimizedByDyld()` is true, then indexes `headerInfoROs` by `hdr`.
+Apple objc4 source correlates the sequence with `header_info::setLoaded(true)` in `addHeader()`, immediately followed by `header_info::classlist`.
+`setLoaded` writes through `getHeaderInfoRW()`. `getPreoptimizedHeaderRW(hdr)` uses shared-cache RW bookkeeping only when `hdr->info()->optimizedByDyld()` is true, then indexes `headerInfoROs` by `hdr`.
 `objc_image_info::OptimizedByDyld = 1<<3 = 0x8`.
 
-The standalone Metal uses a runtime-allocated header_info, making a retained cache-only OptimizedByDyld bit the active bounded causal hypothesis.
+The standalone Metal uses a runtime-allocated header_info, making a retained cache-origin OptimizedByDyld bit the active bounded causal hypothesis.
 Classifications:
 - exact ObjC crash site runtime proven;
+- same RIP/frame/instruction reproducible across independent runs;
 - setLoaded source correlation established;
 - OptimizedByDyld causality still requires exact flag audit + one-bit test.
 
-## D97CI — one-bit ObjC cache-origin adapter ready
-Script `OCLP7_D97CI_objc_optimizedbydyld_flag_adapter.sh`:
-- bytes `37479`;
-- SHA256 `10b0bdfb3deb5f7c3f0e7e73b766f7f14abe5e592d163fd2a80b62be03ee1360`;
-- zsh syntax PASS;
-- embedded Python compile PASS.
+## D97CI-v2 — one-bit ObjC cache-origin adapter runnable authority
+The prior D97CI checkpoint recorded `OCLP7_D97CI_objc_optimizedbydyld_flag_adapter.sh`, bytes `37479`, SHA256 `10b0bdfb3deb5f7c3f0e7e73b766f7f14abe5e592d163fd2a80b62be03ee1360`. That exact script is not recoverable bit-identically from the active sandbox/repository and remains historical only.
 
-D97CI reproduces exact SLIDE/page carrier, then locates one `__objc_imageinfo` and requires version 0 + flag `0x8` set. Only then it clears bit `0x8` in a transient copy, requires exactly one changed byte/XOR `0x08`, preserves `__text`/Metal4, signs and verifies the bit remains clear, then reruns true-single-Metal. If nonzero, explicit-signal LLDB localizes the next fault and automatically compares frame0 to D97CH.
+Current runnable script:
+`OCLP7_D97CI_v2_objc_optimizedbydyld_flag_adapter.sh`
+- bytes `37177`;
+- SHA256 `a8618edcf9143d0e8c99beafa695bdb7dbef98a1773f0d77ed3f2987f4c37dc5`;
+- shell syntax PASS;
+- embedded Python compile PASS;
+- transient cleanup audit PASS.
+
+D97CI-v2 reproduces exact SLIDE/page carrier, then locates one `__objc_imageinfo` and requires version 0 + flag `0x8` set. Only then it clears bit `0x8` in a transient copy, requires exactly one changed byte/XOR `0x08`, preserves section geometry/`__text`/Metal4, signs and verifies the bit remains clear, then reruns true-single-Metal. If nonzero, explicit-signal LLDB localizes the next fault and automatically compares frame0 to D97CH.
 
 Automatic result semantics:
 - exit 0 => flag clear strongly supported;
+- exact D97CH frame persists => hypothesis NEGATIVE;
 - different resolved frame0 => D97CH setLoaded fault cleared, later frontier reached;
-- exact `map_images_nolock + 676` persists => hypothesis NEGATIVE;
-- harness/single-Metal failure => INCONCLUSIVE.
+- harness/debugger failure => INCONCLUSIVE.
 
 ## CURRENT ACTION
-Remain unpatched VESA. Run exact D97CI and return ZIP/output.
+Remain unpatched VESA. Run exact `OCLP7_D97CI_v2_objc_optimizedbydyld_flag_adapter.sh` and return ZIP/output.
 
 No D97BV, Root Patch, installation, local compilation, accelerated boot or reboot is authorized.
