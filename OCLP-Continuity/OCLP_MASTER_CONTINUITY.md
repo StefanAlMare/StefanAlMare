@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CG_LLDB_HOOK_NEGATIVE_D97CH_EXPLICIT_SIGNAL_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CI_OBJC_OPT_FLAG_ADAPTER_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -46,15 +46,14 @@ Exact target Metallib package remains `MetallibSupportPkg-26.6.2-25G82`, SHA256 
 ## Native producer / D97BV closure
 Native Tahoe Metal cache base `0x7FF80F47D000`; native `__TEXT` SHA256 `bf405828f42ba59e68273190ac19b70aa0c3d1d4b34de6dc49de206dd5b04605`; native MTLCompilerService SHA256 `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`.
 Tahoe Builder A llvmVersion `[arg1+0x1C]`; Builder B `[arg1+0x38]`. Native 3802 and 32023 lanes exist; no 31001.
-D97BT proved default-environment accessor-wide 3802 suppression to 32023/32024.
+D97BT proved default-environment 3802 suppression to 32023/32024.
+D97BV selective adapter remains static-semantic proven, but D97CD proved codesign consumes `0x1560..0x1570` of the former cave. D97BV remains unauthorized pending a fresh signed-cave audit.
 
-D97BV selective adapter remains static-semantic proven, but D97CD proved codesign inserts `LC_CODE_SIGNATURE` at `0x1560..0x1570`, consuming the first 16 bytes of its old pre-sign cave `0x1560..0x1630`. Remaining `0x1570..0x1630` requires a fresh safety audit. D97BV remains unauthorized.
-
-## Standalone native-Metal reconstruction closure through D97CC
-D97BW-v2/BX: sparse mirror is analysis-only.
+## Standalone native-Metal reconstruction closure
+D97BW-v2/BX: sparse mirror analysis-only.
 D97BY: real `ipsw v3.1.713` extraction preserves native `__text`/Metal4; first load rejection missing `SG_READ_ONLY`.
-D97BZ: SG_READ_ONLY fixed; next rejection segment VM order.
-D97CA: coherent order-remap surface fully enumerated: 0 dyld segment-index rewrites, 0 relocation ordinal rewrites, 5 section fileoffs, 3652 symtab `n_sect`, no chained/split/unknown blockers.
+D97BZ: `SG_READ_ONLY` fixed; next rejection segment VM order.
+D97CA: order-remap surface fully enumerated: 0 dyld segment-index rewrites, 0 relocation ordinal rewrites, 5 section fileoffs, 3652 symtab `n_sect`, no chained/split/unknown blockers.
 D97CB: atomic order/SG_READ_ONLY/n_sect remap structural PASS.
 D97CB-v5: proven cold harness; remapped RAW Metal maps `__TEXT`, then fails sub-page `__DATA_CONST mmap(...CD0) errno=22`.
 D97CC: exact 4K page-prefix/LINKEDIT plan statically closed; 20 section fileoffs, `__LINKEDIT +0x3000`, 7 total LINKEDIT metadata updates, section/content VM addresses preserved.
@@ -62,72 +61,80 @@ D97CC: exact 4K page-prefix/LINKEDIT plan statically closed; 20 section fileoffs
 ## D97CD — page-aligned mapping FULL PASS; Objective-C frontier
 Bundle SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
 Transient unsigned page-aligned Metal: bytes `5735232`, SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
-All five standalone Metal segments map successfully. Runtime then reaches `mprotect ... to read-write (Metal.PAGE.adhoc)` and exits `RC=-11` SIGSEGV.
+All five standalone Metal segments map successfully. Runtime reaches `mprotect ... to read-write (Metal.PAGE.adhoc)` then exits `RC=-11` SIGSEGV.
 
-## D97CE — full --slide rebase does NOT advance ObjC frontier
+## D97CE — full --slide does NOT advance frontier
 SLIDE Metal SHA256 `df0fae6844a72500492db7c57b0a22ad5a45a0ab40861ddb8ea1e1e5bdf79e4c`.
 `--slide` changes `88012` bytes / `43909` 8-byte chunks, heavily in Objective-C/data metadata, while load commands, native `__text` and Metal4 remain identical.
-Page-aligned SLIDE transform SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2` reproduces exactly the D97CD boundary: target loaded, `makeSegmentsReadWrite`, zero dyld lines after marker, RC `-11`.
+Page-aligned SLIDE transform SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2` reproduces D97CD exactly: target loaded, RW marker, zero dyld lines after marker, RC `-11`.
 Classifications:
 - `D97CE_SLIDE_ADVANCES_BEYOND_D97CD=NEGATIVE`;
 - `D97CE_RAW_CACHE_SLIDE_INFO_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
 
-## D97CF — true single Metal proven; duplicate-Metal cause CLOSED NEGATIVE
-Returned bundle SHA256 `0a8d8c80521ccfefaa0419b4c5261e2b280488f9f74187954b29d1f2bd3cd7fc`.
-Packaged TXT SHA256 `2ea845e8d0826dbfd850c9c6293565963f46a772d9c190cf542730a85e07b338`; JSON SHA256 `e8718f1822ba2494574984763bb3c3df8e5a221b1a112eb34b26bf35248bfb07`.
+## D97CF — true single Metal; duplicate-Metal cause CLOSED NEGATIVE
+Bundle SHA256 `0a8d8c80521ccfefaa0419b4c5261e2b280488f9f74187954b29d1f2bd3cd7fc`.
+Framework override honored: temp Metal loaded, native shared-cache Metal absent, no native-cache Metal mapping, one Metal path/UUID, `D97CF_TRUE_SINGLE_METAL=PASS`.
+Runtime remains RW marker -> zero post-marker dyld lines -> `RC=-11`.
+Classification: `D97CF_DUPLICATE_METAL_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
 
-D97CF framework override was honored:
-- temp framework Metal loaded;
-- native shared-cache Metal not loaded;
-- no native-cache Metal mapping;
-- exactly one loaded Metal path/UUID;
-- `D97CF_TRUE_SINGLE_METAL=PASS`.
+## D97CG — LLDB crash-hook tooling negative
+Bundle SHA256 `ec920f5a04e7f03a8ef274659350f1bfe087725c76e44e8e5530b32616582555`.
+Ordinary D97CF frontier reconfirmed. LLDB `lldb-2100.0.17.203` preserves true-single-Metal and reaches RW marker, but `-K/--source-on-crash` is never entered. RIP/frame0 unresolved. This is debugger-harness only; do not rerun D97CG.
 
-Runtime remains identical:
-- RC `-11` SIGSEGV;
-- target all segments mapped and final loaded;
-- final dyld marker `mprotect ... to read-write (Metal)`;
-- zero dyld lines after marker.
+## D97CH — exact libobjc crash localized
+Bundle `OCLP7_D97CH_SINGLE_METAL_LLDB_EXPLICIT_SIGNAL_20260906_052600.zip`:
+- bytes `246375`;
+- SHA256 `d94d604f5675b72ac6e412e8d0bf593ed18ac6ff4f2e89dedfec59fe80c2433e`.
+TXT SHA256 `001679e65ef84fa4106a695d4707b735b2c6d89f15a8eabe4db2e48fa18d45c4`; JSON SHA256 `33c50f5a39b5aaf540102ab9285b26aef24996a914f7d4465bb55868ef9d9a71`.
+
+D97CH explicit signal handling succeeds:
+- `D97CH_LLDB_TRUE_SINGLE_METAL=PASS`;
+- inferior stopped on `EXC_BAD_ACCESS`;
+- fault address `0x7ff58e927008`;
+- RIP `0x00007ff804ad9bba`;
+- frame0 `libobjc.A.dylib\`map_images_nolock + 676`;
+- fault instruction `orb $0x1,(%rcx)`;
+- `RCX=RAX=0x7ff58e927008`.
+
+Backtrace is `map_images_nolock -> map_images -> dyld ObjC notifier -> setObjCNotifiers -> _dyld_objc_register_callbacks -> _objc_init`.
+This proves the active failure is in libobjc Objective-C image registration.
+
+Apple objc4 source correlates the faulting write with `header_info::setLoaded(true)` in `addHeader()`: that call is immediately followed by `header_info::classlist`, matching D97CH machine code.
+`header_info::setLoaded()` writes through `getHeaderInfoRW()`.
+`getPreoptimizedHeaderRW(hdr)` is taken only when `hdr->info()->optimizedByDyld()` is true; it then assumes `hdr` belongs to shared-cache `headerInfoROs`, computes `headerInfoROs->index(hdr)`, and returns a shared-cache `header_info_rw` entry.
+`objc_image_info::OptimizedByDyld = 1<<3 = 0x8`.
+
+D97CH's standalone Metal has a runtime-allocated `header_info`; retaining the shared-cache `OptimizedByDyld` flag is therefore the current exact bounded causal hypothesis for the invalid setLoaded pointer. Exact flag presence still requires on-host proof before mutation.
 
 Authoritative classifications:
-- `D97CF_FRAMEWORK_OVERRIDE_CLASSIFICATION=SINGLE_METAL_IDENTICAL_RW_MARKER_THEN_SIGSEGV`;
-- `D97CF_DUPLICATE_METAL_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
+- `D97CH_TRUE_SINGLE_METAL_BAD_ACCESS_PC_BACKTRACE_CAPTURED=RUNTIME_PROVEN`;
+- `D97CH_CRASH_SITE_LIBOBJC_MAP_IMAGES_NOLOCK_SETLOADED_WRITE=RUNTIME_SOURCE_CORRELATED`;
+- `D97CH_OBJC_OPTIMIZED_BY_DYLD_FLAG_CAUSALITY=HYPOTHESIS_REQUIRES_EXACT_FLAG_AUDIT_AND_BOUNDED_TEST`.
 
-Thus dyld metadata validation, page mapping, cache-slide resolution and duplicate Metal coexistence are all insufficient explanations for the current crash. The active frontier is inside Objective-C image registration/fixup processing reached immediately after `makeSegmentsReadWrite`.
-
-## D97CG — LLDB crash-hook attempt preserves frontier but does not capture PC
-Returned bundle `OCLP7_D97CG_SINGLE_METAL_FRAMEWORK_OVERRIDE_20260906_051636.zip`:
-- bytes `229595`;
-- SHA256 `ec920f5a04e7f03a8ef274659350f1bfe087725c76e44e8e5530b32616582555`.
-Packaged TXT: bytes `672235`, SHA256 `0614cad86446e8a5afc21e15ce1f200d97ac5206dc2e2e154028fc042e097525`.
-Packaged JSON: bytes `721501`, SHA256 `8735fd2245b2653acc88acb6df3151dd6f0ebc5f124b3547077820e28240bd72`.
-
-Ordinary D97CF frontier reconfirmed exactly: true single Metal, RC `-11`, final target marker `mprotect ... to read-write (Metal)`, zero post-marker dyld lines.
-Installed LLDB `/Library/Developer/CommandLineTools/usr/bin/lldb`, version `lldb-2100.0.17.203`, also preserves true-single-Metal and reaches the same RW marker.
-However `-K/--source-on-crash` is not entered:
-- `D97CG_LLDB_CRASH_HOOK_BEGIN=False`;
-- `D97CG_LLDB_BAD_ACCESS_CAPTURED=False`;
-- `D97CG_LLDB_RIP=UNRESOLVED`;
-- `D97CG_LLDB_FRAME0=UNRESOLVED`;
-- `D97CG_LLDB_CLASSIFICATION=DEBUGGER_DID_NOT_ENTER_ON_CRASH_HOOK`.
-
-Classification: debugger harness limitation only; no new Metal causal conclusion. Do not rerun D97CG unchanged.
-
-## D97CH — explicit-signal LLDB localizer ready
-Run only `OCLP7_D97CH_single_metal_lldb_explicit_signal_localizer.sh`:
-- bytes `32797`;
-- SHA256 `a04f36e64fda0c070da083d1bbf15d4c84a478bfb1daa355f07f841032a62a61`;
-- shell syntax PASS;
+## D97CI — ObjC OptimizedByDyld flag adapter ready
+Run only `OCLP7_D97CI_objc_optimizedbydyld_flag_adapter.sh`:
+- bytes `37479`;
+- SHA256 `10b0bdfb3deb5f7c3f0e7e73b766f7f14abe5e592d163fd2a80b62be03ee1360`;
+- zsh syntax PASS;
 - embedded Python compile PASS.
 
-D97CH preserves the exact D97CF/D97CG page-aligned SLIDE carrier and true-single-Metal framework override. It changes only debugger control:
-- forces LLDB `SIGSEGV` and `SIGBUS` handling to stop+notify+do-not-pass before launch;
-- executes crash-state capture commands directly after synchronous `run`, rather than relying on `-K`;
-- captures process status, all-thread backtrace, x86_64 registers, PC lookup, PC region, disassembly and image slides;
-- fails closed if LLDB does not stop the inferior or if true-single-Metal is not preserved.
+D97CI reproduces the exact proven pre-adapter SLIDE-page transform SHA `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2`, then:
+1. locates exactly one `__objc_imageinfo`;
+2. prints version/flags and requires version 0 + `OptimizedByDyld (0x8)` set;
+3. creates a transient copy clearing only bit `0x8`;
+4. requires exactly one changed byte with XOR `0x08`, unchanged `__text` and Metal4;
+5. signs and verifies the bit remains clear;
+6. reruns proven cold host + framework override and requires true single Metal for causality;
+7. if nonzero, runs explicit-signal LLDB and compares the new frame0 with D97CH.
+
+Automatic causality:
+- exit 0 => flag-clear strongly supported;
+- different resolved frame0 => D97CH setLoaded fault cleared, later frontier reached;
+- exact `map_images_nolock + 676` persists => hypothesis NEGATIVE;
+- harness/single-Metal failure => INCONCLUSIVE.
 
 ## CURRENT ACTION
 Remain unpatched in Tahoe VESA.
-Run only the exact D97CH script above and return its ZIP/output.
+Run only exact D97CI and return its ZIP/output.
 
-D97BV remains absent. No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
+D97BV remains absent. No Root Patch, installation, local compilation, accelerated boot or reboot authorized. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
