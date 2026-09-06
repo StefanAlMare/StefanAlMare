@@ -6,18 +6,18 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EB_WINDOWSERVER_SIGSEGV_COREDISPLAY_HASWELL_FRAMEBUFFER_FRONTIER.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EC_VESA_TOPOLOGY_LIMIT_AND_0A260006_THREE_PORT_BASELINE.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch is installed;
-- root-patched VESA validation D97DZ PASS;
-- first accelerated boot failed in WindowServer/CoreDisplay framebuffer initialization and user recovered into established VESA mode;
+- D97DZ root-patched VESA validation PASS;
+- first accelerated boot failed through repeated WindowServer SIGSEGV during CoreDisplay display initialization;
 - current running session remains VESA recovery;
 - active EFI compatibility kext remains D97DL `OCLPMetalCompat.kext` 0.0.7, UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
-- current VESA recovery policy must remain unchanged until the framebuffer topology audit closes.
+- current VESA recovery policy remains the safe fallback.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -76,77 +76,67 @@ D97DZ checkpoint commit: `d99fe62b65e8633611368241c8dabb2cfb273492`.
 
 ## D97EB — accelerated failure classified
 Evidence ZIP:
-- `OCLP7_D97EB_ACCEL_FAIL_20260907_023429.zip`
-- bytes `1633378`
-- SHA256 `c5e141f4e5e8a9de60b09ebde4229814a0846065582b0796cd3a8bf9bd467374`
+- `OCLP7_D97EB_ACCEL_FAIL_20260907_023429.zip`;
+- bytes `1633378`;
+- SHA256 `c5e141f4e5e8a9de60b09ebde4229814a0846065582b0796cd3a8bf9bd467374`;
 - CRC PASS.
 
-Chronology correction:
-- prior VESA session initiated a normal software shutdown at `02:23:21.748201` via `shutdown <- sessionlogoutd`;
-- accelerated boot begins around `02:23:58`;
-- `Previous shutdown cause: 5` at `02:24:00.432575` belongs to the prior voluntary shutdown and is NOT accelerated-failure evidence.
-
-Accelerated WindowServer PID 177:
-- spawned `02:24:16.4165`, running/INIT `02:24:18.6208`;
-- CoreDisplay starts display initialization around `02:24:56`;
-- reports offline main-display conditions;
-- creates FB1 of 3 and obtains internal 1366x768 mode;
-- FB2 and FB3 fail `IOFBGetDisplayModeInformation()` and capability queries report no devices;
-- reports `GPU: FB: 3 of 3 opened`;
-- kernel legacy Haswell framebuffer/IOAccelerator path remains active;
-- four `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` messages appear at `02:24:58.777–.778`;
-- CoreDisplay then reports another offline display;
-- WindowServer PID 177 becomes a corpse and exits by SIGSEGV at `02:24:58.799390`;
-- launchd immediately respawns WindowServer PID 348, which begins the same failure sequence before user poweroff.
+Accelerated WindowServer behavior:
+- FB1 obtains valid internal 1366x768 mode;
+- FB2/FB3 fail mode-info queries and report capabilities with no devices;
+- `GPU: FB: 3 of 3 opened`;
+- four `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` messages;
+- CoreDisplay reports `Setting offline display 0x00000000 main in AddCGXDisplayDeviceToDeviceList`;
+- WindowServer PID 177 exits by SIGSEGV at `02:24:58.799390`;
+- launchd respawns WindowServer PID 348 and the same sequence repeats, with second SIGSEGV at `02:25:00.730044`.
 
 Critical negatives:
 - no kernel panic;
 - no `_MTL4*` unresolved-superclass evidence;
 - no MTLCompilerService failure before first WindowServer crash;
-- no useful compiler-path runtime evidence before WindowServer death.
-
-Therefore D97BK's legacy-main-Metal ABI failure is closed and was NOT repeated.
-
-Current frontier:
-`Tahoe WindowServer/CoreDisplay <-> legacy Haswell framebuffer/IOAccelerator display semantics`
-
-Classifications:
-- `D97EB_KERNEL_PANIC=NO`;
-- `D97EB_WINDOWSERVER_REACHED=YES`;
-- `D97EB_WINDOWSERVER_FIRST_CRASH=SIGSEGV`;
-- `D97EB_WINDOWSERVER_SIGSEGV_TIME=2026-09-07 02:24:58.799390+0300`;
-- `D97EB_COREDISPLAY_OFFLINE_FB_ERRORS=PROVEN`;
-- `D97EB_IOFB_MODE_INFO_FAILURE_FB2_FB3=PROVEN`;
-- `D97EB_IOACCEL_SURFACE_BAD_BITS=PROVEN`;
-- `D97EB_MTL4_UNRESOLVED=ABSENT`;
-- `D97EB_MTLCOMPILERSERVICE_PRECRASH=NOT_REACHED_OR_NO_EVIDENCE`;
-- `D97EB_NEW_FRONTIER=TAHOE_COREDISPLAY_LEGACY_HASWELL_FRAMEBUFFER_IOACCEL_COMPATIBILITY`.
+- D97BK legacy-main-Metal ABI failure was NOT repeated.
 
 D97EB checkpoint commit: `a6e4b75d5e658ab83d710b9d0a847459ba7cc1c7`.
 
-## Upstream orientation
-Official Dortania Tahoe tracking identifies Metal 3802 (Ivy Bridge/Haswell/Kepler) as an active Tahoe graphics-support workstream with initial promising results. No public Metal3802-specific Tahoe CoreDisplay shim was identified. Non-Metal CoreDisplay downgrade logic exists but must not be transplanted into the native-Metal path without an ABI audit.
+## D97EC — VESA topology limit and 0x0A260006 baseline
+Returned `OCLP7_D97EC_FRAMEBUFFER_TOPOLOGY.txt`, SHA256 `aa25e053f10bd6190685f8edd54760b986e1320616f0aaa93002f60b8aec70d6`.
 
-## CURRENT ACTION — READ-ONLY FRAMEBUFFER TOPOLOGY AUDIT
-Remain in VESA recovery.
-Do NOT repeat accelerated boot.
-Do NOT alter Root Patch or EFI yet.
+VESA proves:
+- IGPU device-id 0x0412;
+- injected semantic properties include framebuffer-patch-enable=1, con2 enable/type HDMI, framebuffer-cursormem;
+- AAPL,ig-platform-id appears `ffffffff` under `-igfxvesa`;
+- only IONDRVFramebuffer/.Display_boot is attached;
+- no live AppleIntelFramebufferAzul nodes are visible in VESA;
+- one internal 1366x768 display is online.
 
-Collect current ASUS2 topology only:
-- effective `AAPL,ig-platform-id` and device-id;
-- IGPU registry properties;
-- AppleIntelFramebuffer@0/@1/@2 nodes;
-- online/offline/attached-display relationship;
-- connector type / pipe / port-count / memory properties where exposed;
-- system display state.
+Project EFI baseline matching the injected properties uses:
+- AAPL,ig-platform-id = `0600260a` = 0x0A260006;
+- device-id = `12040000` = 0x0412;
+- con2 override to HDMI;
+- framebuffer-cursormem / max-pixel-clock / igfxfw / rps-control patches.
 
-Decision after topology audit:
-A. if FB2/FB3 are incorrectly exposed/misdeclared, prefer a bounded framebuffer topology correction;
-B. if topology is already correct and dead pipes are expected, investigate a narrowly-scoped CoreDisplay/IOAccelerator compatibility shim.
+WhateverGreen's documented Azul table defines 0x0A260006 as mobile with PipeCount=3, PortCount=3, FBMemoryCount=3 and connectors LVDS + DP + DP. Therefore D97EB's `3 of 3 opened` count matches the platform baseline and is not simple accidental connector overexposure.
 
-Still forbidden until topology audit closes:
-- another accelerated boot;
+Refined frontier:
+`Tahoe WindowServer/CoreDisplay handling of inactive/offline legacy Haswell framebuffer/display semantics`.
+
+D97EC checkpoint commit: `30017797506a8adcca97e6c77708b10a47f0a72e`.
+
+## CURRENT ACTION — PIN ACTIVE EFI IGPU DEVICEPROPERTIES, THEN BOUNDED COUNT-VECTOR TEST
+Remain in VESA recovery until the active EFI DeviceProperties are re-read byte-for-byte.
+Do NOT Root Patch again.
+Do NOT repeat the unchanged accelerated boot.
+
+After active EFI pinning, the next high-value diagnostic candidate is one logical framebuffer-count mutation while preserving platform 0x0A260006 and connector bytes:
+- framebuffer-pipecount = 1;
+- framebuffer-portcount = 1;
+- framebuffer-memorycount = 1.
+
+Purpose: preserve internal LVDS connector 0 but prevent Tahoe CoreDisplay from enumerating the two inactive external framebuffer slots. If WindowServer progresses further, the offline-FB hypothesis gains causal support. If the same crash persists, move to a narrow CoreDisplay/IOAccelerator compatibility frontier.
+
+Still forbidden until the active EFI pin is checked:
 - EFI mutation;
+- accelerated reboot;
 - another Root Patch;
 - global 3802 forcing;
 - legacy main Metal shadow;
