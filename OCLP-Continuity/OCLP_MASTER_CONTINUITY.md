@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97DF_ROUTE_CALLBACK_CAVE_RUNTIME_PROVEN_SITE_ACTIVE_FAULT_NEXT.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97DG_PUBLISHER_WINDOW_TOOLING_NEGATIVE_D97DH_READY.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -35,12 +35,13 @@ Before any technical modification:
 - D97DD UUID `7651279E-31FA-385C-AD40-D9FB5DFC9644`;
 - previous D97CY backup: `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext.D97CY-20260906_204307.bak`.
 
-End goal: stable hardware acceleration and usable GUI.
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
 Local compilation remains explicit-authorization-only; user authorized the iMac 9900K build host for this OCLPMetalCompat lineage.
 
-## Durable architecture
+## End goal / architecture
+End goal: stable hardware acceleration and usable GUI.
+
 Pinned Golden OCLP commit `b9df76ebdf3e768b37c1cc980e8444aa837c623e`, tree `7c3411fde7d40604164c8877a5ab5594448083ac`, OCLP `2.5.0`.
 
 Target architecture:
@@ -79,73 +80,68 @@ D97CO 0.0.1 established the first observe-only plugin. D97CR proved runtime load
 
 D97CX showed early `sysctlbyname(kern.osversion)` was too early. D97CY 0.0.3 replaced it with direct `osversion[]`, but D97DC proved `onPatcherLoadForce` still precedes `osversion[]` initialization.
 
-D97DD 0.0.4 therefore installs `_cs_validate_page` route before any exact-build read, calls Apple original first, increments an atomic callback counter, then enforces `osversion == 25G82` per callback before target-page observation. Compile/source/binary audit PASS; no page mutation or D97BV replacement bytes.
+D97DD 0.0.4 installs `_cs_validate_page` before any exact-build read, calls Apple original first, increments callback count, then enforces `osversion == 25G82` per callback before target-page observation. Compile/source/binary audit PASS; no page mutation or D97BV replacement bytes. D97DE deployed it while preserving config byte-identically.
 
-D97DE deployed D97DD 0.0.4 into EFI while preserving config byte-identically.
+D97DF runtime PROVEN:
+- D97DD 0.0.4 loaded, UUID `7651279E-31FA-385C-AD40-D9FB5DFC9644`;
+- `D97CTRouteStatus=PASS`;
+- callback count `256069`;
+- `D97CTBuildGate=1`;
+- `D97DDObservedBuild=25G82`;
+- BootArg/Kernel/Cpu gates PASS.
 
-## D97DF — decisive current runtime result
-Returned `OCLP7_D97DF_D97DD_VESA_RUNTIME_20260906_205320.zip`:
-- ZIP bytes `1783`;
-- ZIP SHA256 `7cfe5586dd5671da1ae42a3c0575c79ebc24bc9bd96bc73033adfdb30485681a`;
-- inner TXT bytes `4249`;
-- inner TXT SHA256 `7797af1775f70649a49a5ef319b3d1a729a993aac11be2f7728e0562579fa229`.
-
-Runtime identity:
-- D97DD 0.0.4 UUID `7651279E-31FA-385C-AD40-D9FB5DFC9644` loaded;
-- Lilu 1.7.3 and WhateverGreen 1.7.1 loaded;
-- `VersionInfo=DBG-004-2026-09-06`;
-- `D97DDObservedBuild=25G82`.
-
-Decisive persistent state:
-- BootArgGate=1;
-- KernelGate=1;
-- CpuGate=1;
-- RouteStatus=PASS;
-- D97DDCallbackSeenCount=256069;
-- BuildGate=1;
-- PublisherTicks=300.
-
-Therefore classifications:
-- `D97DF_D97DD_KEXT_RUNTIME_LOAD=PROVEN`;
+Authoritative classifications:
 - `D97DF_CS_VALIDATE_PAGE_ROUTE=RUNTIME_PROVEN`;
 - `D97DF_CS_VALIDATE_PAGE_CALLBACK_EXECUTION=RUNTIME_PROVEN`;
 - `D97DF_CALLBACK_EXACT_BUILD_GATE_25G82=RUNTIME_PROVEN`.
 
-Natural VESA cave observation:
+Natural VESA cave runtime PROVEN:
 - CaveSeenCount=1;
 - CaveWindow18=PASS;
 - CaveFull208=PASS;
-- CaveValidated=15 (`0xF`, XNU `VMP_CS_ALL_TRUE`);
+- CaveValidated=15/0xF = `VMP_CS_ALL_TRUE`;
 - CaveTainted=0;
 - CaveNX=0.
 
-Thus cave target delivery + preimage window + Apple full code-sign validation are runtime PROVEN.
+Site remained `NOT_OBSERVED_WITHIN_300S_VESA`, not NEGATIVE.
 
-Site remains:
-- SiteSeenCount=0;
-- no runtime site preimage/validated/tainted/nx state yet.
+## D97DG — current tooling result
+Second active-fault attempt returned `OCLP7_D97DG_D97DD_ACTIVE_PAGEFAULT_20260906_212953.txt`:
+- bytes `2437`;
+- SHA256 `6622a56e51b73343fe1a77b2d7fe0202115fa17033e9b5881e446fee782fc5c8`.
 
-Do **not** classify site as NEGATIVE: a VESA boot need not fault the deep native Metal site page. Classification is `NOT_OBSERVED_WITHIN_300S_VESA`.
+Boot time `21:25:09`; collector started about `21:29:53`, roughly 284 seconds after boot. At collector start `D97CTPublisherTicks=288`, callback count `251445`, route/build remained PASS and cave remained PASS. The safety gate stopped before mmap because insufficient publication time remained.
 
-## CURRENT ACTION — D97DG active read-only site-page fault
-No new kext build or EFI mutation is needed.
+This is the second demonstration that the D97DD 300-second publisher window is operationally too short for post-desktop active site faulting on ASUS2.
 
-Prepare a read-only ASUS2 userspace collector to be downloaded before reboot. After one manually authorized unchanged VESA reboot, run it immediately while D97DD publisher is below 300 ticks.
+Classifications:
+- `D97DG_ACTIVE_SITE_MMAP_TRIGGER=NOT_EXECUTED`;
+- `D97DG_SITE_RUNTIME_PREIMAGE=UNTESTED`;
+- `D97DG_PUBLISHER_300S_WINDOW=TOOLING_NEGATIVE_FOR_POST_DESKTOP_ACTIVE_FAULT`;
+- no site-negative conclusion;
+- D97DF route/build/callback/cave runtime proofs remain authoritative.
 
-D97DG must:
-1. verify D97DD 0.0.4 is loaded and publisher window is still active;
-2. open exact main Cryptex `dyld_shared_cache_x86_64h` read-only;
-3. map exact site page `0xF5E1000` and cave page `0xF47E000` `MAP_PRIVATE` with `PROT_READ|PROT_EXEC`;
-4. read target bytes only to force page faults, with no write access;
-5. poll IORegistry for route/build/site/cave updates;
-6. collect final evidence ZIP.
+## D97DH design / CURRENT ACTION
+D97DH is a minimal tooling-only successor to D97DD. It changes only the asynchronous IORegistry publication lifetime:
+- preserve route installation unchanged;
+- preserve Apple-original-first callback unchanged;
+- preserve callback exact-build gate unchanged;
+- preserve site/cave matching and all read-only invariants unchanged;
+- preserve zero page writes and zero functional D97BV replacement bytes;
+- publisher cutoff `300 -> 900` seconds;
+- publisher still stops early as soon as both site and cave are seen;
+- publish `D97DHPublisherPolicy=extended-until-site-cave-or-900-v1` and `D97DHPublisherLimitTicks=900`.
 
-Success criterion:
-- route/build remain PASS;
-- callback count > 0;
-- SiteSeenCount > 0;
-- exact SitePreimage=PASS;
-- site validated/tainted/nx captured;
-- cave remains PASS.
+Prepared D97DH source:
+- `OCLP7_D97DH_kern_start.cpp`;
+- SHA256 `63541e7135388ee73ca3b8a408a45578e742734a79f6d313f8aef919405251f1`.
 
-Functional D97BV page write remains separately unauthorized. No Root Patch or accelerated boot is authorized.
+Prepared iMac build script:
+- `OCLP7_D97DH_IMAC_BUILD.sh`;
+- SHA256 `d269baf9b841216ced0d202595c228772823b49a248962e6466575d99084e71a`;
+- `bash -n` PASS;
+- intended plugin version `0.0.5`.
+
+CURRENT ACTION: build D97DH 0.0.5 on the already-authorized iMac 9900K host and return the build ZIP for independent audit. Do not alter ASUS2 EFI until audit passes.
+
+No Root Patch, accelerated boot or functional shared-cache mutation is authorized.
