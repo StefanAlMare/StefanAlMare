@@ -6,19 +6,18 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EA_ACCELERATED_BOOT_FAIL_CHRONOLOGY_FIXED.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EB_WINDOWSERVER_SIGSEGV_COREDISPLAY_HASWELL_FRAMEBUFFER_FRONTIER.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
-Current accelerated-failure collector: `OCLP-Continuity/artifacts/OCLP7_D97EB_ACCELERATED_BOOT_EVIDENCE_COLLECTOR.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch is installed;
-- first root-patched VESA validation completed PASS;
-- first accelerated boot attempt failed at GUI transition and user recovered into established VESA mode;
-- current running session is VESA recovery boot at `2026-09-07 02:25 EEST`;
+- root-patched VESA validation D97DZ PASS;
+- first accelerated boot failed in WindowServer/CoreDisplay framebuffer initialization and user recovered into established VESA mode;
+- current running session remains VESA recovery;
 - active EFI compatibility kext remains D97DL `OCLPMetalCompat.kext` 0.0.7, UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
-- current recovery policy must remain unchanged while evidence is collected.
+- current VESA recovery policy must remain unchanged until the framebuffer topology audit closes.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -75,46 +74,82 @@ Root-patched VESA boot proved:
 
 D97DZ checkpoint commit: `d99fe62b65e8633611368241c8dabb2cfb273492`.
 
-## D97EA — first accelerated boot failed; chronology fixed
-User observation:
-- accelerated/root-patched boot progressed through verbose to the black-screen GUI transition point where the progress bar would normally appear;
-- verbose text then reappeared;
-- user powered off with the physical button and recovered via VESA.
+## D97EB — accelerated failure classified
+Evidence ZIP:
+- `OCLP7_D97EB_ACCEL_FAIL_20260907_023429.zip`
+- bytes `1633378`
+- SHA256 `c5e141f4e5e8a9de60b09ebde4229814a0846065582b0796cd3a8bf9bd467374`
+- CRC PASS.
 
-Exact `last reboot` chronology:
-- `02:23` accelerated diagnostic boot;
-- same-minute `shutdown time 02:23` lifecycle event;
-- `02:25` current VESA recovery boot.
+Chronology correction:
+- prior VESA session initiated a normal software shutdown at `02:23:21.748201` via `shutdown <- sessionlogoutd`;
+- accelerated boot begins around `02:23:58`;
+- `Previous shutdown cause: 5` at `02:24:00.432575` belongs to the prior voluntary shutdown and is NOT accelerated-failure evidence.
 
-Authoritative accelerated evidence window:
-`2026-09-07 02:22:30` through `2026-09-07 02:24:59 EEST`.
+Accelerated WindowServer PID 177:
+- spawned `02:24:16.4165`, running/INIT `02:24:18.6208`;
+- CoreDisplay starts display initialization around `02:24:56`;
+- reports offline main-display conditions;
+- creates FB1 of 3 and obtains internal 1366x768 mode;
+- FB2 and FB3 fail `IOFBGetDisplayModeInformation()` and capability queries report no devices;
+- reports `GPU: FB: 3 of 3 opened`;
+- kernel legacy Haswell framebuffer/IOAccelerator path remains active;
+- four `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` messages appear at `02:24:58.777–.778`;
+- CoreDisplay then reports another offline display;
+- WindowServer PID 177 becomes a corpse and exits by SIGSEGV at `02:24:58.799390`;
+- launchd immediately respawns WindowServer PID 348, which begins the same failure sequence before user poweroff.
 
-The current VESA session is excluded from failure analysis. Same-minute shutdown evidence makes an orderly userspace shutdown/restart plausible; kernel panic/compiler failure/userspace failure remain unclassified until logs are audited.
+Critical negatives:
+- no kernel panic;
+- no `_MTL4*` unresolved-superclass evidence;
+- no MTLCompilerService failure before first WindowServer crash;
+- no useful compiler-path runtime evidence before WindowServer death.
 
-D97EA chronology checkpoint commit: `7a27384f3855d780b02bbf3519934b98f8c92e88`.
+Therefore D97BK's legacy-main-Metal ABI failure is closed and was NOT repeated.
 
-## CURRENT ACTION — D97EB READ-ONLY FAILURE EVIDENCE COLLECTION
+Current frontier:
+`Tahoe WindowServer/CoreDisplay <-> legacy Haswell framebuffer/IOAccelerator display semantics`
+
+Classifications:
+- `D97EB_KERNEL_PANIC=NO`;
+- `D97EB_WINDOWSERVER_REACHED=YES`;
+- `D97EB_WINDOWSERVER_FIRST_CRASH=SIGSEGV`;
+- `D97EB_WINDOWSERVER_SIGSEGV_TIME=2026-09-07 02:24:58.799390+0300`;
+- `D97EB_COREDISPLAY_OFFLINE_FB_ERRORS=PROVEN`;
+- `D97EB_IOFB_MODE_INFO_FAILURE_FB2_FB3=PROVEN`;
+- `D97EB_IOACCEL_SURFACE_BAD_BITS=PROVEN`;
+- `D97EB_MTL4_UNRESOLVED=ABSENT`;
+- `D97EB_MTLCOMPILERSERVICE_PRECRASH=NOT_REACHED_OR_NO_EVIDENCE`;
+- `D97EB_NEW_FRONTIER=TAHOE_COREDISPLAY_LEGACY_HASWELL_FRAMEBUFFER_IOACCEL_COMPATIBILITY`.
+
+D97EB checkpoint commit: `a6e4b75d5e658ab83d710b9d0a847459ba7cc1c7`.
+
+## Upstream orientation
+Official Dortania Tahoe tracking identifies Metal 3802 (Ivy Bridge/Haswell/Kepler) as an active Tahoe graphics-support workstream with initial promising results. No public Metal3802-specific Tahoe CoreDisplay shim was identified. Non-Metal CoreDisplay downgrade logic exists but must not be transplanted into the native-Metal path without an ABI audit.
+
+## CURRENT ACTION — READ-ONLY FRAMEBUFFER TOPOLOGY AUDIT
+Remain in VESA recovery.
 Do NOT repeat accelerated boot.
-Do NOT alter current VESA recovery policy.
-Do NOT Root Patch again.
+Do NOT alter Root Patch or EFI yet.
 
-Run only the exact D97EB collector on ASUS2 while in current VESA recovery. It collects:
-- exact accelerated-window unified lifecycle logs;
-- exact accelerated-window Metal/GPU/kernel evidence;
-- pmset chronology;
-- relevant WindowServer/MTLCompilerService/GPU/panic/watchdog crash reports;
-- current D97 runtime and Root Patch metadata for orientation;
-- packaged ZIP + manifest.
+Collect current ASUS2 topology only:
+- effective `AAPL,ig-platform-id` and device-id;
+- IGPU registry properties;
+- AppleIntelFramebuffer@0/@1/@2 nodes;
+- online/offline/attached-display relationship;
+- connector type / pipe / port-count / memory properties where exposed;
+- system display state.
 
-Collector source Git blob: `8ffebb8cc42f31b3704b43bd6de440a4f3b84c57`.
-Collector GitHub commit: `128db71e1f992e0b037ae22b27a2f602a11d882c`.
+Decision after topology audit:
+A. if FB2/FB3 are incorrectly exposed/misdeclared, prefer a bounded framebuffer topology correction;
+B. if topology is already correct and dead pipes are expected, investigate a narrowly-scoped CoreDisplay/IOAccelerator compatibility shim.
 
-Return the D97EB ZIP for analysis. No EFI/root/snapshot mutations and no reboot are part of collection.
-
-Still forbidden until D97EB analysis:
+Still forbidden until topology audit closes:
 - another accelerated boot;
-- any EFI change;
+- EFI mutation;
+- another Root Patch;
 - global 3802 forcing;
 - legacy main Metal shadow;
 - true-five reapplication;
+- CoreDisplay donor/downgrade without independent ABI audit;
 - Golden mutation.
