@@ -4,7 +4,7 @@ Updated: 2026-09-06 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Permanent consolidated database: `OCLP_PERMANENT_PROJECT_DATABASE.md`.
 Permanent rules: `OCLP_PERMANENT_WORKING_RULES.md` + `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CG_SINGLE_METAL_LLDB_LOCALIZER_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97CG_LLDB_HOOK_NEGATIVE_D97CH_EXPLICIT_SIGNAL_READY.md`.
 Strategic retrospective: `OCLP_PROJECT_RETROSPECTIVE_20260827.md`.
 
 ## Project end goal
@@ -67,19 +67,29 @@ Framework override is runtime-proven honored: temporary page-aligned SLIDE Metal
 Yet runtime remains identical: target final loaded, final dyld marker `mprotect ... to read-write (Metal)`, zero lines after marker, RC `-11` SIGSEGV.
 Authoritative classification: `D97CF_DUPLICATE_METAL_IS_SUFFICIENT_CAUSE_OF_CURRENT_OBJC_SIGSEGV=NEGATIVE`.
 
-## D97CG — exact SIGSEGV PC/backtrace localizer ready
-Script `OCLP7_D97CG_single_metal_lldb_sigsegv_localizer.sh`:
-- bytes `31544`;
-- SHA256 `5bc0cc317be9336bd1af30190eb4e91a20224b2b48c99173cfda11ca2bd0203c`;
+## D97CG — LLDB hook attempt is tooling-negative, runtime frontier unchanged
+Returned bundle `OCLP7_D97CG_SINGLE_METAL_FRAMEWORK_OVERRIDE_20260906_051636.zip`:
+- bytes `229595`;
+- SHA256 `ec920f5a04e7f03a8ef274659350f1bfe087725c76e44e8e5530b32616582555`.
+Packaged TXT SHA256 `0614cad86446e8a5afc21e15ce1f200d97ac5206dc2e2e154028fc042e097525`; JSON SHA256 `8735fd2245b2653acc88acb6df3151dd6f0ebc5f124b3547077820e28240bd72`.
+
+Ordinary D97CF frontier reconfirmed exactly: true single Metal, final `makeSegmentsReadWrite`, zero post-marker dyld lines, RC `-11`.
+Installed LLDB `/Library/Developer/CommandLineTools/usr/bin/lldb` (`lldb-2100.0.17.203`) also preserves true-single-Metal and reaches the same RW marker.
+But the `-K/--source-on-crash` file is never entered: crash hook false, bad-access capture false, RIP/frame0 unresolved.
+Classification: `D97CG_LLDB_CLASSIFICATION=DEBUGGER_DID_NOT_ENTER_ON_CRASH_HOOK`.
+This is debugger-harness evidence only. Do not rerun D97CG unchanged.
+
+## D97CH — explicit-signal LLDB crash localizer ready
+Script `OCLP7_D97CH_single_metal_lldb_explicit_signal_localizer.sh`:
+- bytes `32797`;
+- SHA256 `a04f36e64fda0c070da083d1bbf15d4c84a478bfb1daa355f07f841032a62a61`;
 - shell syntax PASS;
 - embedded Python compile PASS.
 
-D97CG preserves and hard-verifies exact D97CF SLIDE-page transform SHA256 `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2`.
-It first reconfirms ordinary D97CF true-single-Metal `RW marker -> RC -11`. Only then it uses an already-installed LLDB, if available, in official batch mode with `-K/--source-on-crash` to capture process status, all-thread backtrace, registers, PC symbol lookup, memory region, disassembly and image slides.
-No LLDB/tool installation is attempted. Debugger-run causality is accepted only if true-single-Metal is preserved and the crash hook captures the same Objective-C frontier.
+D97CH preserves the exact D97CF/D97CG SLIDE-page transform and framework override. It changes only debugger control: LLDB is told to stop+notify and not pass `SIGSEGV`/`SIGBUS`, then crash-state commands execute directly after synchronous `run` instead of relying on `-K`. It captures process state, all-thread backtrace, registers, PC lookup, memory region, disassembly and image slides, and fails closed if the inferior does not stop or true-single-Metal is not preserved.
 
 ## CURRENT ACTION
 Remain unpatched VESA.
-Run only exact D97CG and return its ZIP/output.
+Run only exact D97CH and return its ZIP/output.
 
 No D97BV, Root Patch, installation, source/local compilation, accelerated boot or reboot is authorized.
