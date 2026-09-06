@@ -3,7 +3,7 @@
 Updated: 2026-09-06 EEST
 
 Permanent consolidated database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
-Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CC_SURFACE_CLOSED_D97CD_SCRIPT_READY.md`
+Current authoritative checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260906_D97CD_PAGE_ALIGNED_FULL_MAPPING_OBJC_MAP_IMAGES_SIGSEGV_D97CE_SLIDE_NEXT.md`
 Strategic retrospective authority: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md` + `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`.
@@ -50,52 +50,71 @@ D97BT proved default-environment accessor-wide 3802 suppression to 32023/32024.
 
 D97BV selective adapter remains static-semantic proven:
 - site `0x7FF80F5E1719..0x7FF80F5E1726`;
-- original cave `0x7FF80F47E560..0x7FF80F47E630`;
+- pre-sign cave `0x7FF80F47E560..0x7FF80F47E630`;
 - exact 3802 preserve semantics with no non-3802 drift.
-D97BV is not currently authorized for standalone delivery because codesign may consume the old cave header padding.
+D97CD proved codesign inserts `LC_CODE_SIGNATURE` at file/VM-relative `0x1560..0x1570`, consuming the first 16 bytes of the old cave. Remaining zero padding `0x1570..0x1630` is 192 bytes but requires a fresh safety audit before any D97BV relocation. D97BV remains unauthorized.
 
-## Standalone native-Metal reconstruction frontier
-D97BW-v2/BX: sparse mirror is analysis-only; signing/preflight pass but shared-cache geometry is not standalone-loadable.
-D97BY: real `ipsw v3.1.713` extraction preserves native `__text`/Metal4; first real-load rejection was missing `SG_READ_ONLY`.
-D97BZ: exact metadata fix passes SG_READ_ONLY gate; next rejection was `__DATA_DIRTY vm address out of order`.
-D97CA: coherent segment-order remap surface fully enumerated; 0 dyld segment-index rewrites, 0 relocation ordinal rewrites, 5 section fileoffs, 3652 symtab `n_sect`, no chained/split/unknown blockers.
-D97CB: atomic order/SG_READ_ONLY/symtab remap structural PASS; parsers and preflight pass.
+## Standalone native-Metal reconstruction closure to D97CC
+D97BW-v2/BX: sparse mirror is analysis-only.
+D97BY: real `ipsw v3.1.713` extraction preserves native `__text`/Metal4; first load rejection missing `SG_READ_ONLY`.
+D97BZ: SG_READ_ONLY fixed; next rejection segment VM order.
+D97CA: coherent order-remap surface fully enumerated: 0 dyld segment-index rewrites, 0 relocation ordinal rewrites, 5 section fileoffs, 3652 symtab `n_sect`, no chained/split/unknown blockers.
+D97CB: atomic order/SG_READ_ONLY/n_sect remap structural PASS.
+D97CB-v5: cold harness proven; remapped RAW Metal maps `__TEXT`, then fails `__DATA_CONST mmap(...CD0) errno=22`.
+D97CC: exact 4K page-prefix/LINKEDIT plan statically closed; 20 section fileoffs, `__LINKEDIT +0x3000`, 7 total LINKEDIT metadata updates, section/content VM addresses preserved.
 
-## D97CB-v5 — cold harness proven, true mmap frontier
-Bundle `OCLP7_D97CB_V5_ATOMIC_REMAP_COLD_HOST_20260906_030103.zip`, SHA256 `2d1a47c49bb6724b4ad5c65e878fa2872ee72880842ed1301aa1b94bf52bf17e`.
-Validated cold host:
-- `/usr/bin/true` baseline exit 0, Metal/libbz2 final delayed;
-- `DYLD_INSERT_LIBRARIES=/usr/lib/libbz2.1.0.dylib` exit 0, final libbz2 loaded.
+## D97CD — page-aligned mapping FULL PASS; Objective-C frontier
+Bundle `OCLP7_D97CD_PAGE_ALIGNED_TRANSFORM_COLD_LOAD_20260906_033115.zip`:
+- bytes `122681`;
+- SHA256 `f1d208d223b516a931daae1ff1f421f60e5e2d633e208a180f24063ee73cd447`.
 
-Signed remapped Metal target path is observed; `__TEXT` maps successfully. Current exact failure:
-`__DATA_CONST mmap(addr=...5CD0, size=0x70000) -> errno=22`.
-Thus SG_READ_ONLY/order gates are passed and current blocker is actual sub-page shared-cache VM mapping geometry.
+Transient unsigned transformed Metal:
+- bytes `5735232`;
+- SHA256 `0bce7edee6a01d372fab584b5a3022326a8c7c8fd061ff82d33b1b189e0af13c`.
 
-## D97CC — page-prefix / LINKEDIT surface closed
-Bundle `OCLP7_D97CC_PAGE_PREFIX_LINKEDIT_FEASIBILITY_20260906_031505.zip`, SHA256 `8edf16651be320d3ace7dadc706e243c35ed68b92192fc2a7fa50a5ebbff19a3`.
-Corrected classification:
-`D97CC_PAGE_PREFIX_REPAIR_CLASSIFICATION=STATIC_REMAP_SURFACE_ENUMERATED`.
+D97CD proves:
+- exact page-aligned transform structural PASS;
+- all section/content VM addresses preserved;
+- 20 section-fileoff rewrites, LINKEDIT shift/fields and 3652 n_sect remaps PASS;
+- payload identity PASS;
+- file/otool PASS;
+- unsigned preflight PASS;
+- ad-hoc signing and strict verify PASS;
+- signed preflight PASS;
+- cold baseline + libbz2 control PASS.
 
-Exact 4K-page plan preserving original section/content VM addresses:
-- `__TEXT`: unchanged;
-- `__DATA_CONST`: floor VM `0x7FF84119D000`, prefix `0xCD0`, fileoff `0x2EC000`, content `0x2ECCD0`, filesize `0x70CD0`, vmsize `0x71000`;
-- `__DATA_DIRTY`: floor VM `0x7FF84384F000`, prefix `0x510`, fileoff `0x35D000`, content `0x35D510`, filesize `0x5510`, vmsize `0x6000`;
-- `__DATA`: floor VM `0x7FF843D59000`, prefix `0xC0`, fileoff `0x363000`, content `0x3630C0`, filesize `0xD0C0`, vmsize `0xE000`;
-- `__LINKEDIT`: fileoff `0x371000`, exact shift `+0x3000`.
+Signed page-aligned target is explicitly observed and all five segments map successfully. Prior `mmap errno=22` alignment blocker is therefore CLOSED.
 
-Exactly 20 file-backed section offsets change. LINKEDIT requires exactly 7 metadata updates: its own segment fileoff plus `LC_DYLD_EXPORTS_TRIE.dataoff`, `LC_SYMTAB.symoff`, `LC_SYMTAB.stroff`, `LC_DYSYMTAB.indirectsymoff`, `LC_FUNCTION_STARTS.dataoff`, `LC_DATA_IN_CODE.dataoff`.
-The one printed D97CC unknown hit was only `__LINKEDIT.fileoff` itself at `0xD48`; no unknown blocker remains.
+Runtime then reaches:
+`mprotect ... to read-write (Metal.PAGE.adhoc)`
+and the cold process exits `RC=-11` SIGSEGV. Target final state is `loaded`; native system Metal also becomes `loaded` through the dependency graph.
+Apple dyld source places this read-write transition immediately before Objective-C `map_images` registration/fixups for images with read-only ObjC metadata.
 
-## CURRENT ACTION — D97CD
+Classifications:
+- `D97CD_STANDALONE_PAGE_ALIGNED_MAPPING=RUNTIME_PROVEN`;
+- `D97CD_ALL_SEGMENTS_MAPPED=RUNTIME_PROVEN`;
+- `D97CD_PREVIOUS_MMAP_ALIGNMENT_GATE=CLOSED`;
+- `D97CD_OBJECTIVE_C_MAP_IMAGES_FRONTIER=REACHED`;
+- `D97CD_COLD_TARGET_FINAL_LOADED_THEN_SIGSEGV=NEGATIVE_RUNTIME`;
+- usable standalone load remains NEGATIVE.
+
+## Exact extractor semantic relevant to current frontier
+Pinned `blacktop/ipsw v3.1.713` source explicitly says ordinary extraction leaves `raw cache slide-info pointers` in the extracted dylib. `--slide` executes `rebaseMachO()` and writes the resolved cache-rebase targets. `--objc` implies `--slide` for the same reason.
+
+This is the next causal discriminator because D97CD maps the RAW image completely and then dies exactly at Objective-C registration/fixup time.
+
+## CURRENT ACTION — D97CE
 Remain unpatched in Tahoe VESA.
-Run only `OCLP7_D97CD_page_aligned_transform_cold_load.sh`:
-- bytes `28199`;
-- SHA256 `67ec2f791de401e1e2007e9b2af898cd40059131bd2ac8d158cf8a139c61309a`;
-- shell syntax PASS;
-- embedded Python compile PASS.
 
-D97CD creates only transient `/private/tmp` binaries. It materializes the exact D97CC page-prefix geometry plus D97CB order/SG_READ_ONLY/n_sect repair, validates byte domains, file/otool, unsigned/signed preflight, records codesign load-command/header-padding growth, proves the established cold harness, and cold-injects only the signed unpatched page-aligned Metal.
+Next transient target-local test must:
+1. extract exact RAW and `--slide` Metal using pinned `ipsw v3.1.713`;
+2. pin RAW identity and record exact SLIDE identity;
+3. prove `__text`, load-command geometry and Metal4 remain equivalent where expected;
+4. enumerate/classify RAW-vs-SLIDE rebase changes by segment/section and target class;
+5. materialize the exact already-proven D97CD page-aligned/order/SG_READ_ONLY/LINKEDIT/n_sect transform from the SLIDE export;
+6. validate payload identity against SLIDE, external parsers, preflight, signing/header growth and cold harness;
+7. cold-inject only signed page-aligned SLIDE Metal and test whether Objective-C registration advances beyond the D97CD `makeSegmentsReadWrite -> SIGSEGV` frontier;
+8. do not apply D97BV;
+9. stop at the next exact runtime frontier and delete all transient binaries.
 
-D97BV must not be applied by D97CD even if the baseline becomes loadable. Any D97BV cave/signing repair is a separate later gate.
-
-No Root Patch, installation, source/local build, accelerated boot or reboot authorized. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
+No Root Patch, installation, source/local compilation, accelerated boot or reboot authorized. GitHub Actions build/package remains suspended until explicit quota-unblocked confirmation.
