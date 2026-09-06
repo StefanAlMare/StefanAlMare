@@ -85,7 +85,7 @@ Returned bundle `OCLP7_D97CI_V2_OBJC_OPTIMIZEDBYDYLD_FLAG_ADAPTER_20260906_13295
 - TXT SHA256 `03dea8ee432944ed227ec3b42a42dbba9d20b8bb55f90178e6b81a126fdfbd34`;
 - JSON SHA256 `66a42d9253784f9835159fde5dd085c95ac0a57b7e8b60cd01ce59d56db50b70`.
 
-Exact pre-adapter carrier SHA `068ec08cff3d279ce1a700695162d0eda19ab8f5b956edb8a91e60c9009d155de2` had exactly one `__objc_imageinfo` at address `0x7FF8411BBDD0`, fileoff `0x30ADD0`, version `0`, flags `0x49`; `OptimizedByDyld (0x8)` was set.
+Exact pre-adapter carrier SHA `068ec08cff3d279ce1a700695162d0eda19ab8f5b956b8a91e60c9009d155de2` had exactly one `__objc_imageinfo` at address `0x7FF8411BBDD0`, fileoff `0x30ADD0`, version `0`, flags `0x49`; `OptimizedByDyld (0x8)` was set.
 
 D97CI-v2 changed exactly one byte:
 - offset `0x30ADD4`;
