@@ -8,6 +8,9 @@ Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 
 Current authoritative runtime checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97ER_DMESG_NEGATIVE_D97ES_READY_FOR_BUILD.md`
+
+Previous accelerated runtime checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EQ_ACCEL_REPRO_OBSERVER_TUPLE_NOT_CAPTURED.md`
 
 Previous decisive observer-route checkpoint:
@@ -23,7 +26,7 @@ Current build design:
 `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 
 Current observer build helper:
-`OCLP-Continuity/artifacts/OCLP7_D97EL_IMAC_BUILD.sh`
+`OCLP-Continuity/artifacts/OCLP7_D97ES_IMAC_BUILD.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`;
@@ -38,7 +41,8 @@ Current observer build helper:
 - `#-ocmcd97bvcave` inert;
 - normal pre-D97ED 3/3/3 framebuffer baseline is authoritative;
 - no new EFI/boot-arg variable from the T2/Haswell audit is currently authorized;
-- no functional set_id_mode masking is authorized.
+- no functional set_id_mode masking is authorized;
+- D97EH/D97EL custom markers are absent from both post-recovery unified log and current live `dmesg`.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -135,8 +139,6 @@ Accelerated WindowServer PID 177 sequence:
 - main display offline at 13:14:56.727861 (~3.089 ms after fourth error);
 - WindowServer SIGSEGV at 13:14:56.745335 (~20.563 ms after fourth error).
 
-WindowServer PID 340 respawned and again reached 3/3 framebuffer open state, but main display remained offline.
-
 Negative findings:
 - no kernel panic;
 - no `_MTL4*` regression;
@@ -144,18 +146,42 @@ Negative findings:
 
 Recovery boot `Previous shutdown cause: 5` is manual hard power-off, not a kernel panic.
 
-### D97EQ telemetry limitation
-Post-recovery unified log contains no custom observer markers:
-- no `D97EH_ROUTE`;
-- no `D97EH_SET_ID_MODE`;
-- no `badBits=` / `goodBits=` tuple.
+Exact accelerated observer tuple remains UNCAPTURED.
 
-This absence does NOT prove observer routing failed in the accelerated boot, because the same custom route marker was absent from unified log in VESA even while IORegistry independently proved `D97ELRouteStatus=PASS`.
+## D97ER — telemetry transport classification
+Current live VESA `dmesg` was filtered for `D97EH|D97EL|ocmc|set_id_mode|badBits|goodBits` and returned no matches.
 
-Therefore exact accelerated `id/mode/badBits/goodBits/ret` remains UNCAPTURED. The next problem is telemetry transport/persistence, not a demonstrated new graphics-path failure.
+Therefore:
+- post-recovery unified log custom markers = ABSENT;
+- live dmesg custom markers = ABSENT;
+- repeating unchanged D97EL accelerated boot is not justified;
+- D97EP route PASS remains valid independent IORegistry proof;
+- next problem is tuple transport/capture, not a newly demonstrated graphics regression.
 
-D97EQ checkpoint commit:
-`eb01d27dc538d7ac0a841950556980f2623ba289`.
+## D97ES — IORegistry tuple telemetry design ready for build
+D97ES will be OCLPMetalCompat 0.0.11, deterministically derived from exact D97EL 0.0.10.
+
+Semantics preserved:
+- same `-ocmcd97eh` gate;
+- same IOAcceleratorFamily2 registration and exact set_id_mode route;
+- Apple original called first with exact `that/id/mode`;
+- original IOReturn returned unchanged;
+- no mode mutation, return coercion, framebuffer mutation, filesystem/NVRAM telemetry, EFI mutation or Root Patch change.
+
+Telemetry additions only:
+- first 8 post-original tuples stored atomically in kernel memory;
+- fields: `id`, `mode`, `badBits`, `goodBits`, raw original `ret`;
+- asynchronous publication via existing IORegistry publisher;
+- publisher remains alive until first observer tuple when `-ocmcd97eh` is active, still bounded to original 5-minute window.
+
+Expected keys include `D97ESCapturedCount` and `D97ES01Id/Mode/BadBits/GoodBits/Ret` through slot 08.
+
+Authority:
+- generator `OCLP7_D97ES_IOREG_TUPLE_GENERATOR.py`, commit `62fac73c0d834be92bcab208234112a4b046e385`, blob `dc7e244c3734f5dd0cd6f24d6d8c43da76d41fad`;
+- build helper `OCLP7_D97ES_IMAC_BUILD.sh`, commit `060e43f8c1bb427f4b9fbd8f610ae57780f6b7dd`.
+
+D97ER checkpoint commit:
+`3203836f8ef7ddf6f2e4e52926f759515f37e672`.
 
 ## OCLP T2 / Haswell audit integration policy
 Do not add new EFI/boot-arg variables while exact set_id_mode measurement is still unresolved.
@@ -175,11 +201,10 @@ Still need exact accelerated runtime:
 
 No functional correction before measurement.
 
-## CURRENT ACTION — LIVE TELEMETRY TRANSPORT CHECK
-Remain in current VESA recovery. No reboot and no EFI change.
+## CURRENT ACTION — BUILD D97ES ON INTEL IMAC ONLY
+Run authoritative `OCLP7_D97ES_IMAC_BUILD.sh` on the authorized Intel iMac.
 
-Before rebuilding OCLPMetalCompat, test the current boot's kernel message buffer (`dmesg`) for D97EH/D97EL custom markers.
+Build only. No ASUS2 EFI change, no Root Patch and no reboot.
+Return the resulting D97ES ZIP for independent audit.
 
-If current live `dmesg` exposes the custom route marker while unified log does not, keep D97EL 0.0.10 and use a live capture method on the next accelerated boot (prefer SSH from another Mac before hard power-off) to recover the observer tuples.
-
-If custom markers are absent even from live `dmesg`, design a telemetry successor that exposes the first set_id_mode tuple(s) through a live-readable channel. No bit masking or return coercion is authorized.
+Only after build audit may D97ES be deployed VESA-first. Accelerated boot remains unauthorized until D97ES VESA route/publisher validation passes.
