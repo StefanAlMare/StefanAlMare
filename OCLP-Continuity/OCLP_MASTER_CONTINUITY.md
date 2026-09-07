@@ -8,7 +8,7 @@ Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 
 Current authoritative runtime checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97ER_DMESG_NEGATIVE_D97ES_READY_FOR_BUILD.md`
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EU_D97ES_VESA_DEPLOY_IDENTITY_PASS_REBOOT_AUTHORIZED.md`
 
 Current observer build audit checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97ET_D97ES_0011_INDEPENDENT_BUILD_AUDIT_PASS.md`
@@ -33,16 +33,17 @@ Current observer build helper:
 - Haswell `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- active EFI kext is still audited D97EL `OCLPMetalCompat.kext` 0.0.10 until D97ES deployment is performed;
-- active D97EL executable SHA256 `7aa86d2484c6f252f7a77704117cebb6e14afa96bf2d98bb2523644fd86926ac`;
-- active D97EL UUID `1A19441E-9937-3FBF-995D-9CC282E89089` x86_64;
-- current session is VESA recovery after D97EQ accelerated failure;
-- recovery args: `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`;
+- active EFI kext is audited D97ES `OCLPMetalCompat.kext` 0.0.11;
+- active D97ES executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
+- active D97ES UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64;
+- current session remains VESA recovery after D97EQ accelerated failure; D97ES has been deployed to EFI but has not yet been boot-validated;
+- recovery args must remain exactly `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`;
 - `#-ocmcd97bvcave` inert;
 - normal pre-D97ED 3/3/3 framebuffer baseline is authoritative;
 - no new EFI/boot-arg variable from the T2/Haswell audit is authorized yet;
 - no functional set_id_mode masking is authorized;
-- D97EH/D97EL custom markers are absent from both post-recovery unified log and current live `dmesg`.
+- D97EH/D97EL custom markers are absent from both post-recovery unified log and current live `dmesg`;
+- D97EU pre-reboot active-EFI identity is exact PASS for D97ES 0.0.11.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -214,6 +215,22 @@ D97ET classification:
 D97ET checkpoint commit:
 `af16880e29d0ae51492a5252cda354bc52b52c9d`.
 
+## D97EU — D97ES VESA deploy identity PASS
+ASUS2 direct active-EFI verification after deployment proved exact audited D97ES 0.0.11 identity:
+- version `0.0.11`;
+- executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
+- UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64.
+
+Classification:
+- active EFI D97ES identity = PASS;
+- exactly one VESA reboot with unchanged VESA configuration = AUTHORIZED;
+- Root Patch = NOT AUTHORIZED;
+- accelerated boot = NOT AUTHORIZED;
+- functional set_id_mode masking = NOT AUTHORIZED.
+
+D97EU checkpoint commit:
+`3861969fe3d6ead6c8684a099e3a5abd80500814`.
+
 ## OCLP T2 / Haswell audit integration policy
 Do not add new EFI/boot-arg variables while exact set_id_mode measurement is still unresolved.
 Existing `ipc_control_port_options=0` and `-amfipassbeta` remain.
@@ -232,18 +249,12 @@ Still need exact accelerated runtime:
 
 No functional correction before measurement.
 
-## CURRENT ACTION — D97ES VESA-FIRST DEPLOYMENT AUTHORIZED
-On ASUS2, while in current VESA recovery:
-1. keep backup of active D97EL 0.0.10;
-2. replace only active EFI `EFI/OC/Kexts/OCLPMetalCompat.kext` with audited D97ES 0.0.11;
-3. do not change `Kernel -> Add -> BundlePath`;
-4. keep VESA boot args exactly `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`; keep `#-ocmcd97bvcave` inert;
-5. no Root Patch, no framebuffer change, no T2/Haswell extra boot-arg;
-6. verify active EFI identity before reboot.
+## CURRENT ACTION — ONE D97ES VESA VALIDATION BOOT AUTHORIZED
+On ASUS2:
+1. make no further EFI, framebuffer, Root Patch or filesystem mutation;
+2. keep VESA boot args exactly `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`;
+3. keep `#-ocmcd97bvcave` inert;
+4. perform exactly one reboot into VESA;
+5. after returning, collect D97ES IORegistry route/publisher and tuple-slot evidence for audit.
 
-Required pre-reboot identity:
-- version `0.0.11`;
-- executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
-- UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`.
-
-After identity PASS, exactly one VESA reboot may be separately authorized. Accelerated boot remains forbidden until D97ES route/publisher and empty-slot behavior are proven in VESA.
+Accelerated boot remains forbidden until D97ES route/publisher and empty-slot behavior are proven in VESA and separately persisted.
