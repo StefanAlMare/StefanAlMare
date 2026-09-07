@@ -7,7 +7,10 @@ Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 
-Current authoritative runtime checkpoint:
+Current authoritative runtime/execution checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FA_GITHUB_ACTIONS_EXECUTION_BLOCKER.md`
+
+Current decisive semantic checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EY_EXACT_SET_ID_MODE_TUPLE_SEMANTIC_PROOF.md`
 
 Previous accelerated authorization checkpoint:
@@ -25,7 +28,7 @@ Current observer build audit checkpoint:
 Current Root Patch execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 
-Current build design:
+Current native-Metal-safe build design:
 `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 
 Current observer build helper:
@@ -37,6 +40,21 @@ Current persistent accelerated-evidence collector:
 - Git blob `d5a60a8b69c22249b03988afe6e6e94a3947d195`;
 - installed capture SHA256 `bc818d5b26f337404945c5118b34d264505351ea0ca307f760c24e6a3260b017`;
 - installed plist SHA256 `a2b5f2ed8d0c2c0ee49b437dffdf04e82f155cb2e20eea32b8d93b67d2881280`.
+
+Current D97EZ exact-match design:
+`OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_DESIGN.md`
+- design commit `8384f183303831ddd117652ef90e5c707a2ee589`.
+
+Current D97EZ generator:
+`OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_GENERATOR.py`
+- generator commit `cd76d912018bfa60284af3cb732ae8bca84db091`;
+- Git blob `3bf728b999e2163af77742686d7ce9aaac04e8fb`.
+
+Current D97EZ GitHub-first workflow:
+`.github/workflows/oclp7-d97ez-exact224-adapter-build.yml`
+- initial workflow commit `6c9e21e548904f7c3597ab67cc44d00a002f0fd9`;
+- PR-trigger enablement commit `320c8caab6d6f0c7790eef27d2b120acbb883c7e`;
+- intended runner `macos-15-intel`.
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`;
@@ -54,8 +72,10 @@ Current persistent accelerated-evidence collector:
 - same-run loaded observer identity is D97ES 0.0.11 UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`;
 - first D97EW sample captured 8 tuples with total call count 15; follow-up snapshots reached call count 20;
 - current session is VESA recovery after that accelerated boot;
+- no D97EZ binary has been built or deployed;
 - no functional `set_id_mode` correction is currently installed or authorized;
-- no new T2/Haswell boot variable is currently authorized.
+- no new T2/Haswell boot variable is currently authorized;
+- no Root Patch or reboot is authorized at D97FA.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -71,7 +91,7 @@ D22 remains the accepted upstream semantic proof for AIR 2.6 / Metal 3.1. D34 ca
 
 Module-boundary + semantic evidence + far-frontier methodology remains mandatory. Universal/no-PID coverage is required when requests can vary. Control-flow success is never semantic proof by itself.
 
-Permanent GitHub-first execution remains mandatory: all technically GitHub-executable validation/integration/build/package/audit work is done in GitHub; ASUS2 is reserved for identity-pinned live-state/deploy/manual boot/recovery evidence.
+Permanent GitHub-first execution remains mandatory: all technically GitHub-executable validation/integration/build/package/audit work is done in GitHub; ASUS2 is reserved for identity-pinned live-state/deploy/manual boot/recovery evidence. If a GitHub-eligible operation is genuinely blocked in GitHub, STOP and document the exact blocker. Local compilation is not an implicit fallback and requires explicit user authorization.
 
 ## Durable target architecture
 `native Tahoe Metal / Metal4 ABI -> selective legacy 3802 ingress -> audited adapter -> legacy compiler path -> Haswell driver -> image`
@@ -139,16 +159,7 @@ Independent build audit PASS:
 D97ES publisher updates IORegistry asynchronously and is bounded to 300 seconds.
 
 ### D97EU / D97EV — deployment and VESA runtime PASS
-D97EU proved exact active EFI D97ES identity. D97EV VESA proved:
-- loaded D97ES 0.0.11 exact UUID;
-- observer/callback/target route PASS;
-- `D97ELSetIdModeCallCount=0`;
-- `D97ESCaptureSlots=8`;
-- `D97ESCapturedCount=0`;
-- all eight Valid=0;
-- D97CT route/build/cpu/kernel gates healthy;
-- D97BV functional requested/ACTIVE;
-- publisher reached bounded tick 300.
+D97EU proved exact active EFI D97ES identity. D97EV VESA proved loaded D97ES 0.0.11 exact UUID, observer/callback/target route PASS, zero set_id_mode calls, eight empty capture slots, healthy D97CT gates, D97BV functional requested/ACTIVE, and publisher liveness through tick 300.
 
 Thus D97ES route, schema, publisher liveness and empty-slot behavior are CLOSED PASS in VESA.
 
@@ -199,25 +210,61 @@ Same accelerated boot also produced repeated WindowServer SIGSEGV in the known d
 D97EY checkpoint commit:
 `f2762e713565b1e72498241de639bdd5698c82c6`.
 
+### D97EZ — bounded exact-match hypothesis prepared, not built
+D97EZ is source-design only at D97FA. Proposed experiment:
+- version target `0.0.12`;
+- new functional bootarg `-ocmcd97ez`;
+- LATENT by default;
+- preserve D97ES route/observer telemetry;
+- global/no-PID classification for every call;
+- only ACTIVE + exact `originalMode == 0x224` selects `passedMode=0x24`;
+- all other modes pass byte-for-byte unchanged;
+- Apple original called once;
+- exact IOReturn returned unchanged;
+- original/passed-mode telemetry and exhaustive counters included;
+- no broad mask.
+
+No D97EZ binary/package identity exists yet because GitHub Actions execution is blocked.
+
+### D97FA — GitHub Actions execution blocker
+GitHub-first build/audit workflow was created on `main`. Direct push/main trigger produced no workflow run. Repository-wide Actions run query reported `total_count=0`.
+
+To exclude a push-trigger issue:
+- `pull_request` trigger was added on `main` at commit `320c8caab6d6f0c7790eef27d2b120acbb883c7e`;
+- branch `oclp7-d97ez-exact224-ci` was created;
+- draft PR #17 was opened with only a documentation-only trigger change;
+- initial PR head `dc7e11ebf989cc41ed931ba066fc6da1efab4f14` produced no workflow runs;
+- synchronize head `58c6c0332e67c43de31260a6c8d613ea8c00f40b` also produced no workflow runs;
+- repository-wide Actions query still reports zero runs;
+- synchronized head has no status/check entries;
+- authenticated repo metadata reports admin/maintain/push/pull access, so content write permission is not the observed blocker;
+- current GitHub connector exposes no workflow-dispatch/create-run action.
+
+Exact deeper GitHub-side cause of zero Actions execution is UNKNOWN through the available interface. Observed execution result is BLOCKED.
+
+D97FA checkpoint commit:
+`4191c7c2f89ce0d95739db6e0723eb7b37b63d0a`.
+
 ## OCLP T2 / Haswell audit integration policy
-The exact `set_id_mode` measurement is now resolved for the captured class, but no unrelated T2/Haswell boot variable is promoted at this gate. Existing `ipc_control_port_options=0` and `-amfipassbeta` remain. `igfxmetal=1`, `-disablegfxfirmware`, `watchdog=0` and other variables remain unapproved until the measured `0x224/0x200` boundary experiment is resolved.
+The exact `set_id_mode` measurement is resolved for the captured class, but no unrelated T2/Haswell boot variable is promoted at this gate. Existing `ipc_control_port_options=0` and `-amfipassbeta` remain. `igfxmetal=1`, `-disablegfxfirmware`, `watchdog=0` and other variables remain unapproved until the measured `0x224/0x200` boundary experiment is resolved.
 
 ## Current causal frontier
 `Tahoe/CoreDisplay surface-mode semantics -> mode 0x224 (good 0x24 + extra 0x200) -> IOAccelSurface::set_id_mode -> legacy Haswell IOAccelerator returns kIOReturnBadArgument`.
 
-The exact failing bit class is measured. What remains UNKNOWN is the semantic name/intent of bit `0x200` and whether selectively translating the observed exact `0x224` class to legacy-accepted `0x24` is sufficient for stable graphical progress.
+The exact observed failing bit class is measured. Unknowns are the semantic intent of bit `0x200` and whether a selective exact-match translation is sufficient for stable graphical progress.
 
-## CURRENT ACTION — GITHUB-FIRST D97EZ EXACT-MATCH ADAPTER DESIGN/AUDIT
-Do not mutate ASUS2 yet.
+## CURRENT ACTION — STOP AT D97FA GITHUB ACTIONS EXECUTION BLOCKER
+Do not mutate ASUS2 and do not fall back to local compilation.
 
-In GitHub, design a D97EZ successor derived deterministically from exact D97ES 0.0.11 with these hard requirements:
-1. LATENT by default behind a new explicit functional bootarg.
-2. Preserve exact D97ES route and observer telemetry.
-3. Global/no-PID classification for every `set_id_mode` call.
-4. Only when the new functional gate is active and original `mode == 0x224`, pass candidate `0x24` to Apple original.
-5. Every other mode must reach Apple original byte-for-byte unchanged.
-6. No global mask and no broad `mode &=` logic.
-7. Return Apple original IOReturn unchanged.
-8. Publish original mode, passed mode, exact-match counters and return so the experiment remains semantically auditable.
-9. GitHub-first source validation, deterministic generation, x86_64 compile, binary/disassembly audit, package identity and artifact publication.
-10. No Root Patch, EFI change, reboot or accelerated boot is authorized until the GitHub build/binary audit is independently PASS and a separate VESA-first deployment checkpoint is persisted.
+D97EZ source design/generator/workflow are prepared in GitHub, but the GitHub-eligible x86_64 compile/binary/package/audit step cannot execute because no GitHub Actions run is generated through push, PR-open, or PR-synchronize paths, and the current connector has no workflow-dispatch action.
+
+Resume only after GitHub Actions execution becomes available for `StefanAlMare/StefanAlMare`. Then run the existing D97EZ GitHub-first workflow, repair any CI failures in GitHub, audit the complete binary/package/artifact result, and persist a separate VESA-first deployment checkpoint.
+
+Until then:
+- local compilation authorization = NO;
+- D97EZ deployment authorization = NO;
+- `-ocmcd97ez` on ASUS2 = NO;
+- Root Patch = NO;
+- EFI mutation = NO;
+- reboot/accelerated boot = NO;
+- D97ES 0.0.11 and current VESA recovery state remain authoritative.
