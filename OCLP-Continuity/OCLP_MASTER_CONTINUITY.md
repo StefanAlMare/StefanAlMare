@@ -105,7 +105,7 @@ Thus set_id_mode remains CLOSED PASS.
 ## Metallib defect and repair closure
 D97FV/D97FW proved the old local/installed 25G82 metallib layer was systemically materialized as metadata stubs (`180/180`). Real package CoreDisplay metallib:
 - bytes `20739`;
-- SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdbca60eca1078226ded4bc92d`;
+- SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
 - direct `MTLB`, contains GPUPass.
 
 Exact pinned package:
