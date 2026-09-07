@@ -12,6 +12,9 @@ Current authoritative runtime/execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`
 
 Current authoritative static-analysis checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FT_GPUPASS_BOOTSTRAP_EQUIVALENCE_AND_NATIVE_METAL_VALIDATION_CONTEXT_FRONTIER.md`
+
+Previous static-analysis checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FS_ACTIVE_METAL_BYTES_EXACT_D97BV_RUNTIME_POSTIMAGES_INCOMING_PRISTINE_REFERENCE.md`
 
 Previous downstream-localization checkpoint:
@@ -71,6 +74,7 @@ D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly i
 - recovery state has active `-igfxvesa` and absent/inert `-ocmcd97ez`;
 - active native Metal shared-cache SITE/CAVE may contain D97BV runtime postimages after the relevant pages are validated/mapped;
 - signature-valid pristine 25G82 reference exists at `Cryptexes/Incoming/OS/.../dyld_shared_cache_x86_64h`;
+- exact CoreDisplay and native Metal images have now been extracted from that Incoming reference and match the D97FJ IPS UUIDs;
 - no new T2/Haswell boot variable is authorized;
 - no Root Patch change is authorized.
 
@@ -176,18 +180,8 @@ Loaded relevant identities:
 - legacy `AppleIntelHD5000GraphicsMTLDriver` 18.8.4 / UUID `d5cf0007-37a7-35cf-bb5e-a6baaa145ad2`;
 - native Tahoe `CoreDisplay` 291.4 / UUID `8bfeff75-c8c8-3b5b-afa0-61385199a1bb`;
 - native Tahoe `SkyLight` 1.600.0 / UUID `7b70d8df-984a-3fa9-829e-c26afc896d9d`;
-- native Tahoe `Metal` 373.7 / UUID `5d64fa80-29ce-32aa-bab6-4e5034132c0b` in the explicit validation-abort report;
+- native Tahoe `Metal` 373.7 / UUID `5d64fa80-29ce-32aa-bab6-4e5034132c0b` in the validation-abort crash;
 - GPUCompiler 32023 support libraries present.
-
-Therefore the strongest fatal frontier is:
-`CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState -> native Metal render-pipeline/device validation`.
-
-Classification:
-- fatal CoreDisplay GPU-pass pipeline frontier REACHED_NEGATIVE;
-- native Metal `validateWithDevice` abort REACHED_NEGATIVE;
-- exact incompatible descriptor field/device capability UNKNOWN;
-- `getPixelInformation` remains real but primary causal status UNPROVEN;
-- IOVersatile primary causal status UNPROVEN/NON-DISCRIMINATING.
 
 ## D97FK-D97FQ — shared-cache extraction tooling
 - standalone CoreDisplay/Metal filesystem paths are absent on 25G82 because the images are cache-resident;
@@ -210,19 +204,66 @@ D97DZ had proved both regions pristine immediately after D97DX Root Patch, while
 
 This does NOT re-open D97BV as a blocker and does NOT establish D97BV as cause of the current CoreDisplay fatal path.
 
-## Current causal frontier
-Closed:
-`Tahoe 0x224 -> legacy IOAccelSurface bad-bits rejection`.
+## D97FT — exact GPUPass bootstrap and native Metal validation-context map
+Archive:
+`OCLP7_D97FT_INCOMING_SELECTED_20260907_200933.zip`
+- bytes `6829957`;
+- SHA256 `937e77b54edd1741b9cb19b89142a98380e77ac74a2811a9f6f1e060b375018b`;
+- CRC PASS.
 
-Current:
-`successful set_id_mode -> CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState -> native Metal render-pipeline/device validation -> WindowServer fatal failure -> main display offline`.
+Exact extracted identities:
+- CoreDisplay x86_64 UUID `8BFEFF75-C8C8-3B5B-AFA0-61385199A1BB`, SHA256 `e8ca1d0b851143235aa2acb500bab5e8ca2d5dbb708647d135f9f8458d3d933f`;
+- native Metal x86_64 UUID `5D64FA80-29CE-32AA-BAB6-4E5034132C0B`, SHA256 `f9287f12f4ed6247d53cf322c468db96ed877abe54912c990f5697e916b45ec8`.
+Both UUIDs exactly match D97FJ IPS identities.
+
+Exact `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState(unsigned int,unsigned int,unsigned long) const` starts at `0x7FF80543D1B4`.
+D97FJ offsets map exactly:
+- +599 `0x7FF80543D40B`;
+- +636 `0x7FF80543D430`;
+- +1720 `0x7FF80543D86C`.
+
+Static flow proves:
+- CoreDisplay creates two function constants and requests specialized function `GPUPass` via `newFunctionWithName:constantValues:error:`;
+- the +599/+636 crash mode is inside the error-report branch entered after this specialization call has produced a non-null NSError;
+- CoreDisplay then builds `MTLRenderPipelineDescriptor`, sets vertexFunction, GPUPass fragmentFunction, `colorAttachments[0].pixelFormat`, and calls `newRenderPipelineStateWithDescriptor:error:`.
+
+Exact `CreateMetalDevice +589` bootstrap tuple is:
+`GetGPUPassRenderPipelineState(0xFFFFFFFF, 0xFFFFFFFF, 0x5E)` where `0x5E = MTLPixelFormatBGR10A2Unorm`.
+The persisted working Golden Sequoia CoreDisplay map uses the same bootstrap tuple and same descriptor recipe. Therefore no Tahoe-only CoreDisplay bootstrap divergence has been found in this scope.
+
+Native Metal helper `validateWithDevice(id<MTLDevice>, MTLRenderPipelineDescriptorPrivate const&)` starts at `0x7FF80F645727`.
+D97FJ `+716` resolves to the instruction immediately after `__MTLMessageContextEnd`; it is not an individual validation predicate. The abort therefore proves one or more validation messages were accumulated before context finalization, but the exact predicate remains UNKNOWN.
+
+Mapped validation families include function validity/device association/specialization and render-raster/device capability checks. Fragment nil alone is not statically sufficient to explain the validation abort in the mapped path. Device-specific pixel-format renderability is a candidate but remains UNPROVEN.
+
+Existing exact 25G82 evidence pins CoreDisplay `default.metallib` SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d` and proves D97DX installed it, but no shader-level `GPUPass` AIR/metadata comparison against Golden has yet been recovered.
+
+Classification:
+- `D97FT_GPUPASS_SPECIALIZATION_ERROR_BRANCH=REACHED`;
+- `D97FT_GPUPASS_SPECIALIZATION_NSError_NON_NULL=CONTROL_FLOW_PROVEN` for captured Crash-A mode;
+- `D97FT_CORE_DISPLAY_GPUPASS_BOOTSTRAP_GOLDEN_TAHOE=STATIC_SEMANTIC_EQUIVALENT` for mapped tuple/descriptor scope;
+- `D97FT_NATIVE_METAL_VALIDATION_ERROR_CONTEXT=REACHED_NEGATIVE`;
+- exact specialization failure reason UNKNOWN;
+- exact Metal validation predicate UNKNOWN.
+
+## Current causal frontier
+Closed/excluded for measured scope:
+`set_id_mode 0x224 rejection`, D97BV delivery, and a Tahoe-only CoreDisplay GPUPass bootstrap tuple/descriptor divergence.
+
+Earliest captured current negative:
+`CoreDisplay -> newFunctionWithName:@"GPUPass" constants(-1,-1) -> non-null NSError path`.
+
+Parallel downstream negative:
+`GPUPass render descriptor -> native Tahoe Metal validation accumulates error -> __MTLMessageContextEnd -> abort -> WindowServer death`.
+
+Exact common semantic cause remains UNKNOWN.
 
 ## Execution-lane authority
 User explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## CURRENT ACTION — PRISTINE INCOMING EXTRACTION / CORE DISPLAY STATIC MAP
+## CURRENT ACTION — STATIC GPUPASS METALLIB INSPECTION
 Remain in VESA. No reboot and no changes to EFI, Root Patch, framebuffer counts, NVRAM or boot variables.
 
-Use signature-valid exact-25G82 `Cryptexes/Incoming/OS/.../dyld_shared_cache_x86_64h` as the extraction reference. Extract CoreDisplay and Metal with the already audited D97FN wrapper, validate their UUIDs against D97FJ IPS identities, then map `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState` around offsets `+599` and `+1720`, plus `F_NymriCY` and the immediately adjacent render-pipeline descriptor/device calls.
+Inspect exact installed 25G82 `CoreDisplay.framework/Versions/A/Resources/default.metallib`, especially `GPUPass`: presence, function-constant metadata, target triple, AIR version, Metal language version, SDK metadata and other recoverable function metadata. Compare against existing/persisted Golden CoreDisplay GPUPass evidence if available; otherwise collect only the minimum read-only Golden comparator needed without booting or modifying Golden.
 
-Do not repeat ACTIVE acceleration until this static boundary is resolved and a bounded observer/adapter is justified.
+Do not repeat ACTIVE acceleration until this static metallib boundary is exhausted or a bounded observer is justified.
