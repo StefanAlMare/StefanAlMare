@@ -3,7 +3,7 @@
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Current runtime checkpoint: `OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`.
-Current remediation checkpoint: `OCLP7_CHECKPOINT_20260907_D97GE_CORRECTED_ROOTPATCH_PREBOOT_STRUCTURAL_SEMANTIC_PASS_VESA_REBOOT_AUTHORIZED.md`.
+Current remediation/runtime checkpoint: `OCLP7_CHECKPOINT_20260907_D97GH_POSTBOOT_VESA_CORRECTED_ROOTPATCH_PASS_ACCELERATED_TEST_AUTHORIZED.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -135,6 +135,39 @@ Composite classification:
 `D97GE_CORRECTED_ROOTPATCH_PREBOOT=STRUCTURAL_SEMANTIC_PASS`.
 Checkpoint commit `c89b84767823b8893578fff62084d10c9a889dcb`.
 
+## D97GF / D97GH — corrected Root Patch postboot VESA active-snapshot PASS
+After the authorized VESA reboot, D97GF proved on the booted active snapshot:
+- `ACTIVE_METALLIB_EXACT=180`;
+- missing `0`;
+- different `0`;
+- metadata stubs `0`;
+- active CoreDisplay bytes `20739`;
+- active CoreDisplay SHA `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
+- active CoreDisplay magic `MTLB`;
+- exact active CoreDisplay identity PASS;
+- both Haswell Data kexts persist with correct IDs and `OSBundleRequired=Auxiliary`;
+- AuxKC match count `2`.
+
+Loaded-state observation in the same VESA boot:
+- `AppleIntelFramebufferAzul (18.0.8)` loaded, UUID `FA074475-16C7-3503-92E0-7BE42DD78F75`;
+- `AppleIntelHD5000Graphics (18.0.8)` loaded, UUID `1BCC06E9-8026-3D04-8750-E563E55583A6`.
+
+D97GF shell stopped before final helper stanza, but the immediate direct micro-gate proved:
+- official helper SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
+- TeamIdentifier `S74BDJXQMD`;
+- codesign valid / Designated Requirement satisfied;
+- D97EW launchd collector `state=running`, pid `331`, never exited;
+- current VESA boot boundary `2026-09-07 23:15` local.
+
+Composite classification:
+- `D97GF_POSTBOOT_VESA_ROOTPATCH=PASS_BY_COMPOSED_EVIDENCE`;
+- `D97GH_CORRECTED_ROOTPATCH=STRUCTURAL_SEMANTIC_PASS_PRE_ACCELERATION`;
+- active corrected metallib layer SEMANTIC PROVEN;
+- Haswell AuxKC runtime load REACHED/PROVEN for the VESA boot;
+- D97EW hard-recovery evidence transport LIVE/PASS.
+
+D97GH checkpoint commit `d05354c74e73917f93b5a9ff7a01b5755470687e`.
+
 ## Current causal frontier
 Closed/excluded:
 - set_id_mode bad-bits rejection;
@@ -143,24 +176,23 @@ Closed/excluded:
 - invalid local 25G82 source;
 - old installed stub layer;
 - corrected patched-volume metallib identity uncertainty;
-- Haswell AuxKC placement/enrollment uncertainty.
+- corrected active-snapshot metallib identity uncertainty;
+- Haswell AuxKC placement/enrollment/load uncertainty in VESA.
 
-Pending runtime closure:
-`corrected real metallib layer -> GPUPass specialization/render-pipeline -> accelerated GUI or new downstream frontier`.
+Pending decisive runtime closure:
+`corrected real 25G82 metallib layer + exact D97EZ 0x224->0x24 adapter -> GPUPass specialization/render-pipeline -> usable accelerated GUI or new downstream measured frontier`.
 
-## Current action — VESA reboot then D97GF
+## Current action — one measured accelerated boot
 Authorized now:
-`D97GE_VESA_REBOOT_AFTER_CORRECTED_ROOTPATCH=YES`.
+`D97GH_ONE_MEASURED_ACCELERATED_BOOT=YES`.
 
-Required sequence:
-1. reboot once with EFI unchanged;
-2. remain VESA with `-igfxvesa` active;
-3. keep D97EZ ACTIVE inert/commented `#-ocmcd97ez`;
-4. no EFI/NVRAM/framebuffer changes;
-5. run `OCLP7_D97GF_POSTBOOT_VESA_CORRECTED_ROOTPATCH_GATE.sh` after return;
-6. D97GF must prove active-snapshot `180/180` metallib identity, exact CoreDisplay, AuxKC/Data-kext persistence, official helper and VESA boundary;
-7. only after D97GF PASS may accelerated boot be separately authorized.
+Exact EFI delta:
+1. `-igfxvesa` -> `#-igfxvesa`;
+2. `#-ocmcd97ez` -> `-ocmcd97ez`;
+3. preserve all other boot args/EFI state exactly, including `-ocmcdiag -ocmcd97bv -ocmcd97eh`, `ipc_control_port_options=0`, `-amfipassbeta`, normal 3/3/3 framebuffer and audited D97EZ 0.0.12;
+4. no other variable/patch/NVRAM/framebuffer change;
+5. D97EW collector remains installed and must restart automatically on the accelerated boot.
 
-D97GF helper authority:
-- commit `631e47b2fd0619d5b1deb80d404ff9f11e082ad3`;
-- blob `238dcba4a84429d7ebcc5553264cf06178809b65`.
+If GUI is usable: make no further changes, allow collector to capture, then return newest D97EW run identity and `last reboot | head -n 5` plus usability observation.
+
+If no usable image: follow permanent VESA recovery rule, restoring exactly `-igfxvesa` active and `-ocmcd97ez` inert/commented; authoritative evidence is the immediately preceding accelerated D97EW run; after VESA recovery first return `last reboot | head -n 5` and newest D97EW run identities before deeper analysis.
