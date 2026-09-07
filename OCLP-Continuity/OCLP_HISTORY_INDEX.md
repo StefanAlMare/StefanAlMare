@@ -2,7 +2,7 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FF_D97EZ_EFI_IDENTITY_PASS_LATENT_VESA_REBOOT_AUTHORIZED.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FG_D97EZ_LATENT_VESA_RUNTIME_PASS_ACTIVE_ACCEL_AUTHORIZED.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -74,25 +74,55 @@ D97FD checkpoint commit `4cc0928f94f9d28bcb1b5b91660a221c570742c4`.
 Fail-closed helper `OCLP7_D97FE_D97EZ_VESA_DEPLOY.sh` was prepared with exact old/new identity checks, rollback, config/boot-arg invariants, and no NVRAM/Root Patch/reboot behavior. User elected to perform the EFI kext replacement manually instead of using the helper.
 
 ## D97FF — manual active-EFI D97EZ identity PASS
-User manually replaced the existing `EFI/OC/Kexts/OCLPMetalCompat.kext` with the audited D97EZ 0.0.12 bundle and then directly verified the active EFI path.
-
+User manually replaced the existing `EFI/OC/Kexts/OCLPMetalCompat.kext` with the audited D97EZ 0.0.12 bundle and directly verified the active EFI path.
 Direct evidence:
 - version `0.0.12`;
 - executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
 - UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64.
-
-Current saved boot args remain:
-`-v debug=0x100 keepsyms=1 -amfipassbeta #amfi=0x80 #-lilubetaall hbfx-ahbm=55 foclegacy=1 -btlfxboardid ipc_control_port_options=0 -igfxvesa -ocmcdiag #-ocmcd97bvcave -ocmcd97bv -ocmcd97eh`
-
-Thus:
-- VESA is active;
-- exact D97EZ identity in EFI is PASS;
-- `-ocmcd97ez` is absent;
-- the first D97EZ runtime boot will be LATENT;
-- no `0x224 -> 0x24` functional translation should occur.
-
+Saved boot args preserved active `-igfxvesa` and no `-ocmcd97ez`; first D97EZ runtime boot therefore LATENT.
 D97FF checkpoint commit `658191198efd7b704b7ee9d2139b12bb91d285f8`.
-MASTER advance to D97FF: `6ec49f48d9f9e7bfbe5d1b65048cec0e6c224f96`.
+
+## D97FG — D97EZ 0.0.12 LATENT VESA runtime PASS
+Authorized LATENT VESA boot completed on exact Tahoe `26.6.2 / 25G82`.
+
+Loaded runtime identity:
+- `com.oclpmetalcompat.OCLPMetalCompat (0.0.12)`;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`.
+
+Saved boot args still contain active `-igfxvesa` and omit `-ocmcd97ez`.
+
+Live IORegistry:
+- `D97EZFunctionalRequested=0`;
+- `D97EZFunctionalMode=LATENT`;
+- all D97EZ exact224/other/adapt/success/failure counters `0`;
+- `D97ELObserverRequested=1`;
+- `D97ELCallbackSeenCount=17`;
+- `D97ELTargetCallbackSeenCount=1`;
+- `D97ELRouteStatus=PASS`;
+- `D97ELSetIdModeCallCount=0`;
+- `D97ESCapturedCount=0`;
+- all eight D97ES Valid fields `0`;
+- `D97CTRouteStatus=PASS`;
+- `D97CTPublisherTicks=300`.
+
+Classification:
+- runtime identity PASS;
+- LATENT functional gate PASS;
+- observer route PASS;
+- zero-call/zero-adaptation VESA behavior PASS;
+- publisher bounded liveness PASS.
+
+Scope caveat: VESA has no set_id_mode traffic, so this does not independently prove accelerated passthrough behavior. It closes the required LATENT VESA safety gate.
+
+D97FG checkpoint commit: `6c71ca6ead28321ac338323f96365208f1037f34`.
+MASTER advance to D97FG: `e4fb8636af6b4fcfbed0b0c31270f3a9947ce844`.
 
 ## Current action
-Exactly one VESA reboot is authorized with current boot args unchanged. After boot, do not alter EFI, boot args, NVRAM, Root Patch or framebuffer. Collect loaded-kext identity and D97EZ IORegistry state to prove LATENT runtime behavior. Accelerated boot and active `-ocmcd97ez` remain forbidden until a later checkpoint explicitly authorizes them.
+Exactly one D97EZ ACTIVE accelerated diagnostic boot is authorized.
+Intentional boot-arg changes only:
+- `-igfxvesa` -> inert `#-igfxvesa`;
+- add active `-ocmcd97ez`.
+
+Preserve `-ocmcdiag`, `-ocmcd97bv`, `-ocmcd97eh`, inert `#-ocmcd97bvcave`, existing `ipc_control_port_options=0`, `-amfipassbeta`, D97DX Root Patch, D97EZ 0.0.12, D97EW collector and normal 3/3/3 framebuffer baseline. No new T2/Haswell variable or Root Patch is authorized.
+
+If image is lost, keep the accelerated system powered for at least 30 seconds before hard power to allow publication and D97EW sync. Then recover VESA by restoring active `-igfxvesa` and removing/making inert `-ocmcd97ez`. Analyze only the D97EW run belonging to the immediately preceding accelerated boot, identified by saved boot args.
