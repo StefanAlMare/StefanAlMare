@@ -3,7 +3,7 @@
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Current runtime checkpoint: `OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`.
-Current static/materialization checkpoint: `OCLP7_CHECKPOINT_20260907_D97FX_SOURCE_RECONSTRUCTION_PASS_ROOTPATCH_PREFLIGHT_NEXT.md`.
+Current static/materialization checkpoint: `OCLP7_CHECKPOINT_20260907_D97FY_FINAL_PRE_ROOTPATCH_GATE_PASS_CORRECTED_METALLIB_SOURCE.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -237,21 +237,48 @@ User execution proved:
 
 D97FX result checkpoint commit `dea61a79025256a5b24d4b1f62a2c88c79d7588d`.
 
+## D97FY — final corrected-source pre-Root-Patch gate PASS
+User execution at 2026-09-07 21:52 EEST proved:
+- helper blob `28a075c7e1017f1fc1babefbe16ec96541f1548e` exact;
+- system 26.6.2 / 25G82 x86_64;
+- boot state VESA PASS with `-igfxvesa -ocmcdiag -ocmcd97bv`, D97EZ ACTIVE mode absent/inert;
+- original package SHA/bytes exact;
+- corrected local tree full identity PASS;
+- `180/180` corrected local metallibs exact to package;
+- every corrected local metallib has `MTLB` magic;
+- CoreDisplay expected SHA PASS;
+- installed root still contains exactly `180` metadata stubs, with zero exact/missing/other;
+- exact D97DX outer app found on Desktop;
+- exact inner executable/debug helper/source diff identities PASS;
+- patchdict closure `182 = 180` exact dynamic MetallibSupportPkg entries + `2` unchanged `14.6.1` donor entries PASS;
+- official privileged helper SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, TeamIdentifier `S74BDJXQMD`, codesign PASS;
+- `D97FY_STATUS=PASS`;
+- no Root Patch and no reboot occurred.
+
+D97FY checkpoint commit `efe286948b322e41f9479f84b9e60027799dddf3`.
+
 ## Current causal frontier
 Closed/excluded:
 - `set_id_mode 0x224` rejection;
 - D97BV delivery;
 - Tahoe-only CoreDisplay GPUPass bootstrap tuple/descriptor divergence;
-- invalid local 25G82 metallib source tree — CLOSED PASS by D97FX reconstruction.
+- invalid local 25G82 metallib source tree — CLOSED PASS by D97FX/D97FY reconstruction and revalidation.
 
-Still present in installed root:
+Still present in installed root until APFS revert/corrected Root Patch:
 `180 metadata-stub metallibs`.
 
 Primary causal model:
 `invalid installed metallib layer -> CoreDisplay cannot obtain valid GPUPass library/function -> specialization error and/or invalid render descriptor -> Metal validation abort -> WindowServer death`.
 
-Runtime causal closure still requires a corrected Root Patch and one measured ACTIVE boot.
+Runtime causal closure still requires corrected Root Patch plus one later measured ACTIVE boot.
 
 ## Current action
-Remain in VESA. No reboot and no Root Patch yet.
-Run a final pre-Root-Patch gate that verifies exact package/source identity, CoreDisplay MTLB identity, exact D97DX application/policy identity, all 182 D97DX `Metal 3802 .metallibs` dictionary entries against the corrected source tree, official helper state, VESA state and inactive D97EZ functional mode. Only after that gate passes may manual Root Patch Restore + Root Patch be separately authorized.
+D97FY authorizes the remediation sequence. Remain VESA and do not enable D97EZ ACTIVE mode.
+
+1. Launch exact outer `OpenCore-Patcher-Tahoe-D97DX.app`.
+2. Run manual Root Patch Restore/Revert only.
+3. Close inner OCLP so the outer launcher restores/verifies the official privileged helper.
+4. Reboot once into the same VESA configuration; this reboot is authorized specifically to make the APFS snapshot revert effective.
+5. Run a read-only post-revert gate before any corrected Root Patch.
+6. Only after that post-revert gate passes, run corrected manual Root Patch with exact D97DX.
+7. Do not reboot after corrected Root Patch until a post-patch payload audit proves the installed metallib layer is now real/exact.
