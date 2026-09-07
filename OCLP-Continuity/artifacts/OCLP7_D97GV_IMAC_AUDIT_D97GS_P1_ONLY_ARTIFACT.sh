@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 # OCLP7 D97GV — independent read-only audit of the D97GS P1-only build artifact.
-# BUILD/AUDIT HOST: Intel iMac.
+# AUDIT HOST: Intel iMac.
 # NO source mutation. NO build. NO Root Patch. NO system/EFI/NVRAM/framebuffer mutation. NO reboot.
 
 EXPECTED_GS_ZIP_SHA="e61d225d2bc1352795ef2aeb9e61959fef2f23b9d11192dd1ea033824c855266"
@@ -30,6 +30,20 @@ exec > >(tee "$REPORT") 2>&1
 sha256(){ /usr/bin/shasum -a 256 "$1" | /usr/bin/awk '{print $1}'; }
 bytes(){ /usr/bin/stat -f '%z' "$1"; }
 fail(){ echo "D97GV_STATUS=FAIL"; echo "D97GV_REASON=$*"; echo "D97GV_REPORT=$REPORT"; exit 1; }
+
+single_regular_file() {
+    local dir="$1"
+    local found=""
+    local count=0
+    local p
+    for p in "$dir"/*; do
+        [[ -f "$p" ]] || continue
+        found="$p"
+        count=$((count + 1))
+    done
+    [[ "$count" -eq 1 ]] || return 1
+    printf '%s\n' "$found"
+}
 
 cat <<'HDR'
 ===== OCLP7 D97GV — INDEPENDENT D97GS P1-ONLY ARTIFACT AUDIT =====
@@ -59,7 +73,6 @@ echo "D97GV_DX_ZIP_SHA256=$DX_ZIP_SHA"
 [[ "$GS_ZIP_SHA" == "$EXPECTED_GS_ZIP_SHA" ]] || fail GS_ZIP_SHA_MISMATCH
 [[ "$GS_ZIP_BYTES" == "$EXPECTED_GS_ZIP_BYTES" ]] || fail GS_ZIP_BYTES_MISMATCH
 [[ "$DX_ZIP_SHA" == "$EXPECTED_DX_ZIP_SHA" ]] || fail DX_ZIP_SHA_MISMATCH
-
 echo "D97GV_OUTER_ZIP_IDENTITIES=PASS"
 
 printf '\n===== EXTRACT EXACT ZIPs =====\n'
@@ -69,7 +82,6 @@ GS_APP="$TMP/gs/OpenCore-Patcher-Tahoe-D97GS.app"
 DX_APP="$TMP/dx/OpenCore-Patcher-Tahoe-D97DX.app"
 [[ -d "$GS_APP" ]] || fail GS_APP_MISSING_AFTER_EXTRACT
 [[ -d "$DX_APP" ]] || fail DX_APP_MISSING_AFTER_EXTRACT
-
 echo "D97GV_EXTRACT=PASS"
 
 printf '\n===== WRAPPER PROVENANCE =====\n'
@@ -107,19 +119,29 @@ echo "D97GV_GS_INNER_SHA256=$GS_INNER_SHA"
 [[ "$GS_NEW_SHA" == "$EXPECTED_GS_SOURCE_SHA" ]] || fail GS_NEW_PATCH_SHA_MISMATCH
 [[ "$GS_INNER_SHA" == "$EXPECTED_GS_INNER_SHA" ]] || fail GS_INNER_SHA_MISMATCH
 
-# Launcher must remain byte-identical to D97DX. Resolve exactly one regular file in each Contents/MacOS.
-mapfile -t GS_LAUNCHERS < <(/usr/bin/find "$GS_APP/Contents/MacOS" -maxdepth 1 -type f -print)
-mapfile -t DX_LAUNCHERS < <(/usr/bin/find "$DX_APP/Contents/MacOS" -maxdepth 1 -type f -print)
-[[ "${#GS_LAUNCHERS[@]}" -eq 1 ]] || fail GS_LAUNCHER_COUNT_NOT_ONE
-[[ "${#DX_LAUNCHERS[@]}" -eq 1 ]] || fail DX_LAUNCHER_COUNT_NOT_ONE
-GS_LAUNCHER_SHA="$(sha256 "${GS_LAUNCHERS[0]}")"
-DX_LAUNCHER_SHA="$(sha256 "${DX_LAUNCHERS[0]}")"
-echo "D97GV_GS_LAUNCHER=$(basename "${GS_LAUNCHERS[0]}")"
+# Also require a Desktop build-source patch with the same audited identity.
+DESKTOP_GS_SOURCE=""
+for P in "$HOME"/Desktop/OCLP7_D97GS_SOURCE_*.patch; do
+    [[ -f "$P" ]] || continue
+    if [[ "$(sha256 "$P")" == "$EXPECTED_GS_SOURCE_SHA" ]]; then
+        DESKTOP_GS_SOURCE="$P"
+        break
+    fi
+done
+[[ -n "$DESKTOP_GS_SOURCE" ]] || fail DESKTOP_GS_SOURCE_PATCH_NOT_FOUND
+/usr/bin/cmp -s "$DESKTOP_GS_SOURCE" "$GS_NEW_PATCH" || fail DESKTOP_VS_EMBEDDED_GS_SOURCE_MISMATCH
+echo "D97GV_DESKTOP_GS_SOURCE=$DESKTOP_GS_SOURCE"
+echo "D97GV_DESKTOP_VS_EMBEDDED_GS_SOURCE=PASS"
+
+GS_LAUNCHER="$(single_regular_file "$GS_APP/Contents/MacOS")" || fail GS_LAUNCHER_COUNT_NOT_ONE
+DX_LAUNCHER="$(single_regular_file "$DX_APP/Contents/MacOS")" || fail DX_LAUNCHER_COUNT_NOT_ONE
+GS_LAUNCHER_SHA="$(sha256 "$GS_LAUNCHER")"
+DX_LAUNCHER_SHA="$(sha256 "$DX_LAUNCHER")"
+echo "D97GV_GS_LAUNCHER=$(basename "$GS_LAUNCHER")"
 echo "D97GV_GS_LAUNCHER_SHA256=$GS_LAUNCHER_SHA"
 echo "D97GV_DX_LAUNCHER_SHA256=$DX_LAUNCHER_SHA"
 [[ "$GS_LAUNCHER_SHA" == "$EXPECTED_LAUNCHER_SHA" ]] || fail GS_LAUNCHER_SHA_MISMATCH
 [[ "$DX_LAUNCHER_SHA" == "$EXPECTED_LAUNCHER_SHA" ]] || fail DX_LAUNCHER_SHA_MISMATCH
-
 echo "D97GV_WRAPPER_PROVENANCE=PASS"
 
 printf '\n===== ARCH / CODESIGN =====\n'
@@ -129,7 +151,6 @@ echo "D97GV_GS_INNER_ARCH=$GS_INNER_ARCH"
 /usr/bin/codesign --verify --deep --strict "$GS_APP" || fail GS_OUTER_CODESIGN_FAIL
 /usr/bin/codesign --verify --deep --strict "$GS_APP/Contents/Resources/OpenCore-Patcher.app" || fail GS_INNER_APP_CODESIGN_FAIL
 /usr/bin/codesign --verify --strict "$GS_DEBUG" || fail GS_DEBUG_HELPER_CODESIGN_FAIL
-
 echo "D97GV_CODESIGN=PASS"
 
 printf '\n===== SOURCE PATCH SECTION AUDIT =====\n'
@@ -179,7 +200,6 @@ for fn in sorted(expected_base):
         raise SystemExit('BASE_SECTION_DRIFT:'+fn)
 
 sec=G[new_file]
-# Only additive source changes are acceptable in sys_patch.py (ignoring file-header --- lines).
 removed=[ln for ln in sec.splitlines() if ln.startswith('-') and not ln.startswith('---')]
 added=[ln[1:] for ln in sec.splitlines() if ln.startswith('+') and not ln.startswith('+++')]
 print('D97GV_SYS_PATCH_REMOVED_LINE_COUNT='+str(len(removed)))
@@ -213,6 +233,11 @@ for forbidden in ['P2b','P2B','AIR00','D34','true-five','true five']:
     if forbidden in a:
         raise SystemExit('FORBIDDEN_REPLAY_LABEL_IN_SYS_PATCH:'+forbidden)
 
+# New added source must not introduce a legacy main Metal shadow.
+for forbidden in ['MetalOld.dylib','13.2.1-24/Metal.framework']:
+    if forbidden in a:
+        raise SystemExit('FORBIDDEN_LEGACY_MAIN_METAL_ADDITION:'+forbidden)
+
 with out.open('w') as f:
     f.write('FILE\tBASE_SECTION_SHA256\tGS_SECTION_SHA256\tEXACT_MATCH\n')
     for r in rows:
@@ -231,16 +256,6 @@ printf '\n===== P1 CONTRACT FILE =====\n'
 /usr/bin/grep -Fx "D97GS_P1_POST_SHA256=$EXPECTED_P1_POST_SHA" "$GS_CONTRACT" >/dev/null || fail CONTRACT_POST_SHA_MISMATCH
 /usr/bin/grep -Fx "D97GS_P1_OFFSET=0x3494" "$GS_CONTRACT" >/dev/null || fail CONTRACT_OFFSET_MISMATCH
 echo "D97GV_P1_CONTRACT_FILE=PASS"
-
-printf '\n===== FORBIDDEN WRAPPER / SOURCE REGRESSION SCAN =====\n'
-# Base D97DX patch was already audited. New functional source is restricted to sys_patch.py above.
-# Still scan the combined D97GS source patch for legacy main-Metal shadow literals.
-if /usr/bin/grep -E 'MetalOld\.dylib|13\.2\.1-24/Metal\.framework' "$GS_NEW_PATCH" > "$OUT/forbidden_source_hits.txt"; then
-    /bin/cat "$OUT/forbidden_source_hits.txt"
-    fail FORBIDDEN_LEGACY_MAIN_METAL_LITERAL_FOUND
-fi
-
-echo "D97GV_FORBIDDEN_LEGACY_MAIN_METAL_SCAN=PASS"
 
 printf '\n===== PACKAGE AUDIT RESULT =====\n'
 /usr/bin/ditto -c -k --sequesterRsrc --keepParent "$OUT" "$ZIP_OUT"
