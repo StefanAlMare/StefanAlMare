@@ -9,6 +9,9 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 
 Current authoritative runtime/execution checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`
+
+Previous downstream-localization checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FI_CORE_DISPLAY_OFFLINE_CRASH_LOOP_FRAMEBUFFER_METADATA_FRONTIER.md`
 
 Previous decisive adapter checkpoint:
@@ -78,7 +81,7 @@ Accepted functional baseline remains exactly:
 
 D22 remains accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave `0xEF8..0xEFE` remains protected. D50/D68/D82 remain reserve-only; D84 retired. Golden Sequoia remains immutable/read-only.
 
-Module-boundary + semantic evidence + far-frontier methodology remains mandatory. Universal/no-PID coverage is required when requests can vary. Control-flow success is never semantic proof by itself.
+Module-boundary + semantic evidence + far-frontier methodology remains mandatory. Universal/no-PID coverage is required when requests vary. Control-flow success is never semantic proof by itself.
 
 ## Durable target architecture
 `native Tahoe Metal / Metal4 ABI -> selective legacy 3802 ingress -> audited adapter -> legacy compiler path -> Haswell driver -> image`
@@ -91,7 +94,7 @@ Permanent prohibitions:
 - no global functional masking of `set_id_mode` bits;
 - no semantic claim for bit `0x200` beyond measured evidence.
 
-## Settled architecture before D97FH
+## Settled architecture
 - D97BV/D97DT selective true-3802 runtime delivery is CLOSED PASS.
 - D97DX native-Metal-safe Root Patch is PASS.
 - D97EB/D97EE framebuffer-count tuning is CLOSED NEGATIVE; 3/3/3 authoritative.
@@ -113,50 +116,87 @@ Persisted accelerated run `/Users/Shared/OCLP-D97EW-Capture/20260907T135033Z-290
 - exact-224 seen/adapted/succeeded `16/16/16`, failures `0`;
 - other-mode seen/passthrough succeeded `4/4`, failures `0`;
 - exhaustive `16+4=20` classification PASS;
-- first-eight direct telemetry shows every captured `0x224` passed as `0x24` and returned Apple `0`.
+- first-eight telemetry shows captured `0x224` passed as `0x24` and Apple returned `0`.
 
-Therefore the prior `Surface mode contains bad bits` rejection is CLOSED PASS as a causal blocker for this measured path. End-to-end GUI remains unproven.
+Thus prior `Surface mode contains bad bits` rejection is CLOSED PASS as a causal blocker for this measured path. End-to-end GUI remains unproven.
 
-## D97FI — downstream CoreDisplay/framebuffer metadata frontier
-Read-only unified-log analysis of the immediately preceding ACTIVE accelerated boot establishes substantial downstream progress:
-- GPUWrangler identifies `8086:0412` and `/IntelAccelerator`;
-- AppleIntelFramebuffer@0/@1/@2 are present;
-- fb0 is online and its internal-panel DPCD/EDID-side path is readable;
+## D97FI — downstream progress before IPS
+Read-only unified log proved:
+- GPUWrangler sees `8086:0412` and `/IntelAccelerator`;
+- AppleIntelFramebuffer@0/@1/@2 exist;
+- fb0 is online; internal DPCD is readable;
 - `display0` and `AppleBacklightDisplay` publish;
 - CoreDisplay reaches `GPU: FB: 3 of 3 opened`.
 
-The first direct accelerated framebuffer-resource failure observed is:
-`IOAccelDisplayPipe::init_framebuffer_resource(...): getPixelInformation for framebuffer 0 failed`.
-Classification is REACHED_NEGATIVE, not yet causal proof.
-
-Related failures then appear:
+Observed negatives include:
+- `IOAccelDisplayPipe::init_framebuffer_resource(...): getPixelInformation for framebuffer 0 failed`;
 - `IOFBSetDisplayModeAndDepth: Failed to obtain mode info from IOFBGetDisplayModeInformation()`;
-- `Attempting to get capabilities from capabilities with no devices`.
+- `Attempting to get capabilities from capabilities with no devices`;
+- repeated main-display-offline path followed by WindowServer crash.
 
-Fatal repeatable path:
-`Setting offline display 0x00000000 main in AddCGXDisplayDeviceToDeviceList`
--> `CGXDisplayDriverInitialize`
--> `WS::Displays::CoreDisplayManager::initialize()`
--> `WSInitialize`
--> WindowServer SIGSEGV.
+`IOVersatile` failure is currently NON-DISCRIMINATING because it also appears in usable VESA.
 
-This repeats across multiple WindowServer restarts. A later restart also reaches `(Metal) validateWithDevice, line 5044: error '<private>'` immediately before a crash; its semantic relationship is UNKNOWN pending `.ips` inspection.
+## D97FJ — exact WindowServer IPS fatal frontier
+Archive:
+`OCLP7_D97FI_WINDOWSERVER_IPS_20260907_172621.zip`
+- bytes `17676`;
+- SHA256 `cfec028c394362326e92b88097bb4eef40030967085a811f91e5c92ab863b793`.
 
-`com.apple.driver.IOVersatile` dependency/allocation failures are present, but the same failure also occurs in the usable VESA recovery boot, so IOVersatile is currently NON-DISCRIMINATING and causal status UNPROVEN. Do not alter it yet.
+Two relevant WindowServer `.ips` reports share bootSessionUUID `48324BF1-0934-44C2-B2B9-A1208109B19E` and converge on the same CoreDisplay function.
+
+Crash A:
+- `EXC_BAD_ACCESS / SIGSEGV`, invalid address `0x18`;
+- faulting main thread;
+- `objc_msgSend +29`
+-> `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState(...) const +599`
+-> `CoreDisplay::CreateMetalDevice +589`
+-> display-device construction
+-> `CoreDisplayManager::initialize`.
+
+Crash B:
+- `EXC_CRASH / SIGABRT`;
+- faulting main thread;
+- `MTLReportFailure`
+-> `_MTLMessageContextEndNewNSErrorOrAbort`
+-> `validateWithDevice(id<MTLDevice>, MTLRenderPipelineDescriptorPrivate const&) +716`
+-> render-pipeline descriptor validation/compiler methods
+-> `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState(...) const +1720`
+-> same display-device/CoreDisplayManager path.
+
+Unified log in the same accelerated run records:
+- `GetGPUPassRenderPipelineState: 0x1000004e9 F_NymriCY`;
+- `(Metal) validateWithDevice, line 5044: error '<private>'`.
+
+Loaded relevant identities:
+- legacy `AppleIntelHD5000GraphicsMTLDriver` 18.8.4 / UUID `d5cf0007-37a7-35cf-bb5e-a6baaa145ad2`;
+- native Tahoe `CoreDisplay` 291.4 / UUID `8bfeff75-c8c8-3b5b-afa0-61385199a1bb`;
+- native Tahoe `SkyLight` 1.600.0 / UUID `7b70d8df-984a-3fa9-829e-c26afc896d9d`;
+- native Tahoe `Metal` 373.7 / UUID `5d64fa80-29ce-32aa-bab6-4e5034132c0b` in the explicit validation-abort report;
+- GPUCompiler 32023 support libraries present.
+
+Therefore the strongest fatal frontier is no longer generic framebuffer metadata. It is:
+`CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState -> native Metal render-pipeline/device validation`.
+
+Classification:
+- fatal CoreDisplay GPU-pass pipeline frontier REACHED_NEGATIVE;
+- native Metal `validateWithDevice` abort REACHED_NEGATIVE;
+- exact incompatible descriptor field/device capability UNKNOWN;
+- `getPixelInformation` remains real but primary causal status UNPROVEN;
+- IOVersatile primary causal status UNPROVEN/NON-DISCRIMINATING.
 
 ## Current causal frontier
 Closed:
 `Tahoe 0x224 -> legacy IOAccelSurface bad-bits rejection`.
 
-Current localized module:
-`successful set_id_mode acceptance -> fb0 pixel/mode metadata/resource construction -> CoreDisplay device/capability construction -> main display offline -> WindowServer SIGSEGV`.
-
-Exact crash instruction/stack remains UNKNOWN pending reading of the existing WindowServer `.ips` reports.
+Current:
+`successful set_id_mode -> CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState -> native Metal render-pipeline/device validation -> WindowServer fatal failure -> main display offline`.
 
 ## Execution-lane authority
 User explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## CURRENT ACTION — READ EXISTING WINDOWSERVER IPS REPORTS ONLY
-Remain in VESA. No reboot and no changes to EFI, Root Patch, framebuffer counts or boot variables.
+## CURRENT ACTION — STATIC/READ-ONLY CORE DISPLAY MAPPING
+Remain in VESA. No reboot and no changes to EFI, Root Patch, framebuffer counts, NVRAM or boot variables.
 
-Collect the newest WindowServer `.ips` files corresponding to the 16:50 accelerated crash loop and analyze exact exception, faulting thread/stack and loaded images. Do not repeat the ACTIVE boot until this gate is resolved.
+Map exact 25G82 `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState` around offsets `+599` and `+1720`, plus strings around `F_NymriCY`, using the installed binaries. Determine, if statically recoverable, the descriptor property or device query immediately preceding native `validateWithDevice`.
+
+Do not repeat ACTIVE acceleration until this static boundary is resolved and a bounded observer/adapter is designed.
