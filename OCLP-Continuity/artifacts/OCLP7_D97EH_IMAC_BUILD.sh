@@ -144,7 +144,7 @@ log "BINARY_MARKER_AUDIT=PASS"
 cp -R "${KEXT}" "${PACKAGE}/OCLPMetalCompat.kext"
 cp "${SRC}" "${PACKAGE}/OCLP7_D97EH_kern_start.cpp"
 cp "${WORK}/generator.py" "${PACKAGE}/OCLP7_D97EH_SOURCE_GENERATOR.py"
-(cd "${PACKAGE}" && /usr/bin/find . -type f -print0 | /usr/bin/xargs -0 /usr/bin/shasum -a 256 > SHA256SUMS.txt)
+(cd "${PACKAGE}" && /usr/bin/find . -type f ! -name 'SHA256SUMS.txt' -print0 | /usr/bin/xargs -0 /usr/bin/shasum -a 256 > SHA256SUMS.txt)
 
 rm -f "${ZIP}"
 /usr/bin/ditto -c -k --keepParent "${PACKAGE}" "${ZIP}"
