@@ -3,7 +3,7 @@
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Current runtime checkpoint: `OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`.
-Current static-analysis checkpoint: `OCLP7_CHECKPOINT_20260907_D97FT_GPUPASS_BOOTSTRAP_EQUIVALENCE_AND_NATIVE_METAL_VALIDATION_CONTEXT_FRONTIER.md`.
+Current static/materialization checkpoint: `OCLP7_CHECKPOINT_20260907_D97FX_SOURCE_RECONSTRUCTION_PASS_ROOTPATCH_PREFLIGHT_NEXT.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -19,7 +19,7 @@ Selective true-3802 adapter semantics and runtime delivery CLOSED PASS under exa
 Do not retest absent contradiction.
 
 ## D97DX — native-Metal-safe Root Patch
-D97DX Root Patch PASS: native Tahoe main Metal authoritative; bounded legacy compiler/compatibility lanes; exact 25G82 metallib; Monterey GVA/OpenCL + Haswell drivers; no legacy main Metal shadow, MetalOld or true-five replay.
+D97DX patch policy/driver/compiler architecture remains accepted: native Tahoe main Metal authoritative; bounded legacy compiler/compatibility lanes; Monterey GVA/OpenCL + Haswell drivers; no legacy main Metal shadow, MetalOld or true-five replay. The previously installed 25G82 metallib bytes are later reclassified invalid by D97FV/D97FW because the local payload source contained metadata stubs rather than real MetalLib binaries.
 
 ## D97DZ — post-Root-Patch shared-cache pristine gate
 Immediately after D97DX under VESA, D97BV SITE and CAVE remained pristine:
@@ -184,24 +184,74 @@ Tahoe native Metal `validateWithDevice(...)` starts `0x7FF80F645727`. D97FJ `+71
 
 Mapped validation families include function validity/device association/specialization and render-raster/device pixel-format/capability checks. Fragment nil alone is not statically sufficient to prove the validation error. BGR10A2 device renderability is only a candidate, not proven causal.
 
-Exact 25G82 CoreDisplay `default.metallib` is already pinned in project evidence at SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d` and D97DX installed it, but no existing shader-level GPUPass AIR/metadata comparator was recovered.
-
 D97FT checkpoint commit `c9ffb5f30458118c7c97725811f643e926c09802`.
 
+## D97FV — real CoreDisplay metallib recovered / installed stub discovered
+Exact original package:
+- bytes `116574513`;
+- SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
+
+Its real CoreDisplay `default.metallib`:
+- bytes `20739`;
+- SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
+- MetalLib 1.2.7, `MTLB` magic;
+- contains GPUPass and its two function constants matching D97FT CoreDisplay code.
+
+The corresponding installed and local Dortania-tree files were instead 319-byte ASCII metadata stubs. Static CoreDisplay disassembly proves it loads that exact path with `newLibraryWithFile:error:`. Invalid metallib materialization became the primary common causal candidate for both D97FJ crash modes.
+D97FV checkpoint commit `935387c7a425d1e1b684a7941b801d58568894ac`.
+
+## D97FW — entire 25G82 metallib layer materialized incorrectly
+Global original-package vs local-tree vs installed-root audit proved:
+- real regular `.metallib` total `180`;
+- local exact `0`;
+- local metadata stubs `180`;
+- local stub declared-size match `180/180`;
+- installed exact `0`;
+- installed metadata stubs `180`.
+
+Thus the issue is systemic across the full 25G82 metallib layer, not isolated CoreDisplay.
+D97FW checkpoint commit `41df9c6582227c61e8bfb2e99bf8469829db4830`.
+
+## D97FX — exact 25G82 local source reconstruction PASS
+Helper authority:
+- `OCLP-Continuity/artifacts/OCLP7_D97FX_RECONSTRUCT_25G82_METALLIB_SOURCE.sh`
+- commit `a02e75e3d4284942fa2112f2964b818a59cc9c7b`
+- blob `b8e9675b16b38575bccfad5cb5c24438531480e7`.
+
+User execution proved:
+- exact original package identity PASS;
+- pre-swap stub state PASS;
+- stage regular-file count `181`;
+- stage symlink count `0`;
+- stage real-metallib count `180`;
+- staged full-tree identity PASS;
+- CoreDisplay MTLB magic PASS;
+- atomic source swap PASS;
+- `D97FX_POSTSWAP_METALLIB_EXACT=180`;
+- `D97FX_POSTSWAP_FULL_TREE_IDENTITY=PASS`;
+- corrected CoreDisplay SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
+- corrected CoreDisplay bytes `20739`;
+- corrected CoreDisplay type `MetalLib executable (MacOS), version 1.2.7`;
+- old stub tree retained at `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82.D97FX_STUB_BACKUP_20260907_212451`;
+- no Root Patch, root-volume mutation, EFI/NVRAM mutation or reboot occurred.
+
+D97FX result checkpoint commit `dea61a79025256a5b24d4b1f62a2c88c79d7588d`.
+
 ## Current causal frontier
-Closed/excluded for measured scope:
+Closed/excluded:
 - `set_id_mode 0x224` rejection;
 - D97BV delivery;
-- Tahoe-only CoreDisplay GPUPass bootstrap tuple/descriptor divergence.
+- Tahoe-only CoreDisplay GPUPass bootstrap tuple/descriptor divergence;
+- invalid local 25G82 metallib source tree — CLOSED PASS by D97FX reconstruction.
 
-Earliest captured current negative:
-`CoreDisplay -> newFunctionWithName:@"GPUPass" constants(-1,-1) -> non-null NSError path`.
+Still present in installed root:
+`180 metadata-stub metallibs`.
 
-Parallel downstream negative:
-`GPUPass descriptor -> native Tahoe Metal validation accumulates error -> __MTLMessageContextEnd -> abort -> WindowServer death`.
+Primary causal model:
+`invalid installed metallib layer -> CoreDisplay cannot obtain valid GPUPass library/function -> specialization error and/or invalid render descriptor -> Metal validation abort -> WindowServer death`.
 
-Exact common semantic cause remains UNKNOWN.
+Runtime causal closure still requires a corrected Root Patch and one measured ACTIVE boot.
 
 ## Current action
-Remain in VESA. No reboot and no EFI/Root Patch/framebuffer/NVRAM/bootarg changes.
-Statically inspect exact installed 25G82 `CoreDisplay.framework/Versions/A/Resources/default.metallib`, especially GPUPass: function presence/constants, target triple, AIR/Metal language/SDK metadata and other recoverable metadata. Compare to persisted/read-only Golden evidence if available. Only if this static boundary remains insufficient should a bounded runtime observer be designed.
+Remain in VESA. No reboot and no Root Patch yet.
+Run a final pre-Root-Patch gate that verifies exact package/source identity, CoreDisplay MTLB identity, exact D97DX application/policy identity, all 182 D97DX `Metal 3802 .metallibs` dictionary entries against the corrected source tree, official helper state, VESA state and inactive D97EZ functional mode. Only after that gate passes may manual Root Patch Restore + Root Patch be separately authorized.
