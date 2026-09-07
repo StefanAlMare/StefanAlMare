@@ -9,28 +9,19 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 
 Current authoritative runtime/execution checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FE_D97EZ_VESA_DEPLOY_HELPER_READY.md`
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FF_D97EZ_EFI_IDENTITY_PASS_LATENT_VESA_REBOOT_AUTHORIZED.md`
 
 Current independent build-audit checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FD_D97EZ_0012_INDEPENDENT_BUILD_AUDIT_PASS_VESA_DEPLOY_AUTHORIZED.md`
 
-Previous local-build helper checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FC_D97EZ_LOCAL_IMAC_BUILD_HELPER_READY.md`
+Previous deploy-helper checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FE_D97EZ_VESA_DEPLOY_HELPER_READY.md`
 
 Current local-compile authorization checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FB_LOCAL_IMAC_COMPILE_EXPLICITLY_AUTHORIZED.md`
 
 Current decisive semantic checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EY_EXACT_SET_ID_MODE_TUPLE_SEMANTIC_PROOF.md`
-
-Current GitHub Actions blocker checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FA_GITHUB_ACTIONS_EXECUTION_BLOCKER.md`
-
-Previous accelerated-evidence transport checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EX_PERSISTENT_COLLECTOR_LIVE_PASS_ACCEL_BOOT_AUTHORIZED.md`
-
-Previous D97ES VESA runtime checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EV_D97ES_VESA_RUNTIME_PASS_ACCEL_MEASUREMENT_AUTHORIZED.md`
 
 Current Root Patch execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
@@ -49,17 +40,6 @@ Authorized local Intel-iMac build helper:
 - hardened helper commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1`;
 - Git blob `19a22fe133fe04d0758f8a14a5306d4f81d25007`.
 
-Fail-closed VESA deploy helper:
-`OCLP-Continuity/artifacts/OCLP7_D97FE_D97EZ_VESA_DEPLOY.sh`
-- commit `4c7b89e5aa2b66b7d25c5e6ed9f7f9a7a25d6e53`;
-- Git blob `58af13327d31ea9b1e6b74c4b73374b2ea91f9f7`.
-
-User-visible deploy package:
-- `OCLP7_D97FE_D97EZ_VESA_DEPLOY.zip`;
-- bytes `22153`;
-- SHA256 `f4faf2266bbba41b15f6f450b120219fbb8c36cbf6ab2f394cee5fa144d746a6`;
-- bootstrap SHA256 `79b5dd3f02ba23bfbabe51c195df62ae29c7eb3f474dca0e5f65bc93e1e00b0f`.
-
 Audited returned D97EZ build:
 - archive `OCLP7_D97EZ_IMAC_BUILD_20260907_160935.zip`;
 - bytes `154432`;
@@ -71,21 +51,25 @@ Audited returned D97EZ build:
 - Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`;
 - UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`.
 
+D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly integrity PASS. This proves build/static/binary correctness, not runtime success.
+
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`;
 - Haswell `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- active EFI kext still remains audited D97ES `OCLPMetalCompat.kext` 0.0.11 until D97FE deployment is performed;
-- active D97ES executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
-- active D97ES UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64;
+- active EFI kext has now been manually replaced with audited D97EZ `OCLPMetalCompat.kext` 0.0.12;
+- direct active-EFI verification reports exact D97EZ executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
+- direct active-EFI verification reports exact D97EZ UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64;
 - D97EW persistent collector remains installed and previously LIVE/PASS;
-- the D97EX accelerated measurement boot completed and its persisted run is `/Users/Shared/OCLP-D97EW-Capture/20260907T115054Z-295`;
-- current session is VESA recovery after that accelerated measurement;
-- D97EZ 0.0.12 build is independently audited PASS but has not yet been deployed;
-- no functional `set_id_mode` correction is installed on ASUS2;
+- current session is VESA recovery after the D97EX accelerated measurement;
+- current boot args remain `-v debug=0x100 keepsyms=1 -amfipassbeta #amfi=0x80 #-lilubetaall hbfx-ahbm=55 foclegacy=1 -btlfxboardid ipc_control_port_options=0 -igfxvesa -ocmcdiag #-ocmcd97bvcave -ocmcd97bv -ocmcd97eh`;
+- `-igfxvesa` is active;
+- `-ocmcd97ez` is absent;
+- therefore the next D97EZ boot is expected to be LATENT and VESA;
+- no functional `0x224 -> 0x24` translation is currently activated;
 - no new T2/Haswell boot variable is authorized;
-- no Root Patch or reboot is authorized before active-EFI D97EZ identity is verified.
+- no Root Patch change is authorized.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -130,32 +114,29 @@ ACTIVE rule only:
 - one Apple original call;
 - exact Apple IOReturn returned unchanged.
 
-D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly integrity PASS. This proves build/static/binary correctness, not runtime success.
+Global/no-PID counters classify every routed call. First-eight telemetry preserves original mode and separately records passed mode.
 
 ## Execution-lane authority
 The user explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is exhausted/blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## D97FE deploy-helper contract
-The deploy helper is VESA-only and fail-closed:
-- requires exact current VESA args and rejects functional D97EZ activation;
-- verifies exact active D97ES identity first;
-- verifies exact incoming D97EZ identity twice before activation;
-- creates timestamped D97ES backup;
-- activates by same-volume rename and rolls back on activation/final-identity failure;
-- proves config.plist SHA and boot-args unchanged;
-- no BundlePath edit, NVRAM write, Root Patch or reboot.
-
-## CURRENT ACTION — RUN D97FE VESA DEPLOY
-On ASUS2 remain in current VESA session. Mount the active EFI as `/Volumes/EFI`, extract the exact D97FE deploy package, and run the bootstrap. Do not add `-ocmcd97ez` and do not reboot afterward.
-
-Return complete terminal output. Required active-EFI result:
-- `D97FE_DEPLOY_STATUS=PASS`;
+## D97FF pre-reboot closure
+Manual active-EFI replacement is identity-pinned PASS:
 - version `0.0.12`;
-- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
-- Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`;
-- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64;
-- config unchanged PASS;
-- boot args unchanged PASS;
-- reboot performed NO.
+- executable SHA256 exact audited value;
+- UUID exact audited value;
+- active VESA bootarg preserved;
+- D97EZ functional bootarg absent.
 
-Only after returned deployment identity PASS may one VESA validation reboot be separately authorized. Accelerated boot and functional `-ocmcd97ez` remain forbidden until LATENT VESA behavior is proven.
+This closes the pre-reboot deployment identity gate. It does not prove runtime load or LATENT behavior yet.
+
+## CURRENT ACTION — ONE LATENT VESA REBOOT AUTHORIZED
+Perform exactly one reboot with current boot args unchanged.
+
+Expected:
+- VESA active via `-igfxvesa`;
+- D97EZ 0.0.12 loads from EFI;
+- `D97EZFunctionalMode=LATENT` because `-ocmcd97ez` is absent;
+- zero functional exact-match adaptations;
+- existing D97BV and set_id_mode observer routes remain requested.
+
+After returning to VESA, do not alter EFI, boot args, NVRAM, Root Patch or framebuffer. Collect live loaded-kext identity and D97EZ IORegistry state. Accelerated boot and active `-ocmcd97ez` remain forbidden until LATENT VESA behavior is separately proven and persisted.
