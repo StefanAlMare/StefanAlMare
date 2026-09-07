@@ -2,7 +2,7 @@
 
 Updated: 2026-09-08 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97GU_BASE_RESTORED_D97GS_BUILD_PASS_D97GV_AUDIT_READY.md`.
+Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97GV_D97GS_ARTIFACT_AUDIT_PASS_ASUS2_PREFLIGHT_NEXT.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history. Older OCLP1–OCLP6 and early OCLP7 details remain in their original checkpoints; this index emphasizes the accepted causal chain and current frontier.
 
 ## Project end goal
@@ -91,7 +91,7 @@ Twelve `.ips` reports spanning both accelerated sessions converge 12/12 on:
 - r15=32023;
 - return frame `MTLConnectionCtx::MTLConnectionCtx(int)+56`, offset `0x3448`.
 
-Accepted D97M static map links `0x3448` to the return from exact `callq *0x8(%r14)`, the `MTLCodeGenServiceCreate` pointer. Historical 2026-08-14 evidence has the same signature.
+Accepted D97M static map links `0x3448` to return from exact `callq *0x8(%r14)`, the `MTLCodeGenServiceCreate` pointer. Historical 2026-08-14 evidence has the same signature.
 Checkpoint `5afdc48b4d9eeae3f713ac99fdeb0592ab543731`.
 
 ## D97GP — service is pre-P1; 32023 compiler itself PASS
@@ -129,10 +129,10 @@ D97GR checkpoint `05cf8b0f5a3e44a24b787ab92010cb2ec1f37419`.
 First D97GS build guard saw whole-worktree diff SHA mismatch. D97GT read-only audit proved:
 - all four D97DX source sections exact byte-for-byte against embedded D97DX source patch;
 - no source drift;
-- only extra tracked file was D97DX DEBUG helper binary left by the earlier build;
-- that helper SHA `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9` exactly matched the known D97DX build artifact.
+- only extra tracked file was D97DX DEBUG helper binary left by earlier build;
+- that helper SHA `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9` exactly matched known D97DX build artifact.
 
-Classification: D97GS first stop was a guard/tooling false negative, not source drift.
+Classification: first D97GS stop was guard/tooling false negative, not source drift.
 Checkpoint `3b44945d87ac96a0bfef4c5cd5e898d1f7d3407b`.
 
 ## D97GU — exact D97DX source base restored
@@ -145,11 +145,10 @@ Before/after:
 - tracked changes after exactly four D97DX source files;
 - `sys_patch.py` pristine.
 
-Classification:
-`D97GU_D97DX_SOURCE_BASE=EXACT_RESTORED`.
+Classification: `D97GU_D97DX_SOURCE_BASE=EXACT_RESTORED`.
 
 ## D97GS — P1-only build PASS
-Unchanged D97GS helper then built from the exact D97DX source base on the authorized Intel iMac.
+Unchanged D97GS helper built from exact D97DX source base on authorized Intel iMac.
 
 Source gate:
 - pre-diff exact `c8b45d7f...` PASS;
@@ -178,14 +177,40 @@ Classification:
 
 Checkpoint `bfbb78a8acb75bf4b06ebda31fb130924e137cfc`.
 
-## Current action — D97GV independent artifact audit
-No ASUS2 Root Patch and no accelerated boot authorized yet.
+## D97GV — independent D97GS artifact audit PASS
+D97GV on Intel iMac proved:
+- D97GS ZIP SHA `e61d225d2bc1352795ef2aeb9e61959fef2f23b9d11192dd1ea033824c855266`, bytes `722879148` exact;
+- D97DX comparator ZIP exact;
+- D97GS/D97DX DEBUG helper exact same SHA `993bf7e8...`;
+- D97GS retains exact D97DX base source patch `c8b45d7f...`;
+- D97GS new source patch exact `cae9c340...`;
+- inner executable exact SHA `5f4abff8...`, x86_64, codesign PASS;
+- D97GS/D97DX launcher exact same SHA `344ea23b...`;
+- source section count base 4 / D97GS 5;
+- all four D97DX base sections byte-identical;
+- only new source section is `sys_patch.py`;
+- zero removed lines, 83 added lines in new `sys_patch.py` section;
+- exact P1 hook/build/model/pre-SHA/post-SHA/preimage/postimage/offset/two-byte-write guards each exactly once;
+- P1 contract file PASS;
+- no P2b/P3/AIR00/D34 replay.
 
-Run only on Intel iMac:
-`OCLP7_D97GV_IMAC_AUDIT_D97GS_P1_ONLY_ARTIFACT.sh`
-- corrected v2 commit `ec349c174dcd0c6bbb4e1b7b7bab9ab64ca0fce7`;
-- blob `253af01b4409e0495cf23febc41ec5a2ce41f7f0`.
+Final classifications:
+`D97GV_D97GS_ARTIFACT_IDENTITY=PASS`
+`D97GV_D97DX_BASE_SECTIONS_EXACT=PASS`
+`D97GV_P1_ONLY_SOURCE_DELTA=STATIC_STRUCTURAL_SEMANTIC_PROVEN`
+`D97GV_STATUS=PASS_READONLY_AUDIT`.
 
-D97GV must independently prove exact ZIP/wrapper/inner identities, x86_64/codesign, four D97DX base source sections exact byte-for-byte, only additive new `sys_patch.py` P1 section, exact P1 guard contract, and absence of P2b/P3/AIR00/D34 replay or new legacy main-Metal shadow.
+D97GV audit ZIP SHA `5f4b96edcf719ed29779ef8b79e89b1d4066a7b51dfd964990dd428b37b3ae66`.
+Checkpoint `72812a82b3a94bfe0dd42c55401834e97d237ffb`.
 
-Only after D97GV PASS may ASUS2 P1-only Root Patch be considered.
+## Current action — D97GW ASUS2 read-only preflight
+No Root Patch and no accelerated boot authorized yet.
+
+Run only on ASUS2:
+`OCLP7_D97GW_ASUS2_PREFLIGHT_D97GS_P1_ONLY_ROOTPATCH.sh`
+- commit `efd54accbfd4360b5e650f576a9cc43211b03315`;
+- blob `7f7b4c9ca7ea8cb9e81d874fb4a76db42c7fd42f`.
+
+D97GW must verify exact Tahoe 25G82/VESA/D97EZ-inert state, current pre-P1 service identity, corrected local 25G82 MetallibSupportPkg state, exact transferred D97GS ZIP SHA/bytes, extracted wrapper/helper/inner/source identities and codesign.
+
+Only after `D97GW_STATUS=PASS_READONLY_PREFLIGHT` may manual D97GS Root Patch be separately authorized. After that Root Patch completes, DO NOT reboot until transcript and patched-volume audit are complete.
