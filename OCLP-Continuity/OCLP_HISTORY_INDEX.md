@@ -2,17 +2,14 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FE_D97EZ_VESA_DEPLOY_HELPER_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FF_D97EZ_EFI_IDENTITY_PASS_LATENT_VESA_REBOOT_AUTHORIZED.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
 Tahoe `26.6.2 / 25G82` on ASUS2, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware-accelerated GUI.
 
 ## Durable baseline / rules
-Accepted functional baseline remains exactly:
-`P1 + P2b + P3 + AIR00 + D34`.
-D22 remains the accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave is protected. Golden Sequoia remains immutable/read-only. D50/D68/D82 remain reserve-only; D84 retired.
-Permanent method remains module-boundary + semantic evidence + far-frontier, with universal/no-PID coverage where requests vary.
+Accepted functional baseline remains exactly `P1 + P2b + P3 + AIR00 + D34`. D22 remains the accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave is protected. Golden Sequoia remains immutable/read-only. D50/D68/D82 remain reserve-only; D84 retired. Permanent method remains module-boundary + semantic evidence + far-frontier, with universal/no-PID coverage where requests vary.
 
 ## D97BV / D97DT — selective 3802 runtime closure
 Selective true-3802 adapter semantics and runtime delivery are CLOSED PASS under exact 25G82. This lane is not to be retested absent contradiction.
@@ -71,27 +68,31 @@ Compiled D97EZ:
 - Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`;
 - generated source SHA256 `35e596e7067eba65bb544cb34a109289485320292cbe97953882da18d0f2a74a`.
 Independent disassembly proves exact compare/translation, unchanged `that/id`, one original call, post-call diagnostic masks and exact return passthrough.
-D97FD checkpoint commit `4cc0928f94f9d28bcb1b5b91660a221c570742c4`; MASTER advance `942388047fb2b3475e2c4a6319800db13f8963fa`.
+D97FD checkpoint commit `4cc0928f94f9d28bcb1b5b91660a221c570742c4`.
 
 ## D97FE — VESA deploy helper ready
-Fail-closed helper:
-`OCLP-Continuity/artifacts/OCLP7_D97FE_D97EZ_VESA_DEPLOY.sh`
-- commit `4c7b89e5aa2b66b7d25c5e6ed9f7f9a7a25d6e53`;
-- Git blob `58af13327d31ea9b1e6b74c4b73374b2ea91f9f7`.
+Fail-closed helper `OCLP7_D97FE_D97EZ_VESA_DEPLOY.sh` was prepared with exact old/new identity checks, rollback, config/boot-arg invariants, and no NVRAM/Root Patch/reboot behavior. User elected to perform the EFI kext replacement manually instead of using the helper.
 
-Helper requires exact current VESA args, rejects `#-igfxvesa` and active `-ocmcd97ez`, verifies exact active D97ES 0.0.11, verifies incoming D97EZ 0.0.12 before and after temp copy, creates timestamped D97ES backup, activates via same-volume rename with rollback on activation/final-identity failure, and proves config.plist + boot args unchanged. It performs no Kernel Add edit, NVRAM write, Root Patch or reboot.
+## D97FF — manual active-EFI D97EZ identity PASS
+User manually replaced the existing `EFI/OC/Kexts/OCLPMetalCompat.kext` with the audited D97EZ 0.0.12 bundle and then directly verified the active EFI path.
 
-User-visible deploy package:
-- `OCLP7_D97FE_D97EZ_VESA_DEPLOY.zip`;
-- bytes `22153`;
-- SHA256 `f4faf2266bbba41b15f6f450b120219fbb8c36cbf6ab2f394cee5fa144d746a6`;
-- bootstrap SHA256 `79b5dd3f02ba23bfbabe51c195df62ae29c7eb3f474dca0e5f65bc93e1e00b0f`.
+Direct evidence:
+- version `0.0.12`;
+- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64.
 
-D97FE checkpoint commit `09e37178cb21836f7cd913a050990fb72282fc0c`; MASTER advance `870f9784ed5701acc9e770e1e4d1b504f451a984`.
+Current saved boot args remain:
+`-v debug=0x100 keepsyms=1 -amfipassbeta #amfi=0x80 #-lilubetaall hbfx-ahbm=55 foclegacy=1 -btlfxboardid ipc_control_port_options=0 -igfxvesa -ocmcdiag #-ocmcd97bvcave -ocmcd97bv -ocmcd97eh`
+
+Thus:
+- VESA is active;
+- exact D97EZ identity in EFI is PASS;
+- `-ocmcd97ez` is absent;
+- the first D97EZ runtime boot will be LATENT;
+- no `0x224 -> 0x24` functional translation should occur.
+
+D97FF checkpoint commit `658191198efd7b704b7ee9d2139b12bb91d285f8`.
+MASTER advance to D97FF: `6ec49f48d9f9e7bfbe5d1b65048cec0e6c224f96`.
 
 ## Current action
-On ASUS2 remain in current VESA session. Mount the active EFI as `/Volumes/EFI`, extract the exact D97FE deploy ZIP and run its bootstrap. Do not add `-ocmcd97ez` and do not reboot afterward.
-
-Return complete terminal output. Required result: D97FE deployment PASS, D97EZ active version 0.0.12, executable SHA `356b5193...`, Info SHA `2ba171f8...`, UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`, x86_64, config unchanged PASS, boot args unchanged PASS, reboot performed NO.
-
-No Root Patch, reboot, framebuffer change, T2/Haswell variable, accelerated boot or functional D97EZ activation is authorized until the exact deployed identity is returned and audited.
+Exactly one VESA reboot is authorized with current boot args unchanged. After boot, do not alter EFI, boot args, NVRAM, Root Patch or framebuffer. Collect loaded-kext identity and D97EZ IORegistry state to prove LATENT runtime behavior. Accelerated boot and active `-ocmcd97ez` remain forbidden until a later checkpoint explicitly authorizes them.
