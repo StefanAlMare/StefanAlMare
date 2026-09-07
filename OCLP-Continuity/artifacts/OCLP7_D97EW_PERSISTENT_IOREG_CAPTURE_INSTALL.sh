@@ -20,7 +20,7 @@ fi
 if [[ "${1:-}" == "--uninstall" ]]; then
   /bin/launchctl bootout "system/${LABEL}" 2>/dev/null || true
   /bin/rm -f "$PLIST" "$CAPTURE"
-  /usr/bin/rmdir "$SUPPORT" 2>/dev/null || true
+  /bin/rmdir "$SUPPORT" 2>/dev/null || true
   echo "D97EW_UNINSTALL_STATUS=PASS"
   echo "D97EW_LOGS_PRESERVED=$BASE"
   exit 0
