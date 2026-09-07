@@ -9,21 +9,21 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 
 Current authoritative runtime/execution checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FG_D97EZ_LATENT_VESA_RUNTIME_PASS_ACTIVE_ACCEL_AUTHORIZED.md`
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FH_SET_ID_MODE_ADAPTER_SEMANTIC_PASS_NEW_DOWNSTREAM_FRONTIER.md`
 
-Current pre-runtime deployment checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FF_D97EZ_EFI_IDENTITY_PASS_LATENT_VESA_REBOOT_AUTHORIZED.md`
+Previous LATENT VESA gate:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FG_D97EZ_LATENT_VESA_RUNTIME_PASS_ACTIVE_ACCEL_AUTHORIZED.md`
 
 Current independent build-audit checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FD_D97EZ_0012_INDEPENDENT_BUILD_AUDIT_PASS_VESA_DEPLOY_AUTHORIZED.md`
 
-Current decisive semantic checkpoint:
+Original exact tuple semantic checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EY_EXACT_SET_ID_MODE_TUPLE_SEMANTIC_PROOF.md`
 
 Current Root Patch execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 
-## Current D97EZ authorities
+## Current D97EZ authority
 Design:
 `OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_DESIGN.md`
 
@@ -32,9 +32,9 @@ Generator:
 - commit `cd76d912018bfa60284af3cb732ae8bca84db091`;
 - Git blob `3bf728b999e2163af77742686d7ce9aaac04e8fb`.
 
-Authorized local Intel-iMac build helper:
+Audited local Intel-iMac build helper:
 `OCLP-Continuity/artifacts/OCLP7_D97EZ_IMAC_BUILD.sh`
-- hardened helper commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1`;
+- helper commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1`;
 - Git blob `19a22fe133fe04d0758f8a14a5306d4f81d25007`.
 
 Audited D97EZ build:
@@ -48,22 +48,20 @@ Audited D97EZ build:
 - Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`;
 - UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`.
 
-D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly integrity PASS. This proves build/static/binary correctness, not accelerated runtime success.
+D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly integrity PASS.
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`;
 - Haswell `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- active and loaded kext is audited D97EZ `OCLPMetalCompat.kext` 0.0.12;
-- loaded UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`;
-- D97EW persistent collector remains installed and previously LIVE/PASS;
-- current session is the completed D97EZ LATENT VESA validation boot;
-- current boot args are `-v debug=0x100 keepsyms=1 -amfipassbeta #amfi=0x80 #-lilubetaall hbfx-ahbm=55 foclegacy=1 -btlfxboardid ipc_control_port_options=0 -igfxvesa -ocmcdiag #-ocmcd97bvcave -ocmcd97bv -ocmcd97eh`;
-- `-igfxvesa` active;
-- `-ocmcd97ez` absent;
-- no new T2/Haswell variable active;
-- normal 3/3/3 framebuffer baseline remains authoritative;
+- active EFI kext remains audited D97EZ `OCLPMetalCompat.kext` 0.0.12;
+- loaded/runtime UUID when tested: `3405DFAB-244A-38CA-90EA-79A1A24EEF72`;
+- D97EW persistent collector remains installed and proven LIVE/PASS;
+- normal framebuffer baseline remains 3/3/3;
+- current session is VESA recovery after the D97FH ACTIVE accelerated experiment;
+- current recovery state should have active `-igfxvesa` and absent/inert `-ocmcd97ez`;
+- no new T2/Haswell boot variable is authorized;
 - no Root Patch change is authorized.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
@@ -76,7 +74,7 @@ Accepted functional baseline remains exactly:
 - AIR00 fallback producing AIR 2.6 / Metal 3.1;
 - D34 semantic-equivalent reset.
 
-D22 remains the accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave `0xEF8..0xEFE` remains protected. D50/D68/D82 remain reserve-only; D84 is retired.
+D22 remains the accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave `0xEF8..0xEFE` remains protected. D50/D68/D82 remain reserve-only; D84 is retired. Golden Sequoia remains immutable/read-only.
 
 Module-boundary + semantic evidence + far-frontier methodology remains mandatory. Universal/no-PID coverage is required when requests can vary. Control-flow success is never semantic proof by itself.
 
@@ -89,16 +87,17 @@ Permanent prohibitions:
 - no global forced-3802 production path;
 - no true-five reapplication;
 - no global functional masking of `set_id_mode` bits;
-- no semantic claim for bit `0x200` without direct proof.
+- no semantic claim for bit `0x200` beyond measured evidence.
 
-## Settled downstream architecture
-D97BV/D97DT selective true-3802 runtime delivery is CLOSED PASS and not to be retested absent contradiction.
-D97DX native-Metal-safe Root Patch is PASS.
-D97EB/D97EE framebuffer-count tuning is CLOSED NEGATIVE; normal 3/3/3 remains authoritative.
-D97EG-D97EP exact `IOAccelSurface::set_id_mode(uint32_t,uint32_t)` observer route and passthrough are CLOSED PASS for their proven scope.
-D97ES/D97ET added first-eight tuple telemetry without mutation; D97EW/D97EX closed the hard-recovery evidence transport gap.
+## Settled architecture before D97FH
+- D97BV/D97DT selective true-3802 runtime delivery is CLOSED PASS.
+- D97DX native-Metal-safe Root Patch is PASS.
+- D97EB/D97EE framebuffer-count tuning is CLOSED NEGATIVE; 3/3/3 authoritative.
+- D97EG-D97EP exact `IOAccelSurface::set_id_mode(uint32_t,uint32_t)` observer route and passthrough are CLOSED PASS for proven scope.
+- D97ES/D97ET added first-eight tuple telemetry without mutation.
+- D97EW/D97EX closed hard-recovery evidence transport.
 
-## D97EY — decisive exact tuple semantic proof
+## D97EY — pre-fix semantic failure proof
 Captured accepted class:
 - `mode=0x24`;
 - badBits `0`;
@@ -111,10 +110,10 @@ Captured rejected class:
 - goodBits `0x24`;
 - Apple raw return `0xE00002C2 = kIOReturnBadArgument`.
 
-The captured accepted/rejected classes differ only by bit `0x200`. This is SEMANTIC PROVEN for captured calls. Semantic meaning of `0x200` remains UNKNOWN. No global mask is authorized.
+The captured classes differ only by bit `0x200`. This is SEMANTIC PROVEN for captured calls. Semantic name of `0x200` remains UNKNOWN.
 
-## D97EZ exact-match experiment
-LATENT unless `-ocmcd97ez` is active.
+## D97EZ exact-match rule
+LATENT unless `-ocmcd97ez` active.
 
 ACTIVE rule only:
 - exact `originalMode == 0x224` -> pass `0x24`;
@@ -126,43 +125,66 @@ ACTIVE rule only:
 Global/no-PID counters classify every routed call. First-eight telemetry preserves original mode and separately records passed mode.
 
 ## D97FG — LATENT VESA runtime PASS
-Exact runtime evidence on 25G82:
-- loaded D97EZ 0.0.12 UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`;
-- `D97EZFunctionalRequested=0`;
-- `D97EZFunctionalMode=LATENT`;
-- all D97EZ seen/adapt/success/failure counters `0`;
-- observer requested `1`;
-- callback seen `17`;
-- exact target callback seen `1`;
-- `D97ELRouteStatus=PASS`;
-- `D97ELSetIdModeCallCount=0`;
-- `D97ESCapturedCount=0`;
-- all eight D97ES Valid fields `0`;
-- `D97CTRouteStatus=PASS`;
-- publisher ticks `300`.
+Exact runtime identity 0.0.12/UUID PASS. `D97EZFunctionalRequested=0`, `FunctionalMode=LATENT`, observer route PASS, zero set_id_mode calls and zero adaptation counters, publisher bounded to 300 ticks. This closed the required LATENT safety gate.
 
-This proves D97EZ runtime identity, LATENT gate, route/publisher and expected VESA zero-call/zero-adaptation behavior. It does not prove accelerated passthrough semantics because VESA produces no set_id_mode calls.
+## D97FH — ACTIVE exact adapter SEMANTIC PASS / bad-bits blocker CLOSED
+Accelerated ACTIVE persisted run:
+`/Users/Shared/OCLP-D97EW-Capture/20260907T135033Z-290`
+
+Saved boot args prove:
+- inert `#-igfxvesa`;
+- active `-ocmcd97ez`;
+- preserved `-ocmcdiag`, `-ocmcd97bv`, `-ocmcd97eh`, inert `#-ocmcd97bvcave`.
+
+Loaded identity:
+- D97EZ 0.0.12;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`.
+
+At first 15 calls:
+- exact-224 seen `12`;
+- exact-224 adapted `12`;
+- adapt success `12`;
+- adapt failure `0`;
+- other mode seen `3`;
+- passthrough success `3`;
+- passthrough failure `0`;
+- `12 + 3 == 15` exhaustive classification PASS.
+
+At stable 20 calls:
+- exact-224 seen `16`;
+- exact-224 adapted `16`;
+- adapt success `16`;
+- adapt failure `0`;
+- other mode seen `4`;
+- passthrough success `4`;
+- passthrough failure `0`;
+- `16 + 4 == 20` exhaustive classification PASS.
+
+First-eight direct telemetry:
+- slots 2/3/4/5/7/8 original `0x224` -> passed `0x24` -> Apple return `0`;
+- slots 1/6 original `0x24` -> passed `0x24` -> Apple return `0`.
+
+Therefore:
+- exact D97EZ translation is STRUCTURAL-SEMANTIC PROVEN for captured traffic;
+- every observed exact-224 call in the 20-call window is accepted by Apple after translation;
+- every observed non-224 passthrough call succeeds;
+- previous `Surface mode contains bad bits` rejection is CLOSED PASS as a causal blocker for this measured path.
+
+This does NOT prove end-to-end accelerated GUI success. The system still required VESA recovery; the next failure is downstream of successful set_id_mode acceptance.
+
+## Current causal frontier
+Closed:
+`Tahoe 0x224 -> legacy IOAccelSurface rejection`
+
+Current:
+`successful IOAccelSurface::set_id_mode acceptance -> next CoreDisplay / SkyLight / WindowServer / IOAccelerator failure preventing usable accelerated image`
 
 ## Execution-lane authority
-User explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is currently exhausted/blocked. Do not retry GitHub Actions compilation during this quota-limited period.
+User explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## CURRENT ACTION — ONE D97EZ ACTIVE ACCELERATED EXPERIMENT AUTHORIZED
-Perform exactly one diagnostic boot with only these intentional changes from current proven VESA state:
-- make `-igfxvesa` inert as `#-igfxvesa`;
-- add active `-ocmcd97ez`.
+## CURRENT ACTION — READ-ONLY DOWNSTREAM FAILURE LOCALIZATION
+Remain in VESA with D97EZ functional mode inactive. Do not change EFI, Root Patch, framebuffer counts or boot variables.
 
-Keep unchanged:
-- `-ocmcdiag`;
-- `-ocmcd97bv`;
-- `-ocmcd97eh`;
-- inert `#-ocmcd97bvcave`;
-- `ipc_control_port_options=0`;
-- `-amfipassbeta`;
-- D97DX Root Patch;
-- D97EZ 0.0.12;
-- D97EW collector;
-- normal 3/3/3 framebuffer baseline.
+Analyze persisted system/unified logs from the immediately preceding ACTIVE accelerated boot around 2026-09-07 16:50 EEST and identify the first new failure after successful set_id_mode acceptance.
 
-No other T2/Haswell variable, Root Patch or framebuffer change is authorized.
-
-If image is lost, keep the system powered for at least 30 seconds before hard power to allow D97EZ publication and D97EW sync. Recover by restoring active `-igfxvesa` and removing/making inert `-ocmcd97ez`. After recovery, accelerated evidence comes only from the preceding accelerated D97EW run, not the current VESA IORegistry.
+Do not repeat the ACTIVE boot unchanged until that downstream frontier is located.
