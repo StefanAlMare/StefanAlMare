@@ -6,7 +6,7 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EF_1FB_NEGATIVE_SET_ID_MODE_FRONTIER.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EG_SET_ID_MODE_EXACT_SYMBOL_RESOLVED.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 
@@ -16,7 +16,8 @@ Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_R
 - current session is VESA recovery boot at `2026-09-07 10:07 EEST`;
 - active EFI compatibility kext remains D97DL `OCLPMetalCompat.kext` 0.0.7, UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
 - active recovery args retain `-igfxvesa -ocmcdiag -ocmcd97bv`; `#-ocmcd97bvcave` is inert;
-- D97ED 1/1/1 accelerated experiment failed and D97EE analysis has closed framebuffer-count tuning as a solution.
+- D97ED 1/1/1 accelerated experiment failed and D97EE analysis closed framebuffer-count tuning as a solution;
+- D97EG resolved the exact failing interface symbol to `IOAccelSurface::set_id_mode(uint32_t,uint32_t)`.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -99,7 +100,7 @@ D97ED temporarily forced:
 - `framebuffer-memorycount = 1`;
 - con2 override removed.
 
-D97EE evidence proves this took effect in the accelerated boot proper (~03:07:54 onward):
+D97EE evidence proves this took effect in the accelerated boot proper:
 - `Creating FB 1 of 1`;
 - `Created FB 1 of 1`;
 - `GPU: FB: 1 of 1 opened`.
@@ -122,18 +123,32 @@ Classifications:
 
 D97EF checkpoint commit: `6547ddfa10fa02664116567a252b4044342c453b`.
 
+## D97EG — exact set_id_mode symbol resolved
+Read-only ASUS2 audit proved:
+- `/System/Library/Extensions/IOAcceleratorFamily2.kext` exists;
+- its prior assumed standalone executable path is absent on this Tahoe system, consistent with implementation residing in a kernel collection;
+- `AppleIntelHD5000Graphics.kext` contains an undefined dynamically-looked-up import:
+  `__ZN14IOAccelSurface11set_id_modeEjj`.
+
+Therefore the exact failing interface imported by the legacy Haswell accelerator driver is:
+`IOAccelSurface::set_id_mode(uint32_t id, uint32_t mode)`.
+
+This closes the ambiguity with external NootedGreen work, which routes `IOAccelLegacySurface::set_id_mode`; ASUS2 imports `IOAccelSurface::set_id_mode` specifically.
+
+D97EG checkpoint commit: `89fafd6040a6fb6ad6880d20544bc4a7397f0bd7`.
+
 ## Current causal frontier
 The active frontier is now specifically:
 `Tahoe/CoreDisplay producer semantics -> IOAccelSurface::set_id_mode(id, mode) -> legacy Haswell IOAccelerator acceptance`.
 
 Need to determine the exact `mode` value(s), rejected bit(s), and original IOReturn before applying any functional correction.
 
-External orientation only: NootedGreen has a related `set_id_mode` diagnostic/fix and classifies candidate mode bits using masks `0xff8073c0` and `0x007f8c3f`, but its TGL/RPL context differs from Haswell. Its functional masking is NOT authorized for transplant. Tahoe ASUS2 logs name `IOAccelSurface::set_id_mode`, while NootedGreen routes `IOAccelLegacySurface::set_id_mode`; exact 25G82 target symbol resolution is mandatory.
+External orientation only: NootedGreen has a related `set_id_mode` observer/fix and classifies candidate mode bits using masks `0xff8073c0` and `0x007f8c3f`, but its TGL/RPL context differs from Haswell. Its functional masking is NOT authorized for transplant.
 
 ## CURRENT ACTION
 Remain VESA. No accelerated boot yet.
 
-First restore pre-D97ED IGPU baseline manually:
+First restore pre-D97ED IGPU baseline manually if not already restored:
 - remove `framebuffer-pipecount`;
 - remove `framebuffer-portcount`;
 - remove `framebuffer-memorycount`;
@@ -141,16 +156,19 @@ First restore pre-D97ED IGPU baseline manually:
 - restore `framebuffer-con2-type = 00080000`;
 - retain 0x0A260006/device-id/framebuffer-patch-enable/framebuffer-cursormem.
 
-Then perform read-only exact symbol audit of Tahoe 25G82 `IOAcceleratorFamily2` for `set_id_mode`.
+Next, derive a new diagnostic-only OCLPMetalCompat revision from exact D97DL source with an independent observer for exact symbol:
+`__ZN14IOAccelSurface11set_id_modeEjj`.
 
-After symbol resolution:
-- derive a new diagnostic-only OCLPMetalCompat revision from exact D97DL source;
+Observer requirements:
 - gated by a new explicit boot arg;
+- Tahoe 25G82 + Haswell gates retained;
 - original `id` and `mode` passed unchanged;
-- bounded logs of id, mode, candidate badBits/goodBits and original return;
-- no mode mutation or return coercion;
-- build locally on authorized Intel iMac 9900K;
-- static/binary audit;
+- original return value passed back unchanged;
+- bounded <=32 observations per boot;
+- publish/log `id`, `mode`, original `IOReturn`, `mode & 0xff8073c0`, `mode & 0x007f8c3f`;
+- no bit stripping, no return coercion, no framebuffer mutation;
+- local Intel iMac 9900K build only;
+- static and binary audit before deployment;
 - first deployment boot remains VESA;
 - accelerated diagnostic boot requires separate authorization after route/load PASS.
 
