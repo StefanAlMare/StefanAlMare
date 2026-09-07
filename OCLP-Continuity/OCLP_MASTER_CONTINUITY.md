@@ -6,7 +6,7 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EC_VESA_TOPOLOGY_LIMIT_AND_0A260006_THREE_PORT_BASELINE.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97ED_SINGLE_FRAMEBUFFER_VECTOR_ARMED_ACCEL_TEST_AUTHORIZED.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 
@@ -15,9 +15,11 @@ Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_R
 - D97DX native-Metal-safe Root Patch is installed;
 - D97DZ root-patched VESA validation PASS;
 - first accelerated boot failed through repeated WindowServer SIGSEGV during CoreDisplay display initialization;
-- current running session remains VESA recovery;
+- D97EC established native platform baseline 0x0A260006 = 3 pipes / 3 ports / 3 framebuffer memories;
+- user has now manually armed the bounded D97ED logical count-vector experiment: 1 pipe / 1 port / 1 framebuffer memory, with con2 overrides removed;
+- current running session remains VESA recovery until the one-attempt D97ED accelerated test is launched;
 - active EFI compatibility kext remains D97DL `OCLPMetalCompat.kext` 0.0.7, UUID `45EAD92D-43BF-3F42-B37B-EB5007345000`;
-- current VESA recovery policy remains the safe fallback.
+- VESA remains the established recovery mode.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -86,9 +88,9 @@ Accelerated WindowServer behavior:
 - FB2/FB3 fail mode-info queries and report capabilities with no devices;
 - `GPU: FB: 3 of 3 opened`;
 - four `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` messages;
-- CoreDisplay reports `Setting offline display 0x00000000 main in AddCGXDisplayDeviceToDeviceList`;
+- CoreDisplay reports offline display state;
 - WindowServer PID 177 exits by SIGSEGV at `02:24:58.799390`;
-- launchd respawns WindowServer PID 348 and the same sequence repeats, with second SIGSEGV at `02:25:00.730044`.
+- launchd respawns WindowServer PID 348 and the sequence repeats.
 
 Critical negatives:
 - no kernel panic;
@@ -99,47 +101,51 @@ Critical negatives:
 D97EB checkpoint commit: `a6e4b75d5e658ab83d710b9d0a847459ba7cc1c7`.
 
 ## D97EC — VESA topology limit and 0x0A260006 baseline
-Returned `OCLP7_D97EC_FRAMEBUFFER_TOPOLOGY.txt`, SHA256 `aa25e053f10bd6190685f8edd54760b986e1320616f0aaa93002f60b8aec70d6`.
-
-VESA proves:
+VESA topology proved:
 - IGPU device-id 0x0412;
-- injected semantic properties include framebuffer-patch-enable=1, con2 enable/type HDMI, framebuffer-cursormem;
-- AAPL,ig-platform-id appears `ffffffff` under `-igfxvesa`;
-- only IONDRVFramebuffer/.Display_boot is attached;
-- no live AppleIntelFramebufferAzul nodes are visible in VESA;
-- one internal 1366x768 display is online.
-
-Project EFI baseline matching the injected properties uses:
-- AAPL,ig-platform-id = `0600260a` = 0x0A260006;
-- device-id = `12040000` = 0x0412;
-- con2 override to HDMI;
-- framebuffer-cursormem / max-pixel-clock / igfxfw / rps-control patches.
-
-WhateverGreen's documented Azul table defines 0x0A260006 as mobile with PipeCount=3, PortCount=3, FBMemoryCount=3 and connectors LVDS + DP + DP. Therefore D97EB's `3 of 3 opened` count matches the platform baseline and is not simple accidental connector overexposure.
-
-Refined frontier:
-`Tahoe WindowServer/CoreDisplay handling of inactive/offline legacy Haswell framebuffer/display semantics`.
+- effective VESA platform-id appears ffffffff under `-igfxvesa`;
+- only IONDRVFramebuffer/.Display_boot is attached in VESA;
+- no live AppleIntelFramebufferAzul nodes are available for accelerated topology inspection;
+- project EFI baseline uses AAPL,ig-platform-id `0600260a` = 0x0A260006;
+- WhateverGreen's documented Azul table defines 0x0A260006 as mobile, 3 pipes / 3 ports / 3 framebuffer memories, connectors LVDS + DP + DP;
+- therefore D97EB's `3 of 3 opened` is consistent with native platform topology, not accidental connector overexposure.
 
 D97EC checkpoint commit: `30017797506a8adcca97e6c77708b10a47f0a72e`.
 
-## CURRENT ACTION — PIN ACTIVE EFI IGPU DEVICEPROPERTIES, THEN BOUNDED COUNT-VECTOR TEST
-Remain in VESA recovery until the active EFI DeviceProperties are re-read byte-for-byte.
-Do NOT Root Patch again.
-Do NOT repeat the unchanged accelerated boot.
+## D97ED — bounded single-framebuffer count-vector experiment ARMED
+User manually confirmed completion of the exact instructed DeviceProperties mutation:
+- preserve `AAPL,ig-platform-id = 0600260A`;
+- preserve `device-id = 12040000`;
+- preserve `framebuffer-patch-enable = 01000000`;
+- preserve `framebuffer-cursormem = 00009000`;
+- set `framebuffer-pipecount = 01000000`;
+- set `framebuffer-portcount = 01000000`;
+- set `framebuffer-memorycount = 01000000`;
+- remove/disable `framebuffer-con2-enable` and `framebuffer-con2-type`;
+- no con0 index/busid/type override.
 
-After active EFI pinning, the next high-value diagnostic candidate is one logical framebuffer-count mutation while preserving platform 0x0A260006 and connector bytes:
-- framebuffer-pipecount = 1;
-- framebuffer-portcount = 1;
-- framebuffer-memorycount = 1.
+Purpose: keep native LVDS framebuffer 0 but suppress the two inactive external framebuffer slots from Tahoe CoreDisplay enumeration.
 
-Purpose: preserve internal LVDS connector 0 but prevent Tahoe CoreDisplay from enumerating the two inactive external framebuffer slots. If WindowServer progresses further, the offline-FB hypothesis gains causal support. If the same crash persists, move to a narrow CoreDisplay/IOAccelerator compatibility frontier.
+D97ED checkpoint commit: `d138f211766848fb125d13c70e51b147bce18449`.
 
-Still forbidden until the active EFI pin is checked:
-- EFI mutation;
-- accelerated reboot;
+## CURRENT ACTION — ONE D97ED ACCELERATED DIAGNOSTIC BOOT AUTHORIZED
+Make only `-igfxvesa` inactive (prefer `#-igfxvesa` for easy restoration).
+Retain active:
+- `-ocmcdiag`;
+- `-ocmcd97bv`.
+Keep `#-ocmcd97bvcave` inactive.
+Make no other EFI/Root Patch/system changes.
+
+Then perform exactly one accelerated diagnostic reboot.
+
+If usable GUI appears, stop and report success without further mutation.
+If black screen / verbose recurrence / unusable GUI appears, recover by reactivating `-igfxvesa` and return to VESA. Analyze only that immediately preceding D97ED accelerated boot under the permanent recovery rule.
+
+Still forbidden until D97ED is evaluated:
 - another Root Patch;
+- any additional EFI/framebuffer mutation;
 - global 3802 forcing;
 - legacy main Metal shadow;
 - true-five reapplication;
-- CoreDisplay donor/downgrade without independent ABI audit;
+- CoreDisplay donor/downgrade without ABI audit;
 - Golden mutation.
