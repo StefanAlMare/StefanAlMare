@@ -6,7 +6,7 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EI_D97EH_BUILD_INDEPENDENT_AUDIT_PASS.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EJ_D97EH_EFI_IDENTITY_PASS_VESA_REBOOT_AUTHORIZED.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
 
@@ -14,11 +14,13 @@ Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_R
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
 - current session is VESA recovery;
-- active EFI compatibility kext is still D97DL `OCLPMetalCompat.kext` 0.0.7 until D97EH deployment is performed;
-- VESA recovery args retain `-igfxvesa -ocmcdiag -ocmcd97bv`; `#-ocmcd97bvcave` inert;
+- active EFI compatibility kext has been manually replaced with audited D97EH `OCLPMetalCompat.kext` 0.0.9;
+- active EFI executable identity is exact: SHA256 `23bbc4a30a0c445a20a2821530a427256662e4e4832eaa6c82b1219540460fcf`, UUID `E3BE3246-7F7A-36B8-822D-7D1AEB35D721` x86_64;
+- VESA recovery args must retain `-igfxvesa -ocmcdiag -ocmcd97bv` and add `-ocmcd97eh`; `#-ocmcd97bvcave` inert;
 - D97ED/D97EE closed framebuffer-count tuning as a solution;
 - D97EG resolved exact failing interface symbol to `IOAccelSurface::set_id_mode(uint32_t,uint32_t)`;
-- D97EH 0.0.9 observer-only build has passed independent source/binary audit and is authorized only for VESA-first deployment, not accelerated execution yet.
+- D97EH 0.0.9 observer-only build passed independent source/binary audit;
+- next boot is authorized only as VESA-first deployment validation; accelerated boot remains unauthorized.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -172,9 +174,20 @@ Independent x86_64 disassembly confirms original saved `that/id/mode` are restor
 Packaging note:
 - all payload hashes in `SHA256SUMS.txt` validate except its own self-entry;
 - self-hash is a manifest-generation tooling bug, not a payload integrity failure;
-- ZIP/source/executable/Info.plist and all non-self manifest entries validate exactly.
+- ZIP/source/executable/Info.plist and all non-self manifest entries validate exactly;
+- builder authority has since been corrected to exclude manifest self-hash for future builds.
 
 D97EI checkpoint commit: `e3ac6110ea39285c6b4891de55bfb4ed6a69973a`.
+
+## D97EJ — active EFI identity PASS
+User manually deployed D97EH to active `EFI/OC/Kexts/OCLPMetalCompat.kext` and verified before reboot:
+- `VERSION=0.0.9`;
+- executable SHA256 `23bbc4a30a0c445a20a2821530a427256662e4e4832eaa6c82b1219540460fcf`;
+- UUID `E3BE3246-7F7A-36B8-822D-7D1AEB35D721` x86_64.
+
+Thus the active EFI payload exactly matches the audited artifact.
+
+D97EJ checkpoint commit: `4f6964a38cb197775b9b8a65176c2e5686fe0c3e`.
 
 ## Current causal frontier
 `Tahoe/CoreDisplay producer semantics -> IOAccelSurface::set_id_mode(id, mode) -> legacy Haswell IOAccelerator acceptance`.
@@ -183,28 +196,32 @@ Need exact accelerated runtime `id`, `mode`, candidate rejected bits, and origin
 
 External NootedGreen masks remain orientation only. Clearing any mode bits is NOT authorized until ASUS2 measurement.
 
-## CURRENT ACTION — D97EH VESA-FIRST DEPLOYMENT AUTHORIZED
+## CURRENT ACTION — ONE D97EH VESA-FIRST REBOOT AUTHORIZED
 Remain on normal pre-D97ED 3/3/3 IGPU baseline:
-- remove `framebuffer-pipecount`, `framebuffer-portcount`, `framebuffer-memorycount` if still present;
-- restore `framebuffer-con2-enable = 01000000` and `framebuffer-con2-type = 00080000`;
+- `framebuffer-pipecount`, `framebuffer-portcount`, `framebuffer-memorycount` absent;
+- `framebuffer-con2-enable = 01000000` and `framebuffer-con2-type = 00080000`;
 - retain 0x0A260006/device-id/framebuffer-patch-enable/framebuffer-cursormem.
 
-Deploy audited D97EH `OCLPMetalCompat.kext` 0.0.9 to the exact active EFI BundlePath used by OpenCore, replacing D97DL only after keeping a backup.
-Enable `-ocmcd97eh` but KEEP `-igfxvesa -ocmcdiag -ocmcd97bv` active for the first deployment boot.
-Do not Root Patch.
-Do not perform accelerated boot yet.
+Required boot args for the next boot:
+- `-igfxvesa` ACTIVE;
+- `-ocmcdiag` ACTIVE;
+- `-ocmcd97bv` ACTIVE;
+- `-ocmcd97eh` ACTIVE;
+- `#-ocmcd97bvcave` inert.
 
-VESA deployment gate must verify:
-- OCLPMetalCompat 0.0.9 loaded, exact UUID/hash if obtainable;
+Perform exactly one VESA reboot. Do not Root Patch. Do not disable `-igfxvesa`.
+
+After VESA returns, read-only gate must verify:
+- OCLPMetalCompat 0.0.9 loaded;
 - D97BV functional mode/state remains healthy;
 - no new kext/load regression;
-- IOAcceleratorFamily2 observer route may remain dormant in VESA because accelerator is not loaded.
+- observer route may remain dormant because IOAcceleratorFamily2 is not loaded in VESA.
 
 Only after that VESA gate may one accelerated observer boot be separately authorized.
 
 Still forbidden:
 - clearing `0xff8073c0` or any mode bits;
-- another unchanged accelerated boot;
+- accelerated boot before VESA gate passes;
 - retaining 1/1/1 as production configuration;
 - another Root Patch;
 - CoreDisplay donor/downgrade without independent ABI audit;
