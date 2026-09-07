@@ -95,3 +95,6 @@ Before any accelerated functional test:
 - only after that PASS may a separate checkpoint authorize ACTIVE `-ocmcd97ez` and one accelerated A/B boot.
 
 No Root Patch is required or authorized for this kext-only observer/adapter revision. Never auto reboot.
+
+## CI trigger note
+This branch-only note is non-functional and exists solely to exercise the repository's `pull_request` GitHub Actions lane for the D97EZ GitHub-first build/audit. It changes no runtime contract, source generator, EFI state, Root Patch state, or ASUS2 state.
