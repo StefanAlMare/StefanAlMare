@@ -9,6 +9,9 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 
 Current authoritative runtime/execution checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FD_D97EZ_0012_INDEPENDENT_BUILD_AUDIT_PASS_VESA_DEPLOY_AUTHORIZED.md`
+
+Previous local-build helper checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FC_D97EZ_LOCAL_IMAC_BUILD_HELPER_READY.md`
 
 Current local-compile authorization checkpoint:
@@ -43,21 +46,32 @@ Authorized local Intel-iMac build helper:
 - hardened helper commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1`;
 - Git blob `19a22fe133fe04d0758f8a14a5306d4f81d25007`.
 
+Audited returned D97EZ build:
+- archive `OCLP7_D97EZ_IMAC_BUILD_20260907_160935.zip`;
+- bytes `154432`;
+- ZIP SHA256 `c21d21c423879973f2ec1595f16046f8db7757486fb1d75b5a873c7705f3c4e6`;
+- package manifest SHA256 `f041bc196767ca8c0c4a0ae33b0091a424f3fc56f70bca0e95e7d62bee58a8ac`;
+- generated source SHA256 `35e596e7067eba65bb544cb34a109289485320292cbe97953882da18d0f2a74a`;
+- version `0.0.12` x86_64;
+- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
+- Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`.
+
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`;
 - Haswell `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- active EFI kext remains audited D97ES `OCLPMetalCompat.kext` 0.0.11;
+- active EFI kext still remains audited D97ES `OCLPMetalCompat.kext` 0.0.11 until D97FD deployment is performed;
 - active D97ES executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
 - active D97ES UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64;
 - D97EW persistent collector remains installed and previously LIVE/PASS;
 - the D97EX accelerated measurement boot completed and its persisted run is `/Users/Shared/OCLP-D97EW-Capture/20260907T115054Z-295`;
 - current session is VESA recovery after that accelerated measurement;
-- no D97EZ binary has been built or deployed yet;
+- D97EZ 0.0.12 build is now independently audited PASS but has not yet been deployed;
 - no functional `set_id_mode` correction is installed on ASUS2;
 - no new T2/Haswell boot variable is authorized;
-- no Root Patch or reboot is authorized at D97FC.
+- no Root Patch or reboot is authorized before active-EFI D97EZ identity is verified.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -126,45 +140,42 @@ Telemetry:
 - first-eight D97ES fields preserve original input;
 - D97EZ adds per-slot `PassedMode` so original and translated inputs are directly observable.
 
-D97EZ is an experimental compatibility hypothesis, not yet deployed and not yet proven at runtime.
+D97EZ remains an experimental compatibility hypothesis. D97FD proves its build/static/binary integrity, not yet its runtime effect.
 
-## Execution-lane authority — 2026-09-07 local-build exception
-The user explicitly states that GitHub Actions quota/execution is currently exhausted/blocked and instructs that compilation should be performed locally on the user's more powerful home Intel iMac.
+## Execution-lane authority — local-build exception
+The user explicitly authorized local compilation on the more powerful home Intel iMac because GitHub Actions quota/execution is currently exhausted/blocked. This satisfies the permanent local-build approval requirement.
 
-This satisfies the permanent rule that local compilation requires explicit user authorization.
+Do not retry GitHub Actions compilation during the current quota-limited period. GitHub remains source/design/helper/persistence authority. ASUS2 remains target-only for identity-pinned deployment/runtime/VESA evidence.
 
-Current execution policy:
-- do NOT keep trying to compile D97EZ with GitHub Actions during the current quota-limited period;
-- source/design/helper integration and persistence remain in GitHub;
-- D97EZ compilation is explicitly authorized on the user's home Intel iMac;
-- compilation on ASUS2 is NOT authorized;
-- ASUS2 remains target-only for later identity-pinned deploy/live-state/manual boot/VESA evidence;
-- returned local build artifact must be independently audited before any deployment.
+## D97FD — independent build audit PASS
+The returned local archive was read directly and independently audited.
 
-D97FA remains historical evidence of the Actions execution failure, but D97FB/D97FC supersede its stop condition for compilation by explicit user authorization.
+PASS results:
+- exact ZIP identity and CRC;
+- all 20 frozen package manifest hashes;
+- exact D97DL/EH/EL/ES/EZ generator/source identities;
+- full byte-identical lineage regeneration through D97EZ;
+- source exact-match/no-mask semantics;
+- two successful Xcode builds, zero failed builds, zero error lines;
+- x86_64 MH_KEXT_BUNDLE identity;
+- exact version/UUID/executable/Info.plist hashes;
+- binary disassembly confirms exact `0x224` compare, conditional `0x24` selection, unchanged `that/id`, one Apple original call, post-call diagnostic masks, and exact IOReturn return.
 
-## D97FC helper contract
-The local helper is fail-closed and must:
-- verify exact D97DL/D97EH/D97EL/D97ES/D97EZ lineage identities;
-- deterministically generate D97EZ twice and byte-compare;
-- enforce exact-match-only source semantics and broad-mask absence;
-- require non-empty D97ES->D97EZ diff;
-- compile pinned Lilu + FeatureUnlock/MacKernelSDK x86_64;
-- build OCLPMetalCompat 0.0.12 x86_64;
-- record UUID/executable SHA/Info.plist SHA/source SHA;
-- preserve strings/nm/disassembly artifacts;
-- package kext, sources, generators, diff and logs;
-- finalize report before SHA256 manifest generation;
-- self-verify the frozen package manifest;
-- create Desktop ZIP + ZIP SHA256 sidecar;
-- never deploy, Root Patch, mutate EFI/NVRAM or reboot.
+Therefore D97EZ 0.0.12 is authorized for VESA-first deployment only, with functional bootarg `-ocmcd97ez` absent.
 
-## CURRENT ACTION — AUTHORIZED HOME INTEL IMAC BUILD
-Run exact helper `OCLP7_D97EZ_IMAC_BUILD.sh` from commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1` / Git blob `19a22fe133fe04d0758f8a14a5306d4f81d25007` on the authorized home Intel iMac.
+## CURRENT ACTION — D97EZ VESA-FIRST DEPLOYMENT
+On ASUS2, while remaining in current VESA recovery:
+1. back up current active D97ES 0.0.11 kext;
+2. replace only active EFI `EFI/OC/Kexts/OCLPMetalCompat.kext` with audited D97EZ 0.0.12;
+3. keep `Kernel -> Add -> BundlePath` unchanged;
+4. DO NOT add `-ocmcd97ez` yet;
+5. keep VESA args exactly `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh` with `#-ocmcd97bvcave` inert;
+6. no Root Patch, framebuffer change, T2/Haswell variable, or reboot yet;
+7. verify active EFI identity before reboot.
 
-Return:
-1. complete terminal output;
-2. produced `OCLP7_D97EZ_IMAC_BUILD_<stamp>.zip`;
-3. optionally the adjacent `.zip.sha256` sidecar if convenient.
+Required active-EFI identity:
+- version `0.0.12`;
+- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64.
 
-Then independently audit the complete returned build before any ASUS2 deployment. No deployment, Root Patch or reboot is authorized before that audit.
+Only after exact identity PASS may one VESA validation reboot be separately authorized. Accelerated boot and functional `-ocmcd97ez` remain forbidden until LATENT VESA behavior is proven.
