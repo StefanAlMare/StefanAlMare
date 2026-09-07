@@ -8,6 +8,9 @@ Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 
 Current authoritative runtime checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EY_EXACT_SET_ID_MODE_TUPLE_SEMANTIC_PROOF.md`
+
+Previous accelerated authorization checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EX_PERSISTENT_COLLECTOR_LIVE_PASS_ACCEL_BOOT_AUTHORIZED.md`
 
 Previous transport-preservation checkpoint:
@@ -18,9 +21,6 @@ Current D97ES VESA runtime checkpoint:
 
 Current observer build audit checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97ET_D97ES_0011_INDEPENDENT_BUILD_AUDIT_PASS.md`
-
-Previous accelerated runtime checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EQ_ACCEL_REPRO_OBSERVER_TUPLE_NOT_CAPTURED.md`
 
 Current Root Patch execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
@@ -43,20 +43,19 @@ Current persistent accelerated-evidence collector:
 - Haswell `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- active EFI kext is audited D97ES `OCLPMetalCompat.kext` 0.0.11;
+- active EFI kext remains audited D97ES `OCLPMetalCompat.kext` 0.0.11;
 - active D97ES executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
 - active D97ES UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64;
 - D97ES VESA route/publisher/empty-slot behavior is PASS;
-- current session is the validated D97ES VESA session;
-- current VESA args are `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`;
-- `#-ocmcd97bvcave` remains inert;
-- normal pre-D97ED 3/3/3 framebuffer baseline is authoritative;
-- D97EW persistent collector is installed, launchd-running and live-tested PASS in current VESA;
-- live collector run `/Users/Shared/OCLP-D97EW-Capture/20260907T114037Z-1039` repeatedly reported service present, `captured_count=0`, `set_id_mode_calls=0`, `route=PASS`;
-- direct IORegistry cross-check simultaneously reported D97ES all eight Valid=0, CapturedCount=0, SetIdModeCallCount=0 and RouteStatus=PASS;
-- no new T2/Haswell boot variable is authorized before exact set_id_mode measurement;
-- no functional set_id_mode masking is authorized;
-- one accelerated measurement boot is authorized under D97EX with only `-igfxvesa` made inert.
+- D97EW persistent collector is installed and LIVE/PASS;
+- the authorized D97EX accelerated measurement boot was completed with only `-igfxvesa` inert;
+- persisted accelerated run is `/Users/Shared/OCLP-D97EW-Capture/20260907T115054Z-295`;
+- saved accelerated boot args prove `#-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`, with `#-ocmcd97bvcave` inert;
+- same-run loaded observer identity is D97ES 0.0.11 UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`;
+- first D97EW sample captured 8 tuples with total call count 15; follow-up snapshots reached call count 20;
+- current session is VESA recovery after that accelerated boot;
+- no functional `set_id_mode` correction is currently installed or authorized;
+- no new T2/Haswell boot variable is currently authorized.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -84,7 +83,8 @@ Permanent prohibitions:
 - no standalone Objective-C rehabilitation mainline;
 - no fake canonical Metal file for BinaryModInfo;
 - no true-five reapplication;
-- no functional masking of `set_id_mode` before exact measurement.
+- no global `set_id_mode` masking;
+- no unmeasured semantic coercion of `set_id_mode` return codes.
 
 ## Settled runtime/build facts
 
@@ -136,7 +136,7 @@ Independent build audit PASS:
 - exact D97ES -> D97EL -> D97EH -> D97DL lineage proved;
 - no functional mode mutation or return coercion.
 
-D97ES publisher updates IORegistry asynchronously on a one-second cadence and remains bounded to 300 seconds. Its completion condition is kept open while observer mode is requested until at least the first set_id_mode tuple exists.
+D97ES publisher updates IORegistry asynchronously and is bounded to 300 seconds.
 
 ### D97EU / D97EV — deployment and VESA runtime PASS
 D97EU proved exact active EFI D97ES identity. D97EV VESA proved:
@@ -153,55 +153,71 @@ D97EU proved exact active EFI D97ES identity. D97EV VESA proved:
 Thus D97ES route, schema, publisher liveness and empty-slot behavior are CLOSED PASS in VESA.
 
 ### D97EW / D97EX — persistent accelerated evidence transport PASS
-D97EW identified that hard VESA recovery destroys prior live IORegistry, so a WindowServer-independent on-disk collector is required before acceleration.
+D97EW identified that hard VESA recovery destroys prior live IORegistry, so a WindowServer-independent on-disk collector was required before acceleration.
 
 Collector artifact:
 `OCLP-Continuity/artifacts/OCLP7_D97EW_PERSISTENT_IOREG_CAPTURE_INSTALL.sh`
 - source commit `b23f1e78a02e3aedd48a4e30101a6d3e8abaf00d`;
 - Git blob `d5a60a8b69c22249b03988afe6e6e94a3947d195`.
 
-The collector is a root LaunchDaemon, starts at boot, polls full OCLPMetalCompat IORegistry and writes snapshots/summary under `/Users/Shared/OCLP-D97EW-Capture`. On first positive `D97ESCapturedCount` it preserves the full tuple snapshot, boot args and loaded-kext identity, calls `sync`, and takes five follow-up snapshots. It performs no EFI/NVRAM/Root Patch/framebuffer/Golden mutation and no reboot.
+D97EX current-VESA live proof closed source identity, install/plist, LaunchDaemon-running, live IORegistry read, live disk persistence and zero-tuple cross-check. Accelerated evidence transport is CLOSED PASS.
 
-D97EX current-VESA live proof:
-- exact source blob identity PASS;
-- plist lint/install PASS;
-- launchd state running, PID 1039;
-- repeated samples service present / captured=0 / calls=0 / route=PASS;
-- direct IORegistry agrees exactly.
+### D97EY — exact accelerated `set_id_mode` semantic proof
+Persisted accelerated run:
+`/Users/Shared/OCLP-D97EW-Capture/20260907T115054Z-295`.
 
-Therefore accelerated evidence transport is READY/PASS and one accelerated measurement boot is authorized.
+First persisted snapshot:
+- route `PASS`;
+- captured slots `8`;
+- call count `15`, later stable follow-ups at `20` total calls.
+
+Exact first-eight tuples:
+1. `id=0x1000 mode=0x24 badBits=0x0 goodBits=0x24 ret=0x0`;
+2. `id=0x1001 mode=0x224 badBits=0x200 goodBits=0x24 ret=0xE00002C2`;
+3. `id=0x1002 mode=0x224 badBits=0x200 goodBits=0x24 ret=0xE00002C2`;
+4. `id=0x1003 mode=0x224 badBits=0x200 goodBits=0x24 ret=0xE00002C2`;
+5. `id=0x1004 mode=0x224 badBits=0x200 goodBits=0x24 ret=0xE00002C2`;
+6. `id=0x1000 mode=0x24 badBits=0x0 goodBits=0x24 ret=0x0`;
+7. `id=0x1001 mode=0x224 badBits=0x200 goodBits=0x24 ret=0xE00002C2`;
+8. `id=0x1002 mode=0x224 badBits=0x200 goodBits=0x24 ret=0xE00002C2`.
+
+`0xE00002C2` is `kIOReturnBadArgument`. Direct same-boot semantic result:
+- observed `0x24` class is accepted by Apple original;
+- observed `0x224` class differs by exactly `0x200`, is classified `badBits=0x200`, preserves the same `goodBits=0x24`, and is rejected with BadArgument for every captured instance;
+- pattern repeats across surface-ID sequences.
+
+Classification:
+- exact first-eight payload = PROVEN;
+- `0x24 -> success` = SEMANTIC PROVEN for captured calls;
+- `0x224 / badBits 0x200 -> BadArgument` = SEMANTIC PROVEN for captured calls;
+- semantic name/meaning of bit `0x200` = UNKNOWN;
+- exact Golden runtime equivalent mode = UNKNOWN;
+- global clearing of bit `0x200` = NOT AUTHORIZED.
+
+Same accelerated boot also produced repeated WindowServer SIGSEGV in the known downstream CoreDisplay/SkyLight initialization path; the direct D97EY tuple remains the stronger causal frontier.
+
+D97EY checkpoint commit:
+`f2762e713565b1e72498241de639bdd5698c82c6`.
 
 ## OCLP T2 / Haswell audit integration policy
-Do not add new EFI/boot-arg variables while exact `set_id_mode` measurement is unresolved. Existing `ipc_control_port_options=0` and `-amfipassbeta` remain. Do not add `igfxmetal=1`, `-disablegfxfirmware`, `watchdog=0` or any other new variable at this gate. Any such lead is a later isolated A/B experiment after measurement.
+The exact `set_id_mode` measurement is now resolved for the captured class, but no unrelated T2/Haswell boot variable is promoted at this gate. Existing `ipc_control_port_options=0` and `-amfipassbeta` remain. `igfxmetal=1`, `-disablegfxfirmware`, `watchdog=0` and other variables remain unapproved until the measured `0x224/0x200` boundary experiment is resolved.
 
 ## Current causal frontier
-`Tahoe/CoreDisplay producer semantics -> IOAccelSurface::set_id_mode(id, mode) -> legacy Haswell IOAccelerator acceptance`.
+`Tahoe/CoreDisplay surface-mode semantics -> mode 0x224 (good 0x24 + extra 0x200) -> IOAccelSurface::set_id_mode -> legacy Haswell IOAccelerator returns kIOReturnBadArgument`.
 
-Still required from the immediately next accelerated boot:
-- exact `id`;
-- exact `mode`;
-- `mode & 0xFF8073C0`;
-- `mode & 0x007F8C3F`;
-- original IOReturn.
+The exact failing bit class is measured. What remains UNKNOWN is the semantic name/intent of bit `0x200` and whether selectively translating the observed exact `0x224` class to legacy-accepted `0x24` is sufficient for stable graphical progress.
 
-No functional correction before measurement.
+## CURRENT ACTION — GITHUB-FIRST D97EZ EXACT-MATCH ADAPTER DESIGN/AUDIT
+Do not mutate ASUS2 yet.
 
-## CURRENT ACTION — ONE D97ES/D97EW ACCELERATED MEASUREMENT BOOT AUTHORIZED
-On ASUS2 make exactly one diagnostic configuration change:
-- make only `-igfxvesa` inert/disabled (the established `#-igfxvesa` convention is acceptable).
-
-Keep unchanged:
-- `-ocmcdiag`;
-- `-ocmcd97bv`;
-- `-ocmcd97eh`;
-- `#-ocmcd97bvcave` inert;
-- `ipc_control_port_options=0` and existing `-amfipassbeta`;
-- D97DX Root Patch;
-- active D97ES 0.0.11;
-- installed D97EW LaunchDaemon collector;
-- normal 3/3/3 framebuffer baseline;
-- every other settled EFI/system state.
-
-Do not Root Patch again. Do not add any T2/Haswell variable. Do not change framebuffer counts or apply any functional `set_id_mode` correction.
-
-If the accelerated boot loses usable image, keep the black/no-image system running long enough for D97ES publication and D97EW disk persistence before manual VESA recovery. After VESA return, identify and analyze the persisted D97EW run belonging to the immediately preceding accelerated boot by its saved boot args; exclude the later VESA recovery run.
+In GitHub, design a D97EZ successor derived deterministically from exact D97ES 0.0.11 with these hard requirements:
+1. LATENT by default behind a new explicit functional bootarg.
+2. Preserve exact D97ES route and observer telemetry.
+3. Global/no-PID classification for every `set_id_mode` call.
+4. Only when the new functional gate is active and original `mode == 0x224`, pass candidate `0x24` to Apple original.
+5. Every other mode must reach Apple original byte-for-byte unchanged.
+6. No global mask and no broad `mode &=` logic.
+7. Return Apple original IOReturn unchanged.
+8. Publish original mode, passed mode, exact-match counters and return so the experiment remains semantically auditable.
+9. GitHub-first source validation, deterministic generation, x86_64 compile, binary/disassembly audit, package identity and artifact publication.
+10. No Root Patch, EFI change, reboot or accelerated boot is authorized until the GitHub build/binary audit is independently PASS and a separate VESA-first deployment checkpoint is persisted.
