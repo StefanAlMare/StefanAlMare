@@ -9,6 +9,9 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 
 Current authoritative runtime/execution checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FI_CORE_DISPLAY_OFFLINE_CRASH_LOOP_FRAMEBUFFER_METADATA_FRONTIER.md`
+
+Previous decisive adapter checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FH_SET_ID_MODE_ADAPTER_SEMANTIC_PASS_NEW_DOWNSTREAM_FRONTIER.md`
 
 Previous LATENT VESA gate:
@@ -41,7 +44,6 @@ Audited D97EZ build:
 - archive `OCLP7_D97EZ_IMAC_BUILD_20260907_160935.zip`;
 - bytes `154432`;
 - ZIP SHA256 `c21d21c423879973f2ec1595f16046f8db7757486fb1d75b5a873c7705f3c4e6`;
-- package manifest SHA256 `f041bc196767ca8c0c4a0ae33b0091a424f3fc56f70bca0e95e7d62bee58a8ac`;
 - generated source SHA256 `35e596e7067eba65bb544cb34a109289485320292cbe97953882da18d0f2a74a`;
 - version `0.0.12` x86_64;
 - executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
@@ -60,7 +62,7 @@ D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly i
 - D97EW persistent collector remains installed and proven LIVE/PASS;
 - normal framebuffer baseline remains 3/3/3;
 - current session is VESA recovery after the D97FH ACTIVE accelerated experiment;
-- current recovery state should have active `-igfxvesa` and absent/inert `-ocmcd97ez`;
+- recovery state has active `-igfxvesa` and absent/inert `-ocmcd97ez`;
 - no new T2/Haswell boot variable is authorized;
 - no Root Patch change is authorized.
 
@@ -74,7 +76,7 @@ Accepted functional baseline remains exactly:
 - AIR00 fallback producing AIR 2.6 / Metal 3.1;
 - D34 semantic-equivalent reset.
 
-D22 remains the accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave `0xEF8..0xEFE` remains protected. D50/D68/D82 remain reserve-only; D84 is retired. Golden Sequoia remains immutable/read-only.
+D22 remains accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave `0xEF8..0xEFE` remains protected. D50/D68/D82 remain reserve-only; D84 retired. Golden Sequoia remains immutable/read-only.
 
 Module-boundary + semantic evidence + far-frontier methodology remains mandatory. Universal/no-PID coverage is required when requests can vary. Control-flow success is never semantic proof by itself.
 
@@ -98,93 +100,63 @@ Permanent prohibitions:
 - D97EW/D97EX closed hard-recovery evidence transport.
 
 ## D97EY — pre-fix semantic failure proof
-Captured accepted class:
-- `mode=0x24`;
-- badBits `0`;
-- goodBits `0x24`;
-- Apple return `0`.
-
-Captured rejected class:
-- `mode=0x224`;
-- badBits `0x200`;
-- goodBits `0x24`;
-- Apple raw return `0xE00002C2 = kIOReturnBadArgument`.
-
-The captured classes differ only by bit `0x200`. This is SEMANTIC PROVEN for captured calls. Semantic name of `0x200` remains UNKNOWN.
+Accepted `mode=0x24` returned `0`; rejected `mode=0x224` carried extra `0x200` and returned `0xE00002C2 = kIOReturnBadArgument`. Semantic meaning of `0x200` remains UNKNOWN.
 
 ## D97EZ exact-match rule
-LATENT unless `-ocmcd97ez` active.
-
-ACTIVE rule only:
-- exact `originalMode == 0x224` -> pass `0x24`;
-- every non-`0x224` mode exact passthrough;
-- `that/id` unchanged;
-- one Apple original call;
-- exact Apple IOReturn returned unchanged.
-
-Global/no-PID counters classify every routed call. First-eight telemetry preserves original mode and separately records passed mode.
+LATENT unless `-ocmcd97ez` active. ACTIVE only translates exact `0x224 -> 0x24`; every other mode is exact passthrough; `that/id` unchanged; one Apple original call; exact Apple IOReturn returned unchanged.
 
 ## D97FG — LATENT VESA runtime PASS
-Exact runtime identity 0.0.12/UUID PASS. `D97EZFunctionalRequested=0`, `FunctionalMode=LATENT`, observer route PASS, zero set_id_mode calls and zero adaptation counters, publisher bounded to 300 ticks. This closed the required LATENT safety gate.
+Exact D97EZ 0.0.12 runtime identity PASS; functional mode LATENT; observer route PASS; zero set_id_mode calls/adaptations; publisher bounded 300 ticks.
 
-## D97FH — ACTIVE exact adapter SEMANTIC PASS / bad-bits blocker CLOSED
-Accelerated ACTIVE persisted run:
-`/Users/Shared/OCLP-D97EW-Capture/20260907T135033Z-290`
+## D97FH — ACTIVE exact adapter STRUCTURAL-SEMANTIC PASS
+Persisted accelerated run `/Users/Shared/OCLP-D97EW-Capture/20260907T135033Z-290` proved at stable 20 calls:
+- exact-224 seen/adapted/succeeded `16/16/16`, failures `0`;
+- other-mode seen/passthrough succeeded `4/4`, failures `0`;
+- exhaustive `16+4=20` classification PASS;
+- first-eight direct telemetry shows every captured `0x224` passed as `0x24` and returned Apple `0`.
 
-Saved boot args prove:
-- inert `#-igfxvesa`;
-- active `-ocmcd97ez`;
-- preserved `-ocmcdiag`, `-ocmcd97bv`, `-ocmcd97eh`, inert `#-ocmcd97bvcave`.
+Therefore the prior `Surface mode contains bad bits` rejection is CLOSED PASS as a causal blocker for this measured path. End-to-end GUI remains unproven.
 
-Loaded identity:
-- D97EZ 0.0.12;
-- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`.
+## D97FI — downstream CoreDisplay/framebuffer metadata frontier
+Read-only unified-log analysis of the immediately preceding ACTIVE accelerated boot establishes substantial downstream progress:
+- GPUWrangler identifies `8086:0412` and `/IntelAccelerator`;
+- AppleIntelFramebuffer@0/@1/@2 are present;
+- fb0 is online and its internal-panel DPCD/EDID-side path is readable;
+- `display0` and `AppleBacklightDisplay` publish;
+- CoreDisplay reaches `GPU: FB: 3 of 3 opened`.
 
-At first 15 calls:
-- exact-224 seen `12`;
-- exact-224 adapted `12`;
-- adapt success `12`;
-- adapt failure `0`;
-- other mode seen `3`;
-- passthrough success `3`;
-- passthrough failure `0`;
-- `12 + 3 == 15` exhaustive classification PASS.
+The first direct accelerated framebuffer-resource failure observed is:
+`IOAccelDisplayPipe::init_framebuffer_resource(...): getPixelInformation for framebuffer 0 failed`.
+Classification is REACHED_NEGATIVE, not yet causal proof.
 
-At stable 20 calls:
-- exact-224 seen `16`;
-- exact-224 adapted `16`;
-- adapt success `16`;
-- adapt failure `0`;
-- other mode seen `4`;
-- passthrough success `4`;
-- passthrough failure `0`;
-- `16 + 4 == 20` exhaustive classification PASS.
+Related failures then appear:
+- `IOFBSetDisplayModeAndDepth: Failed to obtain mode info from IOFBGetDisplayModeInformation()`;
+- `Attempting to get capabilities from capabilities with no devices`.
 
-First-eight direct telemetry:
-- slots 2/3/4/5/7/8 original `0x224` -> passed `0x24` -> Apple return `0`;
-- slots 1/6 original `0x24` -> passed `0x24` -> Apple return `0`.
+Fatal repeatable path:
+`Setting offline display 0x00000000 main in AddCGXDisplayDeviceToDeviceList`
+-> `CGXDisplayDriverInitialize`
+-> `WS::Displays::CoreDisplayManager::initialize()`
+-> `WSInitialize`
+-> WindowServer SIGSEGV.
 
-Therefore:
-- exact D97EZ translation is STRUCTURAL-SEMANTIC PROVEN for captured traffic;
-- every observed exact-224 call in the 20-call window is accepted by Apple after translation;
-- every observed non-224 passthrough call succeeds;
-- previous `Surface mode contains bad bits` rejection is CLOSED PASS as a causal blocker for this measured path.
+This repeats across multiple WindowServer restarts. A later restart also reaches `(Metal) validateWithDevice, line 5044: error '<private>'` immediately before a crash; its semantic relationship is UNKNOWN pending `.ips` inspection.
 
-This does NOT prove end-to-end accelerated GUI success. The system still required VESA recovery; the next failure is downstream of successful set_id_mode acceptance.
+`com.apple.driver.IOVersatile` dependency/allocation failures are present, but the same failure also occurs in the usable VESA recovery boot, so IOVersatile is currently NON-DISCRIMINATING and causal status UNPROVEN. Do not alter it yet.
 
 ## Current causal frontier
 Closed:
-`Tahoe 0x224 -> legacy IOAccelSurface rejection`
+`Tahoe 0x224 -> legacy IOAccelSurface bad-bits rejection`.
 
-Current:
-`successful IOAccelSurface::set_id_mode acceptance -> next CoreDisplay / SkyLight / WindowServer / IOAccelerator failure preventing usable accelerated image`
+Current localized module:
+`successful set_id_mode acceptance -> fb0 pixel/mode metadata/resource construction -> CoreDisplay device/capability construction -> main display offline -> WindowServer SIGSEGV`.
+
+Exact crash instruction/stack remains UNKNOWN pending reading of the existing WindowServer `.ips` reports.
 
 ## Execution-lane authority
 User explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## CURRENT ACTION — READ-ONLY DOWNSTREAM FAILURE LOCALIZATION
-Remain in VESA with D97EZ functional mode inactive. Do not change EFI, Root Patch, framebuffer counts or boot variables.
+## CURRENT ACTION — READ EXISTING WINDOWSERVER IPS REPORTS ONLY
+Remain in VESA. No reboot and no changes to EFI, Root Patch, framebuffer counts or boot variables.
 
-Analyze persisted system/unified logs from the immediately preceding ACTIVE accelerated boot around 2026-09-07 16:50 EEST and identify the first new failure after successful set_id_mode acceptance.
-
-Do not repeat the ACTIVE boot unchanged until that downstream frontier is located.
+Collect the newest WindowServer `.ips` files corresponding to the 16:50 accelerated crash loop and analyze exact exception, faulting thread/stack and loaded images. Do not repeat the ACTIVE boot until this gate is resolved.
