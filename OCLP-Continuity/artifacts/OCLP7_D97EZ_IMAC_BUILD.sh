@@ -203,8 +203,11 @@ print('D97EZ_PER_SLOT_ORIGINAL_PASSED_TELEMETRY_SOURCE=PASS')
 print('D97EZ_BROAD_MASK_SOURCE=ABSENT')
 PY
 
+RC=0
 /usr/bin/git diff --no-index --binary "${WORK}/D97ES.cpp" "${WORK}/D97EZ.cpp" > "${PACKAGE}/D97ES_to_D97EZ.diff" || RC=$?
-[[ "${RC:-1}" -eq 1 ]] || die "D97ES_to_D97EZ_diff_failed"
+[[ "${RC}" -eq 1 ]] || die "D97ES_to_D97EZ_diff_expected_nonzero_RC1_got_${RC}"
+[[ -s "${PACKAGE}/D97ES_to_D97EZ.diff" ]] || die "D97ES_to_D97EZ_diff_empty"
+log "D97ES_TO_D97EZ_DIFF=PASS_NONEMPTY"
 
 log "===== PREPARE PINNED BUILD SCAFFOLD ====="
 /usr/bin/git clone --quiet "${FEATURE_REPO}" "${SCAFFOLD}" || die "FeatureUnlock_clone_failed"
@@ -321,19 +324,26 @@ D97EZ_DEPLOY=AUTO-NO
 D97EZ_REBOOT=AUTO-NO
 EOF
 
-log "===== PACKAGE MANIFEST ====="
+# Finalize the report BEFORE hashing package payloads. Do not mutate files in
+# PACKAGE after SHA256SUMS.txt is generated, otherwise the manifest is stale.
+log "PACKAGE_PAYLOAD_READY=PASS"
+log "D97EZ_BUILD_STATUS=PASS"
+log "DEPLOYMENT_AUTHORIZED=NO_PENDING_INDEPENDENT_AUDIT"
+log "ROOT_PATCH_AUTHORIZED=NO"
+log "REBOOT_AUTHORIZED=NO"
+
 (
     cd "${PACKAGE}"
     /usr/bin/find . -type f ! -name 'SHA256SUMS.txt' -print0 | \
         /usr/bin/xargs -0 /usr/bin/shasum -a 256 > SHA256SUMS.txt
 )
 MANIFEST_SHA256="$(sha256 "${PACKAGE}/SHA256SUMS.txt")"
-log "PACKAGE_MANIFEST_SHA256=${MANIFEST_SHA256}"
-log "PACKAGE_PAYLOAD_READY=PASS"
-log "D97EZ_BUILD_STATUS=PASS"
-log "DEPLOYMENT_AUTHORIZED=NO_PENDING_INDEPENDENT_AUDIT"
-log "ROOT_PATCH_AUTHORIZED=NO"
-log "REBOOT_AUTHORIZED=NO"
+
+# Audit the newly written manifest immediately while the package is frozen.
+(
+    cd "${PACKAGE}"
+    /usr/bin/shasum -a 256 -c SHA256SUMS.txt >/dev/null
+) || die "package_manifest_self_check_failed"
 
 /bin/rm -f "${ZIP}" "${ZIP_SHA_FILE}"
 /usr/bin/ditto -c -k --keepParent "${PACKAGE}" "${ZIP}"
@@ -346,6 +356,7 @@ printf '%s  %s\n' "${ZIP_SHA256}" "$(basename "${ZIP}")" > "${ZIP_SHA_FILE}"
 echo
 echo "===== D97EZ FINAL ====="
 echo "D97EZ_BUILD_STATUS=PASS"
+echo "PACKAGE_MANIFEST_SHA256=${MANIFEST_SHA256}"
 echo "FINAL_ZIP=${ZIP}"
 echo "FINAL_ZIP_BYTES=${ZIP_BYTES}"
 echo "FINAL_ZIP_SHA256=${ZIP_SHA256}"
