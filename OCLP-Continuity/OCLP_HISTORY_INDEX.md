@@ -2,7 +2,7 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97EU_D97ES_VESA_DEPLOY_IDENTITY_PASS_REBOOT_AUTHORIZED.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97EW_D97ES_VESA_PASS_PERSISTENT_CAPTURE_GATE.md`.
 Permanent database/rules remain authoritative for deep history.
 
 ## Project end goal
@@ -16,6 +16,8 @@ Closed branches:
 - full legacy main Metal: ABI-incompatible NEGATIVE;
 - standalone reconstructed Metal carrier: CLOSED after D97CJ broad ObjC relocation proof;
 - plain BinaryModInfo canonical Tahoe Metal path: blocked because native Metal is shared-cache resident.
+
+Golden Sequoia remains immutable/read-only. D50/D68/D82 remain reserve-only unless a later authoritative checkpoint explicitly promotes one.
 
 ## D97BV selective adapter
 Static semantic closure:
@@ -203,7 +205,9 @@ Independent build audit PASS:
 - binary passthrough semantics proved;
 - no functional mode mutation or return coercion.
 
-D97ET authorized VESA deployment only; accelerated boot remained forbidden.
+The publisher updates IORegistry once per second and remains bounded to 300 seconds.
+
+D97ET authorized VESA deployment only.
 
 ## D97EU — active EFI deployment identity PASS
 ASUS2 direct pre-reboot verification of `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext` matched audited D97ES exactly:
@@ -211,9 +215,66 @@ ASUS2 direct pre-reboot verification of `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalComp
 - executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
 - UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64.
 
-Classification: active EFI identity PASS. Exactly one VESA validation reboot is authorized with unchanged args `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`, `#-ocmcd97bvcave` inert, and no Root Patch/framebuffer/T2-variable/set_id_mode mutation. Accelerated boot remains forbidden.
+Exactly one VESA validation reboot was authorized with unchanged args `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`, `#-ocmcd97bvcave` inert, and no Root Patch/framebuffer/T2-variable/set_id_mode mutation.
 
 D97EU checkpoint commit: `3861969fe3d6ead6c8684a099e3a5abd80500814`.
 
+## D97EV — D97ES VESA runtime validation PASS
+The authorized VESA reboot was completed and live evidence proved:
+- loaded `OCLPMetalCompat` 0.0.11 UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`;
+- `D97ELObserverRequested=1`;
+- `D97ELCallbackSeenCount=17`;
+- `D97ELTargetCallbackSeenCount=1`;
+- `D97ELLastCallbackIndex=20`;
+- `D97ELKextLoadIndex=9`;
+- `D97ELRouteStatus=PASS`;
+- `D97ELSetIdModeCallCount=0`;
+- `D97ESCaptureSlots=8`;
+- `D97ESCapturedCount=0`;
+- all eight `D97ESxxValid=0`;
+- `D97CTRouteStatus=PASS`;
+- boot/kernel/cpu/build gates all 1;
+- `D97DDObservedBuild=25G82`;
+- `D97DIFunctionalRequested=1`;
+- `D97DIFunctionalMode=ACTIVE`;
+- `D97CTPublisherTicks=300`.
+
+Thus D97ES route, publisher schema, bounded liveness and empty-slot behavior are PASS in VESA. Zero SITE/CAVE touches in this one VESA boot do not invalidate the already CLOSED-PASS D97BV/D97DT runtime proof.
+
+Preliminary D97EV wording allowed the next accelerated measurement, but no accelerated boot occurred before the stronger D97EW transport-preservation gate below superseded that prospective authorization.
+
+D97EV checkpoint commit: `3520d6a1c3d5b49af962d199230b58472b2b25bb`.
+
+## D97EW — persistent transport-preservation gate
+D97ES tuples live only in IORegistry; VESA recovery by hard reboot destroys the prior boot's IORegistry. Therefore an accelerated test cannot be authorized until tuple data can be persisted during the accelerated boot independently of WindowServer.
+
+GitHub-first persistent collector created and statically audited:
+`OCLP-Continuity/artifacts/OCLP7_D97EW_PERSISTENT_IOREG_CAPTURE_INSTALL.sh`
+- source commit `b23f1e78a02e3aedd48a4e30101a6d3e8abaf00d`;
+- Git blob `d5a60a8b69c22249b03988afe6e6e94a3947d195`.
+
+Static audit:
+`OCLP-Continuity/artifacts/OCLP7_D97EW_PERSISTENT_CAPTURE_STATIC_AUDIT.md`
+- commit `c0fb94b0a92d52ede5527bf8478b94c0593d948b`.
+
+Design:
+- root LaunchDaemon, independent of WindowServer;
+- runs every boot;
+- polls full OCLPMetalCompat IORegistry once per second for up to 300 seconds;
+- stores full snapshots and summary under `/Users/Shared/OCLP-D97EW-Capture`;
+- on first positive `D97ESCapturedCount`, immediately persists and syncs the tuple snapshot, boot args and loaded-kext state, then five additional snapshots;
+- no EFI/NVRAM write, Root Patch, framebuffer change, Golden access or reboot;
+- uninstall removes only collector/plist and preserves evidence.
+
+Classification:
+- D97ES VESA runtime PASS;
+- persistent collector static audit PASS;
+- accelerated boot NOT AUTHORIZED until collector itself passes a no-reboot live test in the current VESA session.
+
+D97EW checkpoint commit: `930c308de295f412650e9454cefcce3cf305baa7`.
+Master update commit advancing authority to D97EW: `7761652d1bb3cbfd3d29351b9c1c41ea31165886`.
+
 ## Current action
-Perform exactly one D97ES VESA validation reboot with the preserved VESA configuration. After return, collect D97ES IORegistry route/publisher and tuple-slot evidence. Do not Root Patch and do not attempt an accelerated boot until that VESA evidence is audited and persisted.
+Remain in the current D97ES VESA session. Install the exact commit-pinned D97EW persistent collector and return the full installer/live-test output. Required live VESA result: installer PASS, service present, `captured_count=0`, `set_id_mode_calls=0`, `route=PASS`.
+
+Do not Root Patch, reboot, alter EFI/boot args/framebuffer, or attempt acceleration until that collector live test is audited and a new checkpoint separately authorizes the accelerated measurement boot.
