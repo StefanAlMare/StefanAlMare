@@ -7,6 +7,12 @@ on:
       - 'OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_GENERATOR.py'
       - 'OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_DESIGN.md'
       - '.github/workflows/oclp7-d97ez-exact224-adapter-build.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_GENERATOR.py'
+      - 'OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_DESIGN.md'
+      - '.github/workflows/oclp7-d97ez-exact224-adapter-build.yml'
   workflow_dispatch:
 
 permissions:
@@ -116,7 +122,6 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import re
           src = Path('D97EZ-output/OCLP7_D97EZ_kern_start.cpp').read_text()
           start = src.index('static IOReturn patchedSetIdMode(')
           end = src.index('\nstatic void processD97EHKext(', start)
@@ -236,8 +241,6 @@ jobs:
           from pathlib import Path
           import re
           text = Path('D97EZ-output/D97EZ_DISASSEMBLY.txt').read_text()
-          # Preserve the complete disassembly as the primary binary evidence.
-          # Debug x86_64 code should expose the exact compare/replacement constants.
           assert re.search(r'0x0*224\b', text, re.I), 'binary 0x224 compare constant missing'
           assert re.search(r'0x0*24\b', text, re.I), 'binary 0x24 replacement constant missing'
           nm = Path('D97EZ-output/D97EZ_NM.txt').read_text()
