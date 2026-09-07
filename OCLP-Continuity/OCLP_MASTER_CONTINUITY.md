@@ -9,6 +9,9 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 
 Current authoritative runtime/execution checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FE_D97EZ_VESA_DEPLOY_HELPER_READY.md`
+
+Current independent build-audit checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FD_D97EZ_0012_INDEPENDENT_BUILD_AUDIT_PASS_VESA_DEPLOY_AUTHORIZED.md`
 
 Previous local-build helper checkpoint:
@@ -46,6 +49,17 @@ Authorized local Intel-iMac build helper:
 - hardened helper commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1`;
 - Git blob `19a22fe133fe04d0758f8a14a5306d4f81d25007`.
 
+Fail-closed VESA deploy helper:
+`OCLP-Continuity/artifacts/OCLP7_D97FE_D97EZ_VESA_DEPLOY.sh`
+- commit `4c7b89e5aa2b66b7d25c5e6ed9f7f9a7a25d6e53`;
+- Git blob `58af13327d31ea9b1e6b74c4b73374b2ea91f9f7`.
+
+User-visible deploy package:
+- `OCLP7_D97FE_D97EZ_VESA_DEPLOY.zip`;
+- bytes `22153`;
+- SHA256 `f4faf2266bbba41b15f6f450b120219fbb8c36cbf6ab2f394cee5fa144d746a6`;
+- bootstrap SHA256 `79b5dd3f02ba23bfbabe51c195df62ae29c7eb3f474dca0e5f65bc93e1e00b0f`.
+
 Audited returned D97EZ build:
 - archive `OCLP7_D97EZ_IMAC_BUILD_20260907_160935.zip`;
 - bytes `154432`;
@@ -62,13 +76,13 @@ Audited returned D97EZ build:
 - Haswell `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- active EFI kext still remains audited D97ES `OCLPMetalCompat.kext` 0.0.11 until D97FD deployment is performed;
+- active EFI kext still remains audited D97ES `OCLPMetalCompat.kext` 0.0.11 until D97FE deployment is performed;
 - active D97ES executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
 - active D97ES UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64;
 - D97EW persistent collector remains installed and previously LIVE/PASS;
 - the D97EX accelerated measurement boot completed and its persisted run is `/Users/Shared/OCLP-D97EW-Capture/20260907T115054Z-295`;
 - current session is VESA recovery after that accelerated measurement;
-- D97EZ 0.0.12 build is now independently audited PASS but has not yet been deployed;
+- D97EZ 0.0.12 build is independently audited PASS but has not yet been deployed;
 - no functional `set_id_mode` correction is installed on ASUS2;
 - no new T2/Haswell boot variable is authorized;
 - no Root Patch or reboot is authorized before active-EFI D97EZ identity is verified.
@@ -100,82 +114,48 @@ Permanent prohibitions remain:
 - no global functional masking of `set_id_mode` bits;
 - no semantic claim for bit `0x200` without direct proof.
 
-## Settled downstream architecture
-D97BV/D97DT selective true-3802 delivery is CLOSED PASS and must not be retested absent contradiction.
-
-D97DX native-Metal-safe Root Patch is PASS and preserves native Tahoe main Metal while providing the bounded legacy compiler/Haswell compatibility path.
-
-D97EB/D97EE proved framebuffer-count tuning NEGATIVE. Normal 3/3/3 remains authoritative.
-
-D97EG-D97EP proved the exact `IOAccelSurface::set_id_mode(uint32_t,uint32_t)` route and observer passthrough semantics. D97ES/D97ET added first-eight IORegistry tuple telemetry without argument mutation or return coercion. D97EW/D97EX closed the accelerated evidence transport gap using the persistent LaunchDaemon collector.
-
 ## D97EY — decisive exact tuple semantic proof
-The immediately preceding accelerated boot was identified by saved boot args with `#-igfxvesa`, and exact D97ES 0.0.11 identity was preserved.
+Captured accepted class: `mode=0x24`, badBits `0`, goodBits `0x24`, Apple return `0`.
+Captured rejected class: `mode=0x224`, badBits `0x200`, goodBits `0x24`, Apple raw return `0xE00002C2 = kIOReturnBadArgument`.
 
-First D97EW sample captured 8 tuples with total call count 15; follow-up snapshots reached total call count 20.
-
-Captured classes:
-- accepted: `mode=0x24`, `badBits=0`, `goodBits=0x24`, Apple return `0`;
-- rejected: `mode=0x224`, `badBits=0x200`, `goodBits=0x24`, Apple raw return `0xE00002C2 = kIOReturnBadArgument`.
-
-The only observed mode-bit difference between the accepted and rejected captured classes is `0x200`. This is SEMANTIC PROVEN for the captured calls. The semantic name/meaning of bit `0x200` remains UNKNOWN.
-
-Therefore:
-- no global mask is authorized;
-- no production claim that `0x200` is universally unnecessary is authorized;
-- the next experiment must be an exact-match boundary adapter, not a broad validator bypass.
+The only observed mode-bit difference between captured accepted/rejected classes is `0x200`. This is SEMANTIC PROVEN for captured calls; semantic meaning of bit `0x200` remains UNKNOWN. No global mask is authorized.
 
 ## D97EZ exact-match experiment
-D97EZ is LATENT unless new explicit bootarg `-ocmcd97ez` is active.
+D97EZ is LATENT unless `-ocmcd97ez` is active.
 
 ACTIVE rule only:
-- if and only if `originalMode == 0x00000224`, pass `0x00000024` to Apple original;
-- every non-`0x224` mode is exact passthrough;
-- `that` and `id` unchanged;
-- Apple original called exactly once;
-- Apple's exact IOReturn returned unchanged.
+- exact `originalMode == 0x224` -> pass `0x24`;
+- every non-`0x224` mode exact passthrough;
+- `that/id` unchanged;
+- one Apple original call;
+- exact Apple IOReturn returned unchanged.
 
-Telemetry:
-- global/no-PID counters classify every routed call;
-- first-eight D97ES fields preserve original input;
-- D97EZ adds per-slot `PassedMode` so original and translated inputs are directly observable.
+D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly integrity PASS. This proves build/static/binary correctness, not runtime success.
 
-D97EZ remains an experimental compatibility hypothesis. D97FD proves its build/static/binary integrity, not yet its runtime effect.
+## Execution-lane authority
+The user explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is exhausted/blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## Execution-lane authority — local-build exception
-The user explicitly authorized local compilation on the more powerful home Intel iMac because GitHub Actions quota/execution is currently exhausted/blocked. This satisfies the permanent local-build approval requirement.
+## D97FE deploy-helper contract
+The deploy helper is VESA-only and fail-closed:
+- requires exact current VESA args and rejects functional D97EZ activation;
+- verifies exact active D97ES identity first;
+- verifies exact incoming D97EZ identity twice before activation;
+- creates timestamped D97ES backup;
+- activates by same-volume rename and rolls back on activation/final-identity failure;
+- proves config.plist SHA and boot-args unchanged;
+- no BundlePath edit, NVRAM write, Root Patch or reboot.
 
-Do not retry GitHub Actions compilation during the current quota-limited period. GitHub remains source/design/helper/persistence authority. ASUS2 remains target-only for identity-pinned deployment/runtime/VESA evidence.
+## CURRENT ACTION — RUN D97FE VESA DEPLOY
+On ASUS2 remain in current VESA session. Mount the active EFI as `/Volumes/EFI`, extract the exact D97FE deploy package, and run the bootstrap. Do not add `-ocmcd97ez` and do not reboot afterward.
 
-## D97FD — independent build audit PASS
-The returned local archive was read directly and independently audited.
-
-PASS results:
-- exact ZIP identity and CRC;
-- all 20 frozen package manifest hashes;
-- exact D97DL/EH/EL/ES/EZ generator/source identities;
-- full byte-identical lineage regeneration through D97EZ;
-- source exact-match/no-mask semantics;
-- two successful Xcode builds, zero failed builds, zero error lines;
-- x86_64 MH_KEXT_BUNDLE identity;
-- exact version/UUID/executable/Info.plist hashes;
-- binary disassembly confirms exact `0x224` compare, conditional `0x24` selection, unchanged `that/id`, one Apple original call, post-call diagnostic masks, and exact IOReturn return.
-
-Therefore D97EZ 0.0.12 is authorized for VESA-first deployment only, with functional bootarg `-ocmcd97ez` absent.
-
-## CURRENT ACTION — D97EZ VESA-FIRST DEPLOYMENT
-On ASUS2, while remaining in current VESA recovery:
-1. back up current active D97ES 0.0.11 kext;
-2. replace only active EFI `EFI/OC/Kexts/OCLPMetalCompat.kext` with audited D97EZ 0.0.12;
-3. keep `Kernel -> Add -> BundlePath` unchanged;
-4. DO NOT add `-ocmcd97ez` yet;
-5. keep VESA args exactly `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh` with `#-ocmcd97bvcave` inert;
-6. no Root Patch, framebuffer change, T2/Haswell variable, or reboot yet;
-7. verify active EFI identity before reboot.
-
-Required active-EFI identity:
+Return complete terminal output. Required active-EFI result:
+- `D97FE_DEPLOY_STATUS=PASS`;
 - version `0.0.12`;
 - executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
-- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64.
+- Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64;
+- config unchanged PASS;
+- boot args unchanged PASS;
+- reboot performed NO.
 
-Only after exact identity PASS may one VESA validation reboot be separately authorized. Accelerated boot and functional `-ocmcd97ez` remain forbidden until LATENT VESA behavior is proven.
+Only after returned deployment identity PASS may one VESA validation reboot be separately authorized. Accelerated boot and functional `-ocmcd97ez` remain forbidden until LATENT VESA behavior is proven.
