@@ -17,7 +17,10 @@ fail(){ echo "D97FN_BUILD_STATUS=FAIL"; echo "D97FN_FAIL_REASON=$*"; exit 1; }
 [[ "$(uname -m)" == "x86_64" ]] || fail "NOT_X86_64"
 
 CLANG="$(xcrun --find clang++ 2>/dev/null || true)"
+SDKROOT="$(xcrun --sdk macosx --show-sdk-path 2>/dev/null || true)"
 [[ -n "$CLANG" && -x "$CLANG" ]] || fail "CLANGXX_NOT_FOUND"
+[[ -n "$SDKROOT" && -d "$SDKROOT" ]] || fail "MACOS_SDK_NOT_FOUND"
+[[ -f "$SDKROOT/usr/include/dlfcn.h" ]] || fail "DLFCN_HEADER_NOT_FOUND_IN_SDK_$SDKROOT"
 
 mkdir -p "$WORK"
 
@@ -27,6 +30,9 @@ mkdir -p "$WORK"
   uname -a
   echo "CLANG=$CLANG"
   "$CLANG" --version
+  echo "SDKROOT=$SDKROOT"
+  echo "DLFCN_HEADER=$SDKROOT/usr/include/dlfcn.h"
+  /usr/bin/ls -l "$SDKROOT/usr/include/dlfcn.h"
   echo "SOURCE_COMMIT=$EXPECTED_SOURCE_COMMIT"
   echo "EXPECTED_SOURCE_BLOB=$EXPECTED_SOURCE_BLOB"
 } | tee "$REPORT"
@@ -44,6 +50,7 @@ echo "===== COMPILE =====" | tee -a "$REPORT"
   -Wall \
   -Wextra \
   -arch x86_64 \
+  -isysroot "$SDKROOT" \
   "$SRC" \
   -o "$BIN" \
   2>&1 | tee -a "$REPORT"
@@ -71,6 +78,7 @@ BIN_BYTES="$(/usr/bin/stat -f '%z' "$BIN")"
   echo
   echo "D97FN_SOURCE_COMMIT=$EXPECTED_SOURCE_COMMIT"
   echo "D97FN_SOURCE_BLOB=$ACTUAL_BLOB"
+  echo "D97FN_SDKROOT=$SDKROOT"
   echo "D97FN_BUILD_STATUS=PASS"
   echo "D97FN_ASUS2_COMPILE=NO"
   echo "D97FN_SYSTEM_MUTATION=NO"
