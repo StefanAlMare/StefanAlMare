@@ -1,0 +1,301 @@
+name: OCLP7 D97EZ exact 0x224 adapter build audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_GENERATOR.py'
+      - 'OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_DESIGN.md'
+      - '.github/workflows/oclp7-d97ez-exact224-adapter-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-audit:
+    runs-on: macos-15-intel
+    timeout-minutes: 45
+    env:
+      BASE_COMMIT: 72dbc5f29aedf4f8190700de9f1c2c45f949b56f
+      BASE_PATH: OCLP-Continuity/artifacts/OCLP7_D97DL_kern_start.cpp
+      BASE_SHA256: f966d34850466441c4b2eb5a6cf78bd5365cc07223b128feb95aad97839878b2
+      EH_GEN_COMMIT: ce73ee2e09edb5d907adf64243251c513fff085a
+      EH_GEN_PATH: OCLP-Continuity/artifacts/OCLP7_D97EH_SOURCE_GENERATOR.py
+      EH_GEN_SHA256: fed0d21e974a70a3dacad9e86261ecde28dc5f2fbb8f2e4c8c94bf08102a1144
+      EL_GEN_COMMIT: 1fb87c18169a9bd1b74c2b3ff67badc77449c1d4
+      EL_GEN_PATH: OCLP-Continuity/artifacts/OCLP7_D97EL_TELEMETRY_GENERATOR.py
+      EL_GEN_BLOB: 16fdcd6de0de7681a2abdf4c30716fb81a0d0f3e
+      ES_GEN_COMMIT: 62fac73c0d834be92bcab208234112a4b046e385
+      ES_GEN_PATH: OCLP-Continuity/artifacts/OCLP7_D97ES_IOREG_TUPLE_GENERATOR.py
+      ES_GEN_BLOB: dc7e244c3734f5dd0cd6f24d6d8c43da76d41fad
+      EZ_GEN_PATH: OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_GENERATOR.py
+      EZ_GEN_BLOB: 3bf728b999e2163af77742686d7ce9aaac04e8fb
+      EH_SOURCE_SHA256: 2d93b4bc09cd4259e027808547ea003820139f2c2d48b7591c8ea5ccfe038a2d
+      EL_SOURCE_SHA256: 3a103b84ae8c18c7259c672dff9dd5c0f11d04d88554c8da8e60c5c0c04b9003
+      ES_SOURCE_SHA256: 8184610aca1f2e651e6526e45c05d00a96055711c985571bc34c703ba7f6a8d0
+      INFO_COMMIT: 8c4904870b8512fe356fcb48e82fb32a9e980634
+      INFO_PATH: OCLPMetalCompat/OCLPMetalCompat/Info.plist
+      FEATURE_REPO: https://github.com/acidanthera/FeatureUnlock.git
+      FEATURE_COMMIT: 201bd45766207e6cc10cd40a8ac1f9c6216f9acb
+      LILU_REPO: https://github.com/acidanthera/Lilu.git
+      LILU_COMMIT: 0515f40b7f2a096adc85e832a4c6104fbd07f936
+      SDK_REPO: https://github.com/acidanthera/MacKernelSDK.git
+      SDK_COMMIT: 05094e5e88cec7caedbfb35e8449ed0db94bf95b
+      OUTDIR: D97EZ-output
+
+    steps:
+      - name: Checkout continuity repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Record CI provenance and Intel boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUTDIR"
+          {
+            echo "D97EZ_CI_REPOSITORY=$GITHUB_REPOSITORY"
+            echo "D97EZ_CI_WORKFLOW=$GITHUB_WORKFLOW"
+            echo "D97EZ_CI_RUN_ID=$GITHUB_RUN_ID"
+            echo "D97EZ_CI_RUN_NUMBER=$GITHUB_RUN_NUMBER"
+            echo "D97EZ_CI_JOB=$GITHUB_JOB"
+            echo "D97EZ_CI_RUNNER_OS=$RUNNER_OS"
+            echo "D97EZ_CI_RUNNER_ARCH=$RUNNER_ARCH"
+            echo "D97EZ_CI_HEAD_SHA=$GITHUB_SHA"
+            echo "D97EZ_ASUS2_MUTATION=NO"
+            echo "D97EZ_ROOT_PATCH=AUTO-NO"
+            echo "D97EZ_REBOOT=AUTO-NO"
+          } | tee "$OUTDIR/CI_PROVENANCE.txt"
+          test "$RUNNER_OS" = macOS
+          test "$RUNNER_ARCH" = X64
+          /usr/bin/xcodebuild -version | tee "$OUTDIR/XCODE_VERSION.txt"
+
+      - name: Reconstruct exact D97ES lineage and generate D97EZ twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          WORK="$RUNNER_TEMP/d97ez-lineage"
+          mkdir -p "$WORK"
+          git show "$BASE_COMMIT:$BASE_PATH" > "$WORK/D97DL.cpp"
+          git show "$EH_GEN_COMMIT:$EH_GEN_PATH" > "$WORK/D97EH_generator.py"
+          git show "$EL_GEN_COMMIT:$EL_GEN_PATH" > "$WORK/D97EL_generator.py"
+          git show "$ES_GEN_COMMIT:$ES_GEN_PATH" > "$WORK/D97ES_generator.py"
+          git show "$INFO_COMMIT:$INFO_PATH" > "$WORK/Info.plist"
+          test "$(shasum -a 256 "$WORK/D97DL.cpp" | awk '{print $1}')" = "$BASE_SHA256"
+          test "$(shasum -a 256 "$WORK/D97EH_generator.py" | awk '{print $1}')" = "$EH_GEN_SHA256"
+          test "$(git rev-parse "$EL_GEN_COMMIT:$EL_GEN_PATH")" = "$EL_GEN_BLOB"
+          test "$(git rev-parse "$ES_GEN_COMMIT:$ES_GEN_PATH")" = "$ES_GEN_BLOB"
+          test "$(git hash-object "$EZ_GEN_PATH")" = "$EZ_GEN_BLOB"
+
+          python3 "$WORK/D97EH_generator.py" "$WORK/D97DL.cpp" "$WORK/D97EH.cpp"
+          test "$(shasum -a 256 "$WORK/D97EH.cpp" | awk '{print $1}')" = "$EH_SOURCE_SHA256"
+          python3 "$WORK/D97EL_generator.py" "$WORK/D97EH.cpp" "$WORK/D97EL.cpp"
+          test "$(shasum -a 256 "$WORK/D97EL.cpp" | awk '{print $1}')" = "$EL_SOURCE_SHA256"
+          python3 "$WORK/D97ES_generator.py" "$WORK/D97EL.cpp" "$WORK/D97ES.cpp"
+          test "$(shasum -a 256 "$WORK/D97ES.cpp" | awk '{print $1}')" = "$ES_SOURCE_SHA256"
+
+          python3 "$EZ_GEN_PATH" "$WORK/D97ES.cpp" "$WORK/D97EZ.cpp" | tee "$OUTDIR/D97EZ_GENERATOR_RUN_1.txt"
+          python3 "$EZ_GEN_PATH" "$WORK/D97ES.cpp" "$WORK/D97EZ.repeat.cpp" | tee "$OUTDIR/D97EZ_GENERATOR_RUN_2.txt"
+          cmp "$WORK/D97EZ.cpp" "$WORK/D97EZ.repeat.cpp"
+          EZ_SHA="$(shasum -a 256 "$WORK/D97EZ.cpp" | awk '{print $1}')"
+          EZ_BYTES="$(stat -f '%z' "$WORK/D97EZ.cpp")"
+          echo "D97EZ_SOURCE_SHA256=$EZ_SHA" | tee "$OUTDIR/D97EZ_SOURCE_IDENTITY.txt"
+          echo "D97EZ_SOURCE_BYTES=$EZ_BYTES" | tee -a "$OUTDIR/D97EZ_SOURCE_IDENTITY.txt"
+          echo "D97EZ_DETERMINISTIC_GENERATION=PASS" | tee -a "$OUTDIR/D97EZ_SOURCE_IDENTITY.txt"
+          cp "$WORK/D97EZ.cpp" "$OUTDIR/OCLP7_D97EZ_kern_start.cpp"
+          cp "$WORK/D97ES.cpp" "$OUTDIR/OCLP7_D97ES_BASE_kern_start.cpp"
+          cp "$WORK/Info.plist" "$OUTDIR/Info.plist"
+          git diff --no-index --binary "$WORK/D97ES.cpp" "$WORK/D97EZ.cpp" > "$OUTDIR/D97ES_to_D97EZ.diff" || test $? -eq 1
+          echo "D97EZ_LINEAGE_RECONSTRUCTION=PASS" | tee "$OUTDIR/D97EZ_LINEAGE.txt"
+
+      - name: Source semantic and latent-mode audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          src = Path('D97EZ-output/OCLP7_D97EZ_kern_start.cpp').read_text()
+          start = src.index('static IOReturn patchedSetIdMode(')
+          end = src.index('\nstatic void processD97EHKext(', start)
+          fn = src[start:end]
+          assert fn.count('FunctionCast(patchedSetIdMode, orgSetIdMode)(that, id, passedMode)') == 1
+          assert fn.count('originalMode == 0x00000224U') == 1
+          assert fn.count('(functionalActive && exact224) ? 0x00000024U : originalMode') == 1
+          assert 'mode &=' not in fn
+          assert '~0x200' not in fn and '~0x00000200' not in fn
+          assert 'return kIOReturnSuccess' not in fn
+          assert fn.count('return ret;') == 1
+          assert 'const uint32_t originalMode = mode;' in fn
+          assert 'const uint32_t passedMode =' in fn
+          assert 'd97ezExact224SeenCount' in fn
+          assert 'd97ezOtherModeSeenCount' in fn
+          assert 'd97ezExact224AdaptedCount' in fn
+          assert 'd97ezAdaptSuccessCount' in fn and 'd97ezAdaptFailureCount' in fn
+          assert 'd97ezPassthroughSuccessCount' in fn and 'd97ezPassthroughFailureCount' in fn
+          assert 'atomic_store_explicit(&d97esMode[slot], originalMode' in src
+          assert 'atomic_store_explicit(&d97ezPassedMode[slot], passedMode' in src
+          assert 'checkKernelArgument("-ocmcd97ez")' in src
+          assert 'D97EZFunctionalMode' in src
+          assert 'D97EZ01PassedMode' in src
+          Path('D97EZ-output/SOURCE_SEMANTIC_AUDIT.txt').write_text(
+              'D97EZ_EXACT_224_ONLY=PASS\n'
+              'D97EZ_NON224_EXACT_PASSTHROUGH_SOURCE=PASS\n'
+              'D97EZ_APPLE_CALL_EXACTLY_ONCE_SOURCE=PASS\n'
+              'D97EZ_RETURN_PASSTHROUGH_SOURCE=PASS\n'
+              'D97EZ_LATENT_DEFAULT_SOURCE=PASS\n'
+              'D97EZ_GLOBAL_COUNTER_CLASSIFICATION_SOURCE=PASS\n'
+              'D97EZ_PER_SLOT_ORIGINAL_PASSED_TELEMETRY_SOURCE=PASS\n'
+              'D97EZ_GLOBAL_MASK_ABSENT_SOURCE=PASS\n'
+          )
+          print(Path('D97EZ-output/SOURCE_SEMANTIC_AUDIT.txt').read_text(), end='')
+          PY
+
+      - name: Prepare pinned FeatureUnlock scaffold and MacKernelSDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          SCAFFOLD="$RUNNER_TEMP/d97ez-scaffold"
+          git clone --quiet "$FEATURE_REPO" "$SCAFFOLD"
+          git -C "$SCAFFOLD" checkout --quiet "$FEATURE_COMMIT"
+          git clone --quiet "$SDK_REPO" "$SCAFFOLD/MacKernelSDK"
+          git -C "$SCAFFOLD/MacKernelSDK" checkout --quiet "$SDK_COMMIT"
+          cp "$OUTDIR/OCLP7_D97EZ_kern_start.cpp" "$SCAFFOLD/FeatureUnlock/kern_start.cpp"
+          cp "$OUTDIR/Info.plist" "$SCAFFOLD/FeatureUnlock/Info.plist"
+          echo "$SCAFFOLD" > "$RUNNER_TEMP/D97EZ_SCAFFOLD_PATH"
+          echo "D97EZ_SCAFFOLD=PASS" | tee "$OUTDIR/SCAFFOLD_AUDIT.txt"
+
+      - name: Build pinned Lilu x86_64
+        shell: bash
+        run: |
+          set -euo pipefail
+          LILU_SRC="$RUNNER_TEMP/d97ez-lilu"
+          LILU_BUILD="$RUNNER_TEMP/d97ez-lilu-build"
+          git clone --quiet "$LILU_REPO" "$LILU_SRC"
+          git -C "$LILU_SRC" checkout --quiet "$LILU_COMMIT"
+          git clone --quiet "$SDK_REPO" "$LILU_SRC/MacKernelSDK"
+          git -C "$LILU_SRC/MacKernelSDK" checkout --quiet "$SDK_COMMIT"
+          (cd "$LILU_SRC" && xcodebuild -configuration Debug -arch x86_64 \
+            SYMROOT="$LILU_BUILD" OBJROOT="$RUNNER_TEMP/d97ez-lilu-obj" build) \
+            2>&1 | tee "$OUTDIR/LILU_XCODEBUILD.log"
+          LK="$(find "$LILU_BUILD" -type d -name Lilu.kext -print -quit)"
+          test -n "$LK"
+          SCAFFOLD="$(cat "$RUNNER_TEMP/D97EZ_SCAFFOLD_PATH")"
+          rm -rf "$SCAFFOLD/Lilu.kext"
+          cp -R "$LK" "$SCAFFOLD/Lilu.kext"
+          echo "D97EZ_LILU_BUILD=PASS" | tee "$OUTDIR/LILU_BUILD_AUDIT.txt"
+
+      - name: Build D97EZ OCLPMetalCompat 0.0.12 x86_64
+        shell: bash
+        run: |
+          set -euo pipefail
+          SCAFFOLD="$(cat "$RUNNER_TEMP/D97EZ_SCAFFOLD_PATH")"
+          PLUGIN_BUILD="$RUNNER_TEMP/d97ez-plugin-build"
+          (cd "$SCAFFOLD" && xcodebuild -project FeatureUnlock.xcodeproj -target FeatureUnlock \
+            -configuration Debug -arch x86_64 \
+            SYMROOT="$PLUGIN_BUILD" OBJROOT="$RUNNER_TEMP/d97ez-plugin-obj" \
+            PRODUCT_NAME=OCLPMetalCompat \
+            PRODUCT_BUNDLE_IDENTIFIER=com.oclpmetalcompat.OCLPMetalCompat \
+            MODULE_NAME=com.oclpmetalcompat.OCLPMetalCompat MODULE_VERSION=0.0.12 \
+            MARKETING_VERSION=0.0.12 CURRENT_PROJECT_VERSION=0.0.12 build) \
+            2>&1 | tee "$OUTDIR/D97EZ_XCODEBUILD.log"
+          KEXT="$(find "$PLUGIN_BUILD" -type d -name OCLPMetalCompat.kext -print -quit)"
+          test -n "$KEXT"
+          cp -R "$KEXT" "$OUTDIR/OCLPMetalCompat.kext"
+          echo "$KEXT" > "$RUNNER_TEMP/D97EZ_KEXT_PATH"
+          echo "D97EZ_PLUGIN_BUILD=PASS" | tee "$OUTDIR/PLUGIN_BUILD_AUDIT.txt"
+
+      - name: Binary identity and disassembly audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEXT="$(cat "$RUNNER_TEMP/D97EZ_KEXT_PATH")"
+          EXEC="$KEXT/Contents/MacOS/OCLPMetalCompat"
+          VER="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$KEXT/Contents/Info.plist)"
+          ARCHS="$(lipo -archs "$EXEC")"
+          UUID="$(dwarfdump --uuid "$EXEC" | awk 'NR==1{print $2}')"
+          EXSHA="$(shasum -a 256 "$EXEC" | awk '{print $1}')"
+          INFOSHA="$(shasum -a 256 "$KEXT/Contents/Info.plist" | awk '{print $1}')"
+          test "$VER" = 0.0.12
+          test "$ARCHS" = x86_64
+          strings -a "$EXEC" > "$OUTDIR/D97EZ_STRINGS.txt"
+          for marker in \
+            D97EZFunctionalMode D97EZExact224SeenCount D97EZExact224AdaptedCount \
+            D97EZOtherModeSeenCount D97EZAdaptSuccessCount D97EZAdaptFailureCount \
+            D97EZPassthroughSuccessCount D97EZPassthroughFailureCount D97EZ01PassedMode \
+            D97ELRouteStatus D97ES01Mode D97ESCapturedCount -ocmcd97ez -ocmcd97eh
+          do
+            grep -F -- "$marker" "$OUTDIR/D97EZ_STRINGS.txt" >/dev/null
+          done
+          nm -nm "$EXEC" > "$OUTDIR/D97EZ_NM.txt"
+          grep -F 'patchedSetIdMode' "$OUTDIR/D97EZ_NM.txt" >/dev/null
+          otool -tvV "$EXEC" > "$OUTDIR/D97EZ_DISASSEMBLY.txt"
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          text = Path('D97EZ-output/D97EZ_DISASSEMBLY.txt').read_text()
+          # Preserve the complete disassembly as the primary binary evidence.
+          # Debug x86_64 code should expose the exact compare/replacement constants.
+          assert re.search(r'0x0*224\b', text, re.I), 'binary 0x224 compare constant missing'
+          assert re.search(r'0x0*24\b', text, re.I), 'binary 0x24 replacement constant missing'
+          nm = Path('D97EZ-output/D97EZ_NM.txt').read_text()
+          assert 'patchedSetIdMode' in nm
+          Path('D97EZ-output/BINARY_SEMANTIC_AUDIT.txt').write_text(
+              'D97EZ_BINARY_PATCHED_SET_ID_MODE_SYMBOL=PASS\n'
+              'D97EZ_BINARY_0x224_CONSTANT=PASS\n'
+              'D97EZ_BINARY_0x24_CONSTANT=PASS\n'
+              'D97EZ_BINARY_FULL_DISASSEMBLY_PRESERVED=PASS\n'
+          )
+          print(Path('D97EZ-output/BINARY_SEMANTIC_AUDIT.txt').read_text(), end='')
+          PY
+          {
+            echo "D97EZ_VERSION=$VER"
+            echo "D97EZ_ARCHS=$ARCHS"
+            echo "D97EZ_UUID=$UUID"
+            echo "D97EZ_EXEC_SHA256=$EXSHA"
+            echo "D97EZ_INFO_SHA256=$INFOSHA"
+            echo "D97EZ_BINARY_IDENTITY=PASS"
+          } | tee "$OUTDIR/BINARY_IDENTITY.txt"
+
+      - name: Package identity manifest and final audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp "$EZ_GEN_PATH" "$OUTDIR/OCLP7_D97EZ_EXACT_224_ADAPTER_GENERATOR.py"
+          cp OCLP-Continuity/artifacts/OCLP7_D97EZ_EXACT_224_ADAPTER_DESIGN.md "$OUTDIR/"
+          (cd "$OUTDIR" && find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 shasum -a 256 > SHA256SUMS.txt)
+          {
+            echo 'D97EZ_AUDIT_VERSION=1'
+            echo "D97EZ_CI_REPOSITORY=$GITHUB_REPOSITORY"
+            echo "D97EZ_CI_WORKFLOW=$GITHUB_WORKFLOW"
+            echo "D97EZ_CI_RUN_ID=$GITHUB_RUN_ID"
+            echo "D97EZ_CI_JOB=$GITHUB_JOB"
+            echo "D97EZ_CI_RUNNER_OS=$RUNNER_OS"
+            echo "D97EZ_CI_RUNNER_ARCH=$RUNNER_ARCH"
+            echo "D97EZ_CI_HEAD_SHA=$GITHUB_SHA"
+            cat "$OUTDIR/D97EZ_SOURCE_IDENTITY.txt"
+            cat "$OUTDIR/BINARY_IDENTITY.txt"
+            echo 'D97EZ_LINEAGE=PASS'
+            echo 'D97EZ_DETERMINISTIC_GENERATION=PASS'
+            echo 'D97EZ_SOURCE_EXACT_MATCH_AUDIT=PASS'
+            echo 'D97EZ_BINARY_DISASSEMBLY_AUDIT=PASS'
+            echo 'D97EZ_LATENT_DEFAULT=PASS'
+            echo 'D97EZ_GLOBAL_MASK=ABSENT'
+            echo 'D97EZ_RETURN_COERCION=ABSENT'
+            echo 'D97EZ_ASUS2_MUTATION=NO'
+            echo 'D97EZ_ROOT_PATCH=AUTO-NO'
+            echo 'D97EZ_REBOOT=AUTO-NO'
+            echo 'D97EZ_FINAL=PASS'
+          } | tee "$OUTDIR/D97EZ_FINAL_AUDIT_REPORT.txt"
+          ditto -c -k --keepParent "$OUTDIR/OCLPMetalCompat.kext" "$OUTDIR/OCLP7_D97EZ_OCLPMetalCompat_0.0.12.zip"
+          shasum -a 256 "$OUTDIR/OCLP7_D97EZ_OCLPMetalCompat_0.0.12.zip" | tee "$OUTDIR/OCLP7_D97EZ_OCLPMetalCompat_0.0.12.zip.sha256"
+
+      - name: Upload audited D97EZ artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OCLP7-D97EZ-0.0.12-exact224-adapter
+          path: D97EZ-output/
+          if-no-files-found: error
+          retention-days: 30
