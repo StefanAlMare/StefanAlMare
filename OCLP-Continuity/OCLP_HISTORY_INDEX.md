@@ -2,7 +2,8 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`.
+Current runtime checkpoint: `OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`.
+Current static-analysis checkpoint: `OCLP7_CHECKPOINT_20260907_D97FS_ACTIVE_METAL_BYTES_EXACT_D97BV_RUNTIME_POSTIMAGES_INCOMING_PRISTINE_REFERENCE.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -12,10 +13,19 @@ Tahoe `26.6.2 / 25G82` on ASUS2, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, st
 Accepted functional baseline remains exactly `P1 + P2b + P3 + AIR00 + D34`. D22 remains accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave protected. Golden Sequoia immutable/read-only. D50/D68/D82 reserve-only; D84 retired. Permanent method remains module-boundary + semantic evidence + far-frontier, with universal/no-PID coverage where requests vary.
 
 ## D97BV / D97DT — selective 3802 runtime closure
-Selective true-3802 adapter semantics and runtime delivery CLOSED PASS under exact 25G82. Do not retest absent contradiction.
+Selective true-3802 adapter semantics and runtime delivery CLOSED PASS under exact 25G82. Exact design postimages:
+- CAVE `3d187d0000b9177d00000f4cc1e9b4311600`, SHA256 `a1b8d3b2988e622a4ea8e9545816a44abdb5c84e70b4126a3bad15c9f7539045`;
+- SITE `3dda0e00007406e93bcee9ff90`, SHA256 `1123dd318a28e66be825763ccb9715b4ef2906fd9cdb6335ed2f53fada489a43`.
+Do not retest absent contradiction.
 
 ## D97DX — native-Metal-safe Root Patch
 D97DX Root Patch PASS: native Tahoe main Metal authoritative; bounded legacy compiler/compatibility lanes; exact 25G82 metallib; Monterey GVA/OpenCL + Haswell drivers; no legacy main Metal shadow, MetalOld or true-five replay.
+
+## D97DZ — post-Root-Patch shared-cache pristine gate
+Immediately after D97DX under VESA, D97BV SITE and CAVE remained pristine:
+- SITE exact original preimage `3d187d0000b9177d00000f4cc1`;
+- CAVE exact zero preimage.
+Thus D97DX itself did not write the D97BV SITE/CAVE modifications.
 
 ## D97EB / D97EE — framebuffer count negative
 Normal 3/3/3 and isolated 1/1/1 both reached `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` -> display offline -> WindowServer SIGSEGV. No panic, no `_MTL4*`; 1/1/1 CLOSED NEGATIVE, 3/3/3 authoritative.
@@ -86,12 +96,10 @@ Returned crash archive:
 Two WindowServer `.ips` reports share bootSessionUUID `48324BF1-0934-44C2-B2B9-A1208109B19E` and converge on `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState`.
 
 Crash A:
-- report SHA256 `3a90c0d19e0e928273cbb2d3d32d432d949ab61a3e8ee807584a704cccedc3cb`;
 - EXC_BAD_ACCESS/SIGSEGV, KERN_INVALID_ADDRESS at `0x18`;
 - main thread stack begins `objc_msgSend +29 -> GetGPUPassRenderPipelineState +599 -> CreateMetalDevice +589 -> CoreDisplay display-device construction -> CoreDisplayManager::initialize`.
 
 Crash B:
-- report SHA256 `6c27adc301ab3c9c1650ae02295c4c98f18e317e7d1424f1c20e250b3665f852`;
 - EXC_CRASH/SIGABRT;
 - main thread stack reaches `MTLReportFailure -> validateWithDevice(...)+716 -> MTLRenderPipelineDescriptorInternal validate -> MTLCompiler newRenderPipelineState... -> _MTLDevice newRenderPipelineState... -> GetGPUPassRenderPipelineState +1720 -> CreateMetalDevice -> same CoreDisplayManager path`.
 
@@ -108,13 +116,68 @@ Loaded userspace identities:
 
 Reclassification:
 - `getPixelInformation` remains REACHED_NEGATIVE but primary cause UNPROVEN;
-- strongest captured fatal boundary is now CoreDisplay GPU-pass render-pipeline construction/device validation;
+- strongest captured fatal boundary is CoreDisplay GPU-pass render-pipeline construction/device validation;
 - native Metal `validateWithDevice` is REACHED_NEGATIVE;
 - exact descriptor field/device capability mismatch remains UNKNOWN;
 - IOVersatile remains UNPROVEN/NON-DISCRIMINATING.
 
 D97FJ checkpoint commit `c3ef589e7f9ee8688dc6a08c9d4a488aec0fb8c1`.
-MASTER advance to D97FJ: `d6283656bd7875d55a283a677b2fef485e11079f`.
+
+## D97FK / D97FL / D97FM — cache-resident CoreDisplay discovery
+D97FK standalone filesystem dump was INCONCLUSIVE because CoreDisplay/Metal are cache-resident on exact 25G82.
+D97FL found the active `dyld_shared_cache_x86_64h` in Cryptex OS plus Apple `dsc_extractor.bundle`.
+D97FM LLDB process-load route was blocked before CoreDisplay load; no further LLDB retries authorized.
+
+## D97FN-D97FQ — audited Apple DSC extraction wrapper
+Minimal wrapper around `dyld_shared_cache_extract_dylibs_progress` built on authorized Intel iMac after SDK/tool-path hardening.
+Final audited x86_64 binary:
+- SHA256 `04f0e1aa835f7dcafc3ccf989fe90bf3324b9d173824a7540d0232e9e7464bff`;
+- UUID `213B833D-A864-3A3D-97E5-BB4AB8824033`;
+- exact source lineage PASS;
+- disassembly/dependency/code-sign audit PASS.
+D97FQ checkpoint commit `864d4d4d19d54c2a18a6203b78ea03de7d9a2377`.
+
+## D97FR — active cache signature mismatch vs valid Incoming
+Apple extractor rejected active main cache at page 62590 due code-signature mismatch.
+Direct comparison proved:
+- active `Cryptexes/OS` cache signature invalid;
+- same-sized `Cryptexes/Incoming/OS` cache valid;
+- the first observed differing page is exact validator page 62590;
+- Incoming therefore provides a pristine signature-valid 25G82 reference.
+D97FR checkpoint commit `555dbb8fea4db84e7705613d3225f71fdb9427d9`.
+
+## D97FS — exact active mutations map to native Metal and D97BV
+Returned `OCLP7_D97FS_CACHE_MAP_20260907_195458.zip` direct audit:
+- bytes `1525842`;
+- SHA256 `f694969d4c9c4cb33ee8e1b0b1b28c4af0b01283da029fb3a4a9ce43a2f5aa52`;
+- CRC PASS.
+
+Active and Incoming cache headers/maps/atlases have identical layout. The two differing code regions map to native Tahoe `Metal.__TEXT`:
+- CAVE `Metal+0x1560`;
+- SITE `Metal+0x164719`.
+
+Exact bytes prove:
+- ACTIVE CAVE = exact accepted D97BV CAVE postimage;
+- ACTIVE SITE = exact accepted D97BV SITE postimage;
+- Incoming CAVE = zero preimage;
+- Incoming SITE = exact Tahoe original clamp preimage.
+
+Constants/semantics:
+- `0xEDA = 3802`;
+- `0x7D17 = 32023`;
+- `0x7D18 = 32024`;
+- exact 3802 bypasses the original Tahoe clamp;
+- all non-3802 values execute original clamp semantics through the CAVE.
+
+Lineage closure:
+- D97DZ proved these bytes pristine after Root Patch;
+- D97DT proved runtime OCLPMetalCompat mutation to these exact postimages;
+- D97FS finds exact postimages active now.
+Therefore the active signature failure is explained by intentional D97BV runtime Metal text mutation, not unexplained corruption and not D97DX Root Patch writing these bytes.
+
+D97FS checkpoint commit `f22b93fb0361d7333afaf689e43c3effd4ab0c42`.
+
+This does not implicate D97BV as the current CoreDisplay pipeline blocker; D97BV remains CLOSED PASS.
 
 ## Current causal frontier
 Closed:
@@ -125,4 +188,4 @@ Current:
 
 ## Current action
 Remain in VESA. No reboot and no EFI/Root Patch/framebuffer/NVRAM/bootarg changes.
-Perform static/read-only mapping of exact 25G82 CoreDisplay around `GetGPUPassRenderPipelineState +599` and `+1720`, plus strings near `F_NymriCY`. Determine the descriptor property or device query immediately preceding native `validateWithDevice` if statically recoverable. Do not repeat ACTIVE boot before this boundary is mapped.
+Use signature-valid exact-25G82 `Cryptexes/Incoming/OS/.../dyld_shared_cache_x86_64h` as the extraction source with audited D97FN. Verify extracted CoreDisplay/Metal UUIDs against D97FJ, then statically map `GetGPUPassRenderPipelineState +599/+1720`, `F_NymriCY`, and immediately adjacent render-pipeline descriptor/device calls. Do not repeat ACTIVE boot before this boundary is mapped.
