@@ -6,21 +6,22 @@ Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
 Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
-Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EJ_D97EH_EFI_IDENTITY_PASS_VESA_REBOOT_AUTHORIZED.md`
+Current authoritative runtime checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EK_D97EH_VESA_LOAD_PASS_ROUTE_UNPROVEN.md`
 Current Root Patch execution checkpoint: `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 Current build design: `OCLP-Continuity/artifacts/OCLP7_D97DU_NATIVE_METAL_SAFE_ROOTPATCH_DESIGN.md`
+Current observer build helper: `OCLP-Continuity/artifacts/OCLP7_D97EL_IMAC_BUILD.sh`
 
 ## Current ASUS2 authority
 - Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- current session is VESA recovery;
-- active EFI compatibility kext has been manually replaced with audited D97EH `OCLPMetalCompat.kext` 0.0.9;
-- active EFI executable identity is exact: SHA256 `23bbc4a30a0c445a20a2821530a427256662e4e4832eaa6c82b1219540460fcf`, UUID `E3BE3246-7F7A-36B8-822D-7D1AEB35D721` x86_64;
-- VESA recovery args must retain `-igfxvesa -ocmcdiag -ocmcd97bv` and add `-ocmcd97eh`; `#-ocmcd97bvcave` inert;
-- D97ED/D97EE closed framebuffer-count tuning as a solution;
-- D97EG resolved exact failing interface symbol to `IOAccelSurface::set_id_mode(uint32_t,uint32_t)`;
-- D97EH 0.0.9 observer-only build passed independent source/binary audit;
-- next boot is authorized only as VESA-first deployment validation; accelerated boot remains unauthorized.
+- current session is VESA boot from 2026-09-07 11:52 EEST;
+- active EFI compatibility kext is audited D97EH `OCLPMetalCompat.kext` 0.0.9;
+- active executable identity: SHA256 `23bbc4a30a0c445a20a2821530a427256662e4e4832eaa6c82b1219540460fcf`, UUID `E3BE3246-7F7A-36B8-822D-7D1AEB35D721` x86_64;
+- active recovery args: `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`; `#-ocmcd97bvcave` inert;
+- D97BV `_cs_validate_page` route remains PASS and functional mode ACTIVE;
+- `IOAcceleratorFamily2` 487.4.3 DOES load in this VESA boot, together with AppleIntelFramebufferAzul 18.0.8 and AppleIntelHD5000Graphics 18.0.8;
+- D97EH set_id_mode route is not proven: no PASS/NEGATIVE route marker, no set_id_mode observations, no UUID mismatch evidence;
+- accelerated boot is NOT authorized.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -97,22 +98,7 @@ Project EFI baseline uses:
 Thus 3-framebuffer enumeration was native platform topology, not accidental overexposure.
 
 ## D97ED / D97EE 1/1/1 experiment — CLOSED NEGATIVE
-D97ED temporarily forced:
-- `framebuffer-pipecount = 1`;
-- `framebuffer-portcount = 1`;
-- `framebuffer-memorycount = 1`;
-- con2 override removed.
-
-D97EE proves the experiment took effect:
-- `Creating FB 1 of 1`;
-- `Created FB 1 of 1`;
-- `GPU: FB: 1 of 1 opened`.
-
-Yet the core failure persisted:
-- four `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits`;
-- main display forced offline;
-- WindowServer SIGSEGV;
-- respawned WindowServer repeats the pattern.
+D97EE proved 1/1/1 took effect (`GPU: FB: 1 of 1 opened`) yet four `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` events and WindowServer SIGSEGV persisted.
 
 Classifications:
 - `D97EE_1FB_APPLIED=YES`;
@@ -123,18 +109,17 @@ Classifications:
 - `D97EE_FRAMEBUFFER_COUNT_TUNING_FRONTIER=CLOSED_NEGATIVE`.
 
 ## D97EG — exact set_id_mode symbol resolved
-ASUS2 read-only audit proved:
-- `/System/Library/Extensions/IOAcceleratorFamily2.kext` exists;
-- standalone executable is absent in this VESA filesystem view / implementation is KC-backed;
-- `AppleIntelHD5000Graphics.kext` contains dynamically looked-up import `__ZN14IOAccelSurface11set_id_modeEjj`.
+ASUS2 read-only audit proved `AppleIntelHD5000Graphics.kext` dynamically imports:
+`__ZN14IOAccelSurface11set_id_modeEjj`.
 
 Therefore exact failing interface imported by legacy Haswell driver is:
 `IOAccelSurface::set_id_mode(uint32_t id, uint32_t mode)`.
 
-IOAcceleratorFamily2 bundle identity on ASUS2:
+IOAcceleratorFamily2 identity:
 - bundle id `com.apple.iokit.IOAcceleratorFamily2`;
-- version `487.4.3`;
-- not shown loaded during VESA, as expected.
+- version `487.4.3`.
+
+Earlier VESA observation that it was not loaded is superseded by D97EK, which proves it does load in the 11:52 VESA session.
 
 ## D97EH / D97EI — observer build and independent audit PASS
 D97EH is OCLPMetalCompat 0.0.9, observer-only, built locally on authorized Intel iMac.
@@ -155,39 +140,70 @@ Kext executable:
 - UUID `E3BE3246-7F7A-36B8-822D-7D1AEB35D721`;
 - executable SHA256 `23bbc4a30a0c445a20a2821530a427256662e4e4832eaa6c82b1219540460fcf`.
 
-Independent lineage proof:
-- reverse exactly the three D97EH generator replacements from packaged source;
-- reconstructed base SHA256 is exact D97DL authority `f966d34850466441c4b2eb5a6cf78bd5365cc07223b128feb95aad97839878b2`;
-- therefore D97BV is preserved exactly outside the observer additions.
+Independent lineage proof reconstructs exact D97DL SHA256 `f966d34850466441c4b2eb5a6cf78bd5365cc07223b128feb95aad97839878b2` after reversing observer additions.
 
 Observer semantics:
 - gate `-ocmcd97eh`;
-- target exact symbol `__ZN14IOAccelSurface11set_id_modeEjj` in `com.apple.iokit.IOAcceleratorFamily2`;
+- target exact symbol `__ZN14IOAccelSurface11set_id_modeEjj`;
 - passes original `that`, `id`, `mode` unchanged to Apple;
-- logs only first 32 calls;
+- logs first 32 calls only;
 - reports `id`, `mode`, `badBits = mode & 0xFF8073C0`, `goodBits = mode & 0x007F8C3F`, original return;
 - returns original IOReturn unchanged;
-- no bit stripping, no return coercion, no framebuffer mutation.
-
-Independent x86_64 disassembly confirms original saved `that/id/mode` are restored into `rdi/esi/edx` before indirect original call; mask operations occur only after return for logging; final return reloads original return value.
-
-Packaging note:
-- all payload hashes in `SHA256SUMS.txt` validate except its own self-entry;
-- self-hash is a manifest-generation tooling bug, not a payload integrity failure;
-- ZIP/source/executable/Info.plist and all non-self manifest entries validate exactly;
-- builder authority has since been corrected to exclude manifest self-hash for future builds.
-
-D97EI checkpoint commit: `e3ac6110ea39285c6b4891de55bfb4ed6a69973a`.
+- no bit stripping, return coercion, or framebuffer mutation.
 
 ## D97EJ — active EFI identity PASS
-User manually deployed D97EH to active `EFI/OC/Kexts/OCLPMetalCompat.kext` and verified before reboot:
-- `VERSION=0.0.9`;
-- executable SHA256 `23bbc4a30a0c445a20a2821530a427256662e4e4832eaa6c82b1219540460fcf`;
-- UUID `E3BE3246-7F7A-36B8-822D-7D1AEB35D721` x86_64.
-
-Thus the active EFI payload exactly matches the audited artifact.
+User manually deployed D97EH to active EFI and verified exact version/SHA/UUID before reboot.
 
 D97EJ checkpoint commit: `4f6964a38cb197775b9b8a65176c2e5686fe0c3e`.
+
+## D97EK — first D97EH VESA boot: load PASS, route UNPROVEN
+VESA boot at 11:52 proves:
+- OCLPMetalCompat 0.0.9 loaded exact;
+- Lilu 1.7.3 and WhateverGreen 1.7.1 loaded;
+- IOAcceleratorFamily2 487.4.3 loaded;
+- AppleIntelFramebufferAzul / AppleIntelHD5000Graphics loaded;
+- D97BV build/kernel/cpu/bootarg gates PASS and `_cs_validate_page` route PASS;
+- D97BV functional mode ACTIVE.
+
+Unified log proves kernelmanagerd receives IOAcceleratorFamily2 load notification at `11:53:00.646238`, but contains:
+- no `D97EH_ROUTE PASS`;
+- no `D97EH_ROUTE NEGATIVE`;
+- no `D97EH_SET_ID_MODE`;
+- no `uuid mismatch`;
+- no explicit MachInfo/symbol failure tied to the observer.
+
+Lilu 1.7.3 implementation audit shows:
+- KextInfo + callback registration is processed during patcher setup;
+- already-loaded kexts can be processed on Big Sur+ when `Loaded` is set;
+- bundle id + current-binary UUID are checked before callback;
+- KC mode may initialize MachInfo from memory, so missing standalone executable does NOT alone prove KextInfo failure.
+
+Classification:
+- `D97EK_D97EH_KEXT_LOAD=PASS`;
+- `D97EK_IOACCELERATORFAMILY2_VESA_LOAD=YES`;
+- `D97EK_D97EH_ROUTE_STATUS=UNPROVEN`;
+- `D97EK_ACCELERATED_BOOT_AUTHORIZED=NO`.
+
+D97EK checkpoint commit: `8af4659248832e2f5468dbacc8b88362d46a2a10`.
+
+## D97EL — telemetry-only successor ARMED FOR BUILD
+D97EL is designed as OCLPMetalCompat 0.0.10 and preserves D97EH observer semantics and registration behavior exactly. It adds only IORegistry telemetry:
+- `D97ELObserverRequested`;
+- `D97ELCallbackSeenCount`;
+- `D97ELTargetCallbackSeenCount`;
+- `D97ELLastCallbackIndex`;
+- `D97ELKextLoadIndex`;
+- `D97ELRouteStatus`;
+- `D97ELSetIdModeCallCount`.
+
+No mode mutation, no return coercion, no registration behavior change.
+
+Authority:
+- telemetry generator commit `1fb87c18169a9bd1b74c2b3ff67badc77449c1d4`;
+- generator blob `16fdcd6de0de7681a2abdf4c30716fb81a0d0f3e`;
+- generator SHA256 `b0d48e176e2b1e9b2bafa902007b80800963108c13d2d76f51fd578baa992637`;
+- expected generated D97EL source SHA256 `3a103b84ae8c18c7259c672dff9dd5c0f11d04d88554c8da8e60c5c0c04b9003`;
+- Intel iMac build helper commit `cf694429557eadaedcf59a7cedce3ff24f3fca27`.
 
 ## Current causal frontier
 `Tahoe/CoreDisplay producer semantics -> IOAccelSurface::set_id_mode(id, mode) -> legacy Haswell IOAccelerator acceptance`.
@@ -196,32 +212,18 @@ Need exact accelerated runtime `id`, `mode`, candidate rejected bits, and origin
 
 External NootedGreen masks remain orientation only. Clearing any mode bits is NOT authorized until ASUS2 measurement.
 
-## CURRENT ACTION — ONE D97EH VESA-FIRST REBOOT AUTHORIZED
-Remain on normal pre-D97ED 3/3/3 IGPU baseline:
-- `framebuffer-pipecount`, `framebuffer-portcount`, `framebuffer-memorycount` absent;
-- `framebuffer-con2-enable = 01000000` and `framebuffer-con2-type = 00080000`;
-- retain 0x0A260006/device-id/framebuffer-patch-enable/framebuffer-cursormem.
+## CURRENT ACTION — BUILD D97EL ON INTEL IMAC ONLY
+Run the authoritative `OCLP7_D97EL_IMAC_BUILD.sh` on the authorized Intel iMac 9900K.
 
-Required boot args for the next boot:
-- `-igfxvesa` ACTIVE;
-- `-ocmcdiag` ACTIVE;
-- `-ocmcd97bv` ACTIVE;
-- `-ocmcd97eh` ACTIVE;
-- `#-ocmcd97bvcave` inert.
+Build only. No target mutation, no EFI, no Root Patch, no reboot.
+Return the resulting ZIP for independent audit.
 
-Perform exactly one VESA reboot. Do not Root Patch. Do not disable `-igfxvesa`.
-
-After VESA returns, read-only gate must verify:
-- OCLPMetalCompat 0.0.9 loaded;
-- D97BV functional mode/state remains healthy;
-- no new kext/load regression;
-- observer route may remain dormant because IOAcceleratorFamily2 is not loaded in VESA.
-
-Only after that VESA gate may one accelerated observer boot be separately authorized.
+Only after build audit may D97EL be deployed to ASUS2 for another VESA-first gate.
 
 Still forbidden:
+- accelerated boot now;
 - clearing `0xff8073c0` or any mode bits;
-- accelerated boot before VESA gate passes;
+- return coercion;
 - retaining 1/1/1 as production configuration;
 - another Root Patch;
 - CoreDisplay donor/downgrade without independent ABI audit;
