@@ -1,8 +1,8 @@
 # OCLP PROJECT HISTORY INDEX — ASUS2 / OCLP1 -> future phases
 
-Updated: 2026-09-06 EEST
+Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260906_D97DI_BUILD_BINARY_AUDIT_PASS_LATENT_DEPLOY_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97EU_D97ES_VESA_DEPLOY_IDENTITY_PASS_REBOOT_AUTHORIZED.md`.
 Permanent database/rules remain authoritative for deep history.
 
 ## Project end goal
@@ -158,8 +158,62 @@ Audited latent package:
 `OCLP7_D97DI_AUDITED_LATENT_DEPLOY_20260906.zip`
 - SHA256 `6f4b43f8fedf9a5167b5d3921d69fb43e7c580f951627352ea78a23316d37e3f`.
 
-## Current action
-ASUS2 remains unchanged on D97DD 0.0.4.
-D97DI is ready for an identity-pinned **LATENT** deployment design that preserves current config and leaves `-ocmcd97bv` absent.
+## D97DL-D97DT — selective 3802 runtime path closure
+D97DL 0.0.7 became source authority for the selective D97BV adapter. Under exact 25G82 VESA, later D97DT evidence closed CAVE/SITE runtime delivery, validation safety and cross-process visibility. Selective-3802 runtime delivery is CLOSED PASS and is not to be retested absent contradiction.
 
-Not yet authorized: D97DI deployment, functional bootarg, functional mutation, Root Patch, accelerated boot or reboot.
+## D97DX — native-Metal-safe Root Patch
+D97DX Root Patch execution PASS installed the bounded architecture:
+- native Tahoe main Metal remains authoritative;
+- bounded legacy `MTLCompilerService.xpc` only under native Metal.framework;
+- private compiler lanes plus CoreImage/RenderBox compatibility;
+- exact 25G82 metallib handling;
+- Monterey GVA/OpenCL and Haswell graphics drivers;
+- no MetalOld, no legacy main Metal shadow and no true-five replay.
+
+## D97EB / D97EE — accelerated failure and framebuffer experiment
+Normal 3/3/3 accelerated boot and isolated 1/1/1 framebuffer experiment both reached the same core failure:
+`IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` -> display offline -> WindowServer SIGSEGV.
+No kernel panic and no `_MTL4*` superclass regression occurred. The 1/1/1 experiment did not solve the failure, so framebuffer-count tuning is CLOSED NEGATIVE and the normal 3/3/3 baseline remains authoritative.
+
+## D97EG-D97EP — exact set_id_mode observer route
+D97EG mapped the exact imported symbol as `IOAccelSurface::set_id_mode(uint32_t id, uint32_t mode)` in IOAcceleratorFamily2 487.4.3.
+D97EH 0.0.9 established an exact observe-only wrapper: original `that/id/mode` passed unchanged, Apple original called first, original IOReturn returned unchanged, candidate masks computed only after original return.
+D97EL 0.0.10 preserved those semantics and added route/callback telemetry.
+D97EP VESA IORegistry evidence proved observer request active, callback path active, exact route PASS and `D97ELSetIdModeCallCount=0` under VESA. Registration/matching/symbol routing is therefore CLOSED PASS in VESA.
+
+## D97EQ — accelerated failure reproduced; tuple not captured
+D97EL accelerated boot reproduced the causal sequence with WindowServer PID 177:
+- `GPU: FB: 3 of 3 opened`;
+- four `Surface mode contains bad bits` errors;
+- display offline about 3 ms later;
+- WindowServer SIGSEGV about 20.6 ms after the fourth error.
+No kernel panic, no `_MTL4*` regression and no preceding MTLCompilerService failure were found. Exact observer tuple remained UNCAPTURED.
+
+## D97ER — transport classification
+Post-recovery unified log and live VESA `dmesg` contained no D97EH/D97EL custom markers. Repeating the same accelerated D97EL boot was therefore NOT JUSTIFIED. D97EP route PASS remained valid; the unresolved problem became tuple transport/capture rather than a newly demonstrated graphics regression.
+
+## D97ES / D97ET — IORegistry tuple telemetry build and independent audit
+D97ES 0.0.11 preserves exact D97EL route/observer passthrough semantics and adds bounded asynchronous IORegistry publication for the first eight post-original tuples: `id`, `mode`, `badBits`, `goodBits`, raw original return.
+
+Independent build audit PASS:
+- version `0.0.11`;
+- UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`;
+- executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
+- exact D97ES -> D97EL -> D97EH -> D97DL lineage proved;
+- binary passthrough semantics proved;
+- no functional mode mutation or return coercion.
+
+D97ET authorized VESA deployment only; accelerated boot remained forbidden.
+
+## D97EU — active EFI deployment identity PASS
+ASUS2 direct pre-reboot verification of `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext` matched audited D97ES exactly:
+- version `0.0.11`;
+- executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
+- UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64.
+
+Classification: active EFI identity PASS. Exactly one VESA validation reboot is authorized with unchanged args `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`, `#-ocmcd97bvcave` inert, and no Root Patch/framebuffer/T2-variable/set_id_mode mutation. Accelerated boot remains forbidden.
+
+D97EU checkpoint commit: `3861969fe3d6ead6c8684a099e3a5abd80500814`.
+
+## Current action
+Perform exactly one D97ES VESA validation reboot with the preserved VESA configuration. After return, collect D97ES IORegistry route/publisher and tuple-slot evidence. Do not Root Patch and do not attempt an accelerated boot until that VESA evidence is audited and persisted.
