@@ -2,279 +2,149 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97EW_D97ES_VESA_PASS_PERSISTENT_CAPTURE_GATE.md`.
-Permanent database/rules remain authoritative for deep history.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97EX_PERSISTENT_COLLECTOR_LIVE_PASS_ACCEL_BOOT_AUTHORIZED.md`.
+Permanent database/rules and the incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
-Tahoe `26.6.2 / 25G82` on ASUS2, Haswell HD4400/4600 `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware-accelerated GUI.
+Tahoe `26.6.2 / 25G82` on ASUS2, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware-accelerated GUI.
 
-## Durable architecture
-Current target: native Tahoe Metal/Metal4 with selective true-3802 ingress and otherwise unchanged Tahoe 32023/32024 semantics.
-Historical accepted baseline: `P1 + P2b + P3 + AIR00 + D34`.
+## Durable architecture / baseline
+Current architecture: native Tahoe Metal/Metal4 with selective true-3802 ingress and otherwise unchanged Tahoe semantics.
 
-Closed branches:
-- full legacy main Metal: ABI-incompatible NEGATIVE;
-- standalone reconstructed Metal carrier: CLOSED after D97CJ broad ObjC relocation proof;
-- plain BinaryModInfo canonical Tahoe Metal path: blocked because native Metal is shared-cache resident.
+Accepted functional baseline remains exactly:
+`P1 + P2b + P3 + AIR00 + D34`.
 
-Golden Sequoia remains immutable/read-only. D50/D68/D82 remain reserve-only unless a later authoritative checkpoint explicitly promotes one.
+Golden Sequoia remains immutable/read-only. D50/D68/D82 remain reserve-only. D84 is retired. D34 cave remains protected.
 
-## D97BV selective adapter
-Static semantic closure:
+Closed branches include legacy-main-Metal shadowing, global forced-3802/global 32023 rewrite, standalone reconstructed carrier and framebuffer-count tuning.
+
+## Early compiler/path history
+Earlier OCLP1-OCLP7 work established the accepted five-patch compiler/request bridges, AIR 2.6 / Metal 3.1 semantics, downstream compiler-service progress, and the far-frontier methodology. Historical over-probing and cross-PID sampling errors drove the permanent module-boundary + semantic-evidence + universal/no-PID rules. Full detailed chronology remains in `OCLP_PERMANENT_PROJECT_DATABASE.md` and prior checkpoints.
+
+## D97BV / D97DT — selective 3802 runtime closure
+Selective adapter semantics:
 - exact 3802 bypasses Tahoe floor;
 - every non-3802 input executes original Tahoe floor sequence.
 
-Exact target bytes:
-- SITE page `0xF5E1000`, in-page `0x719`, original `3d187d0000b9177d00000f4cc1`;
-- SITE replacement `3dda0e00007406e93bcee9ff90`;
-- CAVE page `0xF47E000`, in-page `0x560`;
-- CAVE replacement `3d187d0000b9177d00000f4cc1e9b4311600`.
-
-## D97CL-D97CN — native shared-cache substrate
-D97CL proved Haswell AVX2, Lilu 1.7.3, WEG 1.7.1 and x86_64h cache substrate.
-D97CM proved exact native Metal TEXT mapping.
-D97CN proved exact static target topology: SITE preimage PASS; CAVE full208 zero PASS and first18 zero PASS.
-
-## D97CO-D97CS — plugin observation channel
-D97CO 0.0.1 compile/binary observe-only PASS.
-D97CR proved runtime load; unified logging inconclusive.
-D97CS proved OCLPMetalCompat IOKit lifecycle; persistent IORegistry became preferred evidence channel.
-
-## D97CT-D97CX — persistent channel / early build-gate failure
-D97CT 0.0.2 added atomic state and asynchronous IORegistry publication.
-D97CX proved persistent channel but early `sysctlbyname(kern.osversion)` failed before route.
-
-## D97CY / D97DC — second early-gate failure
-D97CY 0.0.3 replaced sysctl with kernel-global `osversion[]` in patcher-load.
-D97DC proved publisher later sees `25G82` but patcher-load still precedes osversion initialization. Tooling/timing NEGATIVE only; not a real build mismatch.
-
-## D97DD 0.0.4
-D97DD installs `_cs_validate_page` without early build read; wrapper calls Apple original first, then exact-build gate per callback.
-Compiled UUID `7651279E-31FA-385C-AD40-D9FB5DFC9644`, executable SHA256 `3cf3f05809e6dcb8dae9d65c01f72ec9f233596c1c1538c26f6e9ba2045cfc25`.
-D97DE deployed D97DD preserving config SHA256 `b5f9fd91c3a09a4b60709a38692b1143b3699292d5b873b347fb936333015a48`.
-
-## D97DF — route/callback/build/cave runtime closure
-Runtime proved:
-- exact D97DD loaded;
-- RouteStatus=PASS;
-- callback execution high coverage;
-- BuildGate=1 / ObservedBuild=25G82;
-- CaveSeenCount=1;
-- CaveWindow18=PASS;
-- CaveFull208=PASS;
-- CaveValidated=15/0xF;
-- CaveTainted=0;
-- CaveNX=0.
-
-## D97DG — full SITE+CAVE runtime closure
-Successful ZIP:
-`OCLP7_D97DG_D97DD_ACTIVE_PAGEFAULT_20260906_213336.zip`
-- SHA256 `ce6788ad55f2d6405463509311905d79ef3e18b2b12dbaf9fa7d9db85dcd0fb3`.
-
-Read-only active mappings proved:
-- SITE mmap PASS;
-- SITE exact 13-byte preimage PASS;
-- SITE page SHA256 `cc710a65a4dfbc674819bb024eade213b90821ab2a12b9a3e1df3d07fb013c43`;
-- SiteSeenCount=1;
-- SitePreimage=PASS;
-- SiteValidated=15/0xF;
-- SiteTainted=0;
-- SiteNX=0;
-- CAVE mmap PASS;
-- CAVE full208 zero PASS;
-- CAVE first18 zero PASS;
-- CAVE page SHA256 `466792ab709cc54b58d42f1c6ef4ce73e0906071ed5b6160af2722d52cf35140`;
-- CaveSeenCount=1, validated 0xF, tainted 0, NX 0.
-
-Runtime route/timing/preimage prerequisite for D97BV delivery: CLOSED PASS.
-D97DH extended-publisher tooling became superseded and must not be deployed.
-
-## D97DI static design
-D97DI 0.0.6 preserves D97DD route/callback/build/path/page substrate and adds exact D97BV writes behind separate explicit boot arg `-ocmcd97bv`.
-Without `-ocmcd97bv`, D97DI is LATENT / observe-only.
-
-Fail-closed sequence:
-- Apple original first;
-- exact build 25G82;
-- exact target page;
-- exact main x86_64h shared-cache path;
-- explicit functional bootarg;
-- Apple validated=0xF, tainted=0, NX=0;
-- exact SITE preimage or CAVE zero invariants;
-- fixed exact write;
-- immediate postimage verification.
-
-Write bounds:
-- SITE 13 bytes at `+0x719`;
-- CAVE 18 bytes at `+0x560`.
-
-Pinned source SHA256 `932f979ae8a04112b6ee68309d3b14885a20acf7676eb7cc6e49d06976d9b86b`, Git blob `df5f3a67b6117460c0c01b921db1affcb0c6489e`.
-
-Helper identity correction:
-- helper Git blob `8cc7f350f6fee51d17a6fbe1bbdfced4554a9ccf`;
-- actual helper SHA256 `faea187c1e1f4b43dabcc231b62f4110c903cf3543f2711324bcbedf7854f49c`;
-- prior `bbd360...` documentation value was incorrect.
-
-## D97DI 0.0.6 build / binary audit PASS
-Returned build:
-`OCLP7_D97DI_IMAC_BUILD_20260906_223615.zip`
-- bytes `56369`;
-- SHA256 `671d3a19af6a0168b89272c7833547e49a84dbf44fb03765e9c40bc61a4b0642`;
-- manifest mismatches 0;
-- Lilu build PASS;
-- D97DI build PASS;
-- two BUILD SUCCEEDED;
-- zero build errors;
-- six non-functional warnings.
-
-Compiled identity:
-- bundle ID `com.oclpmetalcompat.OCLPMetalCompat`;
-- version `0.0.6`;
-- thin x86_64 Mach-O KEXTBUNDLE;
-- UUID `7E86D62E-6F0D-3C49-9BE6-A97D45D88F06`;
-- executable SHA256 `0f5a94f72ae0317786ea893cf036d3f6f9c1e537747ad82d7fe9cfb98ba45cd4`;
-- Info.plist SHA256 `b228aa9e1e33f8d27b8e139afbde3c376076de12114b1a3d579eaf2465774484`;
-- Lilu dependency 1.7.3.
-
-Binary audit:
-- exact SITE replacement appears once;
-- exact CAVE replacement appears once;
-- SITE→CAVE rel32 PASS;
-- 3802 bypass→SITE+13 PASS;
-- CAVE original-floor prefix PASS;
-- CAVE return→SITE+13 PASS;
-- all required D97DD/D97DI marker strings present;
-- generic patch/write strings absent.
-
-Classifications:
-`D97DI_LOCAL_COMPILE=PASS`
-`D97DI_MANIFEST_AUDIT=PASS`
-`D97DI_SOURCE_IDENTITY=PASS`
-`D97DI_MACHO_IDENTITY=PASS`
-`D97DI_D97BV_BINARY_PAYLOAD=PASS`
-`D97DI_D97BV_CONTROL_FLOW_REAUDIT=PASS`
-`D97DI_LATENT_DEFAULT=PASS`
-`D97DI_BUILD_BINARY_AUDIT=PASS`
-
-Audited latent package:
-`OCLP7_D97DI_AUDITED_LATENT_DEPLOY_20260906.zip`
-- SHA256 `6f4b43f8fedf9a5167b5d3921d69fb43e7c580f951627352ea78a23316d37e3f`.
-
-## D97DL-D97DT — selective 3802 runtime path closure
-D97DL 0.0.7 became source authority for the selective D97BV adapter. Under exact 25G82 VESA, later D97DT evidence closed CAVE/SITE runtime delivery, validation safety and cross-process visibility. Selective-3802 runtime delivery is CLOSED PASS and is not to be retested absent contradiction.
+D97DL 0.0.7 became source authority. D97DT closed runtime CAVE/SITE delivery, validation safety and cross-process visibility under exact 25G82. This lane is CLOSED PASS and should not be retested absent contradiction.
 
 ## D97DX — native-Metal-safe Root Patch
 D97DX Root Patch execution PASS installed the bounded architecture:
-- native Tahoe main Metal remains authoritative;
+- native Tahoe main Metal authoritative;
 - bounded legacy `MTLCompilerService.xpc` only under native Metal.framework;
-- private compiler lanes plus CoreImage/RenderBox compatibility;
+- private compiler lanes and compatibility payloads;
 - exact 25G82 metallib handling;
-- Monterey GVA/OpenCL and Haswell graphics drivers;
-- no MetalOld, no legacy main Metal shadow and no true-five replay.
+- Monterey GVA/OpenCL plus Haswell graphics drivers;
+- no legacy main Metal shadow, no MetalOld, no true-five replay.
 
-## D97EB / D97EE — accelerated failure and framebuffer experiment
-Normal 3/3/3 accelerated boot and isolated 1/1/1 framebuffer experiment both reached the same core failure:
+## D97EB / D97EE — accelerated core failure
+Normal 3/3/3 and isolated 1/1/1 both reached:
 `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` -> display offline -> WindowServer SIGSEGV.
-No kernel panic and no `_MTL4*` superclass regression occurred. The 1/1/1 experiment did not solve the failure, so framebuffer-count tuning is CLOSED NEGATIVE and the normal 3/3/3 baseline remains authoritative.
 
-## D97EG-D97EP — exact set_id_mode observer route
+No kernel panic and no `_MTL4*` superclass regression. The 1/1/1 experiment was NEGATIVE; normal 3/3/3 remains authoritative.
+
+## D97EG-D97EP — exact set_id_mode observer
 D97EG mapped the exact imported symbol as `IOAccelSurface::set_id_mode(uint32_t id, uint32_t mode)` in IOAcceleratorFamily2 487.4.3.
-D97EH 0.0.9 established an exact observe-only wrapper: original `that/id/mode` passed unchanged, Apple original called first, original IOReturn returned unchanged, candidate masks computed only after original return.
-D97EL 0.0.10 preserved those semantics and added route/callback telemetry.
-D97EP VESA IORegistry evidence proved observer request active, callback path active, exact route PASS and `D97ELSetIdModeCallCount=0` under VESA. Registration/matching/symbol routing is therefore CLOSED PASS in VESA.
 
-## D97EQ — accelerated failure reproduced; tuple not captured
-D97EL accelerated boot reproduced the causal sequence with WindowServer PID 177:
-- `GPU: FB: 3 of 3 opened`;
-- four `Surface mode contains bad bits` errors;
-- display offline about 3 ms later;
-- WindowServer SIGSEGV about 20.6 ms after the fourth error.
-No kernel panic, no `_MTL4*` regression and no preceding MTLCompilerService failure were found. Exact observer tuple remained UNCAPTURED.
+D97EH established exact observe-only passthrough: Apple original receives unchanged `that/id/mode`, is called first, and exact original IOReturn is returned unchanged. D97EL preserved those semantics and added route/callback telemetry.
 
-## D97ER — transport classification
-Post-recovery unified log and live VESA `dmesg` contained no D97EH/D97EL custom markers. Repeating the same accelerated D97EL boot was therefore NOT JUSTIFIED. D97EP route PASS remained valid; the unresolved problem became tuple transport/capture rather than a newly demonstrated graphics regression.
+D97EP VESA proved observer request active, global callback active, exact IOAcceleratorFamily2 target callback seen and route PASS, with zero set_id_mode calls in VESA as expected.
 
-## D97ES / D97ET — IORegistry tuple telemetry build and independent audit
-D97ES 0.0.11 preserves exact D97EL route/observer passthrough semantics and adds bounded asynchronous IORegistry publication for the first eight post-original tuples: `id`, `mode`, `badBits`, `goodBits`, raw original return.
+## D97EQ / D97ER — accelerated repro and transport gap
+D97EQ reproduced the accelerated failure after `GPU: FB: 3 of 3 opened`, with four bad-bits errors, display offline about 3 ms later and WindowServer SIGSEGV about 20.6 ms after the fourth error. No kernel panic, `_MTL4*` regression or preceding MTLCompilerService failure.
+
+The exact observer tuple was not captured. D97ER showed post-recovery unified log and live dmesg custom markers absent, so repeating unchanged D97EL was not justified. The unresolved problem became tuple transport rather than graphics localization.
+
+## D97ES / D97ET — IORegistry tuple telemetry build PASS
+D97ES `OCLPMetalCompat.kext` 0.0.11 preserves D97EL passthrough semantics and captures first eight post-original tuples atomically:
+- `id`;
+- `mode`;
+- `badBits = mode & 0xFF8073C0`;
+- `goodBits = mode & 0x007F8C3F`;
+- raw original IOReturn.
 
 Independent build audit PASS:
-- version `0.0.11`;
+- generated source SHA256 `8184610aca1f2e651e6526e45c05d00a96055711c985571bc34c703ba7f6a8d0`;
 - UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`;
 - executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
 - exact D97ES -> D97EL -> D97EH -> D97DL lineage proved;
-- binary passthrough semantics proved;
 - no functional mode mutation or return coercion.
 
-The publisher updates IORegistry once per second and remains bounded to 300 seconds.
+Publisher cadence is asynchronous, about once per second, bounded to 300 seconds, and remains live until at least one observer tuple when observer mode is requested.
 
-D97ET authorized VESA deployment only.
+D97ET checkpoint commit: `af16880e29d0ae51492a5252cda354bc52b52c9d`.
 
-## D97EU — active EFI deployment identity PASS
-ASUS2 direct pre-reboot verification of `/Volumes/EFI/EFI/OC/Kexts/OCLPMetalCompat.kext` matched audited D97ES exactly:
-- version `0.0.11`;
+## D97EU — active EFI identity PASS
+ASUS2 direct pre-reboot verification matched audited D97ES exactly:
+- version 0.0.11;
 - executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
 - UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4` x86_64.
 
-Exactly one VESA validation reboot was authorized with unchanged args `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`, `#-ocmcd97bvcave` inert, and no Root Patch/framebuffer/T2-variable/set_id_mode mutation.
-
 D97EU checkpoint commit: `3861969fe3d6ead6c8684a099e3a5abd80500814`.
 
-## D97EV — D97ES VESA runtime validation PASS
-The authorized VESA reboot was completed and live evidence proved:
-- loaded `OCLPMetalCompat` 0.0.11 UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`;
-- `D97ELObserverRequested=1`;
-- `D97ELCallbackSeenCount=17`;
-- `D97ELTargetCallbackSeenCount=1`;
-- `D97ELLastCallbackIndex=20`;
-- `D97ELKextLoadIndex=9`;
-- `D97ELRouteStatus=PASS`;
+## D97EV — D97ES VESA runtime PASS
+Authorized VESA boot proved:
+- exact D97ES loaded;
+- observer requested;
+- callback/target callback/route PASS;
 - `D97ELSetIdModeCallCount=0`;
 - `D97ESCaptureSlots=8`;
 - `D97ESCapturedCount=0`;
 - all eight `D97ESxxValid=0`;
-- `D97CTRouteStatus=PASS`;
-- boot/kernel/cpu/build gates all 1;
-- `D97DDObservedBuild=25G82`;
-- `D97DIFunctionalRequested=1`;
-- `D97DIFunctionalMode=ACTIVE`;
-- `D97CTPublisherTicks=300`.
+- D97CT route/build/cpu/kernel gates healthy;
+- D97BV functional requested/ACTIVE;
+- publisher reached tick 300.
 
-Thus D97ES route, publisher schema, bounded liveness and empty-slot behavior are PASS in VESA. Zero SITE/CAVE touches in this one VESA boot do not invalidate the already CLOSED-PASS D97BV/D97DT runtime proof.
-
-Preliminary D97EV wording allowed the next accelerated measurement, but no accelerated boot occurred before the stronger D97EW transport-preservation gate below superseded that prospective authorization.
+Thus D97ES route, schema, liveness and VESA empty-slot behavior are PASS.
 
 D97EV checkpoint commit: `3520d6a1c3d5b49af962d199230b58472b2b25bb`.
 
 ## D97EW — persistent transport-preservation gate
-D97ES tuples live only in IORegistry; VESA recovery by hard reboot destroys the prior boot's IORegistry. Therefore an accelerated test cannot be authorized until tuple data can be persisted during the accelerated boot independently of WindowServer.
+Because a hard recovery reboot destroys prior live IORegistry, D97EW required an on-disk collector independent of WindowServer before any new accelerated experiment.
 
-GitHub-first persistent collector created and statically audited:
+GitHub-first collector:
 `OCLP-Continuity/artifacts/OCLP7_D97EW_PERSISTENT_IOREG_CAPTURE_INSTALL.sh`
 - source commit `b23f1e78a02e3aedd48a4e30101a6d3e8abaf00d`;
 - Git blob `d5a60a8b69c22249b03988afe6e6e94a3947d195`.
 
-Static audit:
-`OCLP-Continuity/artifacts/OCLP7_D97EW_PERSISTENT_CAPTURE_STATIC_AUDIT.md`
-- commit `c0fb94b0a92d52ede5527bf8478b94c0593d948b`.
-
-Design:
-- root LaunchDaemon, independent of WindowServer;
-- runs every boot;
-- polls full OCLPMetalCompat IORegistry once per second for up to 300 seconds;
-- stores full snapshots and summary under `/Users/Shared/OCLP-D97EW-Capture`;
-- on first positive `D97ESCapturedCount`, immediately persists and syncs the tuple snapshot, boot args and loaded-kext state, then five additional snapshots;
-- no EFI/NVRAM write, Root Patch, framebuffer change, Golden access or reboot;
-- uninstall removes only collector/plist and preserves evidence.
-
-Classification:
-- D97ES VESA runtime PASS;
-- persistent collector static audit PASS;
-- accelerated boot NOT AUTHORIZED until collector itself passes a no-reboot live test in the current VESA session.
+Static audit PASS: root LaunchDaemon, boot-started, IORegistry polling, writable evidence under `/Users/Shared/OCLP-D97EW-Capture`, positive-tuple full snapshot + boot/kext identity + `sync` + five follow-ups, and no EFI/NVRAM/Root Patch/framebuffer/Golden/reboot mutation.
 
 D97EW checkpoint commit: `930c308de295f412650e9454cefcce3cf305baa7`.
-Master update commit advancing authority to D97EW: `7761652d1bb3cbfd3d29351b9c1c41ea31165886`.
+
+## D97EX — persistent collector current-VESA live PASS
+ASUS2 verified exact source blob identity before install.
+
+Install result:
+- plist lint PASS;
+- `D97EW_INSTALL_STATUS=PASS`;
+- installed capture SHA256 `bc818d5b26f337404945c5118b34d264505351ea0ca307f760c24e6a3260b017`;
+- installed plist SHA256 `a2b5f2ed8d0c2c0ee49b437dffdf04e82f155cb2e20eea32b8d93b67d2881280`;
+- launchd label `com.oclp.d97ew.capture`;
+- no reboot, EFI mutation or Root Patch during install.
+
+Current-VESA live run:
+`/Users/Shared/OCLP-D97EW-Capture/20260907T114037Z-1039`
+
+Launchd state is running, PID 1039. Repeated samples through ticks 10..29 report service present, `captured_count=0`, `set_id_mode_calls=0`, `route=PASS`. Direct IORegistry simultaneously agrees: all eight Valid=0, CapturedCount=0, SetIdModeCallCount=0, RouteStatus=PASS.
+
+Classification:
+- collector source identity PASS;
+- install/plist PASS;
+- LaunchDaemon running PASS;
+- live IORegistry read PASS;
+- live disk persistence PASS;
+- VESA zero-tuple cross-check PASS;
+- accelerated evidence transport READY/PASS.
+
+D97EX checkpoint commit: `eab27b10117750e19c0c8d01c3f0de25d1857c2c`.
+Master update advancing authority to D97EX: `fc0d9002fe231ea730b6ebdd75a830785997896d`.
+
+## Current causal frontier
+`Tahoe/CoreDisplay producer semantics -> IOAccelSurface::set_id_mode(id, mode) -> legacy Haswell IOAccelerator acceptance`.
+
+Still required: exact accelerated runtime `id`, `mode`, `badBits`, `goodBits`, original IOReturn. No functional correction before measurement.
 
 ## Current action
-Remain in the current D97ES VESA session. Install the exact commit-pinned D97EW persistent collector and return the full installer/live-test output. Required live VESA result: installer PASS, service present, `captured_count=0`, `set_id_mode_calls=0`, `route=PASS`.
+One accelerated D97ES/D97EW measurement boot is authorized. Make only `-igfxvesa` inert/disabled. Preserve `-ocmcdiag`, `-ocmcd97bv`, `-ocmcd97eh`, inert `#-ocmcd97bvcave`, D97DX, D97ES 0.0.11, D97EW collector, normal 3/3/3 baseline and all other settled state. No Root Patch, framebuffer change, new T2/Haswell variable or functional set_id_mode correction.
 
-Do not Root Patch, reboot, alter EFI/boot args/framebuffer, or attempt acceleration until that collector live test is audited and a new checkpoint separately authorizes the accelerated measurement boot.
+If image is lost, allow the running accelerated system enough time for D97ES publication and D97EW disk persistence before VESA recovery. After return, analyze the persisted D97EW run whose saved boot args identify the immediately preceding accelerated boot; exclude the later recovery run.
