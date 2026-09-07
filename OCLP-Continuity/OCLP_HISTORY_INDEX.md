@@ -3,7 +3,7 @@
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
 Current runtime checkpoint: `OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`.
-Current static-analysis checkpoint: `OCLP7_CHECKPOINT_20260907_D97FS_ACTIVE_METAL_BYTES_EXACT_D97BV_RUNTIME_POSTIMAGES_INCOMING_PRISTINE_REFERENCE.md`.
+Current static-analysis checkpoint: `OCLP7_CHECKPOINT_20260907_D97FT_GPUPASS_BOOTSTRAP_EQUIVALENCE_AND_NATIVE_METAL_VALIDATION_CONTEXT_FRONTIER.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -111,15 +111,8 @@ Loaded userspace identities:
 - legacy Haswell `AppleIntelHD5000GraphicsMTLDriver` 18.8.4 / UUID `d5cf0007-37a7-35cf-bb5e-a6baaa145ad2`;
 - native CoreDisplay 291.4 / UUID `8bfeff75-c8c8-3b5b-afa0-61385199a1bb`;
 - native SkyLight 1.600.0 / UUID `7b70d8df-984a-3fa9-829e-c26afc896d9d`;
-- native Metal 373.7 / UUID `5d64fa80-29ce-32aa-bab6-4e5034132c0b` in the validation-abort crash;
+- native Metal 373.7 / UUID `5d64fa80-29ce-32aa-bab6-4e5034132c0b`;
 - GPUCompiler 32023 support libraries present.
-
-Reclassification:
-- `getPixelInformation` remains REACHED_NEGATIVE but primary cause UNPROVEN;
-- strongest captured fatal boundary is CoreDisplay GPU-pass render-pipeline construction/device validation;
-- native Metal `validateWithDevice` is REACHED_NEGATIVE;
-- exact descriptor field/device capability mismatch remains UNKNOWN;
-- IOVersatile remains UNPROVEN/NON-DISCRIMINATING.
 
 D97FJ checkpoint commit `c3ef589e7f9ee8688dc6a08c9d4a488aec0fb8c1`.
 
@@ -156,36 +149,59 @@ Active and Incoming cache headers/maps/atlases have identical layout. The two di
 - CAVE `Metal+0x1560`;
 - SITE `Metal+0x164719`.
 
-Exact bytes prove:
-- ACTIVE CAVE = exact accepted D97BV CAVE postimage;
-- ACTIVE SITE = exact accepted D97BV SITE postimage;
-- Incoming CAVE = zero preimage;
-- Incoming SITE = exact Tahoe original clamp preimage.
-
-Constants/semantics:
-- `0xEDA = 3802`;
-- `0x7D17 = 32023`;
-- `0x7D18 = 32024`;
-- exact 3802 bypasses the original Tahoe clamp;
-- all non-3802 values execute original clamp semantics through the CAVE.
-
-Lineage closure:
-- D97DZ proved these bytes pristine after Root Patch;
-- D97DT proved runtime OCLPMetalCompat mutation to these exact postimages;
-- D97FS finds exact postimages active now.
-Therefore the active signature failure is explained by intentional D97BV runtime Metal text mutation, not unexplained corruption and not D97DX Root Patch writing these bytes.
+Exact bytes prove ACTIVE CAVE/SITE are exact accepted D97BV postimages; Incoming contains the pristine zero/original preimages. D97DZ proved these bytes pristine after Root Patch; D97DT proved runtime OCLPMetalCompat mutation to exact postimages. Therefore the active signature failure is intentional D97BV runtime mutation, not corruption and not D97DX Root Patch writing these bytes.
 
 D97FS checkpoint commit `f22b93fb0361d7333afaf689e43c3effd4ab0c42`.
+D97BV remains CLOSED PASS.
 
-This does not implicate D97BV as the current CoreDisplay pipeline blocker; D97BV remains CLOSED PASS.
+## D97FT — exact Incoming CoreDisplay/Metal extraction and GPUPass map
+Returned:
+`OCLP7_D97FT_INCOMING_SELECTED_20260907_200933.zip`
+- bytes `6829957`;
+- SHA256 `937e77b54edd1741b9cb19b89142a98380e77ac74a2811a9f6f1e060b375018b`;
+- CRC PASS.
+
+Exact extracted identities:
+- CoreDisplay x86_64 UUID `8BFEFF75-C8C8-3B5B-AFA0-61385199A1BB`, SHA256 `e8ca1d0b851143235aa2acb500bab5e8ca2d5dbb708647d135f9f8458d3d933f`;
+- Metal x86_64 UUID `5D64FA80-29CE-32AA-BAB6-4E5034132C0B`, SHA256 `f9287f12f4ed6247d53cf322c468db96ed877abe54912c990f5697e916b45ec8`.
+Both match the D97FJ crash images exactly.
+
+`CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState` starts `0x7FF80543D1B4`.
+Crash offsets map:
+- +599 `0x7FF80543D40B`;
+- +636 `0x7FF80543D430`;
+- +1720 `0x7FF80543D86C`.
+
+Static flow proves two function constants -> specialized `GPUPass` -> descriptor construction -> vertexFunction -> GPUPass fragmentFunction -> color attachment 0 pixelFormat -> `newRenderPipelineStateWithDescriptor:error:`.
+
+The +599/+636 crash mode is inside the NSError-report path after `newFunctionWithName:@"GPUPass" constantValues:... error:&error`; hence non-null NSError path is CONTROL-FLOW PROVEN for that captured mode. Exact error reason remains UNKNOWN.
+
+Exact `CreateMetalDevice +589` tuple is:
+`GetGPUPassRenderPipelineState(0xFFFFFFFF,0xFFFFFFFF,0x5E)`; `0x5E` is `MTLPixelFormatBGR10A2Unorm`.
+Persisted Golden Sequoia CoreDisplay evidence uses the same tuple and descriptor recipe. Thus no Tahoe-only CoreDisplay bootstrap divergence is found in mapped scope.
+
+Tahoe native Metal `validateWithDevice(...)` starts `0x7FF80F645727`. D97FJ `+716` is the return address immediately after `__MTLMessageContextEnd`, not an individual validation predicate. Therefore Metal accumulated one or more validation messages before context finalization/abort; exact predicate remains UNKNOWN.
+
+Mapped validation families include function validity/device association/specialization and render-raster/device pixel-format/capability checks. Fragment nil alone is not statically sufficient to prove the validation error. BGR10A2 device renderability is only a candidate, not proven causal.
+
+Exact 25G82 CoreDisplay `default.metallib` is already pinned in project evidence at SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d` and D97DX installed it, but no existing shader-level GPUPass AIR/metadata comparator was recovered.
+
+D97FT checkpoint commit `c9ffb5f30458118c7c97725811f643e926c09802`.
 
 ## Current causal frontier
-Closed:
-`Tahoe 0x224 -> legacy IOAccelSurface bad-bits rejection`.
+Closed/excluded for measured scope:
+- `set_id_mode 0x224` rejection;
+- D97BV delivery;
+- Tahoe-only CoreDisplay GPUPass bootstrap tuple/descriptor divergence.
 
-Current:
-`successful set_id_mode -> CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState -> native Metal render-pipeline/device validation -> WindowServer fatal failure -> main display offline`.
+Earliest captured current negative:
+`CoreDisplay -> newFunctionWithName:@"GPUPass" constants(-1,-1) -> non-null NSError path`.
+
+Parallel downstream negative:
+`GPUPass descriptor -> native Tahoe Metal validation accumulates error -> __MTLMessageContextEnd -> abort -> WindowServer death`.
+
+Exact common semantic cause remains UNKNOWN.
 
 ## Current action
 Remain in VESA. No reboot and no EFI/Root Patch/framebuffer/NVRAM/bootarg changes.
-Use signature-valid exact-25G82 `Cryptexes/Incoming/OS/.../dyld_shared_cache_x86_64h` as the extraction source with audited D97FN. Verify extracted CoreDisplay/Metal UUIDs against D97FJ, then statically map `GetGPUPassRenderPipelineState +599/+1720`, `F_NymriCY`, and immediately adjacent render-pipeline descriptor/device calls. Do not repeat ACTIVE boot before this boundary is mapped.
+Statically inspect exact installed 25G82 `CoreDisplay.framework/Versions/A/Resources/default.metallib`, especially GPUPass: function presence/constants, target triple, AIR/Metal language/SDK metadata and other recoverable metadata. Compare to persisted/read-only Golden evidence if available. Only if this static boundary remains insufficient should a bounded runtime observer be designed.
