@@ -2,7 +2,7 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FI_CORE_DISPLAY_OFFLINE_CRASH_LOOP_FRAMEBUFFER_METADATA_FRONTIER.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -46,7 +46,7 @@ GitHub Actions produced no runs and quota/execution remained blocked. User expli
 ## D97FC / D97FD — local build + independent audit
 Helper commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1`, blob `19a22fe133fe04d0758f8a14a5306d4f81d25007`.
 Returned build `OCLP7_D97EZ_IMAC_BUILD_20260907_160935.zip`, bytes `154432`, SHA256 `c21d21c423879973f2ec1595f16046f8db7757486fb1d75b5a873c7705f3c4e6`.
-Independent audit: CRC/manifest/lineage/source/build/Mach-O/disassembly PASS. Compiled D97EZ 0.0.12 x86_64 UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`, executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`, Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`.
+Independent audit PASS. D97EZ 0.0.12 x86_64 UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`, executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`, Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`.
 D97FD commit `4cc0928f94f9d28bcb1b5b91660a221c570742c4`.
 
 ## D97FE / D97FF — deployment identity
@@ -63,44 +63,66 @@ At stable 20 routed calls:
 - exhaustive 16+4=20 PASS.
 First-eight direct telemetry proves captured original `0x224` passed as `0x24` with Apple ret 0; original `0x24` passed unchanged with ret 0.
 Thus exact adapter STRUCTURAL-SEMANTIC PASS and prior bad-bits rejection CLOSED PASS as measured causal blocker. End-to-end GUI still failed.
-D97FH checkpoint commit `3b882d7428a010a48d4744f290ab97a9232d4b4e`; MASTER advance `023a154a47f944a6fa309513948b2f6f7cd2c292`.
+D97FH checkpoint commit `3b882d7428a010a48d4744f290ab97a9232d4b4e`.
 
-## D97FI — downstream CoreDisplay/framebuffer metadata frontier
-Read-only analysis of the immediately preceding ACTIVE accelerated boot localizes the next module downstream of successful set_id_mode acceptance.
+## D97FI — downstream CoreDisplay/framebuffer localization
+Read-only unified log after D97FH proved GPUWrangler/IntelAccelerator/3 framebuffer presence, fb0 online, DPCD readability, display0/AppleBacklightDisplay publication and CoreDisplay `GPU: FB: 3 of 3 opened`.
 
-Newly REACHED:
-- GPUWrangler identifies Haswell IGPU `8086:0412`;
-- `/IntelAccelerator` exists;
-- AppleIntelFramebuffer@0/@1/@2 exist;
-- fb0 online; internal-panel DPCD readable;
-- `display0` and `AppleBacklightDisplay` publish;
-- CoreDisplay reaches `GPU: FB: 3 of 3 opened`.
+Observed negatives:
+- `getPixelInformation for framebuffer 0 failed`;
+- failed `IOFBGetDisplayModeInformation` mode lookup;
+- `capabilities with no devices`;
+- repeated main-display-offline CoreDisplay path -> WindowServer crash.
 
-First direct accelerated framebuffer-resource negative:
-`IOAccelDisplayPipe::init_framebuffer_resource(...): getPixelInformation for framebuffer 0 failed`.
-This is REACHED_NEGATIVE, but causal sufficiency remains UNKNOWN.
+A later restart logged native Metal `validateWithDevice, line 5044: error '<private>'`. IOVersatile was classified non-discriminating because it also occurs in VESA.
+D97FI checkpoint `6099a8b3a12fc69a115408c3e1ee11fc85e5fd95`; MASTER `bc4856b31fc3ecdbf6e157a3ad5c5ec6791aee18`.
 
-Related downstream failures:
-- `IOFBSetDisplayModeAndDepth: Failed to obtain mode info from IOFBGetDisplayModeInformation()`;
-- `Attempting to get capabilities from capabilities with no devices`.
+## D97FJ — WindowServer IPS proves CoreDisplay Metal pipeline frontier
+Returned crash archive:
+`OCLP7_D97FI_WINDOWSERVER_IPS_20260907_172621.zip`
+- bytes `17676`;
+- SHA256 `cfec028c394362326e92b88097bb4eef40030967085a811f91e5c92ab863b793`.
 
-Repeatable fatal path:
-`Setting offline display 0x00000000 main in AddCGXDisplayDeviceToDeviceList`
--> `CGXDisplayDriverInitialize`
--> `WS::Displays::CoreDisplayManager::initialize()`
--> `WSInitialize`
--> WindowServer SIGSEGV.
-This repeats across multiple WindowServer PIDs. A later restart also logs `(Metal) validateWithDevice, line 5044: error '<private>'` immediately before crash; relationship UNKNOWN.
+Two WindowServer `.ips` reports share bootSessionUUID `48324BF1-0934-44C2-B2B9-A1208109B19E` and converge on `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState`.
 
-`com.apple.driver.IOVersatile` dependency/allocation failures also occur, but they recur in the usable VESA recovery boot; therefore IOVersatile is currently NON-DISCRIMINATING and causal status UNPROVEN.
+Crash A:
+- report SHA256 `3a90c0d19e0e928273cbb2d3d32d432d949ab61a3e8ee807584a704cccedc3cb`;
+- EXC_BAD_ACCESS/SIGSEGV, KERN_INVALID_ADDRESS at `0x18`;
+- main thread stack begins `objc_msgSend +29 -> GetGPUPassRenderPipelineState +599 -> CreateMetalDevice +589 -> CoreDisplay display-device construction -> CoreDisplayManager::initialize`.
 
-Current localized module:
-`successful set_id_mode -> fb0 pixel/mode metadata/resource construction -> CoreDisplay device/capability construction -> main display offline -> WindowServer SIGSEGV`.
-Exact crash instruction/stack remains UNKNOWN pending reading existing `.ips` reports.
+Crash B:
+- report SHA256 `6c27adc301ab3c9c1650ae02295c4c98f18e317e7d1424f1c20e250b3665f852`;
+- EXC_CRASH/SIGABRT;
+- main thread stack reaches `MTLReportFailure -> validateWithDevice(...)+716 -> MTLRenderPipelineDescriptorInternal validate -> MTLCompiler newRenderPipelineState... -> _MTLDevice newRenderPipelineState... -> GetGPUPassRenderPipelineState +1720 -> CreateMetalDevice -> same CoreDisplayManager path`.
 
-D97FI checkpoint commit `6099a8b3a12fc69a115408c3e1ee11fc85e5fd95`.
-MASTER advance to D97FI: `bc4856b31fc3ecdbf6e157a3ad5c5ec6791aee18`.
+Unified log corroborates:
+- `GetGPUPassRenderPipelineState: 0x1000004e9 F_NymriCY`;
+- `(Metal) validateWithDevice, line 5044: error '<private>'`.
+
+Loaded userspace identities:
+- legacy Haswell `AppleIntelHD5000GraphicsMTLDriver` 18.8.4 / UUID `d5cf0007-37a7-35cf-bb5e-a6baaa145ad2`;
+- native CoreDisplay 291.4 / UUID `8bfeff75-c8c8-3b5b-afa0-61385199a1bb`;
+- native SkyLight 1.600.0 / UUID `7b70d8df-984a-3fa9-829e-c26afc896d9d`;
+- native Metal 373.7 / UUID `5d64fa80-29ce-32aa-bab6-4e5034132c0b` in the validation-abort crash;
+- GPUCompiler 32023 support libraries present.
+
+Reclassification:
+- `getPixelInformation` remains REACHED_NEGATIVE but primary cause UNPROVEN;
+- strongest captured fatal boundary is now CoreDisplay GPU-pass render-pipeline construction/device validation;
+- native Metal `validateWithDevice` is REACHED_NEGATIVE;
+- exact descriptor field/device capability mismatch remains UNKNOWN;
+- IOVersatile remains UNPROVEN/NON-DISCRIMINATING.
+
+D97FJ checkpoint commit `c3ef589e7f9ee8688dc6a08c9d4a488aec0fb8c1`.
+MASTER advance to D97FJ: `d6283656bd7875d55a283a677b2fef485e11079f`.
+
+## Current causal frontier
+Closed:
+`Tahoe 0x224 -> legacy IOAccelSurface bad-bits rejection`.
+
+Current:
+`successful set_id_mode -> CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState -> native Metal render-pipeline/device validation -> WindowServer fatal failure -> main display offline`.
 
 ## Current action
-Remain in VESA. No reboot and no EFI/Root Patch/framebuffer/bootarg changes.
-Collect the newest WindowServer `.ips` reports corresponding to the 16:50 accelerated crash loop and inspect exact exception, faulting thread/stack and loaded images. Do not repeat ACTIVE boot before this evidence gate is resolved.
+Remain in VESA. No reboot and no EFI/Root Patch/framebuffer/NVRAM/bootarg changes.
+Perform static/read-only mapping of exact 25G82 CoreDisplay around `GetGPUPassRenderPipelineState +599` and `+1720`, plus strings near `F_NymriCY`. Determine the descriptor property or device query immediately preceding native `validateWithDevice` if statically recoverable. Do not repeat ACTIVE boot before this boundary is mapped.
