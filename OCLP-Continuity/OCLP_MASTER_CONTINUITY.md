@@ -11,6 +11,9 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 Current authoritative runtime/execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`
 
+Current authoritative static-analysis checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FS_ACTIVE_METAL_BYTES_EXACT_D97BV_RUNTIME_POSTIMAGES_INCOMING_PRISTINE_REFERENCE.md`
+
 Previous downstream-localization checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FI_CORE_DISPLAY_OFFLINE_CRASH_LOOP_FRAMEBUFFER_METADATA_FRONTIER.md`
 
@@ -66,6 +69,8 @@ D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly i
 - normal framebuffer baseline remains 3/3/3;
 - current session is VESA recovery after the D97FH ACTIVE accelerated experiment;
 - recovery state has active `-igfxvesa` and absent/inert `-ocmcd97ez`;
+- active native Metal shared-cache SITE/CAVE may contain D97BV runtime postimages after the relevant pages are validated/mapped;
+- signature-valid pristine 25G82 reference exists at `Cryptexes/Incoming/OS/.../dyld_shared_cache_x86_64h`;
 - no new T2/Haswell boot variable is authorized;
 - no Root Patch change is authorized.
 
@@ -174,7 +179,7 @@ Loaded relevant identities:
 - native Tahoe `Metal` 373.7 / UUID `5d64fa80-29ce-32aa-bab6-4e5034132c0b` in the explicit validation-abort report;
 - GPUCompiler 32023 support libraries present.
 
-Therefore the strongest fatal frontier is no longer generic framebuffer metadata. It is:
+Therefore the strongest fatal frontier is:
 `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState -> native Metal render-pipeline/device validation`.
 
 Classification:
@@ -183,6 +188,27 @@ Classification:
 - exact incompatible descriptor field/device capability UNKNOWN;
 - `getPixelInformation` remains real but primary causal status UNPROVEN;
 - IOVersatile primary causal status UNPROVEN/NON-DISCRIMINATING.
+
+## D97FK-D97FQ — shared-cache extraction tooling
+- standalone CoreDisplay/Metal filesystem paths are absent on 25G82 because the images are cache-resident;
+- LLDB loading route was INCONCLUSIVE/BLOCKED;
+- D97FN minimal wrapper for Apple `dyld_shared_cache_extract_dylibs_progress` was built on authorized Intel iMac and independently audited PASS;
+- audited extractor binary x86_64 SHA256 `04f0e1aa835f7dcafc3ccf989fe90bf3324b9d173824a7540d0232e9e7464bff`, UUID `213B833D-A864-3A3D-97E5-BB4AB8824033`.
+
+## D97FR / D97FS — active cache mutation explained
+D97FR proved:
+- active `Cryptexes/OS` x86_64h cache signature is invalid after runtime page mutation;
+- same-sized `Cryptexes/Incoming/OS` cache is signature-valid and differs from active;
+- the Apple extractor correctly rejected the first modified page.
+
+D97FS maps both relevant differences into native Tahoe `Metal.__TEXT` and proves exact D97BV postimage identity:
+- CAVE `Metal+0x1560`: ACTIVE `3d187d0000b9177d00000f4cc1e9b4311600`, Incoming all-zero preimage;
+- SITE `Metal+0x164719`: ACTIVE `3dda0e00007406e93bcee9ff90`, Incoming original `3d187d0000b9177d00000f4cc1`;
+- ACTIVE SITE/CAVE hashes exactly equal the accepted D97BV design hashes.
+
+D97DZ had proved both regions pristine immediately after D97DX Root Patch, while D97DT proved OCLPMetalCompat writes these exact D97BV postimages at runtime. Therefore these active cache differences are the intentional selective-3802 D97BV runtime adapter, not unexplained corruption and not a D97DX Root Patch write.
+
+This does NOT re-open D97BV as a blocker and does NOT establish D97BV as cause of the current CoreDisplay fatal path.
 
 ## Current causal frontier
 Closed:
@@ -194,9 +220,9 @@ Current:
 ## Execution-lane authority
 User explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## CURRENT ACTION — STATIC/READ-ONLY CORE DISPLAY MAPPING
+## CURRENT ACTION — PRISTINE INCOMING EXTRACTION / CORE DISPLAY STATIC MAP
 Remain in VESA. No reboot and no changes to EFI, Root Patch, framebuffer counts, NVRAM or boot variables.
 
-Map exact 25G82 `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState` around offsets `+599` and `+1720`, plus strings around `F_NymriCY`, using the installed binaries. Determine, if statically recoverable, the descriptor property or device query immediately preceding native `validateWithDevice`.
+Use signature-valid exact-25G82 `Cryptexes/Incoming/OS/.../dyld_shared_cache_x86_64h` as the extraction reference. Extract CoreDisplay and Metal with the already audited D97FN wrapper, validate their UUIDs against D97FJ IPS identities, then map `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState` around offsets `+599` and `+1720`, plus `F_NymriCY` and the immediately adjacent render-pipeline descriptor/device calls.
 
-Do not repeat ACTIVE acceleration until this static boundary is resolved and a bounded observer/adapter is designed.
+Do not repeat ACTIVE acceleration until this static boundary is resolved and a bounded observer/adapter is justified.
