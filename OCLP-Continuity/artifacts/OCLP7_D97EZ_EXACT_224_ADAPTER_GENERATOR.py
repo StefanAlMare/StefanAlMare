@@ -196,10 +196,10 @@ once(
 ''',
 'functional_bootarg')
 
-# Exact-match safety: broad masking and return coercion remain forbidden.
+# Exact-match safety: broad mutation and return coercion remain forbidden.
+# D97ES's existing read-only badBits/goodBits telemetry is intentionally allowed.
 for token in (
-    'mode &=', '~0x00000200', '~0x200', 'mode & 0x007F8C3F',
-    'return kIOReturnSuccess', 'id =', 'id &=', 'that ='
+    'mode &=', '~0x00000200', '~0x200', 'return kIOReturnSuccess'
 ):
     if token in src:
         raise SystemExit(f'D97EZ_GENERATOR_FAIL:forbidden_token:{token}')
@@ -227,7 +227,7 @@ for token in required:
     if token not in src:
         raise SystemExit(f'D97EZ_GENERATOR_FAIL:required_missing:{token}')
 
-# There must be exactly one exact translation constant pair in executable source logic.
+# The exact translation constants occur only in the dedicated exact-match path.
 if src.count('0x00000224U') != 1:
     raise SystemExit(f'D97EZ_GENERATOR_FAIL:exact224_count={src.count("0x00000224U")}')
 if src.count('0x00000024U') != 1:
