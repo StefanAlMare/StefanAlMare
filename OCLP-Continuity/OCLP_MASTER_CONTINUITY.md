@@ -12,6 +12,9 @@ Current authoritative runtime/execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FJ_WINDOWSERVER_IPS_CORE_DISPLAY_METAL_PIPELINE_FRONTIER.md`
 
 Current authoritative static/materialization checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FY_FINAL_PRE_ROOTPATCH_GATE_PASS_CORRECTED_METALLIB_SOURCE.md`
+
+Previous source-reconstruction checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97FX_SOURCE_RECONSTRUCTION_PASS_ROOTPATCH_PREFLIGHT_NEXT.md`
 
 Previous causal-materialization checkpoints:
@@ -39,7 +42,7 @@ Current independent build-audit checkpoint:
 Original exact tuple semantic checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EY_EXACT_SET_ID_MODE_TUPLE_SEMANTIC_PROOF.md`
 
-Current Root Patch execution checkpoint remains the prior run until a corrected-payload Root Patch is executed:
+Current Root Patch execution checkpoint remains the prior invalid-payload run until a corrected-payload Root Patch is executed:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
 
 ## Current D97EZ authority
@@ -78,18 +81,19 @@ D97FD independently proved ZIP/package/lineage/source/build/Mach-O/disassembly i
 - D97EW persistent collector remains installed and proven LIVE/PASS;
 - normal framebuffer baseline remains 3/3/3;
 - current session is VESA recovery after the D97FH ACTIVE accelerated experiment;
-- recovery state has active `-igfxvesa` and absent/inert `-ocmcd97ez`;
+- recovery state has active `-igfxvesa`, `-ocmcdiag`, `-ocmcd97bv`, and absent/inert `-ocmcd97ez`;
 - active native Metal shared-cache SITE/CAVE may contain D97BV runtime postimages after the relevant pages are validated/mapped;
 - signature-valid pristine 25G82 shared-cache reference exists at `Cryptexes/Incoming/OS/.../dyld_shared_cache_x86_64h`;
 - exact CoreDisplay and native Metal images extracted from Incoming match D97FJ IPS UUIDs;
 - exact original MetallibSupportPkg is present at `/Users/alex/Downloads/MetallibSupportPkg-26.6.2-25G82.pkg`, bytes `116574513`, SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`;
-- corrected local source tree now exists at `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82` and is exact to the package payload for all regular files;
-- D97FX proves `180/180` regular `.metallib` payloads exact after reconstruction;
+- corrected local source tree exists at `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82` and is exact to the package payload for all regular files;
+- D97FX/D97FY prove `180/180` regular `.metallib` payloads exact and all local metallib magic values `MTLB`;
 - corrected CoreDisplay default.metallib is 20739 bytes, MetalLib 1.2.7, SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
 - prior stub source tree is preserved at `/Library/Application Support/Dortania/MetallibSupportPkg/26.6.2-25G82.D97FX_STUB_BACKUP_20260907_212451`;
-- installed root still contains the old metadata-stub metallib layer until a corrected Root Patch is deliberately executed;
-- no new T2/Haswell boot variable is authorized;
-- no corrected Root Patch has yet been authorized.
+- installed root still contains exactly the old `180/180` metadata-stub metallib layer until the APFS revert/corrected Root Patch sequence is completed;
+- exact D97DX outer app remains `/Users/alex/Desktop/OpenCore-Patcher-Tahoe-D97DX.app` with exact inner/helper/source identities PASS;
+- official privileged helper SHA/team identity remains PASS;
+- no new T2/Haswell boot variable is authorized.
 
 Never auto Root Patch. Never auto reboot. Golden remains immutable/read-only.
 
@@ -208,28 +212,54 @@ Final proof:
 - corrected type `MetalLib executable (MacOS), version 1.2.7`;
 - no Root Patch, root-volume mutation, EFI mutation, NVRAM mutation or reboot occurred.
 
+## D97FY — final pre-Root-Patch gate PASS
+D97FY revalidated the full corrected-source and execution boundary immediately before remediation:
+- system `26.6.2 / 25G82`, x86_64;
+- VESA active with `-igfxvesa -ocmcdiag -ocmcd97bv` and D97EZ ACTIVE mode absent/inert;
+- exact original package identity PASS;
+- corrected local regular files `181` and real metallibs exact `180/180`;
+- every corrected local metallib has `MTLB` magic;
+- corrected CoreDisplay SHA PASS;
+- installed root remains exactly `180` metadata stubs, zero exact/missing/other;
+- exact D97DX app/helper/source identities PASS;
+- patchdict closure PASS: `182 = 180` current exact MetallibSupportPkg entries + `2` unchanged `14.6.1` donors;
+- official privileged helper SHA/team identity PASS;
+- `D97FY_STATUS=PASS`.
+
+D97FY checkpoint commit: `efe286948b322e41f9479f84b9e60027799dddf3`.
+
 ## Current causal frontier
-The previous D97FJ userspace failure is now strongly explained by a newly proven upstream installation defect:
+The previous D97FJ userspace failure is now strongly explained by a proven upstream installation defect:
 `invalid metadata-stub metallib layer -> CoreDisplay cannot obtain valid GPUPass library/function -> GPUPass specialization error path and/or invalid render-pipeline descriptor -> native Metal validation abort -> WindowServer death`.
 
 Classification:
-- invalid local source metallib layer: CLOSED PASS by D97FX reconstruction;
-- invalid currently installed root metallib layer: REACHED_NEGATIVE / still present until corrected Root Patch;
+- invalid local source metallib layer: CLOSED PASS by D97FX/D97FY reconstruction and revalidation;
+- invalid currently installed root metallib layer: REACHED_NEGATIVE / still present until APFS revert then corrected Root Patch;
 - invalid metallib layer as D97FJ common cause: PRIMARY CAUSAL CANDIDATE STRONGLY SUPPORTED, runtime causal closure still pending one corrected-payload ACTIVE test;
 - pure Tahoe-vs-Haswell GPUPass descriptor divergence is no longer the leading hypothesis.
 
 ## Execution-lane authority
 User explicitly authorized local compilation on the home Intel iMac because GitHub Actions quota/execution is blocked. Do not retry GitHub Actions compilation during the current quota-limited period.
 
-## CURRENT ACTION — FINAL PRE-ROOT-PATCH GATE
-Remain in VESA. No reboot and no Root Patch yet.
+## CURRENT ACTION — MANUAL APFS ROOT-PATCH REVERT, THEN VESA REBOOT
+D97FY authorizes the remediation sequence, but Root Patch and reboot remain manual user actions.
 
-Before authorizing manual Root Patch Restore + Root Patch:
-1. revalidate exact 25G82 package and corrected local source identity;
-2. verify CoreDisplay corrected MTLB identity;
-3. verify exact D97DX application/source identity and policy are unchanged;
-4. resolve all 182 D97DX `Metal 3802 .metallibs` patch-dictionary entries against the corrected source tree, explicitly distinguishing real copy entries from remove/other semantics;
-5. verify official privileged-helper state before D97DX launch;
-6. verify current boot remains VESA and D97EZ ACTIVE mode is absent/inert.
+Do NOT chain Revert and corrected Root Patch in the same running snapshot.
 
-Only after this gate passes may a separate checkpoint authorize manual Root Patch Restore + Root Patch. Never auto Root Patch and never auto reboot.
+Current authorized action:
+1. Launch exact outer `/Users/alex/Desktop/OpenCore-Patcher-Tahoe-D97DX.app`.
+2. Run manual Root Patch Restore/Revert only.
+3. After OCLP reports unpatch/revert complete, close the inner OCLP and allow the outer D97DX launcher to restore and verify the official privileged helper.
+4. Reboot once into the same VESA configuration. This reboot is specifically authorized only to make the APFS snapshot revert effective.
+5. After reboot, perform a read-only post-revert gate before any corrected Root Patch. The post-revert gate must prove the stubbed installed metallib layer is gone/restored and the corrected local source remains exact.
+6. Only after that gate passes may the exact D97DX app be run again for corrected manual Root Patch.
+7. After corrected Root Patch completes, do not reboot until post-patch payload identity is audited.
+
+Still forbidden until the corrected post-patch audit passes:
+- accelerated/non-VESA boot;
+- removal of `-igfxvesa`;
+- active `-ocmcd97ez`;
+- EFI/NVRAM/framebuffer changes;
+- Golden mutation;
+- legacy main Metal shadow;
+- true-five reapplication.
