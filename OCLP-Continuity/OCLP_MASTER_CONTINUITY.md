@@ -10,14 +10,14 @@ History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Current authoritative runtime checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97ER_DMESG_NEGATIVE_D97ES_READY_FOR_BUILD.md`
 
+Current observer build audit checkpoint:
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97ET_D97ES_0011_INDEPENDENT_BUILD_AUDIT_PASS.md`
+
 Previous accelerated runtime checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EQ_ACCEL_REPRO_OBSERVER_TUPLE_NOT_CAPTURED.md`
 
 Previous decisive observer-route checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EP_D97EL_VESA_ROUTE_PASS_ACCEL_MEASUREMENT_GATE.md`
-
-Current observer build audit checkpoint:
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97EN_D97EL_0010_INDEPENDENT_BUILD_AUDIT_PASS.md`
 
 Current Root Patch execution checkpoint:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260907_D97DX_ROOT_PATCH_EXECUTION_PASS_PRE_VESA_REBOOT_GATE.md`
@@ -33,14 +33,14 @@ Current observer build helper:
 - Haswell `8086:0412`;
 - SMBIOS `MacBookAir6,2`;
 - D97DX native-Metal-safe Root Patch remains installed;
-- active EFI kext is audited D97EL `OCLPMetalCompat.kext` 0.0.10;
-- executable SHA256 `7aa86d2484c6f252f7a77704117cebb6e14afa96bf2d98bb2523644fd86926ac`;
-- UUID `1A19441E-9937-3FBF-995D-9CC282E89089` x86_64;
+- active EFI kext is still audited D97EL `OCLPMetalCompat.kext` 0.0.10 until D97ES deployment is performed;
+- active D97EL executable SHA256 `7aa86d2484c6f252f7a77704117cebb6e14afa96bf2d98bb2523644fd86926ac`;
+- active D97EL UUID `1A19441E-9937-3FBF-995D-9CC282E89089` x86_64;
 - current session is VESA recovery after D97EQ accelerated failure;
 - recovery args: `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`;
 - `#-ocmcd97bvcave` inert;
 - normal pre-D97ED 3/3/3 framebuffer baseline is authoritative;
-- no new EFI/boot-arg variable from the T2/Haswell audit is currently authorized;
+- no new EFI/boot-arg variable from the T2/Haswell audit is authorized yet;
 - no functional set_id_mode masking is authorized;
 - D97EH/D97EL custom markers are absent from both post-recovery unified log and current live `dmesg`.
 
@@ -104,7 +104,7 @@ D97EH 0.0.9 independent audit PASS:
 - candidate masks computed only after original return;
 - no mode mutation or return coercion.
 
-D97EL 0.0.10 preserves D97EH observer semantics and adds telemetry only.
+D97EL 0.0.10 preserves D97EH observer semantics and adds route/callback telemetry only.
 
 D97EL exact identities:
 - source SHA256 `3a103b84ae8c18c7259c672dff9dd5c0f11d04d88554c8da8e60c5c0c04b9003`;
@@ -149,7 +149,7 @@ Recovery boot `Previous shutdown cause: 5` is manual hard power-off, not a kerne
 Exact accelerated observer tuple remains UNCAPTURED.
 
 ## D97ER — telemetry transport classification
-Current live VESA `dmesg` was filtered for `D97EH|D97EL|ocmc|set_id_mode|badBits|goodBits` and returned no matches.
+Current live VESA `dmesg` filtered for `D97EH|D97EL|ocmc|set_id_mode|badBits|goodBits` returned no matches.
 
 Therefore:
 - post-recovery unified log custom markers = ABSENT;
@@ -158,30 +158,61 @@ Therefore:
 - D97EP route PASS remains valid independent IORegistry proof;
 - next problem is tuple transport/capture, not a newly demonstrated graphics regression.
 
-## D97ES — IORegistry tuple telemetry design ready for build
-D97ES will be OCLPMetalCompat 0.0.11, deterministically derived from exact D97EL 0.0.10.
-
-Semantics preserved:
-- same `-ocmcd97eh` gate;
-- same IOAcceleratorFamily2 registration and exact set_id_mode route;
-- Apple original called first with exact `that/id/mode`;
-- original IOReturn returned unchanged;
-- no mode mutation, return coercion, framebuffer mutation, filesystem/NVRAM telemetry, EFI mutation or Root Patch change.
-
-Telemetry additions only:
-- first 8 post-original tuples stored atomically in kernel memory;
-- fields: `id`, `mode`, `badBits`, `goodBits`, raw original `ret`;
-- asynchronous publication via existing IORegistry publisher;
-- publisher remains alive until first observer tuple when `-ocmcd97eh` is active, still bounded to original 5-minute window.
-
-Expected keys include `D97ESCapturedCount` and `D97ES01Id/Mode/BadBits/GoodBits/Ret` through slot 08.
-
-Authority:
-- generator `OCLP7_D97ES_IOREG_TUPLE_GENERATOR.py`, commit `62fac73c0d834be92bcab208234112a4b046e385`, blob `dc7e244c3734f5dd0cd6f24d6d8c43da76d41fad`;
-- build helper `OCLP7_D97ES_IMAC_BUILD.sh`, commit `060e43f8c1bb427f4b9fbd8f610ae57780f6b7dd`.
-
 D97ER checkpoint commit:
 `3203836f8ef7ddf6f2e4e52926f759515f37e672`.
+
+## D97ES 0.0.11 — independent build audit PASS
+Purpose: preserve exact D97EL route/observer semantics while publishing first set_id_mode tuples asynchronously through IORegistry.
+
+User-returned artifact:
+- `OCLP7_D97ES_IMAC_BUILD_20260907_135316.zip`;
+- bytes `65332`;
+- ZIP SHA256 `f6392b2fdb255b19e5abc46c99afe675ad8e1c1050961368f87e50e2e487327d`;
+- ZIP CRC PASS;
+- all 9 manifest payload hashes PASS.
+
+Generated source:
+- bytes `31083`;
+- SHA256 `8184610aca1f2e651e6526e45c05d00a96055711c985571bc34c703ba7f6a8d0`.
+
+D97ES kext:
+- version `0.0.11`;
+- x86_64;
+- UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`;
+- executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
+- Info.plist SHA256 `3e3a18347d4e4550e13a5407c394ab9196dda83cf6fa3139c17c0a74efeaaed8`.
+
+Independent exact lineage proof:
+- reverse D97ES four substitutions -> exact D97EL SHA256 `3a103b84...`;
+- reverse D97EL five substitutions -> exact D97EH SHA256 `2d93b4bc...`;
+- reverse D97EH three substitutions -> exact D97DL SHA256 `f966d348...`.
+
+Independent x86_64 disassembly confirms:
+- saved original `that/id/mode` restored into `rdi/esi/edx` before original Apple call;
+- Apple original call occurs before diagnostic masks/tuple storage;
+- first 8 tuple slots store `id/mode/badBits/goodBits/raw ret` atomically;
+- final return is exact original IOReturn;
+- no functional mode mutation or return coercion.
+
+Publisher liveness change is telemetry-only:
+- if `-ocmcd97eh` is active, existing publisher remains alive until at least first set_id_mode tuple;
+- publication remains asynchronous and bounded to 300 seconds.
+
+Packaging-only notes, not payload failures:
+- `ditto` added one AppleDouble metadata file;
+- packaged build report omits final ZIP-status lines because those are appended after ZIP creation;
+- Xcode log independently contains two BUILD SUCCEEDED markers and zero BUILD FAILED markers.
+
+D97ET classification:
+- BUILD INTEGRITY PASS;
+- LINEAGE PASS;
+- STATIC/BINARY PASSTHROUGH PASS;
+- IOREG TELEMETRY-ONLY PASS;
+- VESA DEPLOYMENT AUTHORIZED;
+- ACCELERATED BOOT NOT YET AUTHORIZED.
+
+D97ET checkpoint commit:
+`af16880e29d0ae51492a5252cda354bc52b52c9d`.
 
 ## OCLP T2 / Haswell audit integration policy
 Do not add new EFI/boot-arg variables while exact set_id_mode measurement is still unresolved.
@@ -201,10 +232,18 @@ Still need exact accelerated runtime:
 
 No functional correction before measurement.
 
-## CURRENT ACTION — BUILD D97ES ON INTEL IMAC ONLY
-Run authoritative `OCLP7_D97ES_IMAC_BUILD.sh` on the authorized Intel iMac.
+## CURRENT ACTION — D97ES VESA-FIRST DEPLOYMENT AUTHORIZED
+On ASUS2, while in current VESA recovery:
+1. keep backup of active D97EL 0.0.10;
+2. replace only active EFI `EFI/OC/Kexts/OCLPMetalCompat.kext` with audited D97ES 0.0.11;
+3. do not change `Kernel -> Add -> BundlePath`;
+4. keep VESA boot args exactly `-igfxvesa -ocmcdiag -ocmcd97bv -ocmcd97eh`; keep `#-ocmcd97bvcave` inert;
+5. no Root Patch, no framebuffer change, no T2/Haswell extra boot-arg;
+6. verify active EFI identity before reboot.
 
-Build only. No ASUS2 EFI change, no Root Patch and no reboot.
-Return the resulting D97ES ZIP for independent audit.
+Required pre-reboot identity:
+- version `0.0.11`;
+- executable SHA256 `2a4d3b3dde347f87b31fffd067d3ab5fd8616f036321f61b7b5f38abbf1dd2de`;
+- UUID `4E0CD60C-2408-3EDA-9C0A-0FACD06FD9F4`.
 
-Only after build audit may D97ES be deployed VESA-first. Accelerated boot remains unauthorized until D97ES VESA route/publisher validation passes.
+After identity PASS, exactly one VESA reboot may be separately authorized. Accelerated boot remains forbidden until D97ES route/publisher and empty-slot behavior are proven in VESA.
