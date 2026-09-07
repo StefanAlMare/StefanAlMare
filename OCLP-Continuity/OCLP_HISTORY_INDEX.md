@@ -2,7 +2,7 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FG_D97EZ_LATENT_VESA_RUNTIME_PASS_ACTIVE_ACCEL_AUTHORIZED.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FH_SET_ID_MODE_ADAPTER_SEMANTIC_PASS_NEW_DOWNSTREAM_FRONTIER.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -60,69 +60,64 @@ Returned archive `OCLP7_D97EZ_IMAC_BUILD_20260907_160935.zip`:
 - 20/20 frozen manifest payload hashes PASS;
 - manifest SHA256 `f041bc196767ca8c0c4a0ae33b0091a424f3fc56f70bca0e95e7d62bee58a8ac`.
 Independent lineage regeneration produced byte-identical EH/EL/ES/EZ sources. Build log: 2 BUILD SUCCEEDED, 0 failed, 0 error lines, 6 non-functional warnings.
-Compiled D97EZ:
-- version `0.0.12`;
-- x86_64 MH_KEXT_BUNDLE;
-- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`;
-- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
-- Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`;
-- generated source SHA256 `35e596e7067eba65bb544cb34a109289485320292cbe97953882da18d0f2a74a`.
+Compiled D97EZ: version `0.0.12`, x86_64 MH_KEXT_BUNDLE, UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`, executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`, Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`, generated source SHA256 `35e596e7067eba65bb544cb34a109289485320292cbe97953882da18d0f2a74a`.
 Independent disassembly proves exact compare/translation, unchanged `that/id`, one original call, post-call diagnostic masks and exact return passthrough.
 D97FD checkpoint commit `4cc0928f94f9d28bcb1b5b91660a221c570742c4`.
 
-## D97FE — VESA deploy helper ready
-Fail-closed helper `OCLP7_D97FE_D97EZ_VESA_DEPLOY.sh` was prepared with exact old/new identity checks, rollback, config/boot-arg invariants, and no NVRAM/Root Patch/reboot behavior. User elected to perform the EFI kext replacement manually instead of using the helper.
+## D97FE / D97FF — deployment identity
+Fail-closed deploy helper was prepared, but user manually replaced the EFI kext. Direct active-EFI verification proved exact D97EZ 0.0.12 identity before runtime boot.
 
-## D97FF — manual active-EFI D97EZ identity PASS
-User manually replaced the existing `EFI/OC/Kexts/OCLPMetalCompat.kext` with the audited D97EZ 0.0.12 bundle and directly verified the active EFI path.
-Direct evidence:
-- version `0.0.12`;
-- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
-- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64.
-Saved boot args preserved active `-igfxvesa` and no `-ocmcd97ez`; first D97EZ runtime boot therefore LATENT.
-D97FF checkpoint commit `658191198efd7b704b7ee9d2139b12bb91d285f8`.
+## D97FG — D97EZ LATENT VESA runtime PASS
+Loaded D97EZ 0.0.12 exact UUID. `FunctionalRequested=0`, `FunctionalMode=LATENT`, route PASS, zero set_id_mode calls, zero adaptation counters, publisher ticks 300. This closed the required LATENT VESA safety gate.
+D97FG checkpoint commit `6c71ca6ead28321ac338323f96365208f1037f34`.
 
-## D97FG — D97EZ 0.0.12 LATENT VESA runtime PASS
-Authorized LATENT VESA boot completed on exact Tahoe `26.6.2 / 25G82`.
+## D97FH — ACTIVE exact adapter semantic PASS / set_id_mode blocker CLOSED
+Persisted ACTIVE accelerated run:
+`/Users/Shared/OCLP-D97EW-Capture/20260907T135033Z-290`
 
-Loaded runtime identity:
-- `com.oclpmetalcompat.OCLPMetalCompat (0.0.12)`;
-- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`.
+Saved boot args prove inert `#-igfxvesa` plus active `-ocmcd97ez`; exact D97EZ 0.0.12 UUID remained loaded.
 
-Saved boot args still contain active `-igfxvesa` and omit `-ocmcd97ez`.
+At first 15 routed calls:
+- exact-224 seen 12;
+- adapted 12;
+- adapt success 12;
+- adapt failure 0;
+- other modes 3;
+- passthrough success 3;
+- passthrough failure 0;
+- exhaustive classification `12+3=15` PASS.
 
-Live IORegistry:
-- `D97EZFunctionalRequested=0`;
-- `D97EZFunctionalMode=LATENT`;
-- all D97EZ exact224/other/adapt/success/failure counters `0`;
-- `D97ELObserverRequested=1`;
-- `D97ELCallbackSeenCount=17`;
-- `D97ELTargetCallbackSeenCount=1`;
-- `D97ELRouteStatus=PASS`;
-- `D97ELSetIdModeCallCount=0`;
-- `D97ESCapturedCount=0`;
-- all eight D97ES Valid fields `0`;
-- `D97CTRouteStatus=PASS`;
-- `D97CTPublisherTicks=300`.
+At stable 20 routed calls:
+- exact-224 seen 16;
+- adapted 16;
+- adapt success 16;
+- adapt failure 0;
+- other modes 4;
+- passthrough success 4;
+- passthrough failure 0;
+- exhaustive classification `16+4=20` PASS.
 
-Classification:
-- runtime identity PASS;
-- LATENT functional gate PASS;
-- observer route PASS;
-- zero-call/zero-adaptation VESA behavior PASS;
-- publisher bounded liveness PASS.
+First-eight direct telemetry:
+- slots 2/3/4/5/7/8 original mode `0x224`, badBits `0x200`, goodBits `0x24`, D97EZ passed `0x24`, Apple return `0`;
+- slots 1/6 original mode `0x24`, passed `0x24`, Apple return `0`.
 
-Scope caveat: VESA has no set_id_mode traffic, so this does not independently prove accelerated passthrough behavior. It closes the required LATENT VESA safety gate.
+Therefore the exact `0x224 -> 0x24` handoff adapter is STRUCTURAL-SEMANTIC PROVEN for captured traffic and Apple acceptance is SEMANTIC PROVEN for all 16 adapted calls in the observed 20-call window. All observed non-224 passthrough calls also succeed.
 
-D97FG checkpoint commit: `6c71ca6ead28321ac338323f96365208f1037f34`.
-MASTER advance to D97FG: `e4fb8636af6b4fcfbed0b0c31270f3a9947ce844`.
+The previous `IOAccelSurface::set_id_mode(...): Surface mode contains bad bits` rejection is CLOSED PASS as a causal blocker for the measured path.
+
+End-to-end GUI remains unproven because the system still returned to VESA after the ACTIVE experiment. The next frontier is downstream of successful set_id_mode acceptance.
+
+D97FH checkpoint commit: `3b882d7428a010a48d4744f290ab97a9232d4b4e`.
+MASTER advance to D97FH: `023a154a47f944a6fa309513948b2f6f7cd2c292`.
+
+## Current causal frontier
+Closed:
+`Tahoe 0x224 -> legacy IOAccelSurface rejection`.
+
+Current:
+`successful IOAccelSurface::set_id_mode acceptance -> next CoreDisplay/SkyLight/WindowServer/IOAccelerator failure preventing usable accelerated image`.
 
 ## Current action
-Exactly one D97EZ ACTIVE accelerated diagnostic boot is authorized.
-Intentional boot-arg changes only:
-- `-igfxvesa` -> inert `#-igfxvesa`;
-- add active `-ocmcd97ez`.
+Remain in VESA with D97EZ functional bootarg absent/inert. Do not change EFI, Root Patch, framebuffer counts or boot variables.
 
-Preserve `-ocmcdiag`, `-ocmcd97bv`, `-ocmcd97eh`, inert `#-ocmcd97bvcave`, existing `ipc_control_port_options=0`, `-amfipassbeta`, D97DX Root Patch, D97EZ 0.0.12, D97EW collector and normal 3/3/3 framebuffer baseline. No new T2/Haswell variable or Root Patch is authorized.
-
-If image is lost, keep the accelerated system powered for at least 30 seconds before hard power to allow publication and D97EW sync. Then recover VESA by restoring active `-igfxvesa` and removing/making inert `-ocmcd97ez`. Analyze only the D97EW run belonging to the immediately preceding accelerated boot, identified by saved boot args.
+Collect and analyze unified/system logs from the immediately preceding ACTIVE accelerated boot around 2026-09-07 16:50 EEST. Locate the first new error after successful set_id_mode acceptance. Do not repeat the ACTIVE boot unchanged before this downstream frontier is identified.
