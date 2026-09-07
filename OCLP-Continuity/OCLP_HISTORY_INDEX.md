@@ -2,7 +2,7 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FC_D97EZ_LOCAL_IMAC_BUILD_HELPER_READY.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FD_D97EZ_0012_INDEPENDENT_BUILD_AUDIT_PASS_VESA_DEPLOY_AUTHORIZED.md`.
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -105,8 +105,6 @@ Generator authority:
 - commit `cd76d912018bfa60284af3cb732ae8bca84db091`;
 - blob `3bf728b999e2163af77742686d7ce9aaac04e8fb`.
 
-No D97EZ binary has yet been built or deployed.
-
 ## D97FA — GitHub Actions execution blocker
 A GitHub-first D97EZ workflow was integrated and tested via push, PR-open and PR-synchronize paths. Repository Actions queries returned zero runs; the connector exposes no workflow-dispatch action. PR #17 used only a documentation-only trigger branch and was closed without merge.
 
@@ -116,14 +114,6 @@ D97FA checkpoint commit: `4191c7c2f89ce0d95739db6e0723eb7b37b63d0a`.
 On 2026-09-07 the user explicitly stated that GitHub Actions quota/execution is exhausted/blocked and instructed that compilation be performed on the user's more powerful home Intel iMac.
 
 This is the explicit authorization required by the permanent working rule for local compilation. It supersedes the D97FA stop condition only for the build lane while preserving all runtime safety gates.
-
-Rules at D97FB:
-- stop trying to compile D97EZ through GitHub Actions during the current quota-limited period;
-- local build on the home Intel iMac is authorized;
-- compile on ASUS2 is not authorized;
-- GitHub remains source/design/helper/persistence authority;
-- ASUS2 remains target-only for later identity-pinned deployment/runtime/VESA work;
-- returned build must be independently audited before deployment.
 
 D97FB checkpoint commit: `9be9a0659fd63327b343b9eab163116b56d1210f`.
 
@@ -152,7 +142,60 @@ Helper properties:
 D97FC checkpoint commit: `785b87a8235ed003a4e55e198a7a963dac3bbf2b`.
 Master advance to D97FC: `bfa094747b0bdd47468081f7b173a8b67ad433d8`.
 
-## Current action
-Run exact helper `OCLP7_D97EZ_IMAC_BUILD.sh` from commit `38b19ff0ff8e83eb3afeedb18747a56078ce89c1` / blob `19a22fe133fe04d0758f8a14a5306d4f81d25007` on the explicitly authorized home Intel iMac.
+## D97FD — independent D97EZ 0.0.12 build audit PASS
+Returned archive:
+`OCLP7_D97EZ_IMAC_BUILD_20260907_160935.zip`
+- bytes `154432`;
+- SHA256 `c21d21c423879973f2ec1595f16046f8db7757486fb1d75b5a873c7705f3c4e6`;
+- CRC PASS;
+- no symlink/AppleDouble metadata anomalies.
 
-Return the complete terminal output and the produced `OCLP7_D97EZ_IMAC_BUILD_<stamp>.zip` for independent audit. Do not deploy D97EZ to ASUS2, Root Patch or reboot until a later checkpoint explicitly authorizes it.
+Frozen package manifest:
+- 20 payload hashes;
+- all 20 PASS;
+- manifest SHA256 `f041bc196767ca8c0c4a0ae33b0091a424f3fc56f70bca0e95e7d62bee58a8ac`.
+
+Independent lineage regeneration using packaged pinned inputs produced byte-identical EH/EL/ES/EZ sources.
+
+D97EZ generated source:
+- SHA256 `35e596e7067eba65bb544cb34a109289485320292cbe97953882da18d0f2a74a`;
+- exact-match source semantics PASS;
+- broad mask absent;
+- one Apple call and exact return passthrough PASS.
+
+Build log:
+- 2 `BUILD SUCCEEDED`;
+- 0 `BUILD FAILED`;
+- 0 error lines;
+- 6 non-functional toolchain/build-system warnings.
+
+Compiled kext:
+- version `0.0.12`;
+- Mach-O x86_64 `MH_KEXT_BUNDLE`;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72`;
+- executable bytes `83616`;
+- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
+- Info.plist SHA256 `2ba171f88df0d0c4f1c82b3f3d69403d93b06843ea7f79ae7c5f2cc58c7c8899`.
+
+Independent disassembly proves exact `0x224` compare, conditional `0x24` selection, unchanged `that/id`, one original Apple call, diagnostic masks only after the original return, and exact return passthrough.
+
+Classification:
+- build integrity PASS;
+- lineage PASS;
+- source semantic PASS;
+- binary exact-match semantics PASS;
+- VESA deployment AUTHORIZED;
+- VESA reboot NOT yet authorized pending active-EFI identity;
+- accelerated boot / functional `-ocmcd97ez` NOT authorized;
+- Root Patch NOT authorized.
+
+D97FD checkpoint commit: `4cc0928f94f9d28bcb1b5b91660a221c570742c4`.
+Master advance to D97FD: `942388047fb2b3475e2c4a6319800db13f8963fa`.
+
+## Current action
+On ASUS2 in current VESA recovery, deploy only audited D97EZ 0.0.12 to the existing active EFI `EFI/OC/Kexts/OCLPMetalCompat.kext`, preserving a backup of D97ES 0.0.11 and preserving all boot args/configuration. Do NOT add `-ocmcd97ez` yet. Verify active-EFI identity before reboot:
+- version `0.0.12`;
+- executable SHA256 `356b51931d4458e359a253f264db1292e0d045b83684341b8e9be5464ea24b2c`;
+- UUID `3405DFAB-244A-38CA-90EA-79A1A24EEF72` x86_64.
+
+No Root Patch, reboot, framebuffer change, T2/Haswell variable, accelerated boot or functional D97EZ activation is authorized until the exact deployed identity is returned and audited.
