@@ -98,3 +98,5 @@ No Root Patch is required or authorized for this kext-only observer/adapter revi
 
 ## CI trigger note
 This branch-only note is non-functional and exists solely to exercise the repository's `pull_request` GitHub Actions lane for the D97EZ GitHub-first build/audit. It changes no runtime contract, source generator, EFI state, Root Patch state, or ASUS2 state.
+
+Synchronization probe: this second documentation-only commit exists solely to emit a `pull_request` synchronize event after PR #17 is already open; it changes no D97EZ behavior.
