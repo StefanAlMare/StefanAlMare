@@ -2,7 +2,8 @@
 
 Updated: 2026-09-07 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97EY_EXACT_SET_ID_MODE_TUPLE_SEMANTIC_PROOF.md`.
+Current checkpoint: `OCLP7_CHECKPOINT_20260907_D97FA_GITHUB_ACTIONS_EXECUTION_BLOCKER.md`.
+Current decisive semantic checkpoint: `OCLP7_CHECKPOINT_20260907_D97EY_EXACT_SET_ID_MODE_TUPLE_SEMANTIC_PROOF.md`.
 Permanent database/rules and the incremental checkpoints remain authoritative for deep history.
 
 ## Project end goal
@@ -144,10 +145,51 @@ Public context confirms `set_id_mode` mode is a bitwise presentation/surface fla
 D97EY checkpoint commit: `f2762e713565b1e72498241de639bdd5698c82c6`.
 Master advancement commit: `e9aa21dee41d5e0204df7017b762093fb6a96e5f`.
 
+## D97EZ — exact-match adapter design prepared in GitHub
+D97EZ is intentionally bounded and LATENT by default:
+- source design commit `8384f183303831ddd117652ef90e5c707a2ee589`;
+- generator commit `cd76d912018bfa60284af3cb732ae8bca84db091`;
+- generator Git blob `3bf728b999e2163af77742686d7ce9aaac04e8fb`;
+- exact D97ES input SHA pinned;
+- functional gate `-ocmcd97ez`;
+- only ACTIVE + exact `originalMode==0x224` selects `passedMode=0x24`;
+- all non-0x224 modes remain exact passthrough;
+- Apple original called once and exact return preserved;
+- global/no-PID exact/other and success/failure counters;
+- per-slot original/passed-mode telemetry;
+- no broad mask.
+
+GitHub-first workflow `.github/workflows/oclp7-d97ez-exact224-adapter-build.yml` was added to reconstruct exact lineage, generate deterministically, compile x86_64 on `macos-15-intel`, audit source/binary/disassembly, package and publish an artifact.
+
+No D97EZ binary/package identity exists yet.
+
+## D97FA — GitHub Actions execution blocker
+The D97EZ GitHub-first compile/build/package/audit lane is currently blocked at Actions execution, not at source design or repository writes.
+
+Observed sequence:
+1. Workflow created on `main` at commit `6c9e21e548904f7c3597ab67cc44d00a002f0fd9` with push/main + workflow_dispatch. Head-scoped and repo-wide Actions run queries returned zero runs.
+2. `pull_request` trigger was added on `main` at commit `320c8caab6d6f0c7790eef27d2b120acbb883c7e`.
+3. Branch `oclp7-d97ez-exact224-ci` created.
+4. Draft PR #17 opened with documentation-only change; initial head `dc7e11ebf989cc41ed931ba066fc6da1efab4f14`; workflow runs list remained empty.
+5. Second documentation-only synchronize commit head `58c6c0332e67c43de31260a6c8d613ea8c00f40b`; workflow runs list remained empty.
+6. Repository-wide Actions API still reports `total_count=0`, `workflow_runs=[]`.
+7. Synchronized PR head has no statuses/checks.
+8. Authenticated repo metadata reports admin/maintain/push/pull permissions; repository content write is therefore not the observed blocker.
+9. Current GitHub connector has no workflow-dispatch/create-run operation; only read/rerun operations for already-existing Actions runs are exposed.
+
+Exact deeper GitHub-side reason for zero execution (for example Actions disabled/restricted or another execution policy) is UNKNOWN via the available interface. Observed classification is `GITHUB_ACTIONS_EXECUTION=BLOCKED`.
+
+Per permanent GitHub-first rule, local compilation is not an implicit fallback and remains unauthorized.
+
+D97FA checkpoint commit: `4191c7c2f89ce0d95739db6e0723eb7b37b63d0a`.
+Master advancement commit: `e126f787275dd2435457a801a091bf50acd908b6`.
+
 ## Current causal frontier
 `Tahoe/CoreDisplay surface-mode semantics -> mode 0x224 (good 0x24 + extra 0x200) -> IOAccelSurface::set_id_mode -> legacy Haswell IOAccelerator returns kIOReturnBadArgument`.
 
-The exact observed failing bit class is now measured. Unknowns are the semantic intent of bit `0x200` and whether a selective exact-match translation is sufficient for stable graphical progress.
+The exact observed failing bit class is measured. Unknowns are the semantic intent of bit `0x200` and whether a selective exact-match translation is sufficient for stable graphical progress.
 
 ## Current action
-GitHub-first D97EZ design/audit only. Derive from exact D97ES 0.0.11 and keep LATENT by default behind a new explicit gate. The only proposed experimental functional translation may be exact `mode == 0x224 -> 0x24`; all other modes must pass byte-for-byte unchanged, Apple original must be called once, exact IOReturn returned unchanged, and original/passed mode plus counters published for audit. No global mask, Root Patch, EFI change, reboot or accelerated boot is authorized until source/build/binary audit is PASS and a separate VESA-first deployment checkpoint is persisted.
+STOP at D97FA until GitHub Actions execution becomes available for `StefanAlMare/StefanAlMare` through a working trigger/dispatch path. Then resume the existing D97EZ GitHub-first workflow, repair any CI failure in GitHub, independently audit the complete x86_64 binary/package/artifact, and only then persist a separate VESA-first deployment checkpoint.
+
+Until then: no local compilation fallback, no D97EZ deployment, no `-ocmcd97ez` on ASUS2, no Root Patch, no EFI mutation, no reboot/accelerated boot. D97ES 0.0.11 and current VESA recovery state remain authoritative.
