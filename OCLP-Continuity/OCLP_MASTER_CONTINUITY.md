@@ -1,6 +1,6 @@
 # OCLP MASTER CONTINUITY
 
-Updated: 2026-09-08 EEST — independent D97HV archive audit closed
+Updated: 2026-09-08 EEST — D97HW GitHub Golden/P3 comparison source published; CI trigger blocked
 
 Permanent database: `OCLP-Continuity/OCLP_PERMANENT_PROJECT_DATABASE.md`
 Permanent rules: `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
@@ -8,17 +8,21 @@ Permanent VESA rule: `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
 History index: `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
 Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 
-All earlier checkpoints remain authoritative for their own historical evidence. This MASTER and its current checkpoint are the current execution/causal authority. If historical `CURRENT ACTION`, boot-arg baselines, execution-lane wording, or automatic classifications conflict with the current checkpoint, they are superseded prospectively.
+All earlier checkpoints remain authoritative for their own historical evidence. This MASTER and its current checkpoint are the current execution/causal authority. If historical CURRENT ACTION, boot-arg baselines, execution-lane wording, or automatic classifications conflict with the current checkpoint, they are superseded prospectively.
 
 ## Current authoritative checkpoint
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HW_GITHUB_GOLDEN_P3_COMPARE_SOURCE_READY_CI_TRIGGER_BLOCKED.md`
+- creation commit `3120d338f5b8088b753972543396a4d9edeb696a`.
+
+Immediate runtime/archive predecessor:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HV_INDEPENDENT_ARCHIVE_AUDIT_PASS_D97HW_READY.md`
 - creation commit `0801b6b5b73cc4ce2b515252413eae542900b860`.
 
-Immediate reconciliation predecessor:
+Reconciliation predecessor:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HV_FULL_CORPUS_PERMANENT_RECONCILIATION_D97HW_READY.md`
 - creation commit `8c6d095ff97e6d3ebd2775fb132903bc4281f1d1`.
 
-Immediate runtime predecessor:
+Runtime-window predecessor:
 `OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HV_CORRECT_ACCEL_WINDOW_P3_SEMANTIC_PROGRESS_SIMULATOR_BITCODE_FRONTIER.md`
 - commit `541e7fa63a92a577bd5c82136809463f38134bde`.
 
@@ -105,6 +109,7 @@ In the authoritative P1+P3 accelerated experiment:
 `P1_PLUS_P3_GUI=NEGATIVE_NO_USABLE_GUI`.
 
 Do not label the current validator `MTLSimCompiler::validSimulatorMetadata` until D97HW current-binary static mapping proves it.
+P3 frontier movement does not by itself prove that all serialized-bitcode metadata is semantically valid.
 
 ## D97HI / D97HO artifact chain — CLOSED PASS
 D97HI source diff SHA256:
@@ -136,8 +141,7 @@ D97HS proved underlying patched System before reboot:
 
 D97HU proved the later active VESA recovery snapshot contains the same intended P1+P3-only root and exact metallib layer.
 
-D97HU structural result remains valid. Its old runtime attribution of `14:25:*` / `14:26:*` to VESA is superseded; those events belong to the immediately preceding accelerated experiment.
-
+D97HU structural result remains valid. Its old runtime attribution of 14:25/14:26 to VESA is superseded; those events belong to the immediately preceding accelerated experiment.
 Haswell loaded/unloaded state under `-igfxvesa` is informational, not a pass/fail gate.
 
 ## Authoritative P1+P3 accelerated experiment
@@ -146,7 +150,7 @@ Durable identity:
 
 Independent ZIP/log audit proves:
 - 12 distinct WindowServer PIDs;
-- exactly 12 `Server is starting up` markers through `14:27:05.792`;
+- exactly 12 Server-is-starting-up markers through `14:27:05.792`;
 - 145 distinct MTLCompilerService PIDs;
 - all 145 have explicit host peer mapping;
 - 144 = exactly 12 MTLCompilerService processes for each of 12 WindowServer processes;
@@ -161,19 +165,17 @@ Independent ZIP/log audit proves:
 - WindowServer abort/restart;
 - no usable GUI.
 
-Recovery VESA is distinct: WindowServer activity begins around `14:28:38.955`; `Server is starting up` at `14:28:41.325`.
-
+Recovery VESA is distinct: WindowServer activity begins around `14:28:38.955`; Server-is-starting-up at `14:28:41.325`.
 Do not use mutable ordinal labels such as penultimate/antepenultimate in permanent state; use the explicit timestamped window.
 
 ## D97HV archive — INDEPENDENT BYTE AUDIT PASS
 Exact re-uploaded ZIP bytes independently verified:
-- canonical package identity SHA256 `e8427830641821d8394b3c82c9cf266ce046eb0e69ad1af28700f47b16122faf`;
+- canonical SHA256 `e8427830641821d8394b3c82c9cf266ce046eb0e69ad1af28700f47b16122faf`;
 - bytes `5390949`;
 - ZIP CRC PASS;
 - 53 entries.
 
-The D97HV report listed 46 copied IPS payloads; independent archive audit matched all 46 by size and SHA256, mismatches `0`.
-
+The D97HV report listed 46 copied IPS payloads; independent audit matched all 46 by size and SHA256, mismatches `0`.
 The archive contains 21 MTLCompilerService IPS files, all historical by embedded captureTime; current 14:24–14:27 MTLCompilerService IPS = `0`.
 
 Six WindowServer IPS fall inside the current accelerated window and independently confirm:
@@ -181,11 +183,10 @@ Six WindowServer IPS fall inside the current accelerated window and independentl
 - pids387/426/471/518/565 COREANIMATION code4 `PBGRAXb_Xc`, compiler connection interrupted after retries, `CA::OGL::MetalContext::create_pipeline_state(...)+6896`;
 - all six load GPUCompiler 32023 `libllvm-flatbuffers.dylib`, `libGPUCompilerUtils.dylib`, and AppleIntelHD5000GraphicsMTLDriver 18.8.4 / bundle 18.0.8.
 
-D97HV collector still has a real tooling defect: it misparsed `kern.boottime` and emitted a 1970 start time, mixing historical IPS/logs. Its automatic `P3_MIXED_CURRENT_BOOT_FRONTIER` classification remains INVALID.
+D97HV collector misparsed kern.boottime and emitted a 1970 start time, mixing historical IPS/logs. Its automatic P3_MIXED_CURRENT_BOOT_FRONTIER classification remains INVALID.
+Raw evidence is authoritative only after timestamp re-scoping.
 
-Raw evidence is authoritative only after timestamp re-scoping to the window above.
-
-Exact service termination mechanism after the diagnostic remains UNKNOWN: log shows service inactive/connection loss and WindowServer describes compiler-service crash during communication, but there is no current MTLCompilerService IPS. Durable wording is `compiler-service connection loss / service inactive`, not a proven crash mechanism.
+Exact service termination mechanism remains UNKNOWN: log shows inactive/connection loss and WindowServer describes a crash during communication, but no current MTLCompilerService IPS exists. Durable wording is connection loss / service inactive, not a proven crash mechanism.
 
 Current measured chain:
 `P1 + P3 serialized-bitcode path -> exhaustive recurring simulator/bitcode diagnostic route -> compiler-service connection loss / service inactive -> XPC_ERROR_CONNECTION_INTERRUPTED -> GPUPass/render-pipeline failure -> WindowServer abort/restart -> no GUI`.
@@ -193,43 +194,71 @@ Current measured chain:
 ## OCLP 2.5.0 / Nightly
 2026-09-08 review found no measured MTLCompiler/GPUCompiler/Haswell frontier improvement relevant to this lane over the pinned functional base. Do not replace the project app/assets solely because official/nightly package label is newer.
 
-## P2b decision
+## P2b / Sequoia comparison discipline
 Historical P2b = request-layout adapter `+0xD0 -> +0x110` at `0x9A8CD`.
+P2b remains NOT_YET_AUTHORIZED.
+Map exact diagnostic/xref path and establish whether P2b is upstream/causal before any experiment.
 
-P2b is plausible after P3 moved execution to serialized-bitcode/simulator-related behavior, but remains **NOT_YET_AUTHORIZED**.
+Equal compiler bytes do NOT prove Golden Sequoia traverses the same branch for a corresponding shader/request. Same code with different results may reflect data, route selection, dependencies or context. Exact same-boundary Golden runtime equivalence remains UNKNOWN when not persisted.
+The prior explanation that Sequoia passes this precise current validator and Tahoe fails it is a hypothesis, not a measured result.
 
-Required order:
-1. map exact diagnostic/xref path;
-2. establish whether P2b is upstream/causal;
-3. only then decide on a P2b experiment.
+## D97HW GitHub-first comparison — SOURCE PUBLISHED, NOT EXECUTED
+The public PatcherSupportPkg 1.9.6 asset metadata matches the historical exact Universal-Binaries pin:
+- asset ID `332386253`;
+- declared bytes `641964544`;
+- declared SHA256 `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7`.
+Actual download/byte validation remains a CI gate, not an accomplished result.
 
-## CURRENT ACTION — D97HW read-only simulator/bitcode static map
-Artifact already present:
-`OCLP-Continuity/artifacts/OCLP7_D97HW_READONLY_P3_SIMULATOR_BITCODE_STATIC_MAP.sh`.
+Comparator:
+`OCLP-Continuity/artifacts/OCLP7_D97HW_GITHUB_GOLDEN_P3_STATIC_COMPARE.py`.
+Workflow:
+`.github/workflows/oclp-d97hw-golden-p3-static-compare.yml`.
+Workflow name: `OCLP D97HW Golden vs P3 static comparison`.
+Published source/workflow head: `56df870a781d9d9f20e4a8fdd3375ebc4c188e8e`.
+Requested runner: `macos-15-intel`; no actual runner assigned yet.
 
-D97HW has not yet been executed and has no result checkpoint.
+Intended work on disposable runner copies:
+- syntax/guard tests;
+- exact DMG download/hash and read-only mount;
+- Golden-original donor identity;
+- exact P1 and P3 reconstruction to persisted active hashes;
+- original P2 preserved;
+- strings, symbols, disassembly and instruction-boundary xref candidates;
+- text/JSON evidence plus SHA manifest, no donor executables published;
+- assistant artifact and CI audit before causal conclusions.
 
-D97HW must:
-1. pin active P1 service and active P3-only MTLCompiler32023;
-2. prove P2 still original and P3 exact;
-3. recover exact full strings containing `simulator` and `bitcode`;
-4. map file offsets, VAs and xrefs;
-5. disassemble relevant paths;
-6. relate paths to P2 `0x9A8CD` and P3 `0xA1573`;
-7. inspect `MTLSimCompiler::validSimulatorMetadata` only if current binary evidence supports it;
-8. classify whether P2b is the next measured causal adapter.
+The old ASUS2 static-map helper remains historical, but its remotely reproducible analysis is no longer delegated locally. New ASUS2 evidence is justified only if exact remote identity cannot be reproduced or a genuinely live input is needed.
 
-No Root Patch, Restore, EFI/NVRAM/framebuffer mutation, acceleration change or reboot during D97HW.
+## CURRENT ACTION — unblock D97HW GitHub execution; NO ASUS2 action
+Observed blocker:
+- actions/runs filtered to source/workflow head returned `total_count=0`;
+- repository actions/runs also returned `total_count=0`;
+- branch ref confirmed source/workflow commit exists;
+- connector rejected workflow endpoint GET with HTTP400 URL-not-allowed;
+- no workflow_dispatch action is exposed by current connector.
 
-The helper binds exact active `/System/Library` files on Darwin x86_64 25G82, so execution is inherently ASUS2/live-state dependent unless byte-identical active binaries are separately supplied under an audited remote path.
+Classification: `CI_TRIGGER_NOT_OBSERVED_AND_DIRECT_DISPATCH_UNAVAILABLE_IN_CURRENT_CONNECTOR`.
+Do not claim quota/billing failure, disabled Actions, invalid YAML or failed runner: cause remains UNKNOWN.
+No run/job/artifact ID or CI PASS exists.
+
+Minimal external intervention, when available: GitHub repository Actions -> OCLP D97HW Golden vs P3 static comparison -> Run workflow -> main.
+If the UI presents an enablement/restriction message, record it before broader setting changes.
+Then the assistant audits actual run/job logs and artifact.
+
+No local compilation/analysis fallback, Root Patch, Restore, EFI/NVRAM/framebuffer mutation, acceleration change or reboot is authorized.
+
+`D97HW_SOURCE_AND_WORKFLOW=PUBLISHED`
+`D97HW_CI_EXECUTION=NOT_OBSERVED`
+`D97HW_STATIC_COMPARISON_RESULT=NOT_OBTAINED`
+`D97HW_GOLDEN_RUNTIME_EQUIVALENCE=UNKNOWN`
+`P2B_AUTHORIZED=NO`
 
 ## Continuation startup order
 Before any new technical modification, read in full:
-1. `OCLP_PERMANENT_WORKING_RULES.md`;
+1. OCLP_PERMANENT_WORKING_RULES.md;
 2. this MASTER;
-3. `OCLP_PERMANENT_VESA_RECOVERY_RULE.md`;
-4. the exact current authoritative checkpoint named above;
-5. `OCLP_PROJECT_RETROSPECTIVE_20260827.md`;
-6. `OCLP_HISTORY_INDEX.md`.
-
-Then resume exactly from `CURRENT ACTION`; never reconstruct current state from memory or a stale checkpoint.
+3. OCLP_PERMANENT_VESA_RECOVERY_RULE.md;
+4. exact current authoritative checkpoint named above;
+5. OCLP_PROJECT_RETROSPECTIVE_20260827.md;
+6. OCLP_HISTORY_INDEX.md.
+Then resume exactly from CURRENT ACTION; never reconstruct current state from memory or a stale checkpoint.
