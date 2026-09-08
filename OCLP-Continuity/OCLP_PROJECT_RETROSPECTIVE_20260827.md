@@ -1,6 +1,14 @@
 # OCLP PROJECT RETROSPECTIVE — 2026-08-27
 
 Restored reconstruction: 2026-09-01 EEST
+Current interpretation note added: 2026-09-08 EEST
+
+## 2026-09-08 reconciliation note
+This retrospective preserves the accepted August design history. Its five-patch chain (`P1 + P2b + P3 + AIR00 + D34`) is **historical design evidence**, not the current active patchset and not an instruction to replay all five.
+
+Current execution/causal authority is MASTER + the checkpoint named by MASTER. As of the D97HV reconciliation, the active experiment is exact **P1 + P3 only**, P2 remains original, P2b/AIR00/D34 are inactive, P1 and P3 have each produced measured runtime semantic progress, GUI remains negative, and P2b is not authorized until the new simulator/bitcode frontier is statically mapped.
+
+Any `Current retrospective application` wording below is historical for the 2026-08-27 phase and must not override the current `CURRENT ACTION` in MASTER.
 
 ## Purpose
 This strategic authority separates durable technical progress from invalidated evidence and operational churn, restates the end goal, and fixes the architectural direction.
@@ -10,8 +18,8 @@ Run macOS Tahoe 26.6.2 / 25G82 on Intel Haswell HD4600 8086:0412, SMBIOS MacBook
 
 The objective is not merely to suppress WindowServer aborts or compiler errors. It is to identify and correct the earliest causal incompatibility that prevents the Haswell Metal compiler/pipeline path from completing correctly on Tahoe.
 
-## Durable functional baseline
-Exactly five functional patches are the accepted baseline:
+## Durable functional baseline — historical August design evidence
+Exactly five functional patches were the accepted August baseline:
 1. P1 selector bridge.
 2. P2b request-layout bridge `request+0xD0 -> request+0x110`.
 3. P3 serialized-bitcode path.
@@ -25,7 +33,7 @@ Golden remains immutable/read-only.
 
 ## Durable progress
 ### Upstream compiler path
-The five bridges take Tahoe well beyond initial request/FW handling. Historical diagnostics established progress through patchReflection, runLinking, cleanup and epilogue regions. D50/D68 remain reserve-only because sampling/request-coverage limitations prevented a universal GREEN seal and later evidence established a stronger far frontier.
+The five bridges took Tahoe well beyond initial request/FW handling. Historical diagnostics established progress through patchReflection, runLinking, cleanup and epilogue regions. D50/D68 remain reserve-only because sampling/request-coverage limitations prevented a universal GREEN seal and later evidence established a stronger far frontier.
 
 ### Downstream failure correctly reclassified
 WindowServer/SkyLight/CopyPipelineState is downstream error handling after compiler XPC interruption:
@@ -33,16 +41,18 @@ WindowServer/SkyLight/CopyPipelineState is downstream error handling after compi
 WindowServer is not the root cause.
 
 ### Compiler-service frontier
-D71R established the compiler-service lifecycle through launchd accounting. D72 and later work moved the frontier into `MTLSimCompiler::validSimulatorMetadata`. Tahoe and working Golden use the same effective donor implementation there, and the immediate caller/handoff is structurally equivalent.
+D71R established the compiler-service lifecycle through launchd accounting. D72 and later work moved the historical frontier into `MTLSimCompiler::validSimulatorMetadata`. Tahoe and working Golden used the same effective donor implementation there, and the immediate caller/handoff was structurally equivalent.
 
-D78D showed the failing request enters `validSimulatorMetadata` but does not return to the caller during the observed lifecycle. D79 mapped the function statically. D80 instrumentation was perturbative and its NULL-tree SIGSEGV was retired after clean-control evidence.
+D78D showed the failing request entered `validSimulatorMetadata` but did not return to the caller during the observed lifecycle. D79 mapped the function statically. D80 instrumentation was perturbative and its NULL-tree SIGSEGV was retired after clean-control evidence.
+
+Important current limitation: the new September P1+P3 simulator/bitcode diagnostic path must not be identified with this historical symbol until current binary xref/disassembly evidence proves it.
 
 ### Resource/metadata region
-Static and runtime evidence placed activity in the late simulator/resource-limit family. The crucial strategic question is not merely which late predicate fires, but why unchanged donor code receives a different payload/state than working Sequoia.
+Static and runtime evidence placed historical activity in the late simulator/resource-limit family. The crucial strategic question is not merely which late predicate fires, but why unchanged donor code receives a different payload/state than working Sequoia.
 
 ## Invalidated or retired work
 - D36-D44 overlapped the protected D34 cave and their conclusions were retracted.
-- Excessive instruction-by-instruction probing caused unnecessary reboot churn; module-boundary/whole-stage methodology is now mandatory.
+- Excessive instruction-by-instruction probing caused unnecessary reboot churn; module-boundary/whole-stage methodology is mandatory.
 - D66/D67 illustrated that cross-PID sampling cannot GREEN-seal request-varying handoffs.
 - Multiple collector/build/wrapper bugs were tooling failures, not Haswell semantic evidence.
 - D80 was a perturbative instrumentation false frontier.
@@ -54,20 +64,20 @@ Target architecture:
 
 Do not patch a final validator merely to tolerate bad Tahoe data. Preserve proven working donor code downstream and normalize at the earliest causal boundary.
 
-The five accepted patches already follow this architecture:
+The historical five accepted patches followed this architecture:
 - P1 translates selector semantics.
 - P2b translates request layout.
 - P3 selects a compatible serialized-bitcode path.
 - AIR00 normalizes AIR/Metal semantic versioning.
 - D34 repairs semantic state while preserving downstream continuation.
 
-Any further functional patch must be another boundary adapter, not a late error suppressor.
+Any further functional patch must be another measured boundary adapter, not a late error suppressor.
 
 ## Hypotheses to discriminate
 - H1: Tahoe supplies an `llvm::Module*` whose metadata/resource representation differs from the donor's expected shape.
 - H2: module data is equivalent, but an external dependency/runtime ABI/context differs.
 - H3: Tahoe generates a semantically different request/shader/module earlier, requiring normalization before the donor receives it.
-- H4, introduced by D97 provenance work: the runtime request selects a different MTLCompiler generation than the instrumented visible 32023 donor.
+- H4, introduced by D97 provenance work: runtime request selects a different MTLCompiler generation than the instrumented visible 32023 donor.
 
 Do not promote a hypothesis to fact without direct evidence.
 
@@ -81,7 +91,9 @@ Do not promote a hypothesis to fact without direct evidence.
 7. Preserve downstream Golden/Sequoia donor code after a proven handoff.
 8. Prefer deterministic launchd exit codes when crash-report register channels are absent.
 
-## Current retrospective application
-D95/D95D proved structurally valid wrapped LLVM bitcode. D96C and D97JB proved the late six-counter boundary is stable and universal, but D97H showed zero downstream SIGILL in 32023. D97K-T traced the runtime compiler selector back to XPC key `llvmVersion` and proved cached Metal.framework writes that key.
+## Historical retrospective application at reconstruction time
+D95/D95D proved structurally valid wrapped LLVM bitcode. D96C and D97JB proved the late six-counter boundary stable and universal, but D97H showed zero downstream SIGILL in 32023. D97K-T traced runtime compiler selector back to XPC key `llvmVersion` and proved cached Metal.framework writes that key.
 
-D97U/V installed a receiver-side terminal capture immediately after `xpc_dictionary_get_uint64`. The accelerated D97W run produced repeated launchd-visible MTLCompilerService SIGILL terminations but no `.ips/.crash` report, so the register channel failed. The next methodology is a universal exact three-way launchd exit-code classifier for `3802`, `32023`, or other, designed only after a read-only safe-cave audit.
+D97U/V installed a receiver-side terminal capture immediately after `xpc_dictionary_get_uint64`. The accelerated D97W run produced repeated launchd-visible MTLCompilerService SIGILL terminations but no `.ips/.crash` report, so the register channel failed. The next methodology at that historical moment was a universal exact three-way launchd exit-code classifier for `3802`, `32023`, or other, designed only after a read-only safe-cave audit.
+
+That historical `next methodology` is superseded by the current MASTER/current checkpoint.
