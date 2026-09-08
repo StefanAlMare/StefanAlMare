@@ -11,10 +11,11 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HI_IMAC_ASSUMPTION_FALSE_NEGATIVE_D97HK_PORTABLE_INTEL_HOST_READY.md`
-- commit `018c46a1d853c93617338d630e7beb7afe323b21`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HK_PYTHON_ANCHOR_FALSE_NEGATIVE_D97HL_V2_READY.md`
+- commit `35b579df09aa669be91b19f252973458a3c06a51`.
 
 Immediate decisive predecessors:
+- portable Intel build-host authorization / D97HK ready — `018c46a1d853c93617338d630e7beb7afe323b21`;
 - D97HG exact P3-only reconstruction PASS / D97HI build authorized — `3aa5c5ea432b99fd538c44eb9bfe0ab481bf71ec`;
 - D97HF P1 runtime semantic progress / measured P3 frontier — `1af98134a40236290484037548dfba621df1c626`;
 - D97HE historical misselection invalid / D97HF exact collector ready — `d7691224526b3b35c4607f15d43bccfa8372d5f9`;
@@ -31,10 +32,10 @@ Golden Sequoia immutable/read-only.
 Never compile on ASUS2.
 
 ### Build-host rule — current explicit exception
-The historical home Intel iMac remains a valid build host, but the user is currently on an Intel MacBook Pro at work and explicitly requested adaptation to that host.
-A non-target Intel/x86_64 Mac is therefore authorized for this build only when exact source/provenance gates reconstruct the known D97DX/D97GS state. ASUS2 remains forbidden as a compilation host.
+The historical home Intel iMac remains a valid build host. The user is currently on an Intel MacBook Pro at work and explicitly requested adaptation to that host.
+A non-target Intel/x86_64 Mac is authorized for this build only when exact source/provenance gates reconstruct the known D97DX/D97GS state. ASUS2 remains forbidden as a compilation host.
 
-Current portable host preflight:
+Portable host preflight:
 - x86_64 Intel Core i9-9880H;
 - macOS 15.7.9 / 24G830;
 - Xcode full developer dir present;
@@ -85,33 +86,46 @@ P3-only changes exactly one byte:
 Classification:
 `D97HG_P3_ONLY_RECONSTRUCTION=STATIC_STRUCTURAL_SEMANTIC_PROVEN`.
 
-## D97HI direct build attempt on work Mac — tooling false negative
-Original D97HI assumed historical worktree path existed and stopped immediately:
-`D97HI_STATUS=FAIL`
-`D97HI_REASON=WORKTREE_MISSING`.
+## D97HI direct build attempt — tooling false negative
+Original D97HI assumed historical worktree path existed on the build host and stopped immediately with `WORKTREE_MISSING`. No mutation occurred.
 
-No mutation occurred. This is a host-assumption tooling false negative, not P3/Haswell evidence.
+## D97HK portable build attempt v1 — tooling false negative
+D97HK v1 successfully proved the portable host and exact historical authority identities:
+- D97DU blob `ceed3890b5d35efbefc38ebf1a40f358884e58b9`;
+- D97GS blob `b408d8d372ca6956db0caeb2a253df44acd7a5b9`;
+- D97HI blob `0bf2e5601f08613d916d1414a5e2561153517ed5`.
 
-## CURRENT ACTION — D97HK portable bootstrap + inner D97HI build only
+It then stopped before cloning/source mutation with:
+`python loop anchor count=2`.
+
+Cause: portable transformation searched generic `for p in \\` and incorrectly required one occurrence; historical D97DU contains more than one such loop.
+
+Classification:
+`D97HK_V1_RESULT=INCONCLUSIVE_TOOLING_FALSE_NEGATIVE`
+`D97HK_FUNCTIONAL_EVIDENCE=NONE`
+`D97HK_SYSTEM_MUTATION=NO`.
+
+## CURRENT ACTION — D97HL v2 tooling fix + corrected D97HK run
 Artifact:
-`OCLP-Continuity/artifacts/OCLP7_D97HK_PORTABLE_INTEL_HOST_BOOTSTRAP_AND_D97HI_INNER_BUILD.sh`
-- commit `cb878d7a9541f6400c198017931e72eaa7dcf426`;
-- Git blob `b3d8022ac3d543fd1fd38fedc14ebab6bd0ccfe8`.
+`OCLP-Continuity/artifacts/OCLP7_D97HL_PORTABLE_BOOTSTRAP_FIX_PYTHON_ANCHOR_AND_RUN_D97HK.sh`
+- commit `bfab26f8c1fe180447df80de9321f3f565bb520f`;
+- Git blob `b52520b349055674cbd978fb645da7cfa83efbee`.
 
-D97HK pins exact historical build authorities:
-- D97DU commit `d8faeb3b108e57f35ee9576a8cbf1f7149c7bc9`, blob `ceed3890b5d35efbefc38ebf1a40f358884e58b9`;
-- D97GS commit `8f86bfa76282b3b1c5b9aca311e95324406224d5`, blob `b408d8d372ca6956db0caeb2a253df44acd7a5b9`;
-- D97HI commit `4ca10b8e9a1b0db046d570bc2e1d2710ab16fa9a`, blob `0bf2e5601f08613d916d1414a5e2561153517ed5`.
+D97HL v2:
+1. fetches exact D97HK v1 and requires blob `b3d8022ac3d543fd1fd38fedc14ebab6bd0ccfe8`;
+2. changes only D97HK's tooling transformation of D97DU's Python-selection region;
+3. locates the unique D97DU region from `PYTHON_BIN=""` to `Verify exact local 25G82 MetallibSupportPkg` and replaces it with fixed `/usr/local/bin/python3.13` x86_64 selection;
+4. preserves all D97DX/D97GS/P1/P3 authority tokens and commits unchanged;
+5. syntax-checks corrected D97HK;
+6. executes the otherwise unchanged portable chain.
 
-Portable chain must prove:
-1. exact upstream b9df76 / tree 7c3411...;
-2. exact D97DX source diff SHA `c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4`;
-3. Python 3.13 x86_64 venv and exact Universal-Binaries SHA `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7`;
-4. exact D97GS source diff SHA `cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f`;
-5. D97HI P3-only insertion with P1 preserved byte-identically;
-6. build x86_64 inner `OpenCore-Patcher.app` only;
-7. package `OpenCore-Patcher-Tahoe-D97HI-INNER.zip` for independent audit.
+Expected downstream chain still must prove:
+- exact upstream b9df76/tree;
+- D97DX diff SHA `c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4`;
+- exact Universal-Binaries SHA `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7`;
+- D97GS diff SHA `cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f`;
+- P1 preserved exactly;
+- P3-only insertion;
+- x86_64 inner app build and packaging.
 
-Target-local MetallibSupportPkg and official helper checks are intentionally deferred; they are not required to compile the inner app and will be revalidated on ASUS2 before any wrapper/Root Patch step.
-
-No outer-wrapper assembly, target transfer, Root Patch, reboot, acceleration, P2b, AIR00 or D34 is authorized until D97HK output is reviewed and independently audited.
+No outer wrapper assembly, target transfer, Root Patch, reboot, acceleration, P2b, AIR00 or D34 is authorized until D97HL/D97HK output is reviewed and independently audited.
