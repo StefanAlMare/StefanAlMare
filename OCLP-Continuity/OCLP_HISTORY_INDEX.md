@@ -1,46 +1,165 @@
 # OCLP PROJECT HISTORY INDEX — ASUS2 / OCLP1 -> current phase
 
-Updated: 2026-09-08 EEST
+Updated: 2026-09-08 EEST — reconciled through D97HV
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97HD_ACTIVE_SNAPSHOT_PASS_D97EW_LIVE_GATE_PASS_ACCELERATION_AUTHORIZED.md`.
+Current authoritative reconciliation checkpoint: `OCLP7_CHECKPOINT_20260908_D97HV_FULL_CORPUS_PERMANENT_RECONCILIATION_D97HW_READY.md`.
 
-Permanent database/rules and all incremental checkpoints remain authoritative for deep history. This index emphasizes accepted causal milestones and the current action.
+This index preserves accepted causal milestones. Individual checkpoints remain authoritative for exact evidence and historical execution details. Stale historical `CURRENT ACTION`, stale boot-arg baselines and later-invalidated automatic classifications are not current authority.
 
 ## End goal
-Tahoe `26.6.2 / 25G82` on ASUS2, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware-accelerated GUI.
+Run Tahoe `26.6.2 / 25G82` on ASUS2 with Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, stable hardware acceleration and a usable GUI.
 
-## Durable method / architecture
-Historical compiler baseline: `P1 + P2b + P3 + AIR00 + D34`.
-Current rule: never replay all five blindly; patch only the earliest measured failed module. P1 is now live and must be measured at runtime before considering later historical modules.
+The objective is not to suppress the last visible WindowServer failure. The project repairs the earliest measured non-equivalent handoff in the Tahoe-native -> legacy compiler -> Haswell path and then advances to the next measured frontier.
 
-Architecture:
-`Tahoe native Metal/Metal4 ABI -> bounded legacy compiler ingress -> measured adapter(s) -> legacy compiler/backend -> Haswell driver -> image`.
+## Durable architecture / method
+Current architectural principle:
+`Tahoe-native Metal/Metal4 outer ABI -> bounded compatibility adapter(s) at measured frontier -> legacy compiler/backend lane -> Haswell driver -> compositor/image`.
 
-Golden Sequoia immutable/read-only. No legacy main Metal shadow/MetalOld, no global 32023 rewrite, no global forced-3802 path, no global set_id_mode mask, no unrelated boot-variable experiments, no automatic Root Patch/reboot.
+Golden Sequoia is immutable/read-only. The project does not shadow Tahoe's cache-resident native Metal with the full legacy main Metal framework.
 
-## Early compiler-bridge history
-Historical Tahoe work encountered the same startup signature later rediscovered:
+Historical accepted five-functional-patch chain:
+`P1 + P2b + P3 + AIR00 + D34`.
+
+That chain is retained as design evidence only. Current rule: never replay all five blindly; reintroduce only the earliest patch whose causal necessity is measured in the current experiment.
+
+P6/P7 runtime sufficiency remains NEGATIVE. D50/D68/D82 remain reserve-only. D84 is retired. D36-D44 are invalidated for D34 cave overlap. Patch8 is unauthorized unless a later authoritative checkpoint explicitly promotes it.
+
+## Early compiler bridge history
+Early Tahoe work repeatedly encountered the legacy MTLCompilerService startup signature later rediscovered in September:
 - MTLCompilerService 263.8;
 - `RIP=0`;
 - `r15=32023`;
-- `MTLConnectionCtx::MTLConnectionCtx(int)+56`.
+- return frame `MTLConnectionCtx::MTLConnectionCtx(int)+56`.
 
-Historical P1/P2b/P3/AIR00/D34 moved execution far inside MTLCompiler, eventually into `MTLSimCompiler::validSimulatorMetadata`. That late path is retained as design evidence, not current authority.
+Historical P1/P2b/P3/AIR00/D34 moved execution substantially farther, eventually into a simulator-metadata-related lane. That late path is directional design evidence, not proof that the current P1+P3 frontier is the same function.
 
-## D97BV / D97DT — selective true-3802 ingress
-Selective true-3802 delivery CLOSED PASS.
+## D97W -> D97AD — whole-stage compiler classification discipline
+The September diagnostic series established exhaustive/universal classification rules, corrected several tooling false negatives and proved that observed requests were selecting the 32023 compiler generation. It also demonstrated why file identity, cache identity and executed runtime text must be treated separately.
 
-## D97EB / D97EE — framebuffer experiment
-1/1/1 CLOSED NEGATIVE. Normal 3/3/3 remains authoritative.
+D97AD's terminal classifier was later recognized as perturbative diagnostic machinery rather than a production fix. The project therefore removed it and returned to the natural compiler flow.
 
-## D97EY -> D97FH — set_id_mode blocker closed
-D97EZ maps only exact `0x224 -> 0x24`, all other modes passthrough. D97FH proved 16/16 adapted + 4/4 passthrough successes; corrected ACCEL2 later expanded to 58/58 successes (20 adapted + 38 passthrough), zero failures.
+## D97AH — runtime provenance closure
+After packaging/tooling corrections, D97AH proved the intended 32023 runtime provenance across the observed cohort. This eliminated the hypothesis that an unseen alternate compiler generation was responsible for the late failures.
 
-## D97FI / D97FJ / D97FT — old CoreDisplay frontier
-After set_id_mode closure, IntelAccelerator/framebuffer/display initialization progressed but WindowServer failed in `CoreDisplay::MetalDevice::GetGPUPassRenderPipelineState` / native Metal validation. D97FT statically mapped GPUPass and found the mapped bootstrap tuple/descriptor recipe equivalent to Golden.
+## D97AI/D97AJ -> D97AM — natural P7 flow
+Static CFG analysis resolved the relevant late validator paths and showed that simply removing the artificial D97AD classifier did not restore GUI. Natural P7 still ended in compiler-XPC interruption and WindowServer failure.
 
-## D97FV / D97FW — systemic metallib materialization defect
-Exact 25G82 MetallibSupportPkg:
+This shifted the investigation from local terminal behavior to producer/request semantics and comparison with the known-working Golden path.
+
+## D97AN -> D97AR — semantic-boundary methodology
+The project distinguished static reachability from runtime reachability and recovered the late six-counter predicate structure without inventing unavailable runtime values. This phase hardened the permanent rule that a boundary is not GREEN merely because control flow reaches it; semantic payload must also be measured when possible.
+
+## D97AT -> D97BC — Golden contract closure
+Read-only Golden analysis established:
+- the MTLCompilerService XPC request schema;
+- the real donor dialect;
+- the working Haswell -> compiler -> Metal compositor corridor;
+- producer-side sources for `llvmVersion`, `requestType` and timeout;
+- original selector semantics in the legacy service.
+
+Key Golden producer facts retained:
+- `llvmVersion` originates from `[RBX+0x20]` in the primary request builder;
+- `requestType` originates from `[R13+0x08]`;
+- original service selector recognizes 3802 and 31001, with 31001 selecting the 32023 lane.
+
+This phase established the durable architecture: adapt the earliest non-equivalent contract rather than transplant an entire legacy framework.
+
+## D97BE/D97BF/D97BG — exact OCLP lineage / Tahoe eligibility
+The exact OCLP base `b9df76ebdf3e768b37c1cc980e8444aa837c623e` was pinned. Tahoe eligibility was separated from actual root-patch compatibility.
+
+The broad `.dortania_developer` bypass was rejected because it changes more behavior than required. The project retained a target-specific Tahoe eligibility path instead of accepting a global developer-mode shortcut.
+
+Temporary GitHub quota problems on 5 September created local-build exceptions in historical checkpoints. Those exceptions are superseded prospectively by the restored permanent GitHub-first policy; the historical results themselves remain valid.
+
+## D97BH/D97BI — exact 25G82 metallib resolver problem
+The local exact `26.6.2-25G82` MetallibSupportPkg existed, but the stock resolver order preferred an official manifest that lacked the Tahoe mapping and only used the local fallback after manifest failure.
+
+The project therefore added exact-local-first handling and a Tahoe 25G82 map rather than treating the package as absent.
+
+## D97BJ/D97BK — full legacy Metal on Tahoe rejected
+D97BJ Root Patch itself completed, but the accelerated system did **not** kernel panic. Later evidence corrected the initial visual interpretation: Tahoe userspace reached WindowServer, then IOGPU Metal4 classes failed because the full legacy `13.2.1-24` Metal framework lacked the native Tahoe `_MTL4*` superclass surface. launchd subsequently performed controlled shutdown.
+
+Permanent classification:
+`FULL_LEGACY_MAIN_METAL_ON_TAHOE=ABI_INCOMPATIBLE_NEGATIVE`.
+
+This permanently rejects shadowing the cache-resident native Tahoe Metal image with the legacy main Metal binary.
+
+## D97BL -> D97BT — bounded hybrid / producer investigation
+Static analysis separated the legacy MTLCompilerService/compiler payloads from the forbidden full main-Metal shadow. Tahoe's native request producer was then mapped, including the default generation accessor behavior that suppresses the Golden 3802 lane in normal current conditions.
+
+This made clear that historical patches such as P1/P2b/P3 are compatibility adapters, not arbitrary binary hacks.
+
+## D97BU -> D97CF — selective 3802 standalone reconstruction experiments
+The project found no safe ordinary `__TEXT` cave and then identified executable intersection padding. Sparse/standalone reconstructions were used to test loadability without system mutation.
+
+The sequence eliminated several incomplete explanations:
+- raw sparse reconstruction layout problems;
+- segment-read-only metadata mismatch;
+- delayed dyld/tooling false positives;
+- slide identity alone;
+- duplicate-Metal loading alone.
+
+The isolated image reached Objective-C image mapping and failed there, motivating a move away from treating standalone `dlopen` equivalence as the final delivery model.
+
+## D97CH -> D97CN — Objective-C/shared-cache topology and Lilu route
+Exact fault localization reached Objective-C image registration. Subsequent relocation/metadata analysis showed why a copied standalone cache image could not simply be treated like the shared-cache resident original.
+
+The project then shifted to the Lilu/shared-cache page-route mechanism, where Apple-validated cache pages could be observed and later modified under controlled, minimal conditions.
+
+## D97CO -> D97DR — runtime observer and cross-process propagation proof
+A series of EFI kext/observer builds established:
+- kext lifecycle and IOKit state channels;
+- exact route/callback activation;
+- controlled page-site/cave instrumentation;
+- persistent state reporting;
+- cross-process propagation of the modified cave page.
+
+D97DR was the decisive proof that a cave postimage written through the shared-cache route is visible across processes, enabling a safe two-page site/cave design.
+
+## D97DT — full VESA site/cave pair PASS
+D97DT proved the complete CAVE -> SITE pair under VESA:
+- one exact write per intended page;
+- exact postimages;
+- Apple page validation state `0xF`, untainted/non-NX;
+- no unrelated page mutation.
+
+This was the first fully validated functional route for bounded cache-page adaptation.
+
+## D97DX/D97DY/D97DZ — native-Metal-safe Root Patch baseline
+The D97DX line produced a Root Patch design that kept Tahoe's native main Metal safe from legacy shadowing. Independent artifact auditing and post-patch VESA checks proved the shared-cache pages remained Apple-identical until explicitly armed.
+
+This became the clean functional base used by the later P1/P3 experiments.
+
+## D97EA -> D97EY — CoreDisplay / exact set_id_mode frontier
+The first legitimate accelerated test after the native-Metal-safe Root Patch reached a CoreDisplay/Haswell framebuffer-related failure. A temporary 1/1/1 framebuffer experiment was CLOSED NEGATIVE; 3/3/3 remained authoritative.
+
+Persistent measurement then proved the exact semantic discrepancy:
+- `mode=0x24` accepted;
+- `mode=0x224` rejected with `kIOReturnBadArgument`;
+- delta exactly `0x200`.
+
+The project therefore designed an exact-only adapter `0x224 -> 0x24`, not a global mask.
+
+## D97EZ -> D97FH — exact 0x224 adapter semantic closure
+The exact adapter was built/audited and tested. D97FH proved semantic movement:
+- adapted calls succeeded;
+- passthrough calls succeeded;
+- failure moved downstream.
+
+Later corrected accelerated evidence expanded success to 58/58 total calls with no adapter failure.
+
+Permanent classification:
+`SET_ID_MODE_0x224_FRONTIER=CLOSED`.
+
+## D97FI/D97FJ/D97FT — GPUPass/CoreDisplay frontier
+After set_id_mode closure, IntelAccelerator/framebuffer/display initialization progressed farther. WindowServer failed around CoreDisplay Metal GPUPass pipeline creation.
+
+Static mapping of the GPUPass bootstrap tuple/descriptor showed the native Tahoe producer recipe was structurally equivalent to the Golden recipe, so the project did not mutate the framebuffer tuple blindly.
+
+## D97FU/D97FV/D97FW — systemic metallib materialization defect discovered
+The installed/local dynamic metallib tree was found to contain metadata stubs rather than real compiled MTLB payloads.
+
+Exact 25G82 package:
 - bytes `116574513`;
 - SHA256 `602c66b6a558edf81fc71474441fff54a9cdc2f616a91d44b0557a8a12beaea3`.
 
@@ -49,255 +168,176 @@ Real CoreDisplay metallib:
 - SHA256 `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
 - direct `MTLB`, contains GPUPass.
 
-D97FW proved old local and installed dynamic metallibs were metadata stubs: 180/180 invalid materializations.
+D97FW proved the defect was systemic: 180/180 old local/installed dynamic metallibs were invalid materializations.
 
-## D97FX / D97FY / D97GA -> D97GH — corrected metallib / Root Patch closure
-D97FX reconstructed local 25G82 MetallibSupportPkg exact. D97GA Restore removed old installed stubs. D97GB executed corrected D97DX Root Patch. D97GD proved patched System volume 180/180 exact. D97GE closed Haswell AuxKC/userspace placement. D97GF/D97GH proved active booted VESA snapshot contains exact 180/180 real metallibs and loaded Haswell Azul/HD5000 kexts.
+## D97FX/D97FY/D97GA -> D97GH — corrected metallib closure
+D97FX reconstructed the exact 25G82 local source. Restore removed the installed stub layer. Corrected Root Patch then installed exact real payloads.
 
-Key commits:
-- D97GA `0d4bbd4fcddc0ea8cf6f1943b1b0c2e7d233a011`;
-- D97GB `45480db8db7726a770e3deac1f2bbbfd6fda28b5`;
-- D97GE `c89b84767823b8893578fff62084d10c9a889dcb`;
-- D97GH `d05354c74e73917f93b5a9ff7a01b5755470687e`.
+D97GD/D97GE/D97GF/D97GH proved:
+- 180/180 exact metallibs;
+- Haswell userspace/AuxKC placement;
+- active booted VESA snapshot contains the intended corrected payload;
+- exact CoreDisplay real MTLB active.
 
-## D97GL / D97GM — corrected metallibs produce semantic progress
-Authoritative boot boundaries:
-- ACCEL1 `2026-09-07 23:39`;
-- ACCEL2 `23:50`;
-- VESA recovery `23:52`.
+This is a permanent closed result.
 
-Both corrected-payload accelerated windows showed old `validateWithDevice` / `MTLReportFailure` fatal signature absent, bad-bits absent, GPUPass still requested, and repeated MTLCompilerService deaths interrupting WindowServer compiler XPC.
+## D97GI/D97GL/D97GM — metallib repair moves fatal frontier
+Corrected-payload accelerated runs showed:
+- old CoreDisplay `validateWithDevice` / `MTLReportFailure` fatal signature absent;
+- GPUPass still requested;
+- repeated MTLCompilerService deaths interrupted WindowServer compiler XPC.
 
-Thus metallib repair genuinely moved the fatal frontier.
-Checkpoint `b28469abf0363ab7f0877b63c22465c1694d41b6`.
+Thus metallib repair genuinely moved the causal frontier upstream into compiler service behavior.
 
-## D97GO — optional iGPU baseline correction
-ACCEL1 used `igfxfw=2`, `rps-control=1`, Max Pixel Clock Override ON. ACCEL2 used all three OFF. Same compiler crash occurred in both. Future baseline keeps all three OFF until image works.
+## D97GO — optional iGPU baseline split
+Two corrected-payload accelerated runs used different optional iGPU settings yet converged on the same compiler failure. Therefore optional `igfxfw`, `rps-control` and Max Pixel Clock Override are **OFF** in the current baseline until a usable image exists or a later measurement justifies changing them.
 
-## D97GN — exact MTLCompilerService NULL-call frontier
-Twelve `.ips` reports spanning both accelerated sessions converge 12/12 on:
+Any older HISTORY wording that left `igfxfw=2` or `rps-control=1` active is superseded.
+
+## D97GN/D97GP/D97GR — NULL indirect-call cause closed as missing P1
+Twelve compiler crash reports converged on:
 - MTLCompilerService 263.8;
-- UUID `3716D20F-B990-3906-B3E5-44E88AE63AF8`;
-- EXC_BAD_ACCESS/SIGSEGV at address 0;
-- RIP=0 / CR2=0;
-- r15=32023;
-- return frame `MTLConnectionCtx::MTLConnectionCtx(int)+56`, offset `0x3448`.
+- `EXC_BAD_ACCESS/SIGSEGV` at address 0;
+- `RIP=0 / CR2=0`;
+- `r15=32023`;
+- return from exact indirect `callq *0x8(%r14)` in `MTLConnectionCtx`.
 
-Accepted D97M static map links `0x3448` to return from exact `callq *0x8(%r14)`, the `MTLCodeGenServiceCreate` pointer.
-Checkpoint `5afdc48b4d9eeae3f713ac99fdeb0592ab543731`.
+Static identity then showed:
+- legacy service still had original 31001 selector bytes;
+- MTLCompiler32023 itself was exact Golden and exported all required service entry points;
+- missing-export theory was negative;
+- P1 selector bridge was absent.
 
-## D97GP — service is pre-P1; 32023 compiler PASS
-Current legacy MTLCompilerService:
-- bytes `85520`;
-- SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`;
-- selector `81fe19790000` = compare 31001 at `0x3494`;
-- indirect call `41ff5608` at `0x3444`.
-
-Current MTLCompiler 32023:
-- SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269` exact Golden;
-- all four required MTLCodeGenService exports present, 4/4 PASS.
-
-Missing-export hypothesis NEGATIVE; P1 selector bridge MISSING PROVEN.
-Checkpoint `eec9dfd358f77130bfe87510bd3fee97d163a412`.
-
-## D97GQ / D97GR — exact P1 reconstruction
-D97GQ stopped only on `cp -p` protected chflags; tooling false negative.
-
-D97GR proved on a disposable copy:
-- original SHA exact `31a6f745...`;
-- preimage `81fe19790000` unique at `0x3494`;
+D97GR reconstructed exact P1 on a disposable copy:
+- preimage `81fe19790000 @ 0x3494`;
 - postimage `81fe177d0000`;
-- exactly two changed bytes `0x3496 19->17`, `0x3497 79->7d`;
-- patched SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, exact historical P1/D97M;
-- continuation to `/Versions/32023/MTLCompiler`, `cmovne`, `_dlopen` unchanged.
+- exactly two changed bytes;
+- post-SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, exact historical P1 identity.
 
 Classification:
-`CURRENT_MTLCOMPILERSERVICE_NULL_CALL_CAUSE=MISSING_P1_SELECTOR_BRIDGE_CAUSALLY_CLOSED`.
-Checkpoint `05cf8b0f5a3e44a24b787ab92010cb2ec1f37419`.
+`NULL_CALL_CAUSE=MISSING_P1_SELECTOR_BRIDGE_CAUSALLY_CLOSED`.
 
-## D97GT / D97GU — Intel-iMac source-base closure
-D97GT proved all four D97DX source sections byte-identical; the only extra tracked file was the intentional D97DX DEBUG helper build artifact. D97GU restored only that one path from HEAD with backup/hash guards, leaving exact four-file D97DX source diff and pristine `sys_patch.py`.
+## D97GS/D97GV -> D97HD — P1-only experiment prepared and activated
+D97GS built exact P1-only on top of the native-Metal-safe D97DX base, with no P2b/P3/AIR00/D34 replay. D97GV independently audited the artifact.
 
-Checkpoint `3b44945d87ac96a0bfef4c5cd5e898d1f7d3407b`.
+A controlled Restore produced a clean native baseline; the official privileged helper was restored after an old DEBUG helper residual was discovered. Root Patch then installed exact P1 plus exact corrected metallibs and Haswell patches.
 
-## D97GS — P1-only build PASS
-D97GS built on authorized Intel iMac from exact D97DX source base:
-- ZIP SHA `e61d225d2bc1352795ef2aeb9e61959fef2f23b9d11192dd1ea033824c855266`;
-- ZIP bytes `722879148`;
-- source diff SHA `cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f`;
-- inner x86_64 SHA `5f4abff89222939222e7d9b17a091ae19138445cb5a25b46cb9d2a290a315d6e`;
-- exact D97DX launcher/helper/base-source provenance retained;
-- only new functional source section is additive `sys_patch.py` P1 hook;
-- no P2b/P3/AIR00/D34 replay.
+D97HC pre-reboot and D97HD post-reboot audits proved exact P1 and exact metallib 180/180 state on the active snapshot.
 
-Checkpoint `bfbb78a8acb75bf4b06ebda31fb130924e137cfc`.
-
-## D97GV — independent artifact audit PASS
-D97GV independently proved exact D97GS artifact identity, exact D97DX base sections 4/4, x86_64/codesign, wrapper/helper provenance, one additive `sys_patch.py` P1 section, exact P1 guard contract, and no P2b/P3/AIR00/D34 replay.
-
-Final:
-`D97GV_D97GS_ARTIFACT_IDENTITY=PASS`
-`D97GV_D97DX_BASE_SECTIONS_EXACT=PASS`
-`D97GV_P1_ONLY_SOURCE_DELTA=STATIC_STRUCTURAL_SEMANTIC_PROVEN`.
-
-Checkpoint `72812a82b3a94bfe0dd42c55401834e97d237ffb`.
-
-## D97GW — live ASUS2 preflight PASS
-Live ASUS2 preflight proved the exact D97GS ZIP transferred correctly and the corrected local metallib source was intact. The user then deliberately chose a cleaner sequence: Restore/Revert old D97DX first, reboot VESA, validate native base, then apply D97GS.
-
-Checkpoint `40fd4789f7ca430d54d475dce5d193ad19644430`.
-
-## D97GY first pass — clean System Restore, residual DEBUG helper
-After Restore + VESA reboot, D97GY proved:
-- native Tahoe service restored exact SHA `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`, UUID/arches PASS;
-- native CoreDisplay exact SHA `daee638d2bfa52b5196b63c0423cdf6dd2ae35eb264ea077c8e914884ee016e1`, bytes `24128`, `MTLB`;
-- Haswell AuxKC Data kexts removed;
-- corrected local metallib source still 180/180 valid.
-
-Manual helper audit found exact D97DX DEBUG helper still active:
-- SHA `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`;
-- ad-hoc, TeamIdentifier not set.
-
-Classification: System/APFS restore PASS; overall gate partial only because helper state was residual.
-Checkpoint `f0335052f6b8de8a1bd2c6b776b747f149d1b156`.
-
-## D97GZ — exact official helper source locator PASS
-D97GZ inspected the exact reused D97DX launcher and proved its original behavior. The temporary `/tmp/d97dx-official-helper.XXXXXX` backup no longer existed, but two exact persistent official copies were found, both SHA+Team PASS.
-
-Official identity:
-- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
-- TeamIdentifier `S74BDJXQMD`.
-
-Checkpoint `741ddb3f82136f2df0b92b807786f6740a8d4124`.
-
-## D97HA — official privileged helper restored PASS
-D97HA modified only the active privileged helper using the persistent official source under `/Library/Application Support/Dortania/OpenCore-Patcher.app/...`.
-
-Evidence:
-- active DEBUG pre-SHA exact `993bf7e8...` PASS;
-- official source SHA exact `9b74b7c9...`, Team `S74BDJXQMD`, codesign PASS;
-- DEBUG helper backed up;
-- staged official helper SHA/Team/codesign PASS;
-- atomic replacement PASS;
-- active post SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
-- Team `S74BDJXQMD`;
-- stat `root:wheel -rwsr-xr-x 136816`.
-
-Checkpoint `132bba39a18c8658c8948b73b7776cc9510c46a5`.
-
-## D97GY final rerun — post-Restore baseline fully PASS
-Final D97GY rerun proved all gates simultaneously:
-- VESA active / D97EZ inert PASS;
-- native Tahoe service exact PASS;
-- native CoreDisplay exact PASS;
-- Haswell AuxKC removed PASS;
-- corrected local metallib source 180/180 valid PASS;
-- official helper exact SHA `9b74b7c9...`, Team `S74BDJXQMD` PASS.
-
-Final classifications:
-`D97GY_NATIVE_BASELINE=PASS`
-`D97GY_RESTORE_REBOOT=STRUCTURAL_SEMANTIC_PASS`
-`D97GY_D97GS_ROOTPATCH_BASE=READY`
-`D97GY_STATUS=PASS_READONLY_POST_RESTORE_GATE`.
-
-Checkpoint `dd4fcfd0b37f858b60c6c30ddcc1ba5b3645b63a`.
-
-## D97GS manual Root Patch on clean base — PASS
-The exact audited D97GS outer app was used. Root Patch transcript proves:
-- exact local 25G82 MetallibSupportPkg selected;
-- Metal 3802 Common / Common Extended installed;
-- corrected `.metallibs` patchset installed;
-- Monterey GVA/OpenCL installed;
-- Intel Haswell installed;
-- Modern Wireless Common installed;
-- D97GS exact P1 selector bridge reached;
-- exact historical P1 identity PASS SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- AuxKC rebuilt;
-- `Patching complete` reached.
+## D97EW live gate / first post-P1 acceleration
+Persistent instrumentation was revalidated before the P1-only accelerated test. The P1-only boot around `2026-09-08 03:35 +0300` showed the old NULL call gone and 9/9 compiler crashes moved to:
+`MTLCompilerBuildRequestWithOptions -> addMsaaPositionInfoToModuleMetadata -> getOrInsertNamedMetadata -> collectUsedGlobalVariables -> StringMapImpl::LookupBucketFor`.
 
 Classification:
-`D97GS_P1_ROOTPATCH=PASS`.
+`P1_RUNTIME_SEMANTIC_PROGRESS=PROVEN`.
 
-## D97HB — tooling false negative after successful read-only mount
-D97HB proved all preconditions and successfully mounted underlying System read-only, then stopped only because it invoked nonexistent `/usr/bin/mount` instead of `/sbin/mount`. No semantic failure was demonstrated.
+This measured failure selected P3 as the next patch candidate. P2b remained unneeded at that stage because its historical request-layout change had not moved the StringMap frontier when tested before P3.
+
+## D97HG -> D97HN — exact P3-only reconstruction/build/audit
+Current MTLCompiler32023 was proven to retain original P2 bytes. P3 was reconstructed as the exact one-byte serialized-bitcode delta and layered on exact P1.
+
+D97HI/D97HN proved:
+- P1 byte-identical;
+- P3 sole new compiler functional delta;
+- P2b absent;
+- AIR00 absent;
+- D34 absent;
+- independent inner artifact audit PASS.
+
+D97HO wrapper ZIP:
+- SHA256 `a1aa24d58a0e0c9653bab702c50d2f704b28c205efc6e82b9b3cce9b41ead9f3`;
+- bytes `722975756`.
+
+## OCLP 2.5.0/Nightly review — no target update
+Official OCLP 2.5.0/current Nightly was reviewed at source/package level. The delta relevant to the newer release did not touch the measured MTLCompiler/GPUCompiler/Haswell compiler frontier. The current experiment therefore remains on its exact pinned custom chain; official/Nightly is not substituted merely because it is newer.
+
+## D97HR/D97HO/D97HS/D97HU — P1+P3 root state closure
+After clean-native verification, exact D97HO Root Patch completed.
+
+D97HS proved the patched underlying System volume before reboot:
+- exact P1;
+- exact P3-only compiler;
+- original P2/no P2b;
+- exact P3 postimage;
+- corrected metallibs 180/180;
+- Haswell bundles/AuxKC;
+- exact official helper.
+
+D97HU proved the active recovery snapshot retains that exact P1+P3-only state.
+
+D97HU structural state remains accepted. One runtime-attribution phrase from D97HU is superseded by the later boot chronology correction: the `14:25:*` and `14:26:*` WindowServer crashes belong to the accelerated experiment, not the recovery VESA boot.
+
+## D97HV collector defect
+D97HV helper blob:
+`491a73071449a130bc1fdc4d48ad946e51d22ec0`.
+
+Evidence package reported by the collector:
+- `OCLP7_D97HV_CURRENT_P1_P3_VESA_FRONTIER_20260908_151239.zip`;
+- SHA256 `e8427830641821d8394b3c82c9cf266ce046eb0e69ad1af28700f47b16122faf`;
+- bytes `5390949`.
+
+The helper misparsed `kern.boottime` as 1970, causing historical crash-report/log contamination. Its automatic `P3_MIXED_CURRENT_BOOT_FRONTIER` classification is invalid.
+
+Permanent classification:
+`D97HV_AUTOMATIC_CLASSIFICATION=TOOLING_FALSE_NEGATIVE_TIME_WINDOW_CONTAMINATION`.
+
+Raw evidence is retained; interpretation must use exact reconstructed timestamps.
+
+## Authoritative P1+P3 accelerated experiment — 2026-09-08 14:24:02 -> ~14:27:17
+The user's boot identification is authoritative under the permanent recovery rule. Timestamp reconstruction confirms:
+- first accelerated WindowServer evidence `14:24:02.6523`;
+- compiler/WindowServer restart loop through ~`14:27:16.953`;
+- recovery VESA WindowServer starts only ~`14:28:38.955`.
+
+Therefore all `14:25:*` and `14:26:*` WindowServer crashes are accelerated evidence.
+
+Within this window:
+- 12 WindowServer processes;
+- 145 MTLCompilerService launches;
+- 0 current compiler crash IPS;
+- 0 current old NULL-call signature;
+- 0 current post-P1 StringMap crash family;
+- 145/145 compiler invocations reach recurring simulator/bitcode diagnostic fragments;
+- exact missing wording remains UNKNOWN;
+- 132 compiler-XPC interruption retry lines, 33 each for tries 1/2/3/4;
+- GPUPass/render-pipeline failure follows;
+- WindowServer abort/restart follows;
+- GUI remains unusable.
+
+Current causal chain:
+`P1 + P3 serialized-bitcode path -> simulator/bitcode diagnostic -> MTLCompilerService connection loss -> XPC_ERROR_CONNECTION_INTERRUPTED -> GPUPass/render-pipeline failure -> WindowServer abort/restart -> no GUI`.
 
 Classification:
-`D97HB_POST_MOUNT_RESULT=INCONCLUSIVE_TOOLING_FALSE_NEGATIVE`.
-Checkpoint `c702ca47f20a036f2201799d05c1723441eb8a88`.
+`P3_RUNTIME_SEMANTIC_PROGRESS=PROVEN`
+`POST_P1_STRINGMAP_FRONTIER=MOVED_CLOSED_FOR_P1_PLUS_P3_ACCEL_EXPERIMENT`
+`GUI=NEGATIVE_NO_USABLE_GUI`.
 
-## D97HC — corrected pre-reboot audit PASS
-D97HC completed the full audit:
-- active snapshot remained native before reboot;
-- underlying System exact P1 service SHA `a8716ffd...`, bytes 85520;
-- P1 postimage `81fe177d0000` at `0x3494` PASS;
-- patched metallibs exact 180, missing 0, different 0;
-- patched CoreDisplay exact `b848d54e... / 20739 / MTLB`;
-- official helper exact.
+Do not label the current path `MTLSimCompiler::validSimulatorMetadata` until current P3 binary evidence proves that exact symbol/path.
 
-Final classifications:
-`D97HC_STATUS=PASS_PRE_REBOOT_AUDIT`
-`D97HC_PATCHED_P1=STRUCTURAL_SEMANTIC_PASS_PRE_REBOOT`
-`D97HC_PATCHED_METALLIBS=180_OF_180_EXACT`.
+## P2b status now
+Historical P2b adapts request layout `+0xD0 -> +0x110` at MTLCompiler offset `0x9A8CD`.
 
-Checkpoint `c809157e3773a17a149a8cba322bde0fc724c5cb`.
+P3 has now moved execution into a serialized-bitcode/simulator-related frontier, so P2b is a plausible next candidate. It remains:
+`P2B_NEXT_PATCH=NOT_YET_AUTHORIZED`.
 
-## D97HD — post-VESA-reboot active snapshot PASS
-After the authorized VESA reboot, D97HD proved:
-- active MTLCompilerService exact P1 SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- P1 postimage exact PASS;
-- active corrected metallibs 180/180 exact, missing 0, different 0;
-- active CoreDisplay exact `b848d54e... / 20739 / MTLB`;
-- AppleIntelFramebufferAzul + AppleIntelHD5000Graphics installed and loaded;
-- official helper exact;
-- VESA still active, D97EZ inert.
+The next step is static causal mapping, not another Root Patch/reboot.
 
-Final:
-`D97HD_STATUS=PASS_ACTIVE_SNAPSHOT_VESA`
-`D97HD_ACTIVE_P1=STRUCTURAL_SEMANTIC_PASS`
-`D97HD_ACTIVE_METALLIBS=180_OF_180_EXACT`
-`D97HD_HASWELL_AUXKC=LOADED_PASS`
-`D97HD_VESA_BOOT=PASS`.
+## CURRENT ACTION — D97HW
+Existing artifact:
+`OCLP-Continuity/artifacts/OCLP7_D97HW_READONLY_P3_SIMULATOR_BITCODE_STATIC_MAP.sh`.
 
-Checkpoint `f2c484266737c2adc9163f1d58a6fcc49c36cd78`.
+D97HW has not yet been executed and no D97HW result checkpoint exists.
 
-## D97EW — persistent capture live gate PASS
-D97EW exact installer was reinstalled/revalidated after D97HD:
-- source commit `b23f1e78a02e3aedd48a4e30101a6d3e8abaf00d`;
-- blob `d5a60a8b69c22249b03988afe6e6e94a3947d195`;
-- installer PASS;
-- LaunchDaemon running PID 2712;
-- active run `/Users/Shared/OCLP-D97EW-Capture/20260908T003113Z-2712`.
+Required D97HW result:
+- exact P1/P3 binding;
+- P2 original / P3 exact proof;
+- exact full `simulator`/`bitcode` strings;
+- Mach-O offsets/VAs/xrefs;
+- relevant disassembly path;
+- relation to P2 `0x9A8CD` and P3 `0xA1573`;
+- `validSimulatorMetadata` considered only if supported by current binary evidence;
+- classification of whether P2b is the next causal adapter.
 
-Repeated summary ticks prove:
-- service `present`;
-- captured_count `0`;
-- set_id_mode_calls `0`;
-- route `PASS`.
+No Root Patch, restore, EFI/NVRAM/framebuffer mutation, acceleration change or reboot during D97HW.
 
-Live IORegistry proves:
-- `D97ELRouteStatus = PASS`;
-- `D97ESCapturedCount = 0`;
-- `D97ELSetIdModeCallCount = 0`.
-
-Classification:
-`D97EW_LIVE_VESA_GATE=PASS`
-`D97EW_PERSISTENT_CAPTURE=READY_FOR_ACCELERATED_BOOT`.
-
-## Current action — first post-P1 accelerated boot AUTHORIZED
-Checkpoint `f5c342197210248a47469a7e6ec709c26ab66e9c`.
-
-Only two boot-arg state changes are authorized:
-- `-igfxvesa` becomes inert/commented;
-- `-ocmcd97ez` becomes active.
-
-Keep all else unchanged:
-- `-ocmcdiag -ocmcd97bv -ocmcd97eh` active;
-- framebuffer 3/3/3;
-- `igfxfw=2`, `rps-control=1`, Max Pixel Clock Override OFF;
-- no Root Patch/Restore;
-- no other EFI/NVRAM/device-property changes.
-
-Expected bootargs:
-`-v debug=0x100 keepsyms=1 -amfipassbeta #amfi=0x80 #-lilubetaall hbfx-ahbm=55 foclegacy=1 -btlfxboardid ipc_control_port_options=0 #-igfxvesa -ocmcdiag #-ocmcd97bvcave -ocmcd97bv -ocmcd97eh -ocmcd97ez`
-
-If no image appears, use the permanent VESA recovery rule and treat the immediately preceding accelerated boot as authoritative evidence. D97EW persistent evidence survives recovery and must be used to locate the new post-P1 runtime frontier. Do not replay P2b/P3/AIR00/D34 unless measured evidence requires it.
+Because the helper binds exact active `/System/Library` files on Darwin x86_64 25G82, its execution is an identity-pinned ASUS2/live-state action under the permanent GitHub-first responsibility split.
