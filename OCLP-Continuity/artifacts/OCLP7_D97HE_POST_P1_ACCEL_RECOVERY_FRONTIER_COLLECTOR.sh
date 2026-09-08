@@ -1,7 +1,7 @@
 #!/bin/bash
 set -Eeuo pipefail
 
-# OCLP7 D97HE — post-P1 accelerated-boot frontier collector after VESA recovery.
+# OCLP7 D97HE v2 — post-P1 accelerated-boot frontier collector after VESA recovery.
 # READ-ONLY with respect to system/EFI/NVRAM/root patch. Writes evidence only to user's Desktop.
 
 BASE="/Users/Shared/OCLP-D97EW-Capture"
@@ -15,7 +15,7 @@ fail(){ echo "D97HE_STATUS=FAIL"; echo "D97HE_REASON=$*"; echo "D97HE_REPORT=$OU
 sha256(){ /usr/bin/shasum -a 256 "$1" | /usr/bin/awk '{print $1}'; }
 
 cat <<'HDR'
-===== OCLP7 D97HE — POST P1 ACCELERATED FRONTIER COLLECTOR =====
+===== OCLP7 D97HE v2 — POST P1 ACCELERATED FRONTIER COLLECTOR =====
 SYSTEM_MUTATION=NO
 ROOT_PATCH=NO
 RESTORE=NO
@@ -53,7 +53,6 @@ for d in base.iterdir():
         continue
     s=p.read_text(errors='replace').replace('\t',' ')
     toks=s.split()
-    # nvram output begins with boot-args; exact tokens after that are what matter.
     active_d97ez='-ocmcd97ez' in toks
     active_vesa='-igfxvesa' in toks
     inert_vesa='#-igfxvesa' in toks
@@ -61,8 +60,8 @@ for d in base.iterdir():
         cands.append(d)
 if not cands:
     raise SystemExit(2)
-for d in sorted(cands, key=lambda p:p.name):
-    print(d)
+# Only the newest matching run is authoritative for the immediately preceding accelerated boot.
+print(sorted(cands, key=lambda p:p.name)[-1])
 PY
 )" || fail NO_D97EW_ACCEL_RUN_FOUND
 [[ -n "$ACCEL_RUN" && -d "$ACCEL_RUN" ]] || fail ACCEL_RUN_INVALID
@@ -97,14 +96,13 @@ if not m:
 dt=datetime.strptime(m.group(1),'%Y%m%dT%H%M%SZ').replace(tzinfo=timezone.utc)
 start=dt-timedelta(seconds=60)
 end=dt+timedelta(minutes=10)
-# Use local timezone of this host for log show display/query.
 ls=start.astimezone(); le=end.astimezone()
 with open(sys.argv[2],'w') as f:
     f.write('ACCEL_EPOCH='+str(int(dt.timestamp()))+'\n')
     f.write('START_EPOCH='+str(int(start.timestamp()))+'\n')
     f.write('END_EPOCH='+str(int(end.timestamp()))+'\n')
-    f.write('START_LOCAL='+ls.strftime('%Y-%m-%d %H:%M:%S')+'\n')
-    f.write('END_LOCAL='+le.strftime('%Y-%m-%d %H:%M:%S')+'\n')
+    f.write("START_LOCAL='"+ls.strftime('%Y-%m-%d %H:%M:%S')+"'\n")
+    f.write("END_LOCAL='"+le.strftime('%Y-%m-%d %H:%M:%S')+"'\n")
 print('D97HE_ACCEL_RUN_START_UTC='+dt.strftime('%Y-%m-%dT%H:%M:%SZ'))
 print('D97HE_LOG_WINDOW_LOCAL='+ls.strftime('%Y-%m-%d %H:%M:%S')+' -> '+le.strftime('%Y-%m-%d %H:%M:%S'))
 PY
@@ -128,7 +126,6 @@ for root in roots:
             if not p.is_file() or not p.name.endswith('.ips'): continue
             if not (p.name.startswith('MTLCompilerService-') or p.name.startswith('WindowServer-')): continue
             st=p.stat()
-            # Report creation/mtime can lag the process crash slightly; bounded 1 minute grace.
             if not (start-60 <= st.st_mtime <= end+60): continue
             data=p.read_bytes(); h=hashlib.sha256(data).hexdigest(); key=(p.name,h)
             if key in seen: continue
@@ -183,7 +180,6 @@ for p in files:
                 sym=fr.get('symbol',f"image{fr.get('imageIndex','?')}+0x{fr.get('imageOffset',0):x}")
                 loc=fr.get('symbolLocation','')
                 frames.append(f'{sym}+{loc}' if loc!='' else str(sym))
-    # Fallback / cross-check textual signature.
     has_ctx56 = ('MTLConnectionCtx::MTLConnectionCtx(int)+56' in txt or
                  ('MTLConnectionCtx::MTLConnectionCtx(int)' in txt and '"symbolLocation" : 56' in txt) or
                  ('MTLConnectionCtx::MTLConnectionCtx(int)' in txt and '"symbolLocation":56' in txt))
