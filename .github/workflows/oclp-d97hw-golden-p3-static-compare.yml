@@ -1,0 +1,102 @@
+name: OCLP D97HW Golden vs P3 static comparison
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/oclp-d97hw-golden-p3-static-compare.yml'
+      - 'OCLP-Continuity/artifacts/OCLP7_D97HW_GITHUB_GOLDEN_P3_STATIC_COMPARE.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: oclp-d97hw-static-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  static-comparison:
+    runs-on: macos-15-intel
+    timeout-minutes: 15
+    steps:
+      - name: Fetch this exact commit and audit source guards
+        shell: bash
+        env:
+          EXPECTED_REPOSITORY: StefanAlMare/StefanAlMare
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "$EXPECTED_REPOSITORY"
+          test "$(uname -m)" = x86_64
+          mkdir -p "$RUNNER_TEMP/d97hw/out"
+          git init "$RUNNER_TEMP/d97hw/source"
+          cd "$RUNNER_TEMP/d97hw/source"
+          git remote add origin "https://github.com/$EXPECTED_REPOSITORY.git"
+          git fetch --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          export SCRIPT="$RUNNER_TEMP/d97hw/source/OCLP-Continuity/artifacts/OCLP7_D97HW_GITHUB_GOLDEN_P3_STATIC_COMPARE.py"
+          python3 - <<'PY'
+          import importlib.util, os
+          from pathlib import Path
+          p = Path(os.environ['SCRIPT'])
+          compile(p.read_bytes(), str(p), 'exec')
+          spec = importlib.util.spec_from_file_location('d97hw', p)
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          original = b'prefixABCDEsuffix'
+          expected = b'prefixABXDEsuffix'
+          actual, offsets = module.variant(original, module.sha(original), 6, b'ABCDE', b'ABXDE', module.sha(expected), [8])
+          assert actual == expected and offsets == [8]
+          for operation in (
+              lambda: module.macho(b'not a Mach-O'),
+              lambda: module.variant(original, 'wrong-sha', 6, b'ABCDE', b'ABXDE', module.sha(expected), [8]),
+              lambda: module.variant(original, module.sha(original), 6, b'wrong', b'ABXDE', module.sha(expected), [8]),
+              lambda: module.variant(original, module.sha(original), 6, b'ABCDE', b'ABXDE', 'wrong-post-sha', [8]),
+              lambda: module.variant(original, module.sha(original), 6, b'ABCDE', b'ABXDE', module.sha(expected), [9]),
+          ):
+              try:
+                  operation()
+              except (RuntimeError, ValueError):
+                  pass
+              else:
+                  raise SystemExit('FAIL: negative guard unexpectedly accepted')
+          print('D97HW_SOURCE_SYNTAX_AND_GUARD_TESTS=PASS')
+          PY
+          {
+            echo "HEAD=$GITHUB_SHA"
+            echo "RUN_ID=$GITHUB_RUN_ID"
+            echo "RUN_ATTEMPT=$GITHUB_RUN_ATTEMPT"
+            git hash-object "$SCRIPT"
+            shasum -a 256 "$SCRIPT"
+            sw_vers
+            uname -m
+          } > "$RUNNER_TEMP/d97hw/out/CI_IDENTITY.txt"
+      - name: Exact 1.9.6 donor and static comparison only
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/d97hw"
+          curl --fail --location --retry 3 --proto '=https' \
+            'https://github.com/dortania/PatcherSupportPkg/releases/download/1.9.6/Universal-Binaries.dmg' \
+            -o Universal-Binaries.dmg
+          test "$(stat -f '%z' Universal-Binaries.dmg)" = 641964544
+          printf '%s  %s\n' '33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7' Universal-Binaries.dmg | shasum -a 256 -c -
+          mkdir -p mounted copies
+          trap 'hdiutil detach "$RUNNER_TEMP/d97hw/mounted" >/dev/null 2>&1 || true' EXIT
+          printf 'password\n' | hdiutil attach -readonly -nobrowse -stdinpass \
+            -mountpoint "$RUNNER_TEMP/d97hw/mounted" Universal-Binaries.dmg > out/DMG_ATTACH.txt
+          python3 source/OCLP-Continuity/artifacts/OCLP7_D97HW_GITHUB_GOLDEN_P3_STATIC_COMPARE.py \
+            "$RUNNER_TEMP/d97hw/mounted" "$RUNNER_TEMP/d97hw/out" "$RUNNER_TEMP/d97hw/copies" \
+            2>&1 | tee out/STATIC_RUN.log
+          test -s out/D97HW_STATIC_SUMMARY.json
+          {
+            echo '## D97HW static collection completed'
+            echo 'Donor and reconstructed P1/P3 hashes match persisted identities.'
+            echo 'No ASUS2/Golden access; no Root Patch or reboot.'
+            echo 'This is NOT a runtime success proof. P2b remains unauthorized.'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish static evidence only, never donor executables
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: OCLP-D97HW-Golden-P3-static-evidence
+          path: ${{ runner.temp }}/d97hw/out/
+          if-no-files-found: error
+          retention-days: 14
