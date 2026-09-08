@@ -2,7 +2,7 @@
 
 Updated: 2026-09-08 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97HC_PRE_REBOOT_AUDIT_PASS_VESA_REBOOT_AUTHORIZED.md`.
+Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97HD_ACTIVE_SNAPSHOT_PASS_D97EW_LIVE_GATE_PASS_ACCELERATION_AUTHORIZED.md`.
 
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history. This index emphasizes accepted causal milestones and the current action.
 
@@ -11,7 +11,7 @@ Tahoe `26.6.2 / 25G82` on ASUS2, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, st
 
 ## Durable method / architecture
 Historical compiler baseline: `P1 + P2b + P3 + AIR00 + D34`.
-Current rule: never replay all five blindly; patch only the earliest measured failed module. P1 is now installed and must be measured at runtime before considering the later historical modules.
+Current rule: never replay all five blindly; patch only the earliest measured failed module. P1 is now live and must be measured at runtime before considering later historical modules.
 
 Architecture:
 `Tahoe native Metal/Metal4 ABI -> bounded legacy compiler ingress -> measured adapter(s) -> legacy compiler/backend -> Haswell driver -> image`.
@@ -162,36 +162,26 @@ Classification: System/APFS restore PASS; overall gate partial only because help
 Checkpoint `f0335052f6b8de8a1bd2c6b776b747f149d1b156`.
 
 ## D97GZ — exact official helper source locator PASS
-D97GZ inspected the exact reused D97DX launcher and proved its original behavior:
-- verify exact official helper;
-- save temporary backup `/tmp/d97dx-official-helper.XXXXXX`;
-- install DEBUG helper temporarily;
-- restore exact official helper on exit/cleanup.
+D97GZ inspected the exact reused D97DX launcher and proved its original behavior. The temporary `/tmp/d97dx-official-helper.XXXXXX` backup no longer existed, but two exact persistent official copies were found, both SHA+Team PASS.
 
-The temporary backup no longer existed, but D97GZ found two exact persistent official copies, both SHA+Team PASS:
-1. `/Users/alex/Desktop/OpenCore-Patcher.app/Contents/Resources/com.dortania.opencore-legacy-patcher.privileged-helper`;
-2. `/Library/Application Support/Dortania/OpenCore-Patcher.app/Contents/Resources/com.dortania.opencore-legacy-patcher.privileged-helper`.
-
-Both:
+Official identity:
 - SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
 - TeamIdentifier `S74BDJXQMD`.
 
-D97GZ read-only locator PASS. Checkpoint `741ddb3f82136f2df0b92b807786f6740a8d4124`.
+Checkpoint `741ddb3f82136f2df0b92b807786f6740a8d4124`.
 
 ## D97HA — official privileged helper restored PASS
-D97HA used the persistent `/Library/Application Support/Dortania/OpenCore-Patcher.app/...` official helper source and modified only the active privileged helper.
+D97HA modified only the active privileged helper using the persistent official source under `/Library/Application Support/Dortania/OpenCore-Patcher.app/...`.
 
 Evidence:
 - active DEBUG pre-SHA exact `993bf7e8...` PASS;
 - official source SHA exact `9b74b7c9...`, Team `S74BDJXQMD`, codesign PASS;
-- DEBUG helper backed up to Desktop;
+- DEBUG helper backed up;
 - staged official helper SHA/Team/codesign PASS;
 - atomic replacement PASS;
 - active post SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
 - Team `S74BDJXQMD`;
-- stat `root:wheel -rwsr-xr-x 136816`;
-- `D97HA_STATUS=PASS`;
-- no reboot.
+- stat `root:wheel -rwsr-xr-x 136816`.
 
 Checkpoint `132bba39a18c8658c8948b73b7776cc9510c46a5`.
 
@@ -229,70 +219,85 @@ Classification:
 `D97GS_P1_ROOTPATCH=PASS`.
 
 ## D97HB — tooling false negative after successful read-only mount
-D97HB correctly proved before the stop:
-- VESA active, D97EZ inert;
-- active snapshot still native Tahoe service `4262e71f...`;
-- active CoreDisplay native `daee638d... / 24128`;
-- official helper exact `9b74b7c9... / S74BDJXQMD`;
-- local metallib source still 180 exact;
-- underlying System device `disk1s8` mounted read-only successfully.
-
-It then failed only because the script invoked `/usr/bin/mount`, which does not exist on macOS. No Root Patch semantic failure was demonstrated.
+D97HB proved all preconditions and successfully mounted underlying System read-only, then stopped only because it invoked nonexistent `/usr/bin/mount` instead of `/sbin/mount`. No semantic failure was demonstrated.
 
 Classification:
 `D97HB_POST_MOUNT_RESULT=INCONCLUSIVE_TOOLING_FALSE_NEGATIVE`.
 Checkpoint `c702ca47f20a036f2201799d05c1723441eb8a88`.
 
 ## D97HC — corrected pre-reboot audit PASS
-D97HC replaced `/usr/bin/mount` with `/sbin/mount` and completed the full audit.
-
-Active snapshot remained native as expected:
-- service SHA `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`;
-- CoreDisplay SHA `daee638d2bfa52b5196b63c0423cdf6dd2ae35eb264ea077c8e914884ee016e1`;
-- CoreDisplay bytes 24128.
-
-Underlying newly patched System volume read-only evidence:
-- mount line explicitly `apfs, sealed, local, read-only, journaled, nobrowse`;
-- exact P1 service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- bytes 85520;
-- P1 postimage `81fe177d0000` at offset `0x3494` PASS;
-- patched metallib exact 180;
-- missing 0;
-- different 0;
-- patched CoreDisplay exact SHA `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
-- bytes 20739;
-- MTLB magic;
-- official helper exact and restored.
+D97HC completed the full audit:
+- active snapshot remained native before reboot;
+- underlying System exact P1 service SHA `a8716ffd...`, bytes 85520;
+- P1 postimage `81fe177d0000` at `0x3494` PASS;
+- patched metallibs exact 180, missing 0, different 0;
+- patched CoreDisplay exact `b848d54e... / 20739 / MTLB`;
+- official helper exact.
 
 Final classifications:
 `D97HC_STATUS=PASS_PRE_REBOOT_AUDIT`
-`D97HC_ACTIVE_SNAPSHOT=NATIVE_TAHOE_UNCHANGED`
 `D97HC_PATCHED_P1=STRUCTURAL_SEMANTIC_PASS_PRE_REBOOT`
-`D97HC_PATCHED_METALLIBS=180_OF_180_EXACT`
-`D97HC_OFFICIAL_HELPER=RESTORED_PASS`.
+`D97HC_PATCHED_METALLIBS=180_OF_180_EXACT`.
 
 Checkpoint `c809157e3773a17a149a8cba322bde0fc724c5cb`.
 
-## Current action — VESA reboot authorized, then D97HD active-snapshot audit
-A single VESA reboot is authorized now.
-
-Keep:
-- `-igfxvesa` active;
-- D97EZ inert/commented;
-- framebuffer 3/3/3;
-- optional `igfxfw=2`, `rps-control=1`, Max Pixel Clock Override OFF;
-- no EFI/NVRAM/framebuffer changes.
-
-After reboot do not accelerate. Run D97HD read-only active-snapshot audit:
-`OCLP7_D97HD_ASUS2_POST_VESA_REBOOT_ACTIVE_SNAPSHOT_AUDIT.sh`
-- commit `43dc468dc82293eeb3b4daf1182eaee641715e68`.
-
-D97HD must prove:
-- active exact P1 service SHA `a8716ffd...` + P1 postimage;
-- active corrected metallibs 180/180 exact;
+## D97HD — post-VESA-reboot active snapshot PASS
+After the authorized VESA reboot, D97HD proved:
+- active MTLCompilerService exact P1 SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- P1 postimage exact PASS;
+- active corrected metallibs 180/180 exact, missing 0, different 0;
 - active CoreDisplay exact `b848d54e... / 20739 / MTLB`;
-- Haswell Azul + HD5000 kexts installed and loaded;
+- AppleIntelFramebufferAzul + AppleIntelHD5000Graphics installed and loaded;
 - official helper exact;
-- VESA still active and D97EZ still inert.
+- VESA still active, D97EZ inert.
 
-No accelerated boot is authorized until D97HD PASS.
+Final:
+`D97HD_STATUS=PASS_ACTIVE_SNAPSHOT_VESA`
+`D97HD_ACTIVE_P1=STRUCTURAL_SEMANTIC_PASS`
+`D97HD_ACTIVE_METALLIBS=180_OF_180_EXACT`
+`D97HD_HASWELL_AUXKC=LOADED_PASS`
+`D97HD_VESA_BOOT=PASS`.
+
+Checkpoint `f2c484266737c2adc9163f1d58a6fcc49c36cd78`.
+
+## D97EW — persistent capture live gate PASS
+D97EW exact installer was reinstalled/revalidated after D97HD:
+- source commit `b23f1e78a02e3aedd48a4e30101a6d3e8abaf00d`;
+- blob `d5a60a8b69c22249b03988afe6e6e94a3947d195`;
+- installer PASS;
+- LaunchDaemon running PID 2712;
+- active run `/Users/Shared/OCLP-D97EW-Capture/20260908T003113Z-2712`.
+
+Repeated summary ticks prove:
+- service `present`;
+- captured_count `0`;
+- set_id_mode_calls `0`;
+- route `PASS`.
+
+Live IORegistry proves:
+- `D97ELRouteStatus = PASS`;
+- `D97ESCapturedCount = 0`;
+- `D97ELSetIdModeCallCount = 0`.
+
+Classification:
+`D97EW_LIVE_VESA_GATE=PASS`
+`D97EW_PERSISTENT_CAPTURE=READY_FOR_ACCELERATED_BOOT`.
+
+## Current action — first post-P1 accelerated boot AUTHORIZED
+Checkpoint `f5c342197210248a47469a7e6ec709c26ab66e9c`.
+
+Only two boot-arg state changes are authorized:
+- `-igfxvesa` becomes inert/commented;
+- `-ocmcd97ez` becomes active.
+
+Keep all else unchanged:
+- `-ocmcdiag -ocmcd97bv -ocmcd97eh` active;
+- framebuffer 3/3/3;
+- `igfxfw=2`, `rps-control=1`, Max Pixel Clock Override OFF;
+- no Root Patch/Restore;
+- no other EFI/NVRAM/device-property changes.
+
+Expected bootargs:
+`-v debug=0x100 keepsyms=1 -amfipassbeta #amfi=0x80 #-lilubetaall hbfx-ahbm=55 foclegacy=1 -btlfxboardid ipc_control_port_options=0 #-igfxvesa -ocmcdiag #-ocmcd97bvcave -ocmcd97bv -ocmcd97eh -ocmcd97ez`
+
+If no image appears, use the permanent VESA recovery rule and treat the immediately preceding accelerated boot as authoritative evidence. D97EW persistent evidence survives recovery and must be used to locate the new post-P1 runtime frontier. Do not replay P2b/P3/AIR00/D34 unless measured evidence requires it.
