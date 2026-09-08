@@ -1,62 +1,42 @@
-Continuăm proiectul ASUS2 Tahoe Intel x86_64 Haswell / OCLP din starea autoritativă persistentă din repo `StefanAlMare/StefanAlMare`.
+Continuăm proiectul ASUS2 Tahoe Haswell / OCLP din repo StefanAlMare/StefanAlMare.
 
-Înainte să propui ORICE modificare, citește INTEGRAL, în această ordine:
-1. `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`
-2. `OCLP-Continuity/OCLP_MASTER_CONTINUITY.md`
-3. `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`
-4. checkpoint-ul exact indicat de MASTER la `Current authoritative checkpoint`
-5. `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
-6. `OCLP-Continuity/OCLP_HISTORY_INDEX.md`
+Înainte de orice modificare, citește INTEGRAL în această ordine:
+1. OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md
+2. OCLP-Continuity/OCLP_MASTER_CONTINUITY.md
+3. OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md
+4. checkpoint-ul exact indicat de MASTER la Current authoritative checkpoint
+5. OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md
+6. OCLP-Continuity/OCLP_HISTORY_INDEX.md
 
-Aceste fișiere sunt sursa de adevăr; nu reconstrui current state din memorie și nu mă pune să repet istoria. Reia exact de la `CURRENT ACTION`.
+Nu reconstrui starea din memorie și nu cere repetarea istoriei persistate.
 
-Starea reconciliată la 2026-09-08 este P1+P3-only, nu true-five activ:
-- P1 exact este activ/proven;
-- P3 exact P3-only este activ/proven;
-- P2 rămâne original, fără P2b;
-- AIR00 și D34 nu sunt active;
-- corrected metallibs sunt 180/180 exact;
-- GUI este încă NEGATIVE/no usable GUI;
-- P1 runtime semantic progress este PROVEN;
-- P3 runtime semantic progress este PROVEN;
-- P2b este doar candidat plauzibil și `NOT_YET_AUTHORIZED`.
+La 8 septembrie 2026, starea măsurată rămâne P1+P3-only, cu P2 original, metallib-uri reale 180/180 exacte. P1 și P3 au produs progres măsurat; GUI accelerat rămâne nefuncțional. P2b/AIR00/D34 sunt neautorizate. Lanțul P1+P2b+P3+AIR00+D34 rămâne istorie de proiect, nu patchset activ. D50/D68/D82 sunt reserve-only; D84 retired; D34 cave 0xEF8..0xEFE protejată.
 
-Experimentul accelerat P1+P3 relevant se identifică permanent prin fereastra:
-`2026-09-08 14:24:02 -> aproximativ 14:27:17 +0300`.
-Nu folosi formulări persistente de tip penultimul/antepenultimul boot; ele se schimbă după rebooturi ulterioare. User-ul identifică autoritativ care boot a fost accelerat și care a fost VESA recovery.
+Experimentul accelerat autoritativ este 2026-09-08 14:24:02 -> aproximativ 14:27:17 +0300; VESA recovery este separat, cu WindowServer de la aproximativ 14:28:38.955. Nu folosi penultimul/antepenultimul ca identificator persistent.
 
-D97HV are un defect de tooling: parserul `kern.boottime` a produs 1970 și a contaminat automat clasificarea cu IPS istorice. `P3_MIXED_CURRENT_BOOT_FRONTIER` din outputul automat D97HV este INVALID. Raw evidence este util numai după re-scoping la fereastra accelerată de mai sus.
+D97HV ZIP a fost auditat independent: SHA e8427830641821d8394b3c82c9cf266ce046eb0e69ad1af28700f47b16122faf, 5390949 bytes, CRC PASS. Clasificarea automată D97HV rămâne invalidă din cauza parserului kern.boottime=1970; logurile brute sunt utile numai după delimitarea corectă a ferestrei.
 
-Fereastra accelerată P1+P3 a arătat:
-- zero current old NULL-call MTLCompilerService crash;
-- zero current P1-only StringMap SIGSEGV;
-- 145 MTLCompilerService invocations în noul simulator/bitcode diagnostic path;
-- compiler connection loss -> XPC_ERROR_CONNECTION_INTERRUPTED -> GPUPass/render-pipeline failure -> WindowServer restart -> no GUI.
-Nu identifica încă exact validatorul drept `MTLSimCompiler::validSimulatorMetadata` până când static map-ul curent nu dovedește asta.
+Ultimul rezultat runtime rămâne: 145/145 procese compiler emit fragmente simulator/bitcode -> pierdere conexiune compiler -> XPC întrerupt -> pipeline eșuat -> WindowServer restart. Funcția/condiția exactă și mecanismul terminării compilerului rămân necunoscute. Nu echivala automat calea cu MTLSimCompiler::validSimulatorMetadata.
 
-Modul permanent de execuție este GitHub-first:
-- tot ce este tehnic executabil în GitHub îl execută și îl auditează asistentul acolo;
-- ASUS2/user este rezervat acțiunilor identity-pinned care cer hardware/live installed state;
-- compilarea locală nu este fallback implicit și cere autorizare explicită;
-- niciodată auto Root Patch sau auto reboot;
-- Golden Sequoia rămâne immutable/read-only.
+CURRENT ACTION a fost mutat la comparație statică GitHub-first folosind donorul original public PatcherSupportPkg 1.9.6. Metadatele assetului Universal-Binaries.dmg, ID332386253, 641964544 bytes, SHA33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7 corespund pinului istoric. Verificarea efectivă a downloadului și reconstrucțiile sunt încă neexecutate în noul CI.
 
-Păstrează FASTLANE:
-`validări -> integrare -> compile/diff -> build -> audit app -> SHA/identitate -> backup/deploy -> open OCLP -> STOP`.
+Comparator publicat:
+OCLP-Continuity/artifacts/OCLP7_D97HW_GITHUB_GOLDEN_P3_STATIC_COMPARE.py
+Workflow publicat:
+.github/workflows/oclp-d97hw-golden-p3-static-compare.yml
+Nume: OCLP D97HW Golden vs P3 static comparison
+Source/workflow head: 56df870a781d9d9f20e4a8fdd3375ebc4c188e8e
 
-CURRENT ACTION este D97HW:
-`OCLP-Continuity/artifacts/OCLP7_D97HW_READONLY_P3_SIMULATOR_BITCODE_STATIC_MAP.sh`.
-D97HW NU a fost încă executat și nu există rezultat D97HW.
+Checkpoint de execuție:
+OCLP7_CHECKPOINT_20260908_D97HW_GITHUB_GOLDEN_P3_COMPARE_SOURCE_READY_CI_TRIGGER_BLOCKED.md
+creation commit 3120d338f5b8088b753972543396a4d9edeb696a.
 
-Scop D97HW:
-- pin exact P1/P3 active;
-- confirmă P2 original și P3 exact;
-- recuperează full strings `simulator`/`bitcode`;
-- mapează offsets/VA/xrefs/disassembly;
-- leagă calea de P2 `0x9A8CD` și P3 `0xA1573`;
-- inspectează `MTLSimCompiler::validSimulatorMetadata` numai dacă binary evidence curent îl susține;
-- decide dacă P2b este upstream/causal.
+Blocaj măsurat: API actions/runs a returnat total_count=0; fișierele există în main; conectorul respinge endpointul workflows și nu expune workflow_dispatch. NU există run/job/artifact sau CI PASS pentru D97HW. Nu inventa un motiv de quota/billing/Actions disabled/YAML: cauza nu este demonstrată.
 
-D97HW este read-only: fără Root Patch, Restore, EFI/NVRAM/framebuffer mutation, acceleration change sau reboot.
+Pasul curent este deblocarea pornirii jobului GitHub. Intervenția web minimă disponibilă utilizatorului: Actions -> OCLP D97HW Golden vs P3 static comparison -> Run workflow -> main. Orice mesaj de restricție trebuie citit exact. Asistentul auditează apoi rularea și artifactul; nu se declară succes înainte de dovezi.
 
-Persistă imediat orice rezultat decisiv în MASTER + HISTORY + DATABASE (dacă schimbă durable current state) + checkpoint nou.
+Nu rula vechiul helper local D97HW ca fallback implicit. Tot ce poate fi făcut în GitHub rămâne acolo. Golden nu se pornește și nu se modifică. ASUS2 este rezervat dovezilor live care chiar nu pot fi obținute de la distanță. Niciodată auto Root Patch/reboot.
+
+Comparația statică de cod nu dovedește că Sequoia parcurge aceeași ramură pentru același shader. Compară separat cod, selecția traseului, date, dependențe și context. Nu deduce P2b doar din apariția offseturilor 0xD0/0x110.
+
+Păstrează module-boundary + semantic evidence + far-frontier + universal/no-PID și FASTLANE. Persistă imediat rezultatele decisive în MASTER+HISTORY+checkpoint nou, plus DATABASE când se schimbă starea durabilă.
