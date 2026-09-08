@@ -1,35 +1,90 @@
 # OCLP PERMANENT VESA RECOVERY / ACCELERATED-BOOT EVIDENCE RULE
 
 Restored: 2026-09-01 EEST
-Scope: ASUS2 Tahoe Haswell and every OCLP7+ continuation.
+Updated: 2026-09-08 EEST — reconciled after D97HV chronology correction
+Scope: ASUS2 Tahoe Haswell and every future OCLP continuation.
 
-## Core rule
-After a Root Patch test, the accelerated boot normally produces no usable image on this machine. The user therefore cannot return to ChatGPT until recovering through VESA.
+## Core recovery rule
+After a Root Patch test, an accelerated boot may produce no usable image. The user can then return to ChatGPT only after a hard restart/power-cycle and a VESA recovery boot.
 
 Normal sequence:
-1. Root Patch is applied.
+1. Root Patch is applied and audited.
 2. User boots the accelerated/root-patched configuration.
 3. If no usable image appears, user hard-restarts/power-cycles.
-4. User boots VESA and returns from that VESA session.
+4. User restores the VESA-safe boot state and boots recovery.
+5. User returns to ChatGPT from the VESA session.
 
 Consequently:
-- the latest/current boot is ordinarily VESA recovery;
-- the penultimate relevant boot is the accelerated diagnostic boot;
-- hard restart and VESA boot are recovery operations, not compiler-failure evidence by themselves.
+- the current/latest online boot is often VESA recovery;
+- the accelerated experiment may be an earlier immediately preceding boot;
+- hard restart and VESA recovery are recovery actions, not compiler-failure evidence by themselves.
 
-Never assume latest boot equals accelerated boot merely because the user is online.
+Never assume the latest boot equals the accelerated boot merely because the user is online.
+
+## Authoritative boot identification
+The user's identification of which boot was accelerated and which boot was VESA recovery is authoritative.
+
+Corroborate with:
+- `last reboot` chronology;
+- WindowServer launch/crash times;
+- launchd events;
+- MTLCompilerService events;
+- crash-report `captureTime` / launch time;
+- persistent collector bootargs when reliable.
+
+If collector-derived boot chronology conflicts with the user's identified boot and the collector has a tooling defect, the tooling result is not allowed to override the user-authoritative boot boundary.
+
+## Durable experiment identity
+For permanent documentation, identify each accelerated experiment by an explicit timestamped window or unique experiment name.
+
+Do **not** use mutable ordinal labels such as:
+- latest boot;
+- previous boot;
+- penultimate boot;
+- antepenultimate boot.
+
+Those labels change after later recovery/reboots and are not durable identifiers.
 
 ## Runtime evidence selection
-The authoritative rule is: analyze the immediately preceding accelerated diagnostic boot, not necessarily the immediately preceding system boot record.
+Analyze only the accelerated experiment's own bounded window.
 
-Use `last reboot` chronology. If the user identifies which entry was accelerated and which was VESA, that identification is authoritative.
+Scope to that window:
+- unified logs;
+- WindowServer activity;
+- MTLCompilerService activity;
+- launchd service lifecycle;
+- `.ips` reports;
+- GPU/compiler diagnostics;
+- IORegistry/persistent collector state when it belongs to that same boot.
 
-Scope unified logs, launchd markers, WindowServer events, MTLCompilerService events, crash reports and any other runtime evidence to the accelerated boot only. Do not mix the later VESA recovery session.
+Do not mix the later VESA recovery session into the accelerated cohort.
 
-## Current D97V/D97W chronology
-For the 2026-09-01 D97V test:
-- 14:00 = accelerated D97V boot;
-- 14:03 = current VESA recovery boot, excluded;
-- 13:45 = older boot, excluded.
+Do not mix historical crash reports merely because they still exist in `/Library/Logs/DiagnosticReports`.
 
-The D97W analysis window is `2026-09-01 13:59:30` through but not including `2026-09-01 14:03:00` EEST.
+## Missing `.ips` discipline
+Absence of a current `.ips` file is not automatically a negative. A process may exit/be invalidated without producing a crash report.
+
+Use the strongest available combination of launchd, unified log, process restart behavior and crash-report evidence.
+
+## Canonical D97HV warning example
+D97HV incorrectly parsed `kern.boottime` and produced a 1970 boot start. Its collector then copied historical IPS and automatically mixed:
+- old pre-P1 NULL-call reports;
+- P1-only StringMap reports;
+- current P1+P3 WindowServer evidence.
+
+Therefore D97HV's automatic `P3_MIXED_CURRENT_BOOT_FRONTIER` was invalid tooling contamination, not a semantic result.
+
+The authoritative P1+P3 accelerated experiment was reconstructed from user identification and timestamps as:
+`2026-09-08 14:24:02 -> approximately 14:27:17 +0300`.
+
+Recovery VESA begins only around `14:28:38.955` with the next WindowServer session.
+
+Thus `14:25:*` and `14:26:*` WindowServer crashes belong to the accelerated P1+P3 experiment and must not be labeled recovery-VESA evidence.
+
+## Current permanent rule
+Whenever a no-GUI experiment is followed by VESA recovery:
+1. bind the accelerated experiment explicitly by time;
+2. bind recovery separately;
+3. analyze only accelerated evidence for compiler/frontier claims;
+4. use recovery only to verify post-recovery safety/current root state;
+5. persist the timestamped accelerated boundary immediately after it is established.
