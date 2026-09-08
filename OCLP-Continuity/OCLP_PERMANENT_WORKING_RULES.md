@@ -1,204 +1,225 @@
 # OCLP PERMANENT WORKING RULES
 
 Recovered/restored: 2026-09-01 EEST
-Updated: 2026-09-05 EEST — permanent GitHub-first execution policy restored by explicit user instruction
-Scope: ASUS2 Tahoe Haswell project and every continuation named OCLP6, OCLP7, OCLP8, OCLP9, OCLP10, OCLP11, OCLP12, etc.
+Updated: 2026-09-08 EEST — reconciled after full checkpoint review through D97HV
+Scope: ASUS2 Tahoe Haswell project and every future OCLP continuation.
 
-This file is the permanent procedural contract. Future checkpoints and conversations inherit it unless the user explicitly changes a rule.
+This file is the permanent procedural contract. Future checkpoints inherit it unless the user explicitly changes a rule. Historical checkpoints remain evidence for what happened, but stale procedural/current-state wording does not override this file + MASTER + current checkpoint.
 
-## 1. Evidence classes are distinct
-Every diagnostic boundary must be classified with the strongest directly supported label only:
-- `REACHED`: execution arrived at the address.
-- `CONTROL-FLOW PROVEN`: the relevant original branch/call/return relationship is directly demonstrated.
-- `SEMANTIC PROVEN`: the payload/state required by the next stage is directly shown to be semantically correct against persisted Golden Sequoia evidence or another already-PROVEN semantic contract.
-- `STRUCTURAL-SEMANTIC PROVEN`: object/pointer/layout invariants needed by the next consumer are directly validated, but exact Golden runtime values are unavailable.
-- `STATIC-MAPPED`, `STATIC-PROVEN`, `NEGATIVE`, `INCONCLUSIVE`, and `UNKNOWN` remain separate labels.
+## 1. Evidence classes remain distinct
+Use only the strongest directly supported label:
+- `REACHED`: execution arrived at the address/stage.
+- `CONTROL-FLOW PROVEN`: branch/call/return relationship directly demonstrated.
+- `SEMANTIC PROVEN`: payload/state required by the next stage is directly shown correct against persisted Golden or another already-proven contract.
+- `STRUCTURAL-SEMANTIC PROVEN`: object/layout/invariant needed by the next consumer is validated, but exact Golden runtime values are unavailable.
+- `STATIC-MAPPED`, `STATIC-PROVEN`, `NEGATIVE`, `INCONCLUSIVE`, `UNKNOWN` remain separate.
 
-Control-flow success must never be described as semantic correctness by itself.
+Control-flow success alone must never be called semantic correctness.
 
-## 2. Large jumps require two simultaneous questions
-Every coarse or multi-threshold diagnostic must answer:
-1. Where did execution go?
-2. Is the payload/state still good?
+## 2. Large jumps require two questions
+Every broad diagnostic must answer:
+1. where did execution go?
+2. is the handoff payload/state still good?
 
-Before advancing across another large interval, establish a semantic or structural-semantic checkpoint at or near the new frontier whenever safely observable.
+Before advancing another large interval, establish a semantic or structural-semantic checkpoint at or near the new frontier whenever safely observable.
 
-## 3. Module-boundary workflow is the default
-Work by natural functional modules, not individual instructions, whenever binary/control-flow architecture permits it.
-For each module boundary:
+## 3. Module-boundary workflow is default
+Work by natural functional modules rather than one instruction per reboot whenever architecture permits.
+
+For each boundary:
 - validate the end of the current module;
-- validate the beginning of the next module;
+- validate the beginning of the next;
 - validate the handoff payload/status/object;
-- only then mark the boundary `GREEN`.
+- only then mark the boundary GREEN.
 
-`GREEN` requires CONTROL-FLOW PROVEN plus the strongest safely obtainable semantic/structural-semantic validation. If exact Golden runtime equivalence is unavailable, state that explicitly.
+GREEN requires CONTROL-FLOW PROVEN plus the strongest safely obtainable semantic/structural-semantic validation.
 
-Once a boundary is GREEN, do not re-scan the completed module instruction-by-instruction unless later evidence directly invalidates it.
+Once a boundary is GREEN, do not rescan the completed module instruction-by-instruction unless later evidence directly invalidates it.
 
-## 4. Binary-search localization inside a failed module
-When module start/handoff is GREEN but module end is not:
-1. place a coarse midpoint inside only that module;
-2. test control-flow and semantic/structural-semantic integrity there;
-3. retain only the failing half;
-4. repeat by halving;
-5. switch to instruction-level probing only when the remaining interval is genuinely small.
+## 4. Binary search only inside the failed module
+If module start/handoff is GREEN but module end is not:
+1. place a midpoint inside only that failed module;
+2. test control-flow plus payload integrity;
+3. retain the failing half;
+4. repeat;
+5. switch to instruction-level probing only when the interval is genuinely small.
 
-The end goal is accelerated graphical output and a usable GUI. Continue module-by-module from the last accepted frontier until image acceleration appears.
+The project objective remains usable accelerated GUI, not maximum diagnostic density.
 
-## 5. Semantic checkpoint contents
-Use the strongest safely observable subset relevant to the stage, for example:
-- AIR semantic major/minor and Metal semantic version;
-- return/status values before branch decisions;
-- request-layout fields and selector values;
+## 5. Semantic checkpoint content
+Use the strongest safe subset relevant to the stage, including when appropriate:
+- AIR/Metal semantic versions;
+- return/status values;
+- selector/request-layout fields;
 - serialized-bitcode state;
 - pointer null/non-null state;
-- object/vector invariants and safely dereferenced consumer-required fields;
-- exact branch decision and causing data condition;
+- consumer-required object/vector invariants;
+- exact branch decision and causing data;
 - raw observed values, not only PASS/FAIL.
 
-Do not invent a semantic check for a field whose runtime location is unknown.
+Do not invent checks for fields whose runtime location is unknown.
 
-## 6. Golden Sequoia is immutable
-Golden Sequoia 15.7.9 / 24G830 must never be booted or modified. Use only persisted Golden data or inspect the already-mounted Golden read-only when genuinely new static comparison is required.
+## 6. Golden Sequoia immutable
+Golden Sequoia must never be booted or modified for evidence collection.
 
-If an exact Golden runtime value is unavailable:
+If exact Golden runtime equivalence is unavailable:
 - do not guess;
-- label exact Golden runtime equivalence `UNKNOWN`;
-- still record safe structural/runtime facts;
-- never boot or modify Golden to obtain it.
+- mark it UNKNOWN;
+- still record safe structural/runtime facts.
 
-Static identity of a patch/binary is not runtime semantic identity. For root-patched components, compare Tahoe primarily against the working Golden root-patched component when available.
+For root-patched components, compare Tahoe primarily against the working Golden root-patched component when persisted evidence exists.
 
-## 7. Functional baseline
-The accepted five-functional-patch baseline is:
+## 7. Historical five-patch chain is design evidence, not current active baseline
+Historical accepted chain:
 - P1 selector bridge;
-- P2b request layout bridge `+0xD0 -> +0x110`;
-- P3 serialized-bitcode path;
-- AIR00 fallback producing AIR 2.6 / Metal 3.1;
+- P2b request-layout `+0xD0 -> +0x110`;
+- P3 serialized-bitcode;
+- AIR00 AIR 2.6 / Metal 3.1 fallback;
 - D34 semantic-equivalent reset.
 
-D22 is the accepted upstream runtime semantic proof for AIR 2.6 / Metal 3.1. D34 functional cave `0xEF8..0xEFE` is protected and untouchable by diagnostics.
+D22 remains accepted AIR 2.6 / Metal 3.1 semantic proof. D34 cave `0xEF8..0xEFE` remains protected.
 
-P6 and P7 are retained but their runtime sufficiency is NEGATIVE. D50/D68/D82 are reserve-only unless a future authoritative checkpoint explicitly promotes one. D84 is retired. Patch 8 is not authorized unless a later checkpoint explicitly says so.
+Important current methodology rule:
+**never replay all five blindly.** Apply only the earliest currently measured failed module. Later historical modules are reintroduced only after current evidence makes them causal/necessary.
 
-## 8. Multi-threshold and whole-stage diagnostics
-Do not return to one-address/one-reboot scanning for broad localization.
-- Use multiple meaningful thresholds in one build/Root Patch/accelerated boot.
-- Include semantic/structural-semantic gates where safe.
-- Use instruction-level probing only after isolating a genuinely small interval.
-- Absence of a marker is a hard negative only when observation channel, request coverage, and branch semantics justify it.
-- Cross-PID/request differences must not be treated as the same request.
+P6/P7 runtime sufficiency NEGATIVE. D50/D68/D82 reserve-only. D84 retired. Patch8 unauthorized unless a later current checkpoint explicitly promotes it.
 
-When static CFG/binary architecture is sufficiently known, first attempt whole-stage coverage in one diagnostic:
-1. map the unresolved interval statically;
-2. choose natural semantic/control-flow thresholds;
+## 8. Multi-threshold / whole-stage diagnostics
+Do not revert to one-address/one-reboot scanning for broad localization.
+
+When possible:
+1. map unresolved stage statically;
+2. choose natural thresholds;
 3. instrument as many as safely possible;
-4. preserve overwritten instructions, flags, registers, stack, targets and continuation at pass-through thresholds;
-5. use deterministic distinct markers for mutually exclusive terminal/error outcomes;
-6. determine deepest progress for the same request/process without inferring from different PIDs;
-7. use universal/no-PID coverage where requests vary;
-8. include semantic checkpoints where safe;
-9. reserve one-address probing for the final tiny interval or when whole-stage design is technically impossible.
+4. preserve original semantics for pass-through probes;
+5. use deterministic distinct markers for mutually exclusive outcomes;
+6. track deepest progress for the same request/process;
+7. use universal/no-PID coverage when requests vary;
+8. include semantic checkpoints;
+9. reserve instruction-level probing for the final small interval.
 
-A terminal marker on a sequential path cannot map later thresholds. Prefer transparent checkpoints for sequential progress and terminal markers only for explicit outcomes or final boundaries.
+A terminal probe cannot prove later sequential thresholds. Prefer transparent probes for sequential progress.
 
-## 9. Same-cohort rule
-When a sampled classifier is still useful and probes classify mutually exclusive outcomes of one decision:
-- all outcomes must use the same PID cohort/lane;
-- use distinct codes within that cohort;
-- make the classifier exhaustive for that cohort when possible;
-- never assign branch A to one PID lane and branch B to another and infer from marker absence.
+## 9. Same-cohort / universal coverage rules
+For mutually exclusive outcomes of one decision:
+- use the same PID/request cohort;
+- use distinct codes;
+- make the classifier exhaustive when possible;
+- never infer branch A vs B by sampling different PIDs.
 
-## 10. Universal/exhaustive coverage before GREEN
-When MTLCompilerService respawns can carry different requests:
-- do not GREEN-seal a boundary from PID-lane sampling if the result may vary by request;
-- classify every process/request reaching the handoff whenever safely possible;
-- use distinct deterministic markers with no PID filter;
-- if universal instrumentation is infeasible, keep the boundary below GREEN and state the limitation.
+When MTLCompilerService respawns can carry different requests, do not GREEN-seal a boundary from partial PID sampling. Universal/no-PID instrumentation is preferred.
 
-## 11. Instrumentation transparency
-Any diagnostic that continues original execution must preserve original semantics: complete overwritten instructions, flags, registers, stack, branch targets and continuation.
+## 10. Instrumentation transparency
+Any diagnostic that continues original execution must preserve complete overwritten instructions, flags, registers, stack, branch targets and continuation.
 
-Only complete instructions may be replaced unless a fully audited trampoline reconstructs a split instruction exactly.
+Only complete instructions may be overwritten unless an audited trampoline reconstructs a split instruction exactly.
 
-A terminal diagnostic may deliberately stop execution; it must state terminality explicitly and make no pass-through claim.
+Terminal diagnostics must state terminality explicitly.
 
-D34 cave `0xEF8..0xEFE` is protected. Every diagnostic cave allocation must be audited for identity, zero/preimage, xrefs, branch targets, symbols and overlap.
+D34 cave `0xEF8..0xEFE` is protected. Every diagnostic cave allocation requires overlap/xref/branch-target/preimage audit.
 
-## 12. FASTLANE discipline
-FASTLANE preserves this exact order regardless of where an individual step runs:
+## 11. FASTLANE order
+Preserve exact order:
 `validations -> integration -> compile/diff -> build -> packaged-app audit -> SHA/identity -> backup/deploy -> open OCLP -> STOP`.
 
-The permanent default is GitHub-first. Everything technically executable in GitHub is executed by the assistant in GitHub rather than delegated to the user as a local ASUS2 build/compile/validation step. This includes validations, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest generation, artifact publication and CI audit.
+Never skip an audit because a helper printed PASS.
 
-ASUS2 is reserved for identity-pinned work that inherently depends on ASUS2 or its installed/live state: cache/files/log/hardware evidence, unpublished dirty-worktree or local-object evidence not remotely resolvable, target-local download/verification/backup/deploy when required, opening OCLP, manual Root Patch after authorization, accelerated boot, VESA recovery and physical/manual boot actions.
+Never auto Root Patch. Never auto reboot. Audit complete FASTLANE before Root Patch; audit complete Root Patch before accelerated boot.
 
-If a GitHub-eligible operation is genuinely blocked in GitHub, STOP and document the exact blocker. Local compilation is not an implicit fallback and requires the user's explicit authorization.
+## 12. Permanent GitHub-first responsibility split
+Everything technically executable in GitHub is performed by the assistant in GitHub rather than delegated to ASUS2/user. This includes:
+- validations;
+- source/workflow integration;
+- compile/diff;
+- build/package;
+- packaged-app audit;
+- SHA/manifest/provenance work;
+- CI audit/artifact preparation.
 
-Never auto-Root-Patch. Never auto-reboot. Audit the complete FASTLANE before Root Patch; audit the complete Root Patch before accelerated boot.
+ASUS2/user is reserved for identity-pinned operations inherently dependent on installed/live target state:
+- hardware/cache/live filesystem/log evidence not remotely resolvable;
+- target-local deploy when necessary;
+- opening OCLP;
+- manual Root Patch only after explicit authorization;
+- accelerated boot;
+- VESA recovery;
+- physical power/boot selection.
 
-### 12A. Permanent GitHub/ASUS2 responsibility and interaction protocol
-1. First classify every next action by whether it is technically executable in GitHub or inherently ASUS2/live-state dependent.
-2. The assistant performs all GitHub-eligible validations, source/workflow integrations, compile/diff, build/package, packaged-app audit, SHA/manifest work, artifact publication/preparation and CI audit in GitHub.
-3. The assistant repairs GitHub workflow failures when possible and audits the complete result; a printed PASS is not sufficient.
-4. For GitHub build/package work, persist repository, branch/ref, workflow/run/job, runner when relevant, head SHA, artifact ID/digest, inner artifact SHA, packaged executable SHA and packaged audit result when applicable.
-5. Existing audited artifact-delivery mechanisms may be used to bring GitHub artifacts to ASUS2; reproducing such builds locally is not required and local compilation requires explicit user authorization.
-6. User/ASUS2 operations are limited to identity-pinned evidence or state changes that inherently require ASUS2: cache/file/log/hardware/live-state proof; unpublished dirty-worktree/local-object proof if not remotely resolvable; target-local download/verify/backup/deploy when needed; opening OCLP; manual Root Patch; accelerated boot; VESA recovery; power cycling and manual boot selection.
-7. Only after explicit assistant authorization does the user manually Root Patch and return the complete Root Patch output.
-8. Assistant audits Root Patch and only then authorizes accelerated boot.
-9. User boots accelerated, recovers via VESA if necessary, and returns requested evidence.
-10. Assistant analyzes only that immediately preceding accelerated boot, persists decisive evidence, and chooses the next GitHub-first or inherently ASUS2-only bounded action.
-11. If GitHub is genuinely blocked for a GitHub-eligible operation, STOP and document the exact blocker; do not silently fall back to ASUS2/local compilation.
-12. If a target-local action or Root Patch fails, STOP, explain the exact failure and correct it in the shortest appropriate lane; do not continue with scattered mutations.
+If GitHub-eligible work is genuinely blocked, STOP and document the blocker. Do not silently fall back to local compilation. Local compilation requires explicit user authorization.
 
-Rhythm: `assistant GitHub validate/integrate/compile/build/package/audit whenever technically possible -> identity-pinned ASUS2 delivery/live-state action only when inherently required -> assistant audit -> manual Root Patch authorization when warranted -> accelerated boot -> VESA recovery/evidence -> persistence`.
+Never compile on ASUS2 unless a later explicit user authorization overrides that rule for a specific bounded task.
 
-## 13. Runtime evidence discipline
-Analyze only the immediately preceding accelerated diagnostic boot, excluding the later VESA recovery boot.
+Portable non-target Intel build hosts may be used only after explicit authorization and with exact source/provenance/hash gates.
 
-Reliable deterministic launchd exit codes are preferred over `.ips` absence. Missing `.ips` alone is never a hard negative.
+## 13. Runtime evidence discipline — accelerated vs recovery
+The user frequently cannot return to ChatGPT from a no-GUI accelerated boot and must hard-recover to VESA first.
 
-Correlate MTLCompilerService children to the exact host process and fatal-time window where possible. If launchd reports a controlled termination after host abort, do not treat accounting timestamp as the exact final compiler instruction.
+Therefore:
+- current/latest online boot is often VESA recovery;
+- accelerated evidence belongs to the immediately preceding accelerated experiment, not automatically the latest boot;
+- hard restart/VESA recovery are not themselves compiler-failure evidence.
 
-## 14. Persistence
-Persist immediately after every decisive PROVEN/NEGATIVE/major methodology result, otherwise no later than every 10 substantive technical responses.
-Update:
-- `OCLP_MASTER_CONTINUITY.md`;
-- `OCLP_HISTORY_INDEX.md` when phase/history changes;
-- a new incremental checkpoint.
+The user's identification of which boot was accelerated and which was recovery is authoritative.
 
-Future OCLP phase numbers inherit these rules automatically.
+Use `last reboot`, WindowServer launch/crash times, launchd and crash-report timestamps to bind an explicit accelerated window.
 
-## 15. Proven far-downstream evidence may advance the frontier
-Reliable crash stacks or equivalent evidence may establish far-downstream CONTROL-FLOW PROVEN even if an earlier handoff remains semantically unresolved.
+**Durable identity rule:** store accelerated experiments by explicit date/time window or unique experiment name. Do not rely on mutable ordinal terms such as "last", "penultimate" or "antepenultimate" in permanent state.
+
+Do not mix logs/IPS from later VESA recovery into the accelerated cohort.
+
+D97HV is the canonical warning example: a bad `kern.boottime` parser produced a 1970 window and contaminated an automatic classifier with historical IPS. Raw evidence remained useful only after exact timestamp re-scoping.
+
+## 14. Missing `.ips` is not automatically negative
+Prefer reliable launchd/process/unified-log evidence. Absence of `.ips` alone is never a hard negative.
+
+Correlate MTLCompilerService children with exact host process and exact test window when possible.
+
+If launchd reports controlled termination after host abort, do not treat the accounting timestamp as the exact final compiler instruction.
+
+## 15. Far-downstream evidence may advance the frontier
+Reliable crash stacks or equivalent evidence can prove far-downstream control flow even if an earlier semantic handoff remains unresolved.
+
 When this occurs:
-- do not force linear continuation from the earlier checkpoint;
+- do not force linear continuation from the earlier point;
 - identify the nearest natural handoff before the far failure;
-- compare its contract against Golden/static semantics;
-- compare semantic content, not pointer addresses;
+- compare its semantic contract against persisted Golden/static evidence;
 - promote the stronger accepted frontier if justified;
 - retain earlier unresolved points as reserve diagnostics.
 
-Retained causal model: MTLCompilerService failure precedes XPC interruption, pipeline creation failure, SkyLight/CopyPipelineState abort and WindowServer death. WindowServer is downstream, not the root cause.
+Retained causal model:
+`MTLCompilerService/compiler failure -> XPC interruption -> render-pipeline/GPUPass failure -> SkyLight/QuartzCore abort -> WindowServer death`.
 
-## 16. Mandatory continuation protocol
-At the start of every new OCLP7+ continuation, before proposing a technical modification, read in full from `StefanAlMare/StefanAlMare`:
+WindowServer is downstream, not root cause.
+
+## 16. Persistence rule
+Persist immediately after every decisive PROVEN/NEGATIVE result, major methodology change, or material current-state change; otherwise no later than every ~10 substantive technical responses.
+
+Update as appropriate:
+- `OCLP_MASTER_CONTINUITY.md`;
+- `OCLP_HISTORY_INDEX.md` when phase/history changes;
+- `OCLP_PERMANENT_PROJECT_DATABASE.md` when durable current facts change;
+- a new incremental checkpoint.
+
+Do not let MASTER/HISTORY/DATABASE drift into mutually contradictory current states.
+
+## 17. Mandatory continuation protocol
+Before proposing any technical modification in a new continuation, read in full from `StefanAlMare/StefanAlMare`:
 1. `OCLP-Continuity/OCLP_PERMANENT_WORKING_RULES.md`;
 2. `OCLP-Continuity/OCLP_MASTER_CONTINUITY.md`;
 3. `OCLP-Continuity/OCLP_PERMANENT_VESA_RECOVERY_RULE.md`;
-4. the exact `Current authoritative checkpoint` named by MASTER;
+4. exact `Current authoritative checkpoint` named by MASTER;
 5. `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`;
 6. `OCLP-Continuity/OCLP_HISTORY_INDEX.md`.
 
-Treat those files as the durable source of truth. Resume exactly from `CURRENT ACTION`. Do not reconstruct from memory alone and do not ask the user to repeat persisted history.
+Treat them as durable source of truth. Resume exactly from current `CURRENT ACTION`. Do not reconstruct current state from memory alone and do not ask the user to repeat persisted history.
 
-## 17. 2026-09-05 execution-lane authority
-This section is the latest explicit user instruction on execution responsibility and supersedes prospectively the 2026-09-03 ASUS2-local-default wording and any earlier wording inconsistent with GitHub-first execution. Historical results remain historically valid and are not reclassified merely because their execution lane differed.
+## 18. Current project-specific patch discipline after D97HV
+Current exact intended compiler state is P1+P3-only; P2 remains original. P2b/AIR00/D34 are not active.
 
-Permanent rule:
-- everything technically executable in GitHub is performed by the assistant in GitHub: validations, source/workflow integration, compile/diff, build/package, packaged-app audit, SHA/manifest, artifact publication and CI audit;
-- ASUS2/user execution is limited to identity-pinned evidence/actions that inherently require ASUS2: cache/files/log/hardware/live state, unpublished local state not remotely resolvable, target-local download/verify/backup/deploy when necessary, opening OCLP, manual Root Patch after authorization, accelerated boot and VESA recovery;
-- if GitHub is genuinely blocked for a GitHub-eligible operation, STOP and document the exact blocker;
-- local compilation is not an implicit fallback and requires explicit user authorization;
-- Root Patch and reboot remain manual-only and separately authorized;
-- decisive technical and methodology results are persisted immediately in MASTER + HISTORY + a new checkpoint.
+P1 semantic progress is PROVEN. P3 semantic progress is PROVEN. GUI remains NEGATIVE.
+
+The current measured frontier is the recurring simulator/bitcode diagnostic path reached in the timestamped accelerated P1+P3 experiment `2026-09-08 14:24:02 -> ~14:27:17 +0300`.
+
+Before authorizing P2b or any later historical module, statically map that current diagnostic path and prove whether the candidate is upstream/causal.
+
+Current next action is D97HW read-only static simulator/bitcode mapping. No Root Patch/reboot/EFI mutation is implied by this rule.
