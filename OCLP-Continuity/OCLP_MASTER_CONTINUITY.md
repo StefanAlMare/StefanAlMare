@@ -126,16 +126,16 @@ Then close inner OCLP and allow the outer wrapper to restore the official helper
 
 DO NOT reboot. DO NOT remove `-igfxvesa`. DO NOT activate D97EZ.
 
-After Root Patch, run read-only:
-`OCLP-Continuity/artifacts/OCLP7_D97GX_ASUS2_POST_ROOTPATCH_PRE_REBOOT_AUDIT.sh`
-- commit `7004e8463541220f6b96950d879a6f29de49e77b`;
-- blob `b57e84b7544afb787de9eaf7af904f71c2e895e7`.
+After Root Patch, use D97HB, not obsolete D97GX:
+`OCLP-Continuity/artifacts/OCLP7_D97HB_ASUS2_POST_D97GS_PRE_REBOOT_AUDIT_AFTER_CLEAN_RESTORE.sh`
+- commit `416694ae051f2eb64b3adb03b02cdb18e04d3169`;
+- blob `10711c98d6d8b088362ffa21e86da4023645cea0`.
 
-D97GX must prove on the newly patched underlying System volume:
-- exact P1 service SHA/postimage;
-- corrected metallibs 180/180 exact;
-- exact CoreDisplay metallib;
-- official privileged helper restored;
-- current active snapshot remains native/pre-P1 until reboot.
+D97HB must prove before reboot:
+- current active snapshot remains native Tahoe service SHA `4262e71f...` and native CoreDisplay `daee638d... / 24128`;
+- official helper has been restored exact `9b74b7c9... / S74BDJXQMD`;
+- underlying System volume contains exact P1 service SHA `a8716ffd...` and postimage `81fe177d0000`;
+- corrected metallibs are 180/180 byte-exact on the patched System volume;
+- patched CoreDisplay exact `b848d54e... / 20739 / MTLB`.
 
-No reboot is authorized until D97GX PASS. After that, reboot VESA first and audit the active snapshot before any accelerated boot.
+No reboot is authorized until D97HB PASS. After that, reboot VESA first and audit the active snapshot before any accelerated boot.
