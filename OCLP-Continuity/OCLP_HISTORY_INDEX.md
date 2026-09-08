@@ -2,7 +2,7 @@
 
 Updated: 2026-09-08 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97HA_HELPER_RESTORED_D97GY_POST_RESTORE_BASELINE_PASS_D97GS_REAUTHORIZED.md`.
+Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97HC_PRE_REBOOT_AUDIT_PASS_VESA_REBOOT_AUTHORIZED.md`.
 
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history. This index emphasizes accepted causal milestones and the current action.
 
@@ -11,7 +11,7 @@ Tahoe `26.6.2 / 25G82` on ASUS2, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, st
 
 ## Durable method / architecture
 Historical compiler baseline: `P1 + P2b + P3 + AIR00 + D34`.
-Current rule: never replay all five blindly; patch only the earliest measured failed module. Current evidence justifies P1 only.
+Current rule: never replay all five blindly; patch only the earliest measured failed module. P1 is now installed and must be measured at runtime before considering the later historical modules.
 
 Architecture:
 `Tahoe native Metal/Metal4 ABI -> bounded legacy compiler ingress -> measured adapter(s) -> legacy compiler/backend -> Haswell driver -> image`.
@@ -212,29 +212,87 @@ Final classifications:
 
 Checkpoint `dd4fcfd0b37f858b60c6c30ddcc1ba5b3645b63a`.
 
-## D97HB — corrected post-D97GS/pre-reboot audit for clean-Restore sequence
-Old D97GX is obsolete for the current sequence because it expected the active snapshot to contain legacy pre-P1 service SHA `31a6...`. After the deliberate clean Restore, the active snapshot must instead remain native Tahoe SHA `4262...` until the new snapshot is booted.
+## D97GS manual Root Patch on clean base — PASS
+The exact audited D97GS outer app was used. Root Patch transcript proves:
+- exact local 25G82 MetallibSupportPkg selected;
+- Metal 3802 Common / Common Extended installed;
+- corrected `.metallibs` patchset installed;
+- Monterey GVA/OpenCL installed;
+- Intel Haswell installed;
+- Modern Wireless Common installed;
+- D97GS exact P1 selector bridge reached;
+- exact historical P1 identity PASS SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- AuxKC rebuilt;
+- `Patching complete` reached.
 
-D97HB therefore requires before reboot:
-- active snapshot native service SHA `4262e71f...`;
-- active native CoreDisplay SHA `daee638d...`, bytes `24128`;
-- official helper restored exact `9b74b7c9... / S74BDJXQMD`;
-- underlying patched System volume exact P1 service SHA `a8716ffd...` and postimage `81fe177d0000`;
-- patched metallibs 180/180 exact against corrected local source;
-- patched CoreDisplay exact `b848d54e... / 20739 / MTLB`.
+Classification:
+`D97GS_P1_ROOTPATCH=PASS`.
 
-D97HB artifact:
-- commit `416694ae051f2eb64b3adb03b02cdb18e04d3169`;
-- blob `10711c98d6d8b088362ffa21e86da4023645cea0`.
+## D97HB — tooling false negative after successful read-only mount
+D97HB correctly proved before the stop:
+- VESA active, D97EZ inert;
+- active snapshot still native Tahoe service `4262e71f...`;
+- active CoreDisplay native `daee638d... / 24128`;
+- official helper exact `9b74b7c9... / S74BDJXQMD`;
+- local metallib source still 180 exact;
+- underlying System device `disk1s8` mounted read-only successfully.
 
-## Current action — D97GS manual P1-only Root Patch REAUTHORIZED
-Authorized now on ASUS2:
-`D97GS_MANUAL_P1_ONLY_ROOT_PATCH_ON_ASUS2=YES`.
+It then failed only because the script invoked `/usr/bin/mount`, which does not exist on macOS. No Root Patch semantic failure was demonstrated.
 
-Use only the exact audited D97GS outer app. Keep VESA bootargs unchanged. Root Patch must log exact P1 application and exact post-SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, then normal `Patching complete`.
+Classification:
+`D97HB_POST_MOUNT_RESULT=INCONCLUSIVE_TOOLING_FALSE_NEGATIVE`.
+Checkpoint `c702ca47f20a036f2201799d05c1723441eb8a88`.
 
-Close inner OCLP so outer wrapper restores official helper.
+## D97HC — corrected pre-reboot audit PASS
+D97HC replaced `/usr/bin/mount` with `/sbin/mount` and completed the full audit.
 
-DO NOT reboot. DO NOT remove `-igfxvesa`. DO NOT activate D97EZ.
+Active snapshot remained native as expected:
+- service SHA `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`;
+- CoreDisplay SHA `daee638d2bfa52b5196b63c0423cdf6dd2ae35eb264ea077c8e914884ee016e1`;
+- CoreDisplay bytes 24128.
 
-Then run D97HB, not D97GX. No reboot until D97HB PASS. After D97HB PASS, first reboot remains VESA + active-snapshot audit; acceleration comes only after that.
+Underlying newly patched System volume read-only evidence:
+- mount line explicitly `apfs, sealed, local, read-only, journaled, nobrowse`;
+- exact P1 service SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- bytes 85520;
+- P1 postimage `81fe177d0000` at offset `0x3494` PASS;
+- patched metallib exact 180;
+- missing 0;
+- different 0;
+- patched CoreDisplay exact SHA `b848d54e7c98c326658fdb33fd481e373d2fdb2fbca60eca1078226ded4bc92d`;
+- bytes 20739;
+- MTLB magic;
+- official helper exact and restored.
+
+Final classifications:
+`D97HC_STATUS=PASS_PRE_REBOOT_AUDIT`
+`D97HC_ACTIVE_SNAPSHOT=NATIVE_TAHOE_UNCHANGED`
+`D97HC_PATCHED_P1=STRUCTURAL_SEMANTIC_PASS_PRE_REBOOT`
+`D97HC_PATCHED_METALLIBS=180_OF_180_EXACT`
+`D97HC_OFFICIAL_HELPER=RESTORED_PASS`.
+
+Checkpoint `c809157e3773a17a149a8cba322bde0fc724c5cb`.
+
+## Current action — VESA reboot authorized, then D97HD active-snapshot audit
+A single VESA reboot is authorized now.
+
+Keep:
+- `-igfxvesa` active;
+- D97EZ inert/commented;
+- framebuffer 3/3/3;
+- optional `igfxfw=2`, `rps-control=1`, Max Pixel Clock Override OFF;
+- no EFI/NVRAM/framebuffer changes.
+
+After reboot do not accelerate. Run D97HD read-only active-snapshot audit:
+`OCLP7_D97HD_ASUS2_POST_VESA_REBOOT_ACTIVE_SNAPSHOT_AUDIT.sh`
+- commit `43dc468dc82293eeb3b4daf1182eaee641715e68`.
+
+D97HD must prove:
+- active exact P1 service SHA `a8716ffd...` + P1 postimage;
+- active corrected metallibs 180/180 exact;
+- active CoreDisplay exact `b848d54e... / 20739 / MTLB`;
+- Haswell Azul + HD5000 kexts installed and loaded;
+- official helper exact;
+- VESA still active and D97EZ still inert.
+
+No accelerated boot is authorized until D97HD PASS.
