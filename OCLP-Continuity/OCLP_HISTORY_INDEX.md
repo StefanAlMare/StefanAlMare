@@ -2,7 +2,7 @@
 
 Updated: 2026-09-08 EEST
 Master authority: `OCLP_MASTER_CONTINUITY.md`.
-Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97GW_ASUS2_PREFLIGHT_PASS_D97GS_P1_ONLY_ROOTPATCH_AUTHORIZED.md`.
+Current runtime/remediation checkpoint: `OCLP7_CHECKPOINT_20260908_D97HA_HELPER_RESTORED_D97GY_POST_RESTORE_BASELINE_PASS_D97GS_REAUTHORIZED.md`.
 
 Permanent database/rules and all incremental checkpoints remain authoritative for deep history. This index emphasizes accepted causal milestones and the current action.
 
@@ -87,7 +87,7 @@ Accepted D97M static map links `0x3448` to return from exact `callq *0x8(%r14)`,
 Checkpoint `5afdc48b4d9eeae3f713ac99fdeb0592ab543731`.
 
 ## D97GP — service is pre-P1; 32023 compiler PASS
-Current MTLCompilerService:
+Current legacy MTLCompilerService:
 - bytes `85520`;
 - SHA `31a6f745eb55b0c92ebeac66b4a6246c126b27bc7f64c94dc43723b8ab788cc5`;
 - selector `81fe19790000` = compare 31001 at `0x3494`;
@@ -143,30 +143,90 @@ Final:
 Checkpoint `72812a82b3a94bfe0dd42c55401834e97d237ffb`.
 
 ## D97GW — live ASUS2 preflight PASS
-Live ASUS2 preflight proved:
-- Tahoe 25G82 x86_64 / VESA / D97EZ inert PASS;
-- current service exact pre-P1 SHA `31a6f745...`;
-- corrected local CoreDisplay exact `20739 / b848... / MTLB`;
-- local metallib count 180, bad magic 0;
-- transferred D97GS ZIP exact SHA/bytes;
-- extracted launcher/inner/debug-helper/source identities exact;
-- `D97GW_STATUS=PASS_READONLY_PREFLIGHT`.
+Live ASUS2 preflight proved the exact D97GS ZIP transferred correctly and the corrected local metallib source was intact. The user then deliberately chose a cleaner sequence: Restore/Revert old D97DX first, reboot VESA, validate native base, then apply D97GS.
 
 Checkpoint `40fd4789f7ca430d54d475dce5d193ad19644430`.
 
-## Current action — D97GS manual P1-only Root Patch authorized
+## D97GY first pass — clean System Restore, residual DEBUG helper
+After Restore + VESA reboot, D97GY proved:
+- native Tahoe service restored exact SHA `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`, UUID/arches PASS;
+- native CoreDisplay exact SHA `daee638d2bfa52b5196b63c0423cdf6dd2ae35eb264ea077c8e914884ee016e1`, bytes `24128`, `MTLB`;
+- Haswell AuxKC Data kexts removed;
+- corrected local metallib source still 180/180 valid.
+
+Manual helper audit found exact D97DX DEBUG helper still active:
+- SHA `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`;
+- ad-hoc, TeamIdentifier not set.
+
+Classification: System/APFS restore PASS; overall gate partial only because helper state was residual.
+Checkpoint `f0335052f6b8de8a1bd2c6b776b747f149d1b156`.
+
+## D97GZ — exact official helper source locator PASS
+D97GZ inspected the exact reused D97DX launcher and proved its original behavior:
+- verify exact official helper;
+- save temporary backup `/tmp/d97dx-official-helper.XXXXXX`;
+- install DEBUG helper temporarily;
+- restore exact official helper on exit/cleanup.
+
+The temporary backup no longer existed, but D97GZ found two exact persistent official copies, both SHA+Team PASS:
+1. `/Users/alex/Desktop/OpenCore-Patcher.app/Contents/Resources/com.dortania.opencore-legacy-patcher.privileged-helper`;
+2. `/Library/Application Support/Dortania/OpenCore-Patcher.app/Contents/Resources/com.dortania.opencore-legacy-patcher.privileged-helper`.
+
+Both:
+- SHA256 `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
+- TeamIdentifier `S74BDJXQMD`.
+
+D97GZ read-only locator PASS. Checkpoint `741ddb3f82136f2df0b92b807786f6740a8d4124`.
+
+## D97HA — official privileged helper restored PASS
+D97HA used the persistent `/Library/Application Support/Dortania/OpenCore-Patcher.app/...` official helper source and modified only the active privileged helper.
+
+Evidence:
+- active DEBUG pre-SHA exact `993bf7e8...` PASS;
+- official source SHA exact `9b74b7c9...`, Team `S74BDJXQMD`, codesign PASS;
+- DEBUG helper backed up to Desktop;
+- staged official helper SHA/Team/codesign PASS;
+- atomic replacement PASS;
+- active post SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`;
+- Team `S74BDJXQMD`;
+- stat `root:wheel -rwsr-xr-x 136816`;
+- `D97HA_STATUS=PASS`;
+- no reboot.
+
+Checkpoint `132bba39a18c8658c8948b73b7776cc9510c46a5`.
+
+## D97GY final rerun — post-Restore baseline fully PASS
+Final D97GY rerun proved all gates simultaneously:
+- VESA active / D97EZ inert PASS;
+- native Tahoe service exact PASS;
+- native CoreDisplay exact PASS;
+- Haswell AuxKC removed PASS;
+- corrected local metallib source 180/180 valid PASS;
+- official helper exact SHA `9b74b7c9...`, Team `S74BDJXQMD` PASS.
+
+Final classifications:
+`D97GY_NATIVE_BASELINE=PASS`
+`D97GY_RESTORE_REBOOT=STRUCTURAL_SEMANTIC_PASS`
+`D97GY_D97GS_ROOTPATCH_BASE=READY`
+`D97GY_STATUS=PASS_READONLY_POST_RESTORE_GATE`.
+
+Checkpoint `dd4fcfd0b37f858b60c6c30ddcc1ba5b3645b63a`.
+
+## Current action — D97GS manual P1-only Root Patch REAUTHORIZED
 Authorized now on ASUS2:
 `D97GS_MANUAL_P1_ONLY_ROOT_PATCH_ON_ASUS2=YES`.
 
-Keep VESA bootargs unchanged. Use only exact outer D97GS app validated by D97GW. Require log showing exact P1 application/post-SHA and normal `Patching complete`. Close inner OCLP so outer wrapper restores official helper.
+Use only the exact audited D97GS outer app. Keep VESA bootargs unchanged. Root Patch must log exact P1 application and exact post-SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`, then normal `Patching complete`.
+
+Close inner OCLP so outer wrapper restores official helper.
 
 DO NOT reboot. DO NOT remove `-igfxvesa`. DO NOT activate D97EZ.
 
-After Root Patch, run read-only D97GX:
+Then run read-only D97GX:
 `OCLP7_D97GX_ASUS2_POST_ROOTPATCH_PRE_REBOOT_AUDIT.sh`
 - commit `7004e8463541220f6b96950d879a6f29de49e77b`;
 - blob `b57e84b7544afb787de9eaf7af904f71c2e895e7`.
 
-D97GX must prove exact P1 service on newly patched underlying System volume, 180/180 corrected metallibs, exact CoreDisplay, official helper restored, while active current snapshot remains pre-P1 until reboot.
+D97GX must prove exact P1 service on the newly patched underlying System volume, corrected metallibs 180/180 exact, CoreDisplay exact, official helper restored, while current active snapshot remains native/pre-P1 until reboot.
 
-No reboot authorized until D97GX PASS.
+No reboot until D97GX PASS. After D97GX PASS, first reboot remains VESA + active-snapshot audit; acceleration comes only after that.
