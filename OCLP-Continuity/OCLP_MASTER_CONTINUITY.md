@@ -11,10 +11,11 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HS_PRE_REBOOT_P1_P3_FULL_PASS_D97HU_VESA_REBOOT_AUDIT_READY.md`
-- commit `5693992b5115b2c3e301920caeff13da30557e41`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HU_HELPER_HASH_GATE_TOOLING_FALSE_NEGATIVE_RERUN_READY.md`
+- commit `bb14fc276b85585a0adcb36a667a3680ab9cfa85`.
 
 Immediate decisive predecessors:
+- D97HS pre-reboot P1+P3 FULL PASS / VESA reboot authorized: `5693992b5115b2c3e301920caeff13da30557e41`;
 - D97HT tooling false negative / direct D97HS rerun: `08d174b574ec400222cd1218cac7015ee9461fb2`;
 - D97HO Root Patch P1+P3 PASS / first D97HS helper residual: `bd7e059537618175a33949193532cb3e53166d11`;
 - D97HR clean-native VESA PASS / D97HO authorized: `d80304f308cd30af224984bbf27da0c494993f5f`;
@@ -121,21 +122,33 @@ Final classification:
 Report:
 `/Users/alex/Desktop/OCLP7_D97HS_POST_D97HO_PRE_REBOOT_20260908_141929/D97HS_REPORT.txt`.
 
-## CURRENT ACTION — one VESA reboot, then D97HU active snapshot audit
-A single reboot is authorized now with no other change:
-- keep `-igfxvesa` active;
-- keep D97EZ inert;
-- no EFI/NVRAM/framebuffer change;
-- no acceleration;
-- no P2b/AIR00/D34.
+## D97HU first invocation — helper identity gate false-negative
+The authorized VESA reboot has now occurred. No further reboot is required before D97HU.
 
-After reboot run:
-`OCLP-Continuity/artifacts/OCLP7_D97HU_ASUS2_POST_VESA_REBOOT_ACTIVE_P1_P3_AUDIT.sh`
+The user downloaded D97HU from exact commit `19ee3a189bbbb6af2ca83b425e613fe4724f21b8`, but the command supplied an incorrect expected Git blob `771c11b8c0529137f4c3939d202d49204d04874d` and stopped before executing the helper.
+
+Repository truth for the exact D97HU artifact is:
+- path `OCLP-Continuity/artifacts/OCLP7_D97HU_ASUS2_POST_VESA_REBOOT_ACTIVE_P1_P3_AUDIT.sh`;
 - commit `19ee3a189bbbb6af2ca83b425e613fe4724f21b8`;
-- blob `771c11b8c0529137f4c3939d202d49204d04874d`;
-- bytes `11849`.
+- blob `2f023cb10d544794e88a06ba58ab7c276f3d060f`;
+- bytes `12256`.
 
-D97HU is read-only and must prove the now-active snapshot contains:
+Classification:
+`D97HU_HELPER_IDENTITY_FAILURE=TOOLING_FALSE_NEGATIVE_WRONG_EXPECTED_BLOB`
+`D97HU_SCRIPT_EXECUTED=NO`
+`D97HO_P1_P3_ACTIVE_STATE=NOT_INVALIDATED`
+`ROOT_PATCH_RERUN=NO`
+`REBOOT_AGAIN=NO`.
+
+A same-boot WindowServer crash at `2026-09-08 14:26:07 +0300` records COREANIMATION code4 / `spec=PBGRAXb_Xc` / repeated `XPC_ERROR_CONNECTION_INTERRUPTED`, with GPUCompiler 32023 libraries and AppleIntelHD5000GraphicsMTLDriver present in the image list. Treat this as useful post-reboot compiler-path reachability evidence only; it is not an accelerated-test result and does not replace D97HU.
+
+## CURRENT ACTION — rerun exact D97HU directly, no reboot
+Do NOT reboot again. Do NOT rerun Root Patch. Do NOT change EFI/NVRAM/framebuffer/boot-args.
+
+Run the already downloaded exact helper after verifying the corrected blob:
+`2f023cb10d544794e88a06ba58ab7c276f3d060f`.
+
+D97HU is read-only and must prove the active snapshot contains:
 1. exact P1 service SHA/postimage;
 2. exact P3-only MTLCompiler32023 SHA/UUID;
 3. P2 original and P3 exact postimage;
