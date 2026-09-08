@@ -11,16 +11,15 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HI_P1_REGEX_AUDIT_FALSE_NEGATIVE_SUSPECT_D97HM_AST_RESUME_READY.md`
-- commit `6bdc32e965ba98f2726d91a5896d86ccb7e62824`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HM_PORTABLE_D97HI_INNER_BUILD_PASS_D97HN_AUDIT_NEXT.md`
+- commit `7fa87cc64fb44b4b1d527261c8e233197090ef09`.
 
 Immediate decisive predecessors:
+- D97HI regex P1 audit tooling-boundary / D97HM AST resume ready — `6bdc32e965ba98f2726d91a5896d86ccb7e62824`;
 - portable Intel host ready — `018c46a1d853c93617338d630e7beb7afe323b21`;
-- D97HG exact P3-only reconstruction PASS / D97HI build authorized — `3aa5c5ea432b99fd538c44eb9bfe0ab481bf71ec`;
+- D97HG exact P3-only reconstruction PASS — `3aa5c5ea432b99fd538c44eb9bfe0ab481bf71ec`;
 - D97HF P1 runtime semantic progress / measured P3 frontier — `1af98134a40236290484037548dfba621df1c626`;
-- first post-P1 accelerated no-GUI / VESA recovery — `52125fed156f25c9f08ef611e7876793eab5e42a`;
 - D97HD active P1 VESA snapshot PASS + D97EW live gate PASS — `f5c342197210248a47469a7e6ec709c26ab66e9c`;
-- D97HC exact pre-reboot audit PASS — `c809157e3773a17a149a8cba322bde0fc724c5cb`;
 - D97GS P1-only Root Patch PASS — `c702ca47f20a036f2201799d05c1723441eb8a88`.
 
 ## Target / invariants
@@ -28,47 +27,64 @@ Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, framebuffer
 Never auto Root Patch. Never auto reboot. Never modify EFI/NVRAM automatically.
 Golden Sequoia immutable/read-only. Never compile on ASUS2.
 
-## Build-host authority
-Home Intel iMac remains valid. Current work MacBook Pro is explicitly authorized as a portable non-target Intel build host because it passed x86_64/Xcode/Python/toolchain/free-space preflight and all source reconstruction is exact/hash-gated.
+Portable non-target Intel build hosts are allowed only with exact source/provenance/hash gates. Current work MacBook Pro passed this requirement.
 
 ## Current measured compiler state
 - P1 runtime semantic progress PROVEN: old `RIP=0 / r15=32023 / MTLConnectionCtx+56` absent 9/9 current crashes.
-- Current 9/9 frontier: `MTLCompilerBuildRequestWithOptions -> addMsaaPositionInfoToModuleMetadata -> llvm::Module::getOrInsertNamedMetadata -> collectUsedGlobalVariables -> StringMapImpl::LookupBucketFor -> SIGSEGV`.
-- P2b is NOT justified as the next patch.
+- Current measured frontier: `MTLCompilerBuildRequestWithOptions -> addMsaaPositionInfoToModuleMetadata -> llvm::Module::getOrInsertNamedMetadata -> collectUsedGlobalVariables -> StringMapImpl::LookupBucketFor -> SIGSEGV`.
+- P2b is NOT justified as current next patch.
 - P3 serialized-bitcode bridge is measured/historically causal.
-- D97HG P3-only reconstruction changed exactly `0xA1574: e1->c9`, giving exact post-SHA `0066a944e7db5f15c397c156b968cbe71a4bf51fb4cad819beb23a99309f6e90`.
+- D97HG exact P3-only post-SHA: `0066a944e7db5f15c397c156b968cbe71a4bf51fb4cad819beb23a99309f6e90`.
 - AIR00/D34 remain unauthorized.
 
-## Portable bootstrap progress
-D97HL/D97HK on the work Mac successfully:
-- verified exact historical authority blobs;
-- cloned exact upstream b9df76/tree;
-- recreated D97DX source diff exact `c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4`;
-- created Python 3.13 x86_64 venv and installed requirements;
-- regenerated exact Universal-Binaries SHA `33b6f11c7593827f66044fd79c3d3ad2ffb84dfa0d0921c3795033543ec601d7`;
-- recreated exact D97GS source diff `cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f`;
-- inserted D97HI P3 and produced full current D97HI source diff `c459056884d3469a14fd5ebadb6fc4aa96c3b86dc35e39717732ade34ae24da2`.
+## D97HM — P1 audit corrected and D97HI inner build PASS
+The prior regex-based P1 hash mismatch was a tooling-boundary false negative. D97HM reconstructed exact D97GS in a temporary worktree and compared the AST-bounded P1 FunctionDef bytes.
 
-## Current stop — P1 audit boundary issue
-D97HI stopped before compilation because a regex-delimited P1 source capture changed hash after a new method was inserted immediately after P1:
-- pre `4302a73061f15f373cc0167c3f921b1aefc93e10f95932ecc1c20cacebb2ddb3`;
-- post `e1be3d2b40f084d1fa42a74df0950d58c94be4b9867ae70f0366df07f6c71fad`.
+Exact P1 audit:
+- pre/post bytes `3466 / 3466`;
+- pre/post SHA256 `387311b011ffec5931f439a1911c19032e26689e648fd6b074bc121d42d573a1`;
+- `D97HM_P1_AST_BYTE_IDENTICAL=PASS`;
+- `D97HM_P1_FUNCTION_PRESERVED_EXACT=PASS`.
 
-This is `INCONCLUSIVE_TOOLING_BOUNDARY`, not yet proven false-negative and not evidence that P1 changed. No build occurred.
+P3 source contract:
+- method/hook/pre-SHA/post-SHA/offset/preimage/postimage each exactly once;
+- hook order P1 -> P3 -> continuation PASS;
+- `D97HM_P3_SOURCE_CONTRACT=STATIC_STRUCTURAL_SEMANTIC_PROVEN`.
 
-## CURRENT ACTION — D97HM AST-bounded P1 audit + resume inner build
+Current exact source identities:
+- D97GS diff SHA `cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f`;
+- D97HI diff SHA `c459056884d3469a14fd5ebadb6fc4aa96c3b86dc35e39717732ade34ae24da2`.
+
+Built D97HI portable inner artifact:
+- x86_64;
+- executable SHA256 `1c3760fc232ccc653a62fb18cafd0192f5c079dc1a01b7caa58491b0bb775133`;
+- ZIP `/Users/alex/Desktop/OpenCore-Patcher-Tahoe-D97HI-INNER.zip`;
+- ZIP SHA256 `b0fe14f2f212e87a4f73b5ae210a3fda104518399968b2035b3a4f7616ff3e94`;
+- ZIP bytes `722927108`.
+
+Functional classification:
+`D97HI_STATUS=BUILD_PASS_PORTABLE_INNER`
+`D97HI_NEW_FUNCTIONAL_DELTA=P3_ONLY`
+`D97HI_P1_BASE=PRESERVED_EXACT`
+`D97HI_P2B_REPLAY=NO`
+`D97HI_AIR00_REPLAY=NO`
+`D97HI_D34_REPLAY=NO`.
+
+No Root Patch, wrapper assembly, target transfer or reboot occurred.
+
+## CURRENT ACTION — D97HN independent inner artifact audit
 Artifact:
-`OCLP-Continuity/artifacts/OCLP7_D97HM_RESUME_AFTER_P1_AUDIT_FALSE_NEGATIVE_AND_BUILD_INNER.sh`
-- commit `ac528a97f01fc31d5bd629371d3a86b2df16c4ab`;
-- blob `81a4079447e884ee0c8bb7dbf48b4662a45a0da6`.
+`OCLP-Continuity/artifacts/OCLP7_D97HN_INDEPENDENT_D97HI_INNER_ARTIFACT_AUDIT.sh`
+- commit `a73152b6ed715fa76428320f08bce843c4b11b5d`.
 
-D97HM must:
-1. require current full source diff exactly `c4590568...`;
-2. reconstruct exact D97GS from saved patch `cae9c...` in a temporary detached worktree;
-3. extract P1 in both sources using Python AST FunctionDef `lineno/end_lineno` boundaries;
-4. compare actual P1 function bytes exactly, excluding only blank separator lines between methods;
-5. stop if any actual P1 byte differs;
-6. verify P3 constants/hook/order and current full source identity;
-7. reuse existing venv/assets and build/package D97HI inner app only.
+D97HN must independently prove:
+1. current D97HI source diff exact `c4590568...` and changed-file set exact;
+2. reconstructed D97GS reference exact `cae9c...`;
+3. P1 AST-bounded bytes identical to D97GS;
+4. P3-only source contract and hook ordering exact;
+5. inner app codesign + x86_64 + executable SHA exact `1c3760fc...`;
+6. ZIP SHA/bytes exact `b0fe14f2... / 722927108`;
+7. extracted ZIP inner executable identity exact;
+8. file/symlink manifest of extracted ZIP identical to the built inner app.
 
-No wrapper assembly, target transfer, Root Patch, reboot, acceleration, P2b, AIR00 or D34 is authorized until D97HM PASS and an independent inner audit.
+No transfer to ASUS2, wrapper assembly, Root Patch, reboot, acceleration, P2b, AIR00 or D34 is authorized until D97HN PASS is reviewed.
