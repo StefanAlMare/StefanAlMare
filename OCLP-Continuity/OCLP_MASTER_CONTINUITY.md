@@ -11,17 +11,16 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HP_PARTIAL_PASS_AZUL_LOAD_STATE_INCONCLUSIVE_D97HQ_AUXKC_AUDIT_READY.md`
-- commit `2a3668e8fd0c20e20b714f4a6e6a35b25576406d`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HQ_AUXKC_VALID_VESA_UNLOADED_DIRECT_D97HO_ROOTPATCH_READY.md`
+- commit `1258ce510da9e25dbbfe8035b000df582fc39e89`.
 
 Immediate decisive predecessors:
-- D97HN inner audit PASS / D97HO wrapper PASS / D97HP ready — `e75fec4b3c5921ec0a2a28760bf7c699fc96a333`;
+- D97HP partial PASS / D97HQ AuxKC audit ready — `2a3668e8fd0c20e20b714f4a6e6a35b25576406d`;
+- D97HN inner audit PASS / D97HO wrapper PASS — `e75fec4b3c5921ec0a2a28760bf7c699fc96a333`;
 - D97HN independent D97HI inner audit PASS — `d169d7c63c7d69b3b9f49ce8dd12d8512bf8e546`;
 - D97HM portable D97HI inner build PASS — `7fa87cc64fb44b4b1d527261c8e233197090ef09`;
 - D97HG exact P3-only reconstruction PASS — `3aa5c5ea432b99fd538c44eb9bfe0ab481bf71ec`;
-- D97HF P1 runtime semantic progress / measured P3 frontier — `1af98134a40236290484037548dfba621df1c626`;
-- D97HD active P1 VESA snapshot PASS + D97EW live gate PASS — `f5c342197210248a47469a7e6ec709c26ab66e9c`;
-- D97GS P1-only Root Patch PASS — `c702ca47f20a036f2201799d05c1723441eb8a88`.
+- D97HF P1 runtime semantic progress / measured P3 frontier — `1af98134a40236290484037548dfba621df1c626`.
 
 ## Target / invariants
 Tahoe `26.6.2 / 25G82`, Haswell `8086:0412`, SMBIOS `MacBookAir6,2`, framebuffer 3/3/3.
@@ -66,53 +65,65 @@ Preserved exact D97GS components:
 - D97DX patch SHA `c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4`;
 - D97GS patch SHA `cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f`.
 
-No Root Patch or reboot occurred.
-
-## D97HP — PARTIAL PASS, userspace/compiler base exact
-Current boot remains VESA with D97EZ inert.
-
-D97HP proved before stopping:
-- `D97HP_VESA_GATE=PASS`;
-- D97HO artifact exact `a1aa24d5... / 722975756`;
+## D97HP — userspace/compiler base exact; Haswell loaded-only gate retired for VESA
+D97HP proved:
+- VESA active, D97EZ inert;
+- D97HO artifact exact;
 - active P1 service exact SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- P1 postimage `81fe177d0000 @ 0x3494` PASS;
+- P1 postimage `81fe177d0000 @ 0x3494`;
 - active MTLCompiler 32023 exact pre-P3 SHA `ddabe975cd2ff3e8854d92a102aedfea6f1a3e586eccd50259639182b29ee269`;
-- UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`;
-- P2 remains original `418b81d0000000 @ 0x9A8CD`, no P2b;
-- P3 remains unapplied exact preimage `81e100002000 @ 0xA1573`;
+- P2 original `418b81d0000000 @ 0x9A8CD`, no P2b;
+- P3 unapplied exact preimage `81e100002000 @ 0xA1573`;
 - corrected metallibs exact 180/180, missing0, different0.
 
-D97HP then stopped:
-`D97HP_STATUS=FAIL`
-`D97HP_REASON=AZUL_NOT_LOADED`.
+D97HP then stopped at `AZUL_NOT_LOADED`. D97HQ resolves this gate.
 
-Classification:
-`D97HP_USERSPACE_P1_PRE_P3_BASE=STRUCTURAL_SEMANTIC_PASS`
-`D97HP_METALLIB_LAYER=180_OF_180_EXACT`
-`D97HP_HASWELL_LOAD_STATE=INCONCLUSIVE`.
+## D97HQ — AuxKC valid, Haswell present but intentionally unloaded in current VESA boot
+User archive:
+`OCLP7_D97HQ_AUXKC_HASWELL_AUDIT_20260908_125907.zip`
+- bytes `346782`;
+- SHA256 `8095be562ce77e8d4b416f5d558b2938d583277119fb5d1e018e3045ad41bc68`.
 
-VESA alone is not a sufficient explanation: prior D97HD VESA boot reported both AppleIntelFramebufferAzul and AppleIntelHD5000Graphics loaded. Therefore do not infer either a driver regression or a need for Restore from the single generic `kmutil showloaded` miss.
+Exact D97HQ results:
+- VESA gate PASS;
+- Azul/HD5000 kext bundles present on disk;
+- `D97HQ_AZUL_IN_AUX_ALL=1`, loaded0, unloaded1, all-collections1;
+- `D97HQ_HD5000_IN_AUX_ALL=1`, loaded0, unloaded1, all-collections1;
+- `D97HQ_KMUTIL_CHECK_AUX_LOADINFO_RC=0`;
+- AuxKC `/Library/KernelCollections/AuxiliaryKernelExtensions.kc`, bytes `5439488`;
+- kmutil inspect contains LC_FILESET_ENTRY for both Haswell kext bundle IDs;
+- IOKit counts under VESA: Azul0, HD5000Graphics0, IntelAccelerator0, IntelFramebuffer0, AppleIntelFramebuffer0, display0=2, AppleBacklight=4;
+- official helper exact SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, Team `S74BDJXQMD`, PASS;
+- classifier `PRESENT_IN_AUX_BUT_NOT_BOTH_LOADED`;
+- final `PASS_READONLY_DIAGNOSTIC_COLLECTION`.
 
-## CURRENT ACTION — D97HQ read-only AuxKC/load-state audit
-Artifact:
-`OCLP-Continuity/artifacts/OCLP7_D97HQ_ASUS2_READONLY_AUXKC_HASWELL_STATE_AUDIT.sh`
-- commit `eb6cdadc1ce00ee65d87417ce99eb946a4271617`;
-- Git blob `b77a65026f0eece6d88f09e58f98430041c61619`.
+Interpretation:
+The current VESA boot has no Intel accelerator/framebuffer service and kmutil explicitly classifies both Haswell kexts as present in the valid AuxKC but unloaded. Therefore the D97HP loaded-only failure is not evidence of a broken AuxKC and does not justify Restore.
 
-D97HQ must distinguish:
-1. Haswell kext bundles present on disk;
-2. presence in `kmutil showloaded --collection aux --show all`;
-3. explicit AUX loaded state;
-4. explicit AUX unloaded state;
-5. all-collection load information;
-6. `kmutil check --collection aux --load-info` consistency;
-7. standard on-disk AuxKC presence/inspection;
-8. IOKit evidence for Intel framebuffer/accelerator/display services;
-9. official privileged helper exact SHA/team/codesign.
+## Restore-first vs direct D97HO — DECIDED
+`RESTORE_FIRST=NO`
+`DIRECT_D97HO_ROOT_PATCH=AUTHORIZED`
 
-D97HQ is read-only. It does NOT load/unload kexts and does not modify Root Patch/Restore/EFI/NVRAM/framebuffer state.
+Rationale:
+- exact P1-only active userspace base;
+- exact pre-P3 MTLCompiler 32023;
+- P2 original and P3 unique preimage exact;
+- metallibs 180/180 exact;
+- valid AuxKC contains both Haswell kexts;
+- official helper exact;
+- D97HO independently audited and exact.
 
-## Restore-first vs direct D97HO
-Decision remains deferred until D97HQ returns. Do not Root Patch or Restore yet.
+Expected D97HO Root Patch semantics:
+- P1 sees already-post SHA and no-ops idempotently;
+- P3 changes exactly `0xA1574: e1 -> c9` and must produce SHA `0066a944e7db5f15c397c156b968cbe71a4bf51fb4cad819beb23a99309f6e90`;
+- P2b/AIR00/D34 remain absent;
+- normal D97DX patchsets reapply/rebuild corrected files and AuxKC.
 
-No Root Patch, Restore, reboot, acceleration, EFI/NVRAM/framebuffer change, P2b, AIR00 or D34 is authorized before D97HQ review.
+## CURRENT ACTION — manual D97HO Root Patch, then NO reboot
+1. User manually launches `/Users/alex/Desktop/OpenCore-Patcher-Tahoe-D97HO.app` on ASUS2.
+2. Run Post-Install Root Patch.
+3. Capture full patch output.
+4. Do NOT reboot when patching completes.
+5. Run a read-only pre-reboot audit proving P1 + P3 exact, metallibs exact, and AuxKC rebuild success.
+
+No EFI/NVRAM/framebuffer mutation is authorized. No accelerated boot is authorized until the pre-reboot audit closes PASS.
