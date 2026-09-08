@@ -11,10 +11,11 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HO_ROOTPATCH_P1_P3_PASS_D97HS_HELPER_DEBUG_RESIDUAL_D97HT_RESTORE_AND_RERUN.md`
-- commit `bd7e059537618175a33949193532cb3e53166d11`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HT_TOOLING_FALSE_NEGATIVE_OFFICIAL_HELPER_ALREADY_PRESENT_D97HS_RERUN.md`
+- commit `08d174b574ec400222cd1218cac7015ee9461fb2`.
 
 Immediate decisive predecessors:
+- D97HO Root Patch P1+P3 PASS / first D97HS helper residual: `bd7e059537618175a33949193532cb3e53166d11`;
 - D97HR clean-native VESA PASS / D97HO authorized: `d80304f308cd30af224984bbf27da0c494993f5f`;
 - upstream OCLP 2.5.0/Nightly review — no target update: `dcdb38756fdd09b8b6bb4362572bd70c26f62ae5`;
 - D97GS Revert PASS / D97HR ready: `22fa01b19306788c75911baf0eb7fdb5c55a1de4`;
@@ -41,8 +42,7 @@ Portable non-target Intel build hosts are allowed only with exact source/provena
 - AIR00/D34 remain unauthorized.
 
 ## D97HI inner — build + independent audit CLOSED PASS
-Exact source diff:
-`c459056884d3469a14fd5ebadb6fc4aa96c3b86dc35e39717732ade34ae24da2`.
+Exact source diff: `c459056884d3469a14fd5ebadb6fc4aa96c3b86dc35e39717732ade34ae24da2`.
 P1 AST preservation byte-identical: bytes 3466/3466, SHA both `387311b011ffec5931f439a1911c19032e26689e648fd6b074bc121d42d573a1`.
 D97HN independently proved P1 exact, P3-only, hook order P1 -> P3 -> continuation, P2b/AIR00/D34 absent, x86_64 inner executable SHA `1c3760fc232ccc653a62fb18cafd0192f5c079dc1a01b7caa58491b0bb775133`, inner ZIP SHA `b0fe14f2f212e87a4f73b5ae210a3fda104518399968b2035b3a4f7616ff3e94`, bytes 722927108, manifest exact 156/156.
 
@@ -92,27 +92,30 @@ Before stopping D97HS proved:
 - active native service exact `4262e71f...`;
 - active native CoreDisplay exact `daee638d... / 24128`;
 - active legacy 32023 absent, expected before reboot.
+D97HS then observed helper DEBUG SHA `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`, Team not set and stopped. This did not invalidate P1/P3.
 
-D97HS then found active privileged helper SHA `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`, Team not set.
-This is the exact known D97GS/D97HO DEBUG helper preserved in the custom wrapper, not an unknown binary and not P3 failure.
+## D97HT — TOOLING FALSE NEGATIVE
+D97HT fetched exact D97HA and D97HS successfully. D97HA precheck then observed the active helper already equal to official SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
+D97HA is intentionally fail-closed and expects exact DEBUG pre-state, so it stopped with `ACTIVE_NOT_EXACT_DEBUG_HELPER`.
+This is a precondition/tooling false-negative, not a Root Patch/P3 failure.
+The trailing password prompt is caused by D97HA's EXIT cleanup trap invoking `sudo rm -f` on its temporary staging path even after the precheck fails; no Root Patch or other project mutation occurred.
+
 Classification:
-`D97HS_FAIL=INFRASTRUCTURE_HELPER_RESIDUAL_ONLY`
-`D97HS_P3_STATUS=NOT_INVALIDATED`
-`REBOOT=NO`.
+`D97HT_FAILURE=TOOLING_FALSE_NEGATIVE_PRECONDITION_DRIFT`
+`OFFICIAL_HELPER_ALREADY_PRESENT=PROVEN_BY_SHA`
+`D97HO_ROOTPATCH_P1_P3=NOT_INVALIDATED`.
 
-## CURRENT ACTION — D97HT restore official helper + rerun exact D97HS
-D97HT artifact:
-`OCLP-Continuity/artifacts/OCLP7_D97HT_RESTORE_OFFICIAL_HELPER_AND_RERUN_D97HS.sh`
-- commit `0d778babaa1c8c8318bcf1cbff11c3516d270aa6`;
-- blob `69a5b2e57e857f2fc735b030c0aa8caa24504f68`.
-
-D97HT pins and executes:
-1. exact proven D97HA official-helper-only restore, commit `5c5ffddc7db7c2d6113115c90b9ef0e74449e977`, blob `5eec076996619bab2b2d8a17f57b086b6d0ac011`;
-2. exact D97HS pre-reboot audit, commit `dcfc861b9bd23a8ac00d7d07c43f4166ea402f18`, blob `dd71dbd1149a6c96b3e754ff500f029f536bdef5`.
-
-Only system mutation authorized is replacing the exact DEBUG helper with the exact official helper. No Root Patch, Restore, EFI/NVRAM/framebuffer change or reboot.
+## CURRENT ACTION — rerun exact D97HS directly, before reboot
+Do NOT run D97HA/D97HT again.
+Do NOT rerun Root Patch.
+Do NOT reboot.
+Run exact D97HS directly:
+`OCLP-Continuity/artifacts/OCLP7_D97HS_ASUS2_POST_D97HO_PRE_REBOOT_P1_P3_AUDIT.sh`
+- commit `dcfc861b9bd23a8ac00d7d07c43f4166ea402f18`;
+- blob `dd71dbd1149a6c96b3e754ff500f029f536bdef5`.
 
 D97HS full PASS must prove on underlying System volume:
+- official helper exact SHA/team/codesign;
 - exact P1 service SHA `a8716ffd...`;
 - exact P3-only MTLCompiler32023 SHA `0066a944...`;
 - P2 original `418b81d0000000 @ 0x9A8CD`;
@@ -120,4 +123,4 @@ D97HS full PASS must prove on underlying System volume:
 - corrected metallibs 180/180 exact;
 - Haswell bundles present and new AuxKC contains both.
 
-Only after D97HT/D97HS full PASS may a VESA reboot be authorized. No acceleration before post-reboot active-snapshot audit.
+Only after D97HS full PASS may a VESA reboot be authorized. No acceleration before post-reboot active-snapshot audit.
