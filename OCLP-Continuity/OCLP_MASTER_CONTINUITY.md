@@ -11,12 +11,13 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HO_UI_REVERT_ONLY_RESTORE_FIRST_REQUIRED.md`
-- commit `afb6fee84e8b7eae53a30693999049667d5be17a`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97GS_REVERT_PASS_D97HR_POST_REBOOT_NATIVE_AUDIT_READY.md`
+- commit `22fa01b19306788c75911baf0eb7fdb5c55a1de4`.
 
 Immediate decisive predecessors:
+- D97HO UI Revert-only / Restore-first required — `afb6fee84e8b7eae53a30693999049667d5be17a`;
 - D97HQ AuxKC valid / VESA unloaded diagnostic — `1258ce510da9e25dbbfe8035b000df582fc39e89`;
-- D97HP partial PASS / D97HQ AuxKC audit ready — `2a3668e8fd0c20e20b714f4a6e6a35b25576406d`;
+- D97HP partial PASS / D97HQ ready — `2a3668e8fd0c20e20b714f4a6e6a35b25576406d`;
 - D97HN inner audit PASS / D97HO wrapper PASS — `e75fec4b3c5921ec0a2a28760bf7c699fc96a333`;
 - D97HN independent D97HI inner audit PASS — `d169d7c63c7d69b3b9f49ce8dd12d8512bf8e546`;
 - D97HM portable D97HI inner build PASS — `7fa87cc64fb44b4b1d527261c8e233197090ef09`;
@@ -66,8 +67,8 @@ Preserved exact D97GS components:
 - D97DX patch SHA `c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4`;
 - D97GS patch SHA `cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f`.
 
-## D97HP + D97HQ — live base exact; Haswell kexts healthy in AuxKC but unloaded under VESA
-D97HP proved:
+## D97HP + D97HQ — pre-revert live base exact
+D97HP proved before its loaded-only stop:
 - VESA active, D97EZ inert;
 - D97HO artifact exact;
 - active P1 service exact SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
@@ -78,35 +79,57 @@ D97HP proved:
 - corrected metallibs exact 180/180, missing0, different0.
 
 D97HQ then proved:
-- Azul and HD5000 bundles present on disk and in AuxKC;
-- both explicitly unloaded in current VESA boot;
+- Azul and HD5000 present on disk and in AuxKC;
+- both explicitly unloaded under current VESA boot;
 - `kmutil check --collection aux --load-info` RC=0;
 - AuxKC contains LC_FILESET_ENTRY for both Haswell kexts;
 - no IntelAccelerator/IntelFramebuffer IOKit services under VESA;
 - official helper exact SHA/team/codesign.
 
-Therefore D97HP `AZUL_NOT_LOADED` is not AuxKC corruption.
+Thus D97HP `AZUL_NOT_LOADED` was not AuxKC corruption.
 
-## D97HO UI/runtime patcher-state observation — supersedes direct-patch decision
-When the user launched exact D97HO on ASUS2, Gatekeeper required `Open Anyway` and `osascript` requested authorization to make changes. These are security/authorization prompts and not compiler evidence.
+## OCLP UI patcher-state — Restore-first workflow required
+Exact D97HO, when launched on the still-patched P1 snapshot, exposed only `Revert Root Patch` and no `Start Root Patch`.
+This superseded the earlier direct-patch decision.
+Classification:
+`RESTORE_FIRST=REQUIRED_BY_OCLP_WORKFLOW`.
+This was not D97HO/P3 failure.
 
-After launch, OCLP exposed **only `Revert Root Patch`** and did not expose `Start Root Patch`.
-
-This is decisive workflow evidence that OCLP considers the currently active root snapshot already patched/dirty and refuses another Root Patch pass over it.
+## D97GS Revert Root Patch — PASS
+User ran controlled Revert using exact D97GS lineage.
+Observed:
+- exact local MetallibSupportPkg 26.6.2-25G82 found;
+- installed patchsets correctly detected: Metal 3802 Common, Metal 3802 .metallibs, Intel Haswell, Metal 3802 Common Extended, Monterey GVA, Monterey OpenCL;
+- SkylightPlugins removed;
+- Auxiliary Kernel Collection cleaned;
+- AppleIntelFramebufferAzul.kext removed;
+- AppleIntelHD5000Graphics.kext removed;
+- `Unpatching complete`;
+- OCLP requests reboot for changes to take effect.
 
 Classification:
-- prior `DIRECT_D97HO_ROOT_PATCH=AUTHORIZED` is superseded;
-- `RESTORE_FIRST=REQUIRED_BY_OCLP_WORKFLOW`;
-- this is not evidence of D97HO/P3 failure.
+`D97GS_REVERT_ROOT_PATCH=PASS`
+`D97HO_P3_NOT_APPLIED_YET`.
 
-## CURRENT ACTION — controlled Revert first
-1. Do not bypass the OCLP Revert-only state.
-2. Prefer the exact D97GS lineage for the revert of the currently installed D97GS/P1-only Root Patch.
-3. Run `Revert Root Patch` and capture the full output.
-4. Reboot only after the revert completes successfully, keeping `-igfxvesa` active and D97EZ inert.
-5. After reboot, run a read-only clean/native-state audit.
-6. Then run exact D97HO Root Patch on the clean state.
-7. After D97HO patch completes, do not reboot until a pre-reboot P1+P3/system/AuxKC audit passes.
-8. Only then authorize reboot and later acceleration testing.
+## CURRENT ACTION — reboot in VESA, then D97HR clean/native audit
+Reboot is now authorized with no other change:
+- keep `-igfxvesa` active;
+- keep D97EZ inert;
+- no EFI/NVRAM/framebuffer changes.
 
-No EFI/NVRAM/framebuffer changes. P2b/AIR00/D34 remain unauthorized.
+After reboot run:
+`OCLP-Continuity/artifacts/OCLP7_D97HR_ASUS2_POST_REVERT_REBOOT_CLEAN_NATIVE_AUDIT.sh`
+- commit `27ce582a14ecf4486fb9397208da2905bddfd4a4`.
+
+D97HR must prove:
+1. 25G82 + VESA gate PASS;
+2. native MTLCompilerService exact SHA `4262e71f2412adcd66ec052611bc76a8f8c5477f38bd21f8094cf2ec0ee66256`;
+3. native CoreDisplay metallib exact SHA `daee638d2bfa52b5196b63c0423cdf6dd2ae35eb264ea077c8e914884ee016e1`, bytes `24128`, MTLB;
+4. Haswell patch bundles removed from /Library/Extensions;
+5. AuxKC consistency RC=0;
+6. official helper exact SHA/team/codesign;
+7. D97HO ZIP still exact `a1aa24d5... / 722975756`.
+
+Only after D97HR PASS is D97HO Root Patch authorized on the clean/native snapshot. After D97HO patch completes, do not reboot until a pre-reboot P1+P3/system/AuxKC audit passes.
+
+No P2b/AIR00/D34. No acceleration until post-patch audits close PASS.
