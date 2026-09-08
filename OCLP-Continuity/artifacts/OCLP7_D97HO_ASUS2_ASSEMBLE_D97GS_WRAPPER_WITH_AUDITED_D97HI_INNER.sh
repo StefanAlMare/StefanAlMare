@@ -1,0 +1,167 @@
+#!/bin/bash
+set -Eeuo pipefail
+
+# OCLP7 D97HO — ASUS2 wrapper assembly only.
+# Uses exact audited D97GS wrapper and replaces only the nested OpenCore-Patcher.app
+# with the independently audited D97HI inner app. NO build, Root Patch, EFI/NVRAM,
+# framebuffer mutation or reboot.
+
+EXPECTED_D97GS_ZIP_SHA="e61d225d2bc1352795ef2aeb9e61959fef2f23b9d11192dd1ea033824c855266"
+EXPECTED_D97GS_ZIP_BYTES="722879148"
+EXPECTED_D97HI_INNER_ZIP_SHA="b0fe14f2f212e87a4f73b5ae210a3fda104518399968b2035b3a4f7616ff3e94"
+EXPECTED_D97HI_INNER_ZIP_BYTES="722927108"
+EXPECTED_D97HI_INNER_EXE_SHA="1c3760fc232ccc653a62fb18cafd0192f5c079dc1a01b7caa58491b0bb775133"
+EXPECTED_LAUNCHER_SHA="344ea23b3215c47db0208d22f0bbcf1478ebb903b744b8d0213dc9df5a4f484c"
+EXPECTED_DEBUG_HELPER_SHA="993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9"
+EXPECTED_D97DX_PATCH_SHA="c8b45d7f256a13b24f4569b342bd70bad8b45fa348f36395eb4c7e1ae2d24ca4"
+EXPECTED_D97GS_PATCH_SHA="cae9c340bc5ade561f38e949dde74da630475805e053c0acb87c36bed7ede65f"
+EXPECTED_P1_POST_SHA="a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43"
+EXPECTED_P3_POST_SHA="0066a944e7db5f15c397c156b968cbe71a4bf51fb4cad819beb23a99309f6e90"
+EXPECTED_D97HI_SOURCE_DIFF_SHA="c459056884d3469a14fd5ebadb6fc4aa96c3b86dc35e39717732ade34ae24da2"
+
+STAMP="$(date +%Y%m%d_%H%M%S)"
+TMP="$HOME/Library/Caches/OCLP7-D97HO-$STAMP"
+BASE_EXTRACT="$TMP/base"
+INNER_EXTRACT="$TMP/inner"
+OUT="$HOME/Desktop/OpenCore-Patcher-Tahoe-D97HO.app"
+ZIP_OUT="$HOME/Desktop/OpenCore-Patcher-Tahoe-D97HO.zip"
+REPORT="$HOME/Desktop/OCLP7_D97HO_WRAPPER_ASSEMBLY_${STAMP}.txt"
+mkdir -p "$BASE_EXTRACT" "$INNER_EXTRACT"
+exec > >(tee "$REPORT") 2>&1
+
+fail(){ echo "D97HO_STATUS=FAIL"; echo "D97HO_REASON=$*"; echo "D97HO_REPORT=$REPORT"; exit 1; }
+sha256(){ /usr/bin/shasum -a 256 "$1" | /usr/bin/awk '{print $1}'; }
+
+cat <<'HDR'
+===== OCLP7 D97HO — D97GS WRAPPER + AUDITED D97HI INNER ASSEMBLY =====
+BUILD=NO
+ROOT_PATCH=NO
+SYSTEM_ROOT_MUTATION=NO
+EFI_MUTATION=NO
+NVRAM_MUTATION=NO
+FRAMEBUFFER_MUTATION=NO
+REBOOT=NO
+WRAPPER_ASSEMBLY_ONLY=YES
+P2B_REPLAY=NO
+AIR00_REPLAY=NO
+D34_REPLAY=NO
+HDR
+
+[[ "$(uname -s)" == Darwin ]] || fail NOT_DARWIN
+[[ "$(uname -m)" == x86_64 ]] || fail NOT_X86_64
+
+printf '\n===== LOCATE EXACT INPUT ZIPS =====\n'
+D97GS_ZIP=""
+for P in "$HOME/Desktop/OpenCore-Patcher-Tahoe-D97GS.zip" "$HOME/Downloads/OpenCore-Patcher-Tahoe-D97GS.zip"; do
+  if [[ -f "$P" ]] && [[ "$(sha256 "$P")" == "$EXPECTED_D97GS_ZIP_SHA" ]]; then D97GS_ZIP="$P"; break; fi
+done
+[[ -n "$D97GS_ZIP" ]] || fail EXACT_D97GS_ZIP_NOT_FOUND
+[[ "$(/usr/bin/stat -f '%z' "$D97GS_ZIP")" == "$EXPECTED_D97GS_ZIP_BYTES" ]] || fail D97GS_ZIP_BYTES_MISMATCH
+
+echo "D97HO_D97GS_ZIP=$D97GS_ZIP"
+echo "D97HO_D97GS_ZIP_SHA256=$(sha256 "$D97GS_ZIP")"
+
+D97HI_ZIP=""
+for P in "$HOME/Desktop/OpenCore-Patcher-Tahoe-D97HI-INNER.zip" "$HOME/Downloads/OpenCore-Patcher-Tahoe-D97HI-INNER.zip"; do
+  if [[ -f "$P" ]] && [[ "$(sha256 "$P")" == "$EXPECTED_D97HI_INNER_ZIP_SHA" ]]; then D97HI_ZIP="$P"; break; fi
+done
+[[ -n "$D97HI_ZIP" ]] || fail EXACT_D97HI_INNER_ZIP_NOT_FOUND
+[[ "$(/usr/bin/stat -f '%z' "$D97HI_ZIP")" == "$EXPECTED_D97HI_INNER_ZIP_BYTES" ]] || fail D97HI_INNER_ZIP_BYTES_MISMATCH
+
+echo "D97HO_D97HI_INNER_ZIP=$D97HI_ZIP"
+echo "D97HO_D97HI_INNER_ZIP_SHA256=$(sha256 "$D97HI_ZIP")"
+echo "D97HO_INPUT_ZIPS=PASS"
+
+printf '\n===== EXTRACT / VERIFY D97GS WRAPPER =====\n'
+/usr/bin/ditto -x -k "$D97GS_ZIP" "$BASE_EXTRACT"
+BASE_APP="$BASE_EXTRACT/OpenCore-Patcher-Tahoe-D97GS.app"
+[[ -d "$BASE_APP" ]] || fail D97GS_APP_MISSING_AFTER_EXTRACT
+LAUNCHER="$BASE_APP/Contents/MacOS/OpenCore-Patcher-Tahoe-D97DX"
+DEBUG_HELPER="$BASE_APP/Contents/Resources/debug-privileged-helper"
+D97DX_PATCH="$BASE_APP/Contents/Resources/OCLP7_D97DX_SOURCE.patch"
+D97GS_PATCH="$BASE_APP/Contents/Resources/OCLP7_D97GS_SOURCE.patch"
+for P in "$LAUNCHER" "$DEBUG_HELPER" "$D97DX_PATCH" "$D97GS_PATCH"; do [[ -f "$P" ]] || fail "MISSING_BASE_COMPONENT_$P"; done
+[[ "$(sha256 "$LAUNCHER")" == "$EXPECTED_LAUNCHER_SHA" ]] || fail LAUNCHER_SHA_MISMATCH
+[[ "$(sha256 "$DEBUG_HELPER")" == "$EXPECTED_DEBUG_HELPER_SHA" ]] || fail DEBUG_HELPER_SHA_MISMATCH
+[[ "$(sha256 "$D97DX_PATCH")" == "$EXPECTED_D97DX_PATCH_SHA" ]] || fail D97DX_PATCH_SHA_MISMATCH
+[[ "$(sha256 "$D97GS_PATCH")" == "$EXPECTED_D97GS_PATCH_SHA" ]] || fail D97GS_PATCH_SHA_MISMATCH
+
+echo "D97HO_D97GS_LAUNCHER=PASS"
+echo "D97HO_D97GS_DEBUG_HELPER=PASS"
+echo "D97HO_D97DX_PATCH=PASS"
+echo "D97HO_D97GS_PATCH=PASS"
+
+printf '\n===== EXTRACT / VERIFY AUDITED D97HI INNER =====\n'
+/usr/bin/ditto -x -k "$D97HI_ZIP" "$INNER_EXTRACT"
+INNER_APP="$INNER_EXTRACT/OpenCore-Patcher-Tahoe-D97HI-INNER.app"
+[[ -d "$INNER_APP" ]] || fail D97HI_INNER_APP_MISSING_AFTER_EXTRACT
+/usr/bin/codesign --verify --deep --strict "$INNER_APP" || fail D97HI_INNER_CODESIGN_FAIL
+INNER_EXE="$INNER_APP/Contents/MacOS/OpenCore-Patcher"
+[[ -f "$INNER_EXE" ]] || fail D97HI_INNER_EXE_MISSING
+INNER_SHA="$(sha256 "$INNER_EXE")"
+INNER_ARCH="$(/usr/bin/lipo -archs "$INNER_EXE")"
+echo "D97HO_D97HI_INNER_EXE_SHA256=$INNER_SHA"
+echo "D97HO_D97HI_INNER_ARCH=$INNER_ARCH"
+[[ "$INNER_SHA" == "$EXPECTED_D97HI_INNER_EXE_SHA" ]] || fail D97HI_INNER_EXE_SHA_MISMATCH
+[[ "$INNER_ARCH" == x86_64 ]] || fail D97HI_INNER_ARCH_MISMATCH
+echo "D97HO_D97HI_INNER=PASS"
+
+printf '\n===== ASSEMBLE D97HO =====\n'
+/bin/rm -rf "$OUT" "$ZIP_OUT"
+/usr/bin/ditto "$BASE_APP" "$OUT"
+/bin/rm -rf "$OUT/Contents/Resources/OpenCore-Patcher.app"
+/usr/bin/ditto "$INNER_APP" "$OUT/Contents/Resources/OpenCore-Patcher.app"
+
+cat > "$OUT/Contents/Resources/OCLP7_D97HI_PROVENANCE.txt" <<EOF
+D97HO_BASE_WRAPPER=D97GS_EXACT
+D97GS_ZIP_SHA256=$EXPECTED_D97GS_ZIP_SHA
+D97GS_LAUNCHER_SHA256=$EXPECTED_LAUNCHER_SHA
+D97GS_DEBUG_HELPER_SHA256=$EXPECTED_DEBUG_HELPER_SHA
+D97DX_SOURCE_PATCH_SHA256=$EXPECTED_D97DX_PATCH_SHA
+D97GS_SOURCE_PATCH_SHA256=$EXPECTED_D97GS_PATCH_SHA
+D97HI_SOURCE_DIFF_SHA256=$EXPECTED_D97HI_SOURCE_DIFF_SHA
+D97HI_INNER_EXECUTABLE_SHA256=$EXPECTED_D97HI_INNER_EXE_SHA
+D97HI_INNER_ZIP_SHA256=$EXPECTED_D97HI_INNER_ZIP_SHA
+D97HI_P1_POST_SHA256=$EXPECTED_P1_POST_SHA
+D97HI_P3_POST_SHA256=$EXPECTED_P3_POST_SHA
+D97HI_P2B_REPLAY=NO
+D97HI_AIR00_REPLAY=NO
+D97HI_D34_REPLAY=NO
+EOF
+
+# Re-sign only outer bundle after nested app replacement; nested inner signature remains intact.
+/usr/bin/codesign --force --sign - "$OUT"
+/usr/bin/codesign --verify --deep --strict "$OUT" || fail D97HO_OUTER_CODESIGN_FAIL
+
+echo "D97HO_OUTER_CODESIGN=PASS"
+
+printf '\n===== POST-ASSEMBLY IDENTITY AUDIT =====\n'
+OUT_LAUNCHER="$OUT/Contents/MacOS/OpenCore-Patcher-Tahoe-D97DX"
+OUT_DEBUG="$OUT/Contents/Resources/debug-privileged-helper"
+OUT_D97DX_PATCH="$OUT/Contents/Resources/OCLP7_D97DX_SOURCE.patch"
+OUT_D97GS_PATCH="$OUT/Contents/Resources/OCLP7_D97GS_SOURCE.patch"
+OUT_INNER_EXE="$OUT/Contents/Resources/OpenCore-Patcher.app/Contents/MacOS/OpenCore-Patcher"
+[[ "$(sha256 "$OUT_LAUNCHER")" == "$EXPECTED_LAUNCHER_SHA" ]] || fail OUT_LAUNCHER_DRIFT
+[[ "$(sha256 "$OUT_DEBUG")" == "$EXPECTED_DEBUG_HELPER_SHA" ]] || fail OUT_DEBUG_HELPER_DRIFT
+[[ "$(sha256 "$OUT_D97DX_PATCH")" == "$EXPECTED_D97DX_PATCH_SHA" ]] || fail OUT_D97DX_PATCH_DRIFT
+[[ "$(sha256 "$OUT_D97GS_PATCH")" == "$EXPECTED_D97GS_PATCH_SHA" ]] || fail OUT_D97GS_PATCH_DRIFT
+[[ "$(sha256 "$OUT_INNER_EXE")" == "$EXPECTED_D97HI_INNER_EXE_SHA" ]] || fail OUT_INNER_EXE_DRIFT
+[[ "$(/usr/bin/lipo -archs "$OUT_INNER_EXE")" == x86_64 ]] || fail OUT_INNER_ARCH_DRIFT
+/usr/bin/codesign --verify --deep --strict "$OUT/Contents/Resources/OpenCore-Patcher.app" || fail OUT_INNER_CODESIGN_FAIL
+
+echo "D97HO_BASE_WRAPPER_COMPONENTS=PRESERVED_EXACT"
+echo "D97HO_D97HI_INNER=PRESERVED_EXACT"
+
+/usr/bin/ditto -c -k --sequesterRsrc --keepParent "$OUT" "$ZIP_OUT"
+ZIP_SHA="$(sha256 "$ZIP_OUT")"
+ZIP_BYTES="$(/usr/bin/stat -f '%z' "$ZIP_OUT")"
+
+echo "D97HO_ZIP=$ZIP_OUT"
+echo "D97HO_ZIP_SHA256=$ZIP_SHA"
+echo "D97HO_ZIP_BYTES=$ZIP_BYTES"
+echo "D97HO_STATUS=PASS_WRAPPER_ASSEMBLY"
+echo "D97HO_CLASSIFICATION=STATIC_STRUCTURAL_SEMANTIC_PROVEN"
+echo "D97HO_ROOT_PATCH=NOT_YET"
+echo "D97HO_REBOOT=NO"
+echo "D97HO_NEXT=READ_ONLY_ASUS2_PREFLIGHT_BEFORE_ANY_ROOT_PATCH"
+echo "D97HO_REPORT=$REPORT"
