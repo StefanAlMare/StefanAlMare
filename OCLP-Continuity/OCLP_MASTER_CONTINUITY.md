@@ -11,10 +11,11 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97GS_REVERT_PASS_D97HR_POST_REBOOT_NATIVE_AUDIT_READY.md`
-- commit `22fa01b19306788c75911baf0eb7fdb5c55a1de4`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_OCLP_250_NIGHTLY_REVIEW_NO_TARGET_UPDATE.md`
+- commit `dcdb38756fdd09b8b6bb4362572bd70c26f62ae5`.
 
 Immediate decisive predecessors:
+- D97GS Revert PASS / D97HR post-reboot native audit ready — `22fa01b19306788c75911baf0eb7fdb5c55a1de4`;
 - D97HO UI Revert-only / Restore-first required — `afb6fee84e8b7eae53a30693999049667d5be17a`;
 - D97HQ AuxKC valid / VESA unloaded diagnostic — `1258ce510da9e25dbbfe8035b000df582fc39e89`;
 - D97HP partial PASS / D97HQ ready — `2a3668e8fd0c20e20b714f4a6e6a35b25576406d`;
@@ -111,8 +112,37 @@ Classification:
 `D97GS_REVERT_ROOT_PATCH=PASS`
 `D97HO_P3_NOT_APPLIED_YET`.
 
+## Upstream OCLP 2.5.0 / Nightly review — NO target update
+Official OCLP 2.5.0 was published on 2026-09-08. Tag `2.5.0` and current `main` both point to exactly:
+`af9b49ac0539c684590ac35c7d695c7e706f6aea`.
+Therefore the current Nightly contains no source commit newer than the release.
+
+Our project upstream base:
+`b9df76ebdf3e768b37c1cc980e8444aa837c623e`.
+Comparison `b9df76... -> 2.5.0` shows only two commits and only:
+- `CHANGELOG.md`;
+- `opencore_legacy_patcher/constants.py`.
+No functional patchset/sys_patch/Haswell/Metal3802/compiler-path code differs.
+
+Pinned b9df76 already contains all functional 2.5.0 changes, including the dirty-root repatch guard and CoreImage patch logic. It already declares patcher 2.5.0, OpenCorePkg 1.0.4, Lilu 1.7.1 and RestrictEvents 1.1.7.
+
+Only material constants delta is PatcherSupportPkg `1.9.6 -> 1.9.7`.
+PatcherSupportPkg 1.9.7 changes only:
+- four IO80211 binaries;
+- CoreImage wrapper `14.0 Beta 3-24` with LC_ID_DYLIB fix.
+No MTLCompiler, GPUCompiler, Haswell kext, Metal framework, or compiler backend binary changes.
+
+Official OCLP 2.5.0 still caps normal supported host OS at Sequoia in `detect.py`; Tahoe remains outside normal official validation. Our Tahoe-specific D97DX/D97GS/D97HI source policy is still required.
+
+Decision:
+`INSTALL_OFFICIAL_OCLP_250_ON_ASUS2=NO`
+`INSTALL_CURRENT_NIGHTLY_ON_ASUS2=NO`
+`KEEP_D97GS_D97HO_PINNED_PROJECT_CHAIN=YES`.
+
+Retain downloaded official/Nightly packages offline only. PatcherSupportPkg 1.9.7 CoreImage wrapper may be evaluated later in an isolated branch if a CoreImage-specific failure becomes measured; do not introduce it into the current P3 experiment.
+
 ## CURRENT ACTION — reboot in VESA, then D97HR clean/native audit
-Reboot is now authorized with no other change:
+Reboot remains authorized with no other change:
 - keep `-igfxvesa` active;
 - keep D97EZ inert;
 - no EFI/NVRAM/framebuffer changes.
