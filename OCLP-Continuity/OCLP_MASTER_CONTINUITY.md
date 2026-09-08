@@ -11,10 +11,11 @@ Project retrospective: `OCLP-Continuity/OCLP_PROJECT_RETROSPECTIVE_20260827.md`
 All earlier checkpoints remain authoritative for deep history. This MASTER and its current checkpoint are the current execution/causal authority.
 
 ## Current authoritative checkpoint
-`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HT_TOOLING_FALSE_NEGATIVE_OFFICIAL_HELPER_ALREADY_PRESENT_D97HS_RERUN.md`
-- commit `08d174b574ec400222cd1218cac7015ee9461fb2`.
+`OCLP-Continuity/checkpoints/OCLP7_CHECKPOINT_20260908_D97HS_PRE_REBOOT_P1_P3_FULL_PASS_D97HU_VESA_REBOOT_AUDIT_READY.md`
+- commit `5693992b5115b2c3e301920caeff13da30557e41`.
 
 Immediate decisive predecessors:
+- D97HT tooling false negative / direct D97HS rerun: `08d174b574ec400222cd1218cac7015ee9461fb2`;
 - D97HO Root Patch P1+P3 PASS / first D97HS helper residual: `bd7e059537618175a33949193532cb3e53166d11`;
 - D97HR clean-native VESA PASS / D97HO authorized: `d80304f308cd30af224984bbf27da0c494993f5f`;
 - upstream OCLP 2.5.0/Nightly review — no target update: `dcdb38756fdd09b8b6bb4362572bd70c26f62ae5`;
@@ -69,15 +70,14 @@ After controlled D97GS Revert and reboot:
 - active legacy MTLCompiler 32023 absent.
 
 ## D97HO Root Patch — EXECUTION PASS
-User ran exact D97HO on the D97HR clean/native state. Root Patch completed normally.
-Decisive patcher-reported evidence:
+Exact D97HO completed Root Patch on the D97HR clean/native baseline.
+Patcher-reported decisive evidence:
 - exact local MetallibSupportPkg 26.6.2-25G82 used;
 - Metal 3802 Common / Common Extended / .metallibs, Monterey GVA/OpenCL, Intel Haswell and Modern Wireless Common applied;
-- D97GS P1 exact historical identity PASS with service post-SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
-- D97HI P3 exact P3-only identity PASS with MTLCompiler32023 post-SHA `0066a944e7db5f15c397c156b968cbe71a4bf51fb4cad819beb23a99309f6e90`;
+- D97GS P1 exact historical identity PASS, service post-SHA `a8716ffd75acab7ca2dd11b87861895f28fed386d098ad25280aba022f5b8b43`;
+- D97HI P3 exact P3-only identity PASS, MTLCompiler32023 post-SHA `0066a944e7db5f15c397c156b968cbe71a4bf51fb4cad819beb23a99309f6e90`;
 - new AuxKC built and forced;
-- patching complete;
-- no reboot yet.
+- patching complete.
 
 Classification:
 `D97HO_ROOT_PATCH_EXECUTION=PASS`
@@ -85,42 +85,71 @@ Classification:
 `P3_EXACT_P3_ONLY=PROVEN_BY_PATCHER`
 `P2B_AIR00_D34=NOT_REPLAYED`.
 
-## D97HS first run — partial PASS / helper residual only
-Before stopping D97HS proved:
-- VESA gate PASS;
-- active booted snapshot still native Tahoe;
-- active native service exact `4262e71f...`;
-- active native CoreDisplay exact `daee638d... / 24128`;
-- active legacy 32023 absent, expected before reboot.
-D97HS then observed helper DEBUG SHA `993bf7e846672b3c131b7c6dc9af2c97072f6ec53326df062e542a1f001ab7b9`, Team not set and stopped. This did not invalidate P1/P3.
-
-## D97HT — TOOLING FALSE NEGATIVE
-D97HT fetched exact D97HA and D97HS successfully. D97HA precheck then observed the active helper already equal to official SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`.
-D97HA is intentionally fail-closed and expects exact DEBUG pre-state, so it stopped with `ACTIVE_NOT_EXACT_DEBUG_HELPER`.
-This is a precondition/tooling false-negative, not a Root Patch/P3 failure.
-The trailing password prompt is caused by D97HA's EXIT cleanup trap invoking `sudo rm -f` on its temporary staging path even after the precheck fails; no Root Patch or other project mutation occurred.
-
-Classification:
-`D97HT_FAILURE=TOOLING_FALSE_NEGATIVE_PRECONDITION_DRIFT`
-`OFFICIAL_HELPER_ALREADY_PRESENT=PROVEN_BY_SHA`
-`D97HO_ROOTPATCH_P1_P3=NOT_INVALIDATED`.
-
-## CURRENT ACTION — rerun exact D97HS directly, before reboot
-Do NOT run D97HA/D97HT again.
-Do NOT rerun Root Patch.
-Do NOT reboot.
-Run exact D97HS directly:
+## D97HS — FULL PRE-REBOOT P1+P3 AUDIT PASS
+Exact artifact:
 `OCLP-Continuity/artifacts/OCLP7_D97HS_ASUS2_POST_D97HO_PRE_REBOOT_P1_P3_AUDIT.sh`
 - commit `dcfc861b9bd23a8ac00d7d07c43f4166ea402f18`;
 - blob `dd71dbd1149a6c96b3e754ff500f029f536bdef5`.
 
-D97HS full PASS must prove on underlying System volume:
-- official helper exact SHA/team/codesign;
-- exact P1 service SHA `a8716ffd...`;
-- exact P3-only MTLCompiler32023 SHA `0066a944...`;
-- P2 original `418b81d0000000 @ 0x9A8CD`;
-- P3 postimage `81c900002000 @ 0xA1573`;
-- corrected metallibs 180/180 exact;
-- Haswell bundles present and new AuxKC contains both.
+D97HS full rerun proved:
+- VESA active, D97EZ inert;
+- active booted snapshot remains native pre-reboot: service `4262e71f...`, CoreDisplay `daee638d... / 24128`, legacy 32023 absent;
+- official helper exact SHA `9b74b7c95d54dc99a577e6a700dcd5922f40d3430108034029715caca14a037a`, Team `S74BDJXQMD`;
+- local corrected metallib source exact 180, CoreDisplay `b848d54e... / 20739`;
+- D97HO ZIP exact `a1aa24d5... / 722975756`;
+- underlying sealed System volume mounted read-only;
+- underlying P1 service exact SHA `a8716ffd...`, bytes 85520, postimage `81fe177d0000 @ 0x3494`;
+- underlying P3-only MTLCompiler32023 exact SHA `0066a944...`, bytes 1636896, UUID `D5CE0008-587C-3861-971A-4BAEFB7B9C5B`;
+- P2 remains exact original `418b81d0000000 @ 0x9A8CD`, no P2b;
+- P3 exact postimage `81c900002000 @ 0xA1573`;
+- corrected metallibs exact 180/180, missing0, different0, CoreDisplay exact MTLB;
+- Azul and HD5000 bundles present;
+- new AuxKC `/Library/KernelCollections/AuxiliaryKernelExtensions.kc`, bytes 5439488, contains both Haswell kexts;
+- `kmutil check --collection aux --load-info` RC0 informational pre-reboot.
 
-Only after D97HS full PASS may a VESA reboot be authorized. No acceleration before post-reboot active-snapshot audit.
+Final classification:
+`D97HS_STATUS=PASS_PRE_REBOOT_P1_P3_AUDIT`
+`D97HS_CLASSIFICATION=STATIC_STRUCTURAL_SEMANTIC_PROVEN`
+`D97HS_PATCHED_P1=EXACT`
+`D97HS_PATCHED_P3=EXACT_P3_ONLY`
+`D97HS_P2B_REPLAY=NO`
+`D97HS_AIR00_REPLAY=NO`
+`D97HS_D34_REPLAY=NO`
+`D97HS_PATCHED_METALLIBS=180_OF_180_EXACT`
+`D97HS_HASWELL_AUXKC=ON_DISK_PRESENT_PASS`.
+
+Report:
+`/Users/alex/Desktop/OCLP7_D97HS_POST_D97HO_PRE_REBOOT_20260908_141929/D97HS_REPORT.txt`.
+
+## CURRENT ACTION — one VESA reboot, then D97HU active snapshot audit
+A single reboot is authorized now with no other change:
+- keep `-igfxvesa` active;
+- keep D97EZ inert;
+- no EFI/NVRAM/framebuffer change;
+- no acceleration;
+- no P2b/AIR00/D34.
+
+After reboot run:
+`OCLP-Continuity/artifacts/OCLP7_D97HU_ASUS2_POST_VESA_REBOOT_ACTIVE_P1_P3_AUDIT.sh`
+- commit `19ee3a189bbbb6af2ca83b425e613fe4724f21b8`;
+- blob `771c11b8c0529137f4c3939d202d49204d04874d`;
+- bytes `11849`.
+
+D97HU is read-only and must prove the now-active snapshot contains:
+1. exact P1 service SHA/postimage;
+2. exact P3-only MTLCompiler32023 SHA/UUID;
+3. P2 original and P3 exact postimage;
+4. corrected metallibs exact 180/180;
+5. Haswell bundles and AuxKC present and consistent;
+6. official helper exact;
+7. D97HO artifact exact.
+
+D97HU intentionally treats Azul/HD5000 `loaded/unloaded` state and IOKit state under `-igfxvesa` as informational rather than a gate, incorporating D97HQ evidence.
+
+Expected final:
+`D97HU_STATUS=PASS_ACTIVE_P1_P3_VESA`
+`D97HU_CLASSIFICATION=STRUCTURAL_SEMANTIC_PASS_ACTIVE_SNAPSHOT`
+`D97HU_NEXT=REVALIDATE_D97EW_CAPTURE_BEFORE_ANY_ACCELERATED_BOOT`
+`D97HU_ACCELERATION=NOT_YET_AUTHORIZED`.
+
+Even after D97HU PASS, acceleration remains unauthorized until D97EW persistent capture is repaired/revalidated, because the previous P1-only accelerated attempt produced an incomplete current accelerated tuple capture.
