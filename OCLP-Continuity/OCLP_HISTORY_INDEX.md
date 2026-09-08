@@ -212,6 +212,21 @@ Final classifications:
 
 Checkpoint `dd4fcfd0b37f858b60c6c30ddcc1ba5b3645b63a`.
 
+## D97HB — corrected post-D97GS/pre-reboot audit for clean-Restore sequence
+Old D97GX is obsolete for the current sequence because it expected the active snapshot to contain legacy pre-P1 service SHA `31a6...`. After the deliberate clean Restore, the active snapshot must instead remain native Tahoe SHA `4262...` until the new snapshot is booted.
+
+D97HB therefore requires before reboot:
+- active snapshot native service SHA `4262e71f...`;
+- active native CoreDisplay SHA `daee638d...`, bytes `24128`;
+- official helper restored exact `9b74b7c9... / S74BDJXQMD`;
+- underlying patched System volume exact P1 service SHA `a8716ffd...` and postimage `81fe177d0000`;
+- patched metallibs 180/180 exact against corrected local source;
+- patched CoreDisplay exact `b848d54e... / 20739 / MTLB`.
+
+D97HB artifact:
+- commit `416694ae051f2eb64b3adb03b02cdb18e04d3169`;
+- blob `10711c98d6d8b088362ffa21e86da4023645cea0`.
+
 ## Current action — D97GS manual P1-only Root Patch REAUTHORIZED
 Authorized now on ASUS2:
 `D97GS_MANUAL_P1_ONLY_ROOT_PATCH_ON_ASUS2=YES`.
@@ -222,11 +237,4 @@ Close inner OCLP so outer wrapper restores official helper.
 
 DO NOT reboot. DO NOT remove `-igfxvesa`. DO NOT activate D97EZ.
 
-Then run read-only D97GX:
-`OCLP7_D97GX_ASUS2_POST_ROOTPATCH_PRE_REBOOT_AUDIT.sh`
-- commit `7004e8463541220f6b96950d879a6f29de49e77b`;
-- blob `b57e84b7544afb787de9eaf7af904f71c2e895e7`.
-
-D97GX must prove exact P1 service on the newly patched underlying System volume, corrected metallibs 180/180 exact, CoreDisplay exact, official helper restored, while current active snapshot remains native/pre-P1 until reboot.
-
-No reboot until D97GX PASS. After D97GX PASS, first reboot remains VESA + active-snapshot audit; acceleration comes only after that.
+Then run D97HB, not D97GX. No reboot until D97HB PASS. After D97HB PASS, first reboot remains VESA + active-snapshot audit; acceleration comes only after that.
